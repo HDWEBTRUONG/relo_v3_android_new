@@ -14,6 +14,11 @@ import net.fukuri.memberapp2.relo.main.ui.fragment.CouponAreaFragment;
 import net.fukuri.memberapp2.relo.main.ui.fragment.CouponFragment;
 import net.fukuri.memberapp2.relo.main.ui.fragment.MemberFragment;
 
+/**
+ *
+ * Main Actiovity ( HUY )
+ *
+ */
 public class MainActivity extends BaseActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
