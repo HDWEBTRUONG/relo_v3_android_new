@@ -1,0 +1,10 @@
+package net.fukuri.memberapp2.relo.framework.restfulService.parser;
+
+import android.content.Context;
+
+/**
+ * Created by linhphan on 11/12/15.
+ */
+public interface IParser {
+    Object parse(Context context, String data);
+}
