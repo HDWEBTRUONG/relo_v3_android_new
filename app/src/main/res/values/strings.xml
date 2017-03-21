@@ -9,4 +9,7 @@
     <string name="xlistview_header_hint_ready" />
     <string name="xlistview_header_hint_loading" />
     <string name="xlistview_header_last_time" />
+    <string name="title_coupon_area">Coupon Area</string>
+    <string name="title_member">Member</string>
+    <string name="title_coupon">Coupon</string>
 </resources>

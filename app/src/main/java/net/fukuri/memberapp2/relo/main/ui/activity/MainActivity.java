@@ -1,4 +1,4 @@
-package net.fukuri.memberapp2.relo.main;
+package net.fukuri.memberapp2.relo.main.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,10 +8,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import net.fukuri.memberapp2.relo.R;
+import net.fukuri.memberapp2.relo.framework.phvtActivity.BaseActivity;
+import net.fukuri.memberapp2.relo.framework.phvtFragment.FragmentHelper;
+import net.fukuri.memberapp2.relo.main.ui.fragment.CouponAreaFragment;
+import net.fukuri.memberapp2.relo.main.ui.fragment.CouponFragment;
+import net.fukuri.memberapp2.relo.main.ui.fragment.MemberFragment;
 
-public class MainActivity extends AppCompatActivity {
-
-    private TextView mTextMessage;
+public class MainActivity extends BaseActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -20,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    replaceFragment(R.id.content, CouponFragment.class.getName(), false, null, null);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    replaceFragment(R.id.content, CouponAreaFragment.class.getName(), false, null, null);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    replaceFragment(R.id.content, MemberFragment.class.getName(), false, null, null);
                     return true;
             }
             return false;
@@ -37,11 +40,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mTextMessage = (TextView) findViewById(R.id.message);
+        addFragment(R.id.content, CouponFragment.class.getName(), false, null, null);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected int getActivityLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void getMandatoryViews(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected void registerEventHandlers() {
+
     }
 
 }
