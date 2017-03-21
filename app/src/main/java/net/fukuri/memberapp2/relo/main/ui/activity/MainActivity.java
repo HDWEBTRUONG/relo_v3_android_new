@@ -3,13 +3,10 @@ package net.fukuri.memberapp2.relo.main.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import net.fukuri.memberapp2.relo.R;
 import net.fukuri.memberapp2.relo.framework.phvtActivity.BaseActivity;
-import net.fukuri.memberapp2.relo.framework.phvtFragment.FragmentHelper;
 import net.fukuri.memberapp2.relo.main.ui.fragment.CouponAreaFragment;
 import net.fukuri.memberapp2.relo.main.ui.fragment.CouponFragment;
 import net.fukuri.memberapp2.relo.main.ui.fragment.MemberFragment;

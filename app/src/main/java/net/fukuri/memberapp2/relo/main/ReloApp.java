@@ -1,4 +1,4 @@
-package net.fukuri.memberapp2.relo;
+package net.fukuri.memberapp2.relo.main;
 
 import android.app.Application;
 
