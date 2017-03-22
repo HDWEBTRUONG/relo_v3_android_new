@@ -12,7 +12,6 @@ import butterknife.ButterKnife;
 
 /**
  * Created by HuyTran on 3/21/17.
- * MOTE
  */
 
 public class CouponFragment extends BaseFragment {
