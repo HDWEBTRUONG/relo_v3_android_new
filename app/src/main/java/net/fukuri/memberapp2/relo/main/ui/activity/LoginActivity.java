@@ -62,23 +62,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Show toolbar
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View viewToolbar = inflater.inflate(R.layout.layout_toolbar_default, null);
-        mToolbar = ButterKnife.findById(viewToolbar, R.id.toolbar);
-        mToolbarTilte = ButterKnife.findById(viewToolbar, R.id.title_toolbar);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
         mToolbarTilte.setText(getString(R.string.txt_title_login));
-        mToolbarTilte.setTextColor(R.color.white);
-
-        View view = inflater.inflate(R.layout.activity_login, null);
-        editUsername = ButterKnife.findById(view, R.id.edit_login_username);
-        editPassword = ButterKnife.findById(view, R.id.edit_login_password);
-        btnLogin = ButterKnife.findById(view, R.id.bt_login);
-        txtShowError = ButterKnife.findById(view, R.id.txt_show_error);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+       // mToolbarTilte.setTextColor(R.color.white);
     }
 
     public void clickLogin(View view){
