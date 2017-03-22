@@ -13,4 +13,19 @@
     <string name="title_member">Member</string>
     <string name="title_coupon">Coupon</string>
     <string name="no_internet">Check network Please</string>
+
+    <!-- Login Fragment-->
+    <string name="txt_bt_login">ログインボタン</string>
+    <string name="txt_login_username">RELO CLUB 会員ID</string>
+    <string name="txt_login_password">トフィールド</string>
+    <string name="txt_link_forget_id_password">会員ID・パスワードを忘れた方はこちら</string>
+    <string name="txt_link_can_not_login">ログインできない方はこちら</string>
+    <string name="txt_note_login">ご使用の端末で初めてご利用になる場合には、\nログインが必要です。</string>
+    <string name="txt_title_login">ログイン</string>
+    <string name="error_login_wrong_id_password">ログインですることができませんでした。\n入力内容が間違っているか、大会後の可能性がございます。会員IDもしくはパスワードを再度</string>
+    <string name="error_connect_network">通信に失敗しました</string>
+    <string name="error_blank_id_password">「RELO CLUB 会員ID」と「パスワード」 を入力してください</string>
+    <string name="popup_title_login">エラー</string>
+    <string name="popup_yes">Yes</string>
+    <string name="popup_no">No</string>
 </resources>
