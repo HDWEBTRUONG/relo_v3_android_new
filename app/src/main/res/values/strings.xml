@@ -1,16 +1,14 @@
 <resources>
-    <string name="app_name">Relo</string>
+    <string name="app_name">Relo Club</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="xlistview_footer_hint_ready" />
     <string name="xlistview_footer_hint_normal" />
     <string name="xlistview_header_hint_normal" />
     <string name="xlistview_header_hint_ready" />
     <string name="xlistview_header_hint_loading" />
     <string name="xlistview_header_last_time" />
-    <string name="title_coupon_area">Coupon Area</string>
-    <string name="title_member">Member</string>
-    <string name="title_coupon">Coupon</string>
+    <string name="title_coupon_area">エリアクーポン</string>
+    <string name="title_membership">会員サイト</string>
+    <string name="title_coupon_list">人気クーポン</string>
     <string name="no_internet">Check network Please</string>
 </resources>
