@@ -11,4 +11,7 @@
     <color name="colorMineShaft">#333333</color>
     <color name="colorMonaLisa">#FF9897</color>
     <color name="white">#FFFFFF</color>
+<color name="colorWindowBackground">#FFF</color>
+    <color name="colorText">#323232</color>
+    <color name="colorNavigationBottom">#303030</color>
 </resources>

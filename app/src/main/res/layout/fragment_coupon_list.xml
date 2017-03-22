@@ -3,9 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Coupon" />
+    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
+
+
 </LinearLayout>
