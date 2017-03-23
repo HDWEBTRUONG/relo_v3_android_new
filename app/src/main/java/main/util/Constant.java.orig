@@ -6,10 +6,12 @@ package main.util;
 
 public class Constant {
 
+<<<<<<< HEAD
     //Google Analytics
     public static final String GA_POPULAR_COUPON_SCREEN = "人気クーポン";
-
+=======
     public static final String KEY_URL_FORGET_LOGIN = "fogetLoginUrl";
     public static final String KEY_URL_CAN_NOT_LOGIN = "canNotLoginUrl";
     public static final String KEY_CHECK_WEBVIEW = "checkWebview";
+>>>>>>> dev
 }

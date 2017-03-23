@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="main">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".ReloApp"
@@ -23,12 +23,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+        <activity android:name="main.ui.activity.MainActivity"></activity>
+        <activity android:name="main.ui.activity.LoginActivity"></activity>
+=======
         <activity android:name="main.ui.activity.MainActivity">
         </activity>
         <activity android:name="main.ui.activity.LoginActivity">
         </activity>
         <activity android:name="main.ui.activity.WebviewActivity">
         </activity>
+>>>>>>> dev
     </application>
 
 </manifest>
