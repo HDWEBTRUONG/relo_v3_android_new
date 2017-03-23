@@ -48,7 +48,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     //TODO make redirection after splash screen gone
     private void goNextScreen() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
