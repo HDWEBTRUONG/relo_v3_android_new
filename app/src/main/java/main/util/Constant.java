@@ -15,6 +15,6 @@ public class Constant {
 
 
     //Key username
-    public static final String USERNAME ="admin";
-    public static final String PASSWORD = "123456";
+    public static final String ACC_LOGIN_DEMO_USERNAME ="admin";
+    public static final String ACC_LOGIN_DEMO_PASSWORD = "123456";
 }
