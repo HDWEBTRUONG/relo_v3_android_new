@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.OnClick;
@@ -28,7 +29,10 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.title_toolbar)
+    @BindView(R.id.group_title_login)
+    LinearLayout lnGroupTitleLogin;
+
+    @BindView(R.id.title_toolbar_login)
     TextView mToolbarTilte;
 
     /*@BindView(R.id.text_view_left_toolbar)
@@ -57,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        lnGroupTitleLogin.setVisibility(View.VISIBLE);
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
         mToolbarTilte.setText(getString(R.string.txt_title_login));

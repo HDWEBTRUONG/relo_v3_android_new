@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -41,6 +42,15 @@ public class WebviewActivity extends BaseActivity {
     @BindView(R.id.web_view)
     WebView mWebView;
 
+    @BindView(R.id.group_close)
+    RelativeLayout rlGroupClose;
+
+    @BindView(R.id.group_title)
+    LinearLayout lnGroupTitle;
+
+    @BindView(R.id.imgClose)
+    ImageView imgClose;
+
 
 
     @Override
@@ -63,8 +73,9 @@ public class WebviewActivity extends BaseActivity {
             mToolbarTilte.setText(getString(R.string.txt_title_login));
         }
 
+        lnGroupTitle.setVisibility(View.VISIBLE);
         lnGroupArrow.setVisibility(View.VISIBLE);
-
+        rlGroupClose.setVisibility(View.VISIBLE);
         String url = getIntent().getStringExtra(Constant.KEY_URL_FORGET_LOGIN);
         mWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = mWebView.getSettings();
@@ -95,6 +106,11 @@ public class WebviewActivity extends BaseActivity {
     @OnClick(R.id.imgForward)
     public void clickForward(){
         mWebView.goForward();
+    }
+
+    @OnClick(R.id.imgClose)
+    public void clickClose(){
+        finish();
     }
 
     @Override
