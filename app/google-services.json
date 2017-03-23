@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "1011504929666",
+    "project_id": "firebase-relo-club"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011504929666:android:62b17d9d503a40b2",
+        "android_client_info": {
+          "package_name": "net.fukuri.memberapp2.relo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnGwJPOZ4QELSqLrXQXB5oiIffyJrP558"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-96035385-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

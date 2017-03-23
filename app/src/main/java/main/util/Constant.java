@@ -5,4 +5,7 @@ package main.util;
  */
 
 public class Constant {
+
+    //Google Analytics
+    public static final String GA_POPULAR_COUPON_SCREEN = "人気クーポン";
 }

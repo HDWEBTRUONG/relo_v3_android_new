@@ -1,14 +1,20 @@
 package main.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.Tracker;
+
 import main.R;
 import framework.phvtFragment.BaseFragment;
 
 import butterknife.ButterKnife;
+import main.ReloApp;
+import main.util.Constant;
+import main.util.GoogleAnalytics;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -27,11 +33,17 @@ public class CouponListFragment extends BaseFragment {
         Toolbar toolbar = ButterKnife.findById(root, R.id.toolbar);
         TextView title = ButterKnife.findById(toolbar, R.id.toolbar_title);
         title.setText(R.string.title_coupon_list);
-
     }
 
     @Override
     protected void registerEventHandlers() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Test GA
+        GoogleAnalytics.trackingAnalytics(getActivity(), Constant.GA_POPULAR_COUPON_SCREEN);
     }
 }
