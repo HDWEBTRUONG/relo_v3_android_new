@@ -1,28 +1,20 @@
 package main.ui.activity;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import butterknife.OnClick;
 import main.R;
-import framework.phvtActivity.BaseActivity;
+import main.util.Constant;
 import main.util.Utils;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.bt_login)
     Button btnLogin;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
         mToolbarTilte.setText(getString(R.string.txt_title_login));
-       // mToolbarTilte.setTextColor(R.color.white);
+        // mToolbarTilte.setTextColor(R.color.white);
     }
 
+    @OnClick(R.id.bt_login)
     public void clickLogin(View view){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
@@ -115,12 +109,38 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void clickForget(View view){
-        String url = "http://google.com";
+    @OnClick(R.id.link_webview_forget_id)
+    public void clickForget(){
+        String url = "https://google.com";
+        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, url, 1);
     }
 
-    public void clickLinkNotLogin(View view){
-        String url = "http://google.com";
+    @OnClick(R.id.link_webview_not_login)
+    public void clickLinkNotLogin(){
+        String url = "https://google.com";
+        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, url, 2);
+    }
+
+    /**
+     *
+     * Show webview with current url
+     * @param key a key of url
+     * @param url a url address
+     * @param keyCheckWebview change title webview
+     * <p>Note:
+     *       <b>1 - Forget ID/Password</b>
+     *       <b>2 - You can not login</b>
+     * </p>
+     */
+    //TODO make redirection after splash screen gone
+    private void goNextWebview(String key, String url, int keyCheckWebview) {
+        Bundle bundle = new Bundle();
+        bundle.putString(key,url);
+        bundle.putInt(Constant.KEY_CHECK_WEBVIEW, keyCheckWebview);
+        Intent intent = new Intent(this, WebviewActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     @Override

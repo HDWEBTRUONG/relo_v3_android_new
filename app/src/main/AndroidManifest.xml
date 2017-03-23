@@ -20,6 +20,8 @@
         </activity>
         <activity android:name="main.ui.activity.LoginActivity">
         </activity>
+        <activity android:name="main.ui.activity.WebviewActivity">
+        </activity>
     </application>
 
 </manifest>

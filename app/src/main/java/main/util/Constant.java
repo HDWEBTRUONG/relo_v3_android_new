@@ -5,4 +5,8 @@ package main.util;
  */
 
 public class Constant {
+
+    public static final String KEY_URL_FORGET_LOGIN = "fogetLoginUrl";
+    public static final String KEY_URL_CAN_NOT_LOGIN = "canNotLoginUrl";
+    public static final String KEY_CHECK_WEBVIEW = "checkWebview";
 }

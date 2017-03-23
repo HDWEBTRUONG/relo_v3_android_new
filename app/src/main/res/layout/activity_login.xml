@@ -36,7 +36,9 @@
             android:textCursorDrawable="@null"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="@dimen/text_size_large"/>
+            android:textColor="@color/colorIron"
+            android:textSize="@dimen/text_size_large"
+            android:textColorHint="@color/colorIron"/>
         <EditText
             android:id="@+id/edit_login_password"
             android:layout_width="match_parent"
@@ -51,7 +53,9 @@
             android:inputType="textPassword"
             android:background="@drawable/radius_edittext"
             android:textCursorDrawable="@null"
-            android:textSize="@dimen/text_size_large"/>
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/colorIron"
+            android:textColorHint="@color/colorIron"/>
         <TextView
             android:id="@+id/txt_login_error"
             android:layout_width="match_parent"
@@ -79,27 +83,26 @@
             android:layout_gravity="center"
             android:text="@string/txt_bt_login"
             android:background="@drawable/button_default"
-            android:textSize="@dimen/text_size_large"
-            android:onClick="clickLogin"/>
+            android:textSize="@dimen/text_size_large" />
 
         <TextView
+            android:id="@+id/link_webview_forget_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/colorFunBlue"
             android:text="@string/txt_link_forget_id_password"
             android:layout_marginTop="@dimen/_5dp"
-            android:layout_marginBottom="@dimen/_5dp"
-            android:onClick="clickForget"/>
+            android:layout_marginBottom="@dimen/_5dp" />
         <TextView
+            android:id="@+id/link_webview_not_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/colorFunBlue"
             android:text="@string/txt_link_can_not_login"
             android:layout_marginTop="@dimen/_5dp"
-            android:layout_marginBottom="@dimen/_5dp"
-            android:onClick="clickLinkNotLogin"/>
+            android:layout_marginBottom="@dimen/_5dp" />
 
         <TextView
             android:layout_width="match_parent"
