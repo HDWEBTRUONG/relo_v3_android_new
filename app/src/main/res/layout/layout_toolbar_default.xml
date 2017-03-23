@@ -14,21 +14,56 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
-
-        <TextView
-            android:id="@+id/title_toolbar"
+        <LinearLayout
+            android:id="@+id/group_bt_arrow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+            <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_arrow_left_white"
+                    android:background="@drawable/radius_button"
+                    android:layout_marginLeft="@dimen/_10dp"
+                    android:layout_marginRight="@dimen/_5dp"/>/>
+                <!--<TextView
+                    android:id="@+id/tvBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lnActionbar"
+                    style="@style/TitleTextViewStyle"/>-->
+            <ImageView
+                    android:id="@+id/imgForward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_right_white"
+                    android:layout_gravity="center"
+                    android:background="@drawable/radius_button"
+                    android:layout_marginLeft="@dimen/_5dp"/>
+                <!--<TextView
+                    android:id="@+id/tvBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lnActionbar"
+                    style="@style/TitleTextViewStyle"/>-->
+        </LinearLayout>
+        <TextView
+            android:id="@+id/title_toolbar"
+            android:layout_width="@dimen/_170dp"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:singleLine="true"
-            android:layout_toRightOf="@+id/text_view_left_toolbar"
-            android:layout_toLeftOf="@+id/text_view_right_toolbar"
             android:gravity="center"
             android:visibility="visible"
             android:text="@string/txt_title_login"
+            android:inputType="textMultiLine"
             android:layout_gravity="center"/>
+
     </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
