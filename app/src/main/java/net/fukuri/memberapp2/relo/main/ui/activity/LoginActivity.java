@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import net.fukuri.memberapp2.relo.R;
 import net.fukuri.memberapp2.relo.framework.phvtActivity.BaseActivity;
-import net.fukuri.memberapp2.relo.main.ui.fragment.CouponFragment;
 import net.fukuri.memberapp2.relo.main.util.Utils;
 
 import java.io.UnsupportedEncodingException;
