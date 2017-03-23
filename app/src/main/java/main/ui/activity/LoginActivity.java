@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = editPassword.getText().toString();
             try {
                 if ((username != null && !username.isEmpty()) && (password != null && !password.isEmpty())) {
-                    if("admin".equals(username) && "123456".equals(password)) {
+                    if(username.equals(Constant.USERNAME) && password.equals(Constant.PASSWORD)) {
                         Intent mainActivity = new Intent(this, MainActivity.class);
                         startActivity(mainActivity);
                     }else{
