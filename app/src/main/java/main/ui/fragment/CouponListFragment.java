@@ -6,15 +6,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.Tracker;
-
-import main.R;
-import framework.phvtFragment.BaseFragment;
-
 import butterknife.ButterKnife;
+import framework.phvtFragment.BaseFragment;
+import main.R;
 import main.ReloApp;
 import main.util.Constant;
-import main.util.GoogleAnalytics;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -44,6 +40,10 @@ public class CouponListFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         //Test GA
-        GoogleAnalytics.trackingAnalytics(getActivity(), Constant.GA_POPULAR_COUPON_SCREEN);
+        Activity act = getActivity();
+        if (act != null) {
+            ReloApp app = (ReloApp) act.getApplication();
+            app.trackingAnalytics(Constant.GA_POPULAR_COUPON_SCREEN);
+        }
     }
 }
