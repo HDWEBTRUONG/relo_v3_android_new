@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import butterknife.OnClick;
 import main.R;
+import main.ReloApp;
 import main.util.Constant;
 import main.util.Utils;
 
@@ -116,14 +117,18 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.link_webview_forget_id)
     public void clickForget(){
-        String url = "https://google.com";
-        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, url, 1);
+        trackingAnalytics(false,Constant.GA_LOGIN_SCREEN,Constant.GA_LOGIN_SCREEN_ACTION,
+                Constant.GA_LOGIN_SCREEN_FORGET_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
+        // Go to webview
+        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, Constant.WEBVIEW_URL_FORGET_LOGIN, 1);
     }
 
     @OnClick(R.id.link_webview_not_login)
     public void clickLinkNotLogin(){
-        String url = "https://google.com";
-        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, url, 2);
+        trackingAnalytics(false,Constant.GA_LOGIN_SCREEN, Constant.GA_LOGIN_SCREEN_ACTION,
+                Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
+        // Go to webview
+        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, 2);
     }
 
     /**
@@ -146,6 +151,24 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Tracking Google Analytic Login Screen
+     * @param isOnlyScreen
+     * @param category
+     * @param action
+     * @param label
+     * @param value
+     */
+    public void trackingAnalytics(Boolean isOnlyScreen, String category, String action, String label, long value){
+        ReloApp application = (ReloApp) getApplication();
+        if(isOnlyScreen){
+            application.trackingAnalyticByScreen(Constant.GA_LOGIN_SCREEN);
+        }else {
+            application.trackingWithAnalyticGoogleServices(category, action, label, value);
+        }
+
     }
 
     @Override
