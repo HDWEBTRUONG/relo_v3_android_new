@@ -1,8 +1,12 @@
 package main.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -77,10 +81,70 @@ public class WebviewActivity extends BaseActivity {
         lnGroupArrow.setVisibility(View.VISIBLE);
         rlGroupClose.setVisibility(View.VISIBLE);
         String url = getIntent().getStringExtra(Constant.KEY_URL_FORGET_LOGIN);
-        mWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = mWebView.getSettings();
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setBuiltInZoomControls(true);
         webSettings.setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new CustomWebViewClient() {
+
+            @Override
+            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                builder.setMessage(getResources().getString(R.string.error_ssl));
+                builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
+            }
+        });
         mWebView.loadUrl(url);
+
+        events();
+    }
+
+
+    public class CustomWebViewClient extends WebViewClient {
+        /* (non-Java doc)
+         * @see android.webkit.WebViewClient#shouldOverrideUrlLoading(android.webkit.WebView, java.lang.String)
+         */
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+    }
+
+    private void events() {
+        imgBack.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(mWebView.canGoBack()) {
+                    mWebView.goBack();
+                }
+            }
+        });
+
+        imgForward.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (mWebView.canGoForward()) {
+                    mWebView.goForward();
+                }
+
+            }
+        });
     }
 
     @Override
@@ -98,7 +162,7 @@ public class WebviewActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.imgBack)
+    /*@OnClick(R.id.imgBack)
     public void clickBack(){
         onBackPressed();
     }
@@ -106,7 +170,7 @@ public class WebviewActivity extends BaseActivity {
     @OnClick(R.id.imgForward)
     public void clickForward(){
         mWebView.goForward();
-    }
+    }*/
 
     @OnClick(R.id.imgClose)
     public void clickClose(){
