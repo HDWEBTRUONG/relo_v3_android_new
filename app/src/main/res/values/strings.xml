@@ -26,4 +26,17 @@
     <string name="popup_title_login">エラー</string>
     <string name="popup_yes">Yes</string>
     <string name="popup_no">No</string>
+
+    <!-- List Coupon -->
+    <string name="txt_title_category_list_coupon">カテゴリを選ぶ</string>
+
+    <!-- Item category of list Coupon -->
+    <string name="item_category_list_coupon_1">すべて</string>
+    <string name="item_category_list_coupon_2">グルメ</string>
+    <string name="item_category_list_coupon_3">カラオケ</string>
+    <string name="item_category_list_coupon_4">スーツ・メガネ</string>
+    <string name="item_category_list_coupon_5">その他</string>
+    <string name="item_coupon_category_name">グルメ</string>
+    <string name="item_coupon_company_name">クーポンボタン</string>
+    <string name="item_coupon_duration">有効期限2017/03/31まで</string>
 </resources>

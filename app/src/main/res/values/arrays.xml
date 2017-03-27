@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fragment_list_category_coupon">
+        <item>カテゴリを選ぶ</item>
+        <item>すべて</item>
+        <item>グルメ</item>
+        <item>カラオケ</item>
+        <item>スーツ・メガネ</item>
+        <item>その他</item>
+    </string-array>
+</resources>

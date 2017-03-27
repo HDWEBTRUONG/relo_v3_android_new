@@ -8,11 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:textColor">@color/colorText</item>
+        <!--<item name="android:popupBackground">@style/popup_menu</item>-->
     </style>
 
     <style
         name="dialog_animation" >
         <item name="android:windowEnterAnimation">@anim/slide_enter_bottom_top</item>
         <item name="android:windowExitAnimation">@anim/slide_exit_top_bottom</item>
+    </style>
+
+    <style name="popup_menu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/colorConcrete</item>
+        <item name="android:background">@color/colorConcrete</item>
     </style>
 </resources>
