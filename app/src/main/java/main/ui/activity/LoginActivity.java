@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.OnClick;
+import framework.phvtActivity.BaseActivity;
 import main.R;
 import main.ReloApp;
 import main.util.Constant;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -58,8 +59,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
         lnGroupTitleLogin.setVisibility(View.VISIBLE);
@@ -67,6 +66,21 @@ public class LoginActivity extends AppCompatActivity {
         mToolbarTilte.setVisibility(View.VISIBLE);
         mToolbarTilte.setText(getString(R.string.txt_title_login));
         // mToolbarTilte.setTextColor(R.color.white);
+    }
+
+    @Override
+    protected int getActivityLayoutId() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void getMandatoryViews(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected void registerEventHandlers() {
+
     }
 
     @OnClick(R.id.bt_login)

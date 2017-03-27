@@ -60,12 +60,43 @@ public class WebviewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
         ButterKnife.bind(this);
+    }
 
+    private void events() {
+        imgBack.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(mWebView.canGoBack()) {
+                    mWebView.goBack();
+                }
+            }
+        });
+
+        imgForward.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (mWebView.canGoForward()) {
+                    mWebView.goForward();
+                }
+
+            }
+        });
+    }
+
+    @Override
+    protected int getActivityLayoutId() {
+        return R.layout.activity_webview;
+    }
+
+    @Override
+    protected void getMandatoryViews(Bundle savedInstanceState) {
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
-
         int checkWebview = getIntent().getIntExtra(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
 
         // Change Title webview
@@ -108,47 +139,11 @@ public class WebviewActivity extends BaseActivity {
         });
         mWebView.loadUrl(url);
 
-        events();
-    }
-
-    private void events() {
-        imgBack.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if(mWebView.canGoBack()) {
-                    mWebView.goBack();
-                }
-            }
-        });
-
-        imgForward.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if (mWebView.canGoForward()) {
-                    mWebView.goForward();
-                }
-
-            }
-        });
-    }
-
-    @Override
-    protected int getActivityLayoutId() {
-        return R.layout.activity_webview;
-    }
-
-    @Override
-    protected void getMandatoryViews(Bundle savedInstanceState) {
-
     }
 
     @Override
     protected void registerEventHandlers() {
-
+        events();
     }
 
     /*@OnClick(R.id.imgBack)
