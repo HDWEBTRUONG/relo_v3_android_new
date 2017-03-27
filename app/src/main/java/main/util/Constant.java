@@ -9,7 +9,7 @@ public class Constant {
     //Google Analytics
     public static final String GA_POPULAR_COUPON_SCREEN = "人気クーポン";
 
-    public static final String KEY_LOGIN_URL = "fogetLoginUrl";
+    public static final String KEY_LOGIN_URL = "loginUrl";
     public static final String KEY_CHECK_WEBVIEW = "checkWebview";
 
     // Some URL of webview
