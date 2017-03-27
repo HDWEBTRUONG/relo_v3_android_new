@@ -35,7 +35,7 @@ public class ReloApp extends Application {
      * @param labelId
      * @param valueId
      */
-     void trackingWithAnalyticGoogleServices(String categoryId, String actionId, String labelId, long valueId){
+     public void trackingWithAnalyticGoogleServices(String categoryId, String actionId, String labelId, long valueId){
         getDefaultTracker();
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(categoryId)
@@ -51,7 +51,7 @@ public class ReloApp extends Application {
      * Tracking this Action by screen
      * @param nameScreen
      */
-    private void trackingAnalyticByScreen(String nameScreen){
+    public void trackingAnalyticByScreen(String nameScreen){
         getDefaultTracker();
         mTracker.setScreenName(nameScreen);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
