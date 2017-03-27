@@ -39,4 +39,8 @@
     <string name="item_coupon_category_name">グルメ</string>
     <string name="item_coupon_company_name">クーポンボタン</string>
     <string name="item_coupon_duration">有効期限2017/03/31まで</string>
+
+    <!--Check SSL -->
+    <string name="error_ssl">ssl証明書が正しくないページですが開いてもいいですか"</string>
+
 </resources>
