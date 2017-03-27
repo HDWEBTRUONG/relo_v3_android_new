@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center|center_vertical">
     <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
-
-
+    <LinearLayout
+        android:id="@+id/lnGroupCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        android:gravity="top"
+        android:background="@color/transparent" >
+        <Button
+            android:id="@+id/bt_menu_category"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
+            android:text="@string/title_coupon_list"
+            android:paddingRight="@dimen/_110dp"
+            android:paddingLeft="@dimen/_110dp"
+            android:layout_margin="@dimen/_5dp"
+            android:background="@drawable/button_default_no_active"
+            android:textSize="@dimen/text_size_large"/>
+    </LinearLayout>
+    <!--<ScrollView
+        android:id="@+id/scvListCoupon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/transparent"
+            android:orientation="vertical" >-->
+            <ListView
+                android:id="@+id/list_category_listview"
+                android:layout_width="match_parent"
+                android:background="@color/transparent"
+                android:layout_height="wrap_content">
+            </ListView>
+        <!--</LinearLayout>
+    </ScrollView>-->
 </LinearLayout>
