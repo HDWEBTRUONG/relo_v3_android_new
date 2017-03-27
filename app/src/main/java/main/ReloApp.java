@@ -58,7 +58,7 @@ public class ReloApp extends Application {
 
     }
 
-    private void trackingAnalytics(Boolean isScreenOnly, String screenName, String category, String action, String label, long value) {
+    public void trackingAnalytics(Boolean isScreenOnly, String screenName, String category, String action, String label, long value) {
         if (isScreenOnly) {
             trackingAnalyticByScreen(screenName);
         } else {
