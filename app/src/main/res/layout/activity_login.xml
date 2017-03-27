@@ -36,7 +36,7 @@
             android:textCursorDrawable="@null"
             android:lines="1"
             android:singleLine="true"
-            android:textColor="@color/colorIron"
+            android:textColor="@color/colorMineShaft"
             android:textSize="@dimen/text_size_large"
             android:textColorHint="@color/colorIron"/>
         <EditText
@@ -54,7 +54,7 @@
             android:background="@drawable/radius_edittext"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/text_size_large"
-            android:textColor="@color/colorIron"
+            android:textColor="@color/colorMineShaft"
             android:textColorHint="@color/colorIron"/>
         <TextView
             android:id="@+id/txt_login_error"
