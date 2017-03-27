@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         trackingAnalytics(false,Constant.GA_LOGIN_SCREEN,Constant.GA_LOGIN_SCREEN_ACTION,
                 Constant.GA_LOGIN_SCREEN_FORGET_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
         // Go to webview
-        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
     }
 
     @OnClick(R.id.link_webview_not_login)
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
         trackingAnalytics(false,Constant.GA_LOGIN_SCREEN, Constant.GA_LOGIN_SCREEN_ACTION,
                 Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
         // Go to webview
-        goNextWebview(Constant.KEY_URL_FORGET_LOGIN, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
     }
 
     /**

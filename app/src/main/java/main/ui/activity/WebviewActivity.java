@@ -9,7 +9,6 @@ import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -81,7 +80,7 @@ public class WebviewActivity extends BaseActivity {
         lnGroupTitle.setVisibility(View.VISIBLE);
         lnGroupArrow.setVisibility(View.VISIBLE);
         rlGroupClose.setVisibility(View.VISIBLE);
-        String url = getIntent().getStringExtra(Constant.KEY_URL_FORGET_LOGIN);
+        String url = getIntent().getStringExtra(Constant.KEY_LOGIN_URL);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setPluginState(WebSettings.PluginState.ON);
