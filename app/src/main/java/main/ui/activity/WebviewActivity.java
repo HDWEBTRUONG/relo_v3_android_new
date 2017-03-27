@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import framework.phvtActivity.BaseActivity;
 import main.R;
+import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
 
 /**
@@ -109,17 +110,6 @@ public class WebviewActivity extends BaseActivity {
         mWebView.loadUrl(url);
 
         events();
-    }
-
-
-    public class CustomWebViewClient extends WebViewClient {
-        /* (non-Java doc)
-         * @see android.webkit.WebViewClient#shouldOverrideUrlLoading(android.webkit.WebView, java.lang.String)
-         */
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view, url);
-        }
     }
 
     private void events() {
