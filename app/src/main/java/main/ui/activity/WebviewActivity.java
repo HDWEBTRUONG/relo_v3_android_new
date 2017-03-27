@@ -67,12 +67,12 @@ public class WebviewActivity extends BaseActivity {
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
 
-        int checkWebview = getIntent().getIntExtra(Constant.KEY_CHECK_WEBVIEW, 1);
+        int checkWebview = getIntent().getIntExtra(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
 
         // Change Title webview
-        if(checkWebview==1){ // 1: Forget ID/Password
+        if( checkWebview== Constant.FORGET_PASSWORD ){ // 1: Forget ID/Password
             mToolbarTilte.setText(getString(R.string.txt_link_forget_id_password));
-        }else if(checkWebview==2){ // 2: You can not login
+        }else if(checkWebview== Constant.CAN_NOT_LOGIN){ // 2: You can not login
             mToolbarTilte.setText(getString(R.string.txt_link_can_not_login));
         }else{ // Something else
             mToolbarTilte.setText(getString(R.string.txt_title_login));
