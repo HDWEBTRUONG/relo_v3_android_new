@@ -3,6 +3,7 @@ package main.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -16,11 +17,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import butterknife.BindArray;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import framework.phvtFragment.BaseFragment;
 import main.R;
 import main.ReloApp;
@@ -32,20 +28,24 @@ import main.util.Constant;
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragment {
+public class CouponListFragment extends BaseFragment implements View.OnClickListener{
 
-    @BindView(R.id.bt_menu_category)
     Button btnMenuCategory;
-
-    @BindView(R.id.list_category_listview)
     ListView lvCategoryMenu;
-
-    @BindArray(R.array.fragment_list_category_coupon)
     String[] listCategoryCoupon;
-
     ArrayAdapter<String> itemsAdapter;
 
-    private Unbinder unbinder;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init(view);
+    }
+
+    private void init(View view) {
+        btnMenuCategory = (Button) view.findViewById(R.id.bt_menu_category);
+        lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
+        btnMenuCategory.setOnClickListener(this);
+    }
 
     @Override
     public int getRootLayoutId() {
@@ -54,13 +54,12 @@ public class CouponListFragment extends BaseFragment {
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        ButterKnife.bind(this, root);
-        Toolbar toolbar = ButterKnife.findById(root, R.id.toolbar);
-        TextView title = ButterKnife.findById(toolbar, R.id.toolbar_title);
+        Toolbar toolbar = (Toolbar)root.findViewById(R.id.toolbar);
+        TextView title = (TextView)root.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_coupon_list);
 
         ArrayList listCoupon = getListData();
-        final ListView lvCategory = ButterKnife.findById(root, R.id.list_category_listview);
+        final ListView lvCategory = (ListView)root.findViewById(R.id.list_category_listview);
         lvCategory.setAdapter(new CouponListAdapter(getContext(), listCoupon));
 
     }
@@ -85,7 +84,6 @@ public class CouponListFragment extends BaseFragment {
         return results;
     }
 
-    @OnClick(R.id.bt_menu_category)
     public void clickCategoryMenu(){
         //Set Style for PopupMenu
         Context wrapper = new ContextThemeWrapper(getContext(), R.style.popup_menu);
@@ -115,6 +113,13 @@ public class CouponListFragment extends BaseFragment {
         if (act != null) {
             ReloApp app = (ReloApp) act.getApplication();
             app.trackingAnalytics(Constant.GA_POPULAR_COUPON_SCREEN);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.bt_menu_category){
+            clickCategoryMenu();
         }
     }
 

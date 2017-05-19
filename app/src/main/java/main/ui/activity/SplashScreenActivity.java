@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import main.R;
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.NetworkUtil;
+import main.R;
 import main.util.DialogFactory;
 
 /**
@@ -36,6 +35,7 @@ public class SplashScreenActivity extends BaseActivity {
             }
         }, DELAY_TIME_SPLASH_ACTIVITY);
     }
+
 
     private void mainProcess() {
         boolean isNetWorkAvailable = NetworkUtil.isOnline(this);

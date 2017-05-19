@@ -33,14 +33,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import main.R;
-import framework.phvtUi.scaleAndZoomImageView.decoder.CompatDecoderFactory;
-import framework.phvtUi.scaleAndZoomImageView.decoder.DecoderFactory;
-import framework.phvtUi.scaleAndZoomImageView.decoder.ImageDecoder;
-import framework.phvtUi.scaleAndZoomImageView.decoder.ImageRegionDecoder;
-import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageDecoder;
-import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageRegionDecoder;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -51,6 +43,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
+
+import framework.phvtUi.scaleAndZoomImageView.decoder.CompatDecoderFactory;
+import framework.phvtUi.scaleAndZoomImageView.decoder.DecoderFactory;
+import framework.phvtUi.scaleAndZoomImageView.decoder.ImageDecoder;
+import framework.phvtUi.scaleAndZoomImageView.decoder.ImageRegionDecoder;
+import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageDecoder;
+import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageRegionDecoder;
+import main.R;
 
 /**
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,

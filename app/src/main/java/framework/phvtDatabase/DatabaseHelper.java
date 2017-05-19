@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import framework.phvtCommon.AppState;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import framework.phvtCommon.AppState;
 
 /**
  * Phatvt-FrameWork
