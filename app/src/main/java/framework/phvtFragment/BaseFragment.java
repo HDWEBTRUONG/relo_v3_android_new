@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import framework.phvtActivity.BaseActivity;
 import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
-
-import java.util.ArrayList;
 
 /**
  * Base Fragment for all Fragment in the application

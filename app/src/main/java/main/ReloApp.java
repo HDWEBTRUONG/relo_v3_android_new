@@ -1,16 +1,23 @@
 package main;
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.io.File;
 
 /**
  * Created by HuyTran on 3/21/17.
  */
 
 public class ReloApp extends Application {
+
+    protected File extStorageAppBasePath;
+
+    protected File extStorageAppCachePath;
 
     private Tracker mTracker;
 
@@ -76,4 +83,59 @@ public class ReloApp extends Application {
         trackingAnalytics(false, "", category, action, label, value);
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Check if the external storage is writeable
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
+        {
+            // Retrieve the base path for the application in the external storage
+            File externalStorageDir = Environment.getExternalStorageDirectory();
+
+            if (externalStorageDir != null)
+            {
+                // {SD_PATH}/Android/data/com.blogspot.geekonjava.androidwebviewcacheonsd
+                extStorageAppBasePath = new File(externalStorageDir.getAbsolutePath() +
+                        File.separator + "Android" + File.separator + "data" +
+                        File.separator + getPackageName());
+            }
+
+            if (extStorageAppBasePath != null)
+            {
+                // {SD_PATH}/Android/data/com.blogspot.geekonjava.androidwebviewcacheonsd/cache
+                extStorageAppCachePath = new File(extStorageAppBasePath.getAbsolutePath() +
+                        File.separator + "cache");
+
+                boolean isCachePathAvailable = true;
+
+                if (!extStorageAppCachePath.exists())
+                {
+                    // Create the cache path on the external storage
+                    isCachePathAvailable = extStorageAppCachePath.mkdirs();
+                }
+
+                if (!isCachePathAvailable)
+                {
+                    // Unable to create the cache path
+                    extStorageAppCachePath = null;
+                }
+            }
+        }
+    }
+    @Override
+    public File getCacheDir()
+    {
+        // NOTE: this method is used in Android 2.2 and higher
+
+        if (extStorageAppCachePath != null)
+        {
+            // Use the external storage for the cache
+            return extStorageAppCachePath;
+        }
+        else
+        {
+            // /data/data/com.blogspot.geekonjava.androidwebviewcacheonsd/cache
+            return super.getCacheDir();
+        }
+    }
 }

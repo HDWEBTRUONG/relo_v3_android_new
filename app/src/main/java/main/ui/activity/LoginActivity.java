@@ -4,68 +4,60 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import butterknife.OnClick;
 import framework.phvtActivity.BaseActivity;
 import main.R;
 import main.ReloApp;
 import main.util.Constant;
 import main.util.Utils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
-    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
-    @BindView(R.id.group_title_login)
     LinearLayout lnGroupTitleLogin;
-
-    @BindView(R.id.title_toolbar_login)
     TextView mToolbarTilte;
-
-    /*@BindView(R.id.text_view_left_toolbar)
-    TextView mLeftToolbar;
-
-    @BindView(R.id.text_view_right_toolbar)
-    TextView mRightToolbar;*/
-
-    @BindView(R.id.edit_login_username)
     EditText editUsername;
-
-    @BindView(R.id.edit_login_password)
     EditText editPassword;
-
-    @BindView(R.id.txt_show_error)
     TextView txtShowError;
-
-    @BindView(R.id.bt_login)
+    TextView link_webview_forget_id;
+    TextView link_webview_not_login;
     Button btnLogin;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+        init();
+    }
+
+    private void init() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        lnGroupTitleLogin = (LinearLayout) findViewById(R.id.group_title_login);
+        mToolbarTilte = (TextView) findViewById(R.id.title_toolbar_login);
+        editUsername = (EditText) findViewById(R.id.edit_login_username);
+        editPassword = (EditText) findViewById(R.id.edit_login_password);
+        txtShowError = (TextView) findViewById(R.id.txt_show_error);
+        link_webview_forget_id = (TextView) findViewById(R.id.link_webview_forget_id);
+        link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        btnLogin = (Button) findViewById(R.id.bt_login);
 
         lnGroupTitleLogin.setVisibility(View.VISIBLE);
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
         mToolbarTilte.setText(getString(R.string.txt_title_login));
-        // mToolbarTilte.setTextColor(R.color.white);
+
+        btnLogin.setOnClickListener(this);
+        link_webview_forget_id.setOnClickListener(this);
+        link_webview_not_login.setOnClickListener(this);
     }
 
     @Override
@@ -82,8 +74,6 @@ public class LoginActivity extends BaseActivity {
     protected void registerEventHandlers() {
 
     }
-
-    @OnClick(R.id.bt_login)
     public void clickLogin(View view){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
@@ -95,6 +85,7 @@ public class LoginActivity extends BaseActivity {
                     if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && password.equals(Constant.ACC_LOGIN_DEMO_PASSWORD)) {
                         Intent mainActivity = new Intent(this, MainActivity.class);
                         startActivity(mainActivity);
+                        finish();
                     }else{
                         txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
                         txtShowError.setVisibility(View.VISIBLE);
@@ -129,7 +120,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.link_webview_forget_id)
     public void clickForget(){
         trackingAnalytics(false,Constant.GA_LOGIN_SCREEN,Constant.GA_LOGIN_SCREEN_ACTION,
                 Constant.GA_LOGIN_SCREEN_FORGET_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
@@ -137,7 +127,6 @@ public class LoginActivity extends BaseActivity {
         goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
     }
 
-    @OnClick(R.id.link_webview_not_login)
     public void clickLinkNotLogin(){
         trackingAnalytics(false,Constant.GA_LOGIN_SCREEN, Constant.GA_LOGIN_SCREEN_ACTION,
                 Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
@@ -164,7 +153,6 @@ public class LoginActivity extends BaseActivity {
         Intent intent = new Intent(this, WebviewActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
-        finish();
     }
 
     /**
@@ -193,5 +181,20 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.bt_login:
+                clickLogin(v);
+                break;
+            case R.id.link_webview_forget_id:
+                clickForget();
+                break;
+            case R.id.link_webview_not_login:
+                clickLinkNotLogin();
+                break;
+        }
     }
 }

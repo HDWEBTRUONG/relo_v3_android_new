@@ -9,13 +9,6 @@ import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import main.R;
-import framework.phvtUtils.AppLog;
-import framework.phvtUtils.NetworkUtil;
-import framework.restfulService.parser.IParser;
-import main.util.DialogFactory;
-import main.util.NoSSLv3SocketFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +38,13 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+
+import framework.phvtUtils.AppLog;
+import framework.phvtUtils.NetworkUtil;
+import framework.restfulService.parser.IParser;
+import main.R;
+import main.util.DialogFactory;
+import main.util.NoSSLv3SocketFactory;
 
 /**
  * Created by linhphan on 11/17/15.

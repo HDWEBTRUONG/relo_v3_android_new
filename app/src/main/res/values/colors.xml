@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTreePoppy">#FFA51D</color>
+    <color name="colorTreePoppy_press">#D48412</color>
     <color name="colorGallery">#EAEAEA</color>
     <color name="colorAlabaster">#F7F7F7</color>
     <color name="colorFunBlue">#1561A7</color>
@@ -21,4 +22,6 @@
     <color name="colorWindowBackground">#FFF</color>
     <color name="colorText">#323232</color>
     <color name="colorNavigationBottom">#303030</color>
+    <color name="color_bg_bottom_ena">#3C3C3C</color>
+    <color name="color_bg_bottom_dis">#8F8F8F</color>
 </resources>

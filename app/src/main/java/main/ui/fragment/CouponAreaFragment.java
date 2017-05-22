@@ -4,11 +4,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-
-import main.R;
 import framework.phvtFragment.BaseFragment;
-
-import butterknife.ButterKnife;
+import main.R;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -17,14 +14,12 @@ import butterknife.ButterKnife;
 public class CouponAreaFragment extends BaseFragment {
     @Override
     public int getRootLayoutId() {
-        return R.layout.fragment_area_coupon;
+        return R.layout.activity_webview;
     }
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        Toolbar toolbar = ButterKnife.findById(root, R.id.toolbar);
-        TextView title = ButterKnife.findById(toolbar, R.id.toolbar_title);
-        title.setText(R.string.title_coupon_area);
+        addChildFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),true,getArguments(),null);
     }
 
     @Override

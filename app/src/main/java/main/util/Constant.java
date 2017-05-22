@@ -14,7 +14,9 @@ public class Constant {
 
     // Some URL of webview
     public static final String WEBVIEW_URL_FORGET_LOGIN = "https://google.com";
-    public static final String WEBVIEW_URL_CAN_NOT_LOGIN = "https://google.com";
+    public static final String WEBVIEW_URL_CAN_NOT_LOGIN = "http://stackoverflow.com";
+    public static final String WEBVIEW_URL_AREA_COUPON = "https://www.google.com/maps/@10.764855,106.6468148,15z";
+    public static final String WEBVIEW_URL_MEMBER_COUPON = "http://devpro.edu.vn";
 
     //Key username
     public static final String ACC_LOGIN_DEMO_USERNAME ="admin";
@@ -36,5 +38,7 @@ public class Constant {
     // Const for Weview throught login page
     public static final int FORGET_PASSWORD = 1;
     public static final int CAN_NOT_LOGIN =  FORGET_PASSWORD + 1;
+    public static final int AREA_COUPON =  CAN_NOT_LOGIN + 1;
+    public static final int MEMBER_COUPON =  AREA_COUPON + 1;
 
 }

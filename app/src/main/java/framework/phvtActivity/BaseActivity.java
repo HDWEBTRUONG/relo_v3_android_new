@@ -9,13 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
-
-import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Base Fragment Activity for the application
