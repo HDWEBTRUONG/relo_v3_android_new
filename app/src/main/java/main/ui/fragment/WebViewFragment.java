@@ -21,6 +21,7 @@ import android.widget.TextView;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import main.R;
+import main.ui.BaseFragmentToolbar;
 import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
 
@@ -28,35 +29,36 @@ import main.util.Constant;
  * Created by tonkhanh on 5/18/17.
  */
 
-public class WebViewFragment extends BaseFragment {
+public class WebViewFragment extends BaseFragmentToolbar {
 
-    Toolbar mToolbar;
-    TextView mToolbarTilte;
-    LinearLayout lnGroupArrow;
-    ImageView imgBack;
-    ImageView imgForward;
-    RelativeLayout rlGroupClose;
-    LinearLayout lnGroupTitle;
-    ImageView imgClose;
     WebView mWebView;
     private ProgressBar horizontalProgress;
+    private int checkWebview;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void init(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mToolbarTilte = (TextView) view.findViewById(R.id.title_toolbar);
-        lnGroupArrow = (LinearLayout) view.findViewById(R.id.group_bt_arrow);
-        imgBack = (ImageView) view.findViewById(R.id.imgBack);
-        imgForward = (ImageView) view.findViewById(R.id.imgForward);
-        rlGroupClose = (RelativeLayout) view.findViewById(R.id.group_close);
-        lnGroupTitle = (LinearLayout) view.findViewById(R.id.group_title);
-        imgClose = (ImageView) view.findViewById(R.id.imgClose);
-        mWebView = (WebView) view.findViewById(R.id.web_view);
-        horizontalProgress = (ProgressBar) view.findViewById(R.id.progressBar2);
+    @Override
+    public int getRootLayoutId() {
+        return R.layout.fragment_webview;
+    }
+
+    @Override
+    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
+        init(root);
+
+        checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+
+        String url = getArguments().getString(Constant.KEY_LOGIN_URL);
+
+        setupWebview();
+
+        mWebView.loadUrl(url);
+    }
+    @Override
+    public void setupToolbar() {
         imgBack.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -85,32 +87,16 @@ public class WebViewFragment extends BaseFragment {
                 getActivity().finish();
             }
         });
-
-    }
-
-    @Override
-    public int getRootLayoutId() {
-        return R.layout.fragment_webview;
-    }
-
-    @Override
-    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        init(root);
         mToolbar.setBackgroundResource(R.color.colorMineShaft);
         mToolbarTilte.setVisibility(View.VISIBLE);
-        int checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
-
         setToolbar(checkWebview);
-
-        String url = getArguments().getString(Constant.KEY_LOGIN_URL);
-
-        setupWebview();
-        if(mWebView.getUrl()!=null && !mWebView.getUrl().toString().equals("")){
-            AppLog.log("Ok");
-        }
-
-        mWebView.loadUrl(url);
     }
+
+    private void init(View view) {
+        mWebView = (WebView) view.findViewById(R.id.web_view);
+        horizontalProgress = (ProgressBar) view.findViewById(R.id.progressBar2);
+    }
+
     private void setToolbar(int checkWebview){
         // Change Title webview
         if( checkWebview== Constant.FORGET_PASSWORD ){ // 1: Forget ID/Password
