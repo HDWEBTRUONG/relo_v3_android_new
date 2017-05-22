@@ -7,11 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,7 @@ import java.util.ArrayList;
 import framework.phvtFragment.BaseFragment;
 import main.R;
 import main.ReloApp;
+import main.ui.BaseFragmentToolbar;
 import main.ui.adapter.CouponListAdapter;
 import main.ui.model.Coupon;
 import main.util.Constant;
@@ -30,19 +36,13 @@ import main.util.Constant;
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragment implements View.OnClickListener{
+public class CouponListFragment extends BaseFragmentToolbar implements View.OnClickListener{
 
     Button btnMenuCategory;
     ListView lvCategoryMenu;
     String[] listCategoryCoupon;
     ArrayAdapter<String> itemsAdapter;
     MaterialSpinner spinner;
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        init(view);
-    }
 
     private void init(View view) {
         btnMenuCategory = (Button) view.findViewById(R.id.bt_menu_category);
@@ -64,16 +64,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar)root.findViewById(R.id.toolbar);
-        TextView title = (TextView)root.findViewById(R.id.toolbar_title);
-        title.setText(R.string.title_coupon_list);
+        init(root);
+        //setToolbar();
 
         ArrayList listCoupon = getListData();
         final ListView lvCategory = (ListView)root.findViewById(R.id.list_category_listview);
         lvCategory.setAdapter(new CouponListAdapter(getContext(), listCoupon));
 
     }
-
 
     private ArrayList getListData() {
         ArrayList<Coupon> results = new ArrayList<Coupon>();
@@ -132,6 +130,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             //clickCategoryMenu();
             spinner.expand();
         }
+    }
+
+    @Override
+    public void setupToolbar() {
+        mToolbarTilte.setText(getString(R.string.title_coupon_list));
+        imgClose.setVisibility(View.GONE);
+        lnGroupTitle.setVisibility(View.VISIBLE);
+        lnGroupArrow.setVisibility(View.GONE);
+        rlGroupClose.setVisibility(View.GONE);
     }
 
     /*@Override
