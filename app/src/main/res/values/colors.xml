@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTreePoppy">#FFA51D</color>
+    <color name="colorTreePoppy_press">#D48412</color>
     <color name="colorGallery">#EAEAEA</color>
     <color name="colorAlabaster">#F7F7F7</color>
     <color name="colorFunBlue">#1561A7</color>

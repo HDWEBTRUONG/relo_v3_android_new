@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import framework.phvtFragment.BaseFragment;
+import framework.phvtUtils.AppLog;
 import main.R;
 import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
@@ -104,6 +105,9 @@ public class WebViewFragment extends BaseFragment {
         String url = getArguments().getString(Constant.KEY_LOGIN_URL);
 
         setupWebview();
+        if(mWebView.getUrl()!=null && !mWebView.getUrl().toString().equals("")){
+            AppLog.log("Ok");
+        }
 
         mWebView.loadUrl(url);
     }

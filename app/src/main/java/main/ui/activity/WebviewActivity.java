@@ -29,7 +29,7 @@ public class WebviewActivity extends BaseActivity {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-        replaceFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),false,getIntent().getExtras(),null);
+        replaceFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),true,getIntent().getExtras(),null);
     }
 
     @Override

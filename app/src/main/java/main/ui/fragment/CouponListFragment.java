@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
 import java.util.ArrayList;
 
 import framework.phvtFragment.BaseFragment;
@@ -34,6 +36,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ListView lvCategoryMenu;
     String[] listCategoryCoupon;
     ArrayAdapter<String> itemsAdapter;
+    MaterialSpinner spinner;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -44,6 +47,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void init(View view) {
         btnMenuCategory = (Button) view.findViewById(R.id.bt_menu_category);
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
+        spinner = (MaterialSpinner) view.findViewById(R.id.spinnerCategory);
+        spinner.setItems("カテゴリを選ぶ 1", "カテゴリを選ぶ 2", "カテゴリを選ぶ 3", "カテゴリを選ぶ 4", "カテゴリを選ぶ 5");
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Toast.makeText(getActivity(), "Clicked " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
         btnMenuCategory.setOnClickListener(this);
     }
 
@@ -51,7 +62,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public int getRootLayoutId() {
         return R.layout.fragment_coupon_list;
     }
-
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar)root.findViewById(R.id.toolbar);
@@ -119,7 +129,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.bt_menu_category){
-            clickCategoryMenu();
+            //clickCategoryMenu();
+            spinner.expand();
         }
     }
 
