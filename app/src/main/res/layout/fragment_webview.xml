@@ -7,22 +7,11 @@
     android:orientation="vertical"
     tools:context="main.ui.activity.MainActivity">
     <include layout="@layout/layout_toolbar_default"/>
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/lnContainerWv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/positive_2dp"
-            android:layout_gravity="start|top"
-            android:max="100"
-            android:padding="0dp"
-            android:progressDrawable="@drawable/progress_horizontal" />
-    </RelativeLayout>
-    <WebView android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    </LinearLayout>
 
 </LinearLayout>

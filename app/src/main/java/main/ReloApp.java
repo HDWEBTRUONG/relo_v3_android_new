@@ -1,7 +1,14 @@
 package main;
 
 import android.app.Application;
+import android.content.DialogInterface;
+import android.net.http.SslError;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -9,17 +16,20 @@ import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
 
+import main.ui.webview.CustomWebViewClient;
+import main.util.Constant;
+
 /**
  * Created by HuyTran on 3/21/17.
  */
 
 public class ReloApp extends Application {
-
-    protected File extStorageAppBasePath;
-
-    protected File extStorageAppCachePath;
-
     private Tracker mTracker;
+
+    private WebView wvForgetPass;
+    private WebView wvCanNotLogin;
+    private WebView wvAreaCoupon;
+    private WebView wvMemberCoupon;
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
@@ -86,56 +96,70 @@ public class ReloApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // Check if the external storage is writeable
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
-        {
-            // Retrieve the base path for the application in the external storage
-            File externalStorageDir = Environment.getExternalStorageDirectory();
+        wvForgetPass=setupWebview(Constant.WEBVIEW_URL_FORGET_LOGIN);
+        wvCanNotLogin=setupWebview(Constant.WEBVIEW_URL_CAN_NOT_LOGIN);
+        wvAreaCoupon=setupWebview(Constant.WEBVIEW_URL_AREA_COUPON);
+        wvMemberCoupon=setupWebview(Constant.WEBVIEW_URL_MEMBER_COUPON);
 
-            if (externalStorageDir != null)
-            {
-                // {SD_PATH}/Android/data/com.blogspot.geekonjava.androidwebviewcacheonsd
-                extStorageAppBasePath = new File(externalStorageDir.getAbsolutePath() +
-                        File.separator + "Android" + File.separator + "data" +
-                        File.separator + getPackageName());
+    }
+
+    private WebView setupWebview(String url){
+        ////////////// setting webview
+        WebView mWebView = new WebView(getApplicationContext());
+        WebSettings webSettings = mWebView.getSettings();
+
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptEnabled(true);
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
+        //set responsive
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
+
+        //set zoomable
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+
+        //////////////
+
+        mWebView.setWebViewClient(new CustomWebViewClient() {
+
+            @Override
+            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setMessage(getResources().getString(R.string.error_ssl));
+                builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
             }
 
-            if (extStorageAppBasePath != null)
-            {
-                // {SD_PATH}/Android/data/com.blogspot.geekonjava.androidwebviewcacheonsd/cache
-                extStorageAppCachePath = new File(extStorageAppBasePath.getAbsolutePath() +
-                        File.separator + "cache");
-
-                boolean isCachePathAvailable = true;
-
-                if (!extStorageAppCachePath.exists())
-                {
-                    // Create the cache path on the external storage
-                    isCachePathAvailable = extStorageAppCachePath.mkdirs();
-                }
-
-                if (!isCachePathAvailable)
-                {
-                    // Unable to create the cache path
-                    extStorageAppCachePath = null;
-                }
-            }
-        }
+        });
+        mWebView.loadUrl(url);
+        return mWebView;
     }
-    @Override
-    public File getCacheDir()
-    {
-        // NOTE: this method is used in Android 2.2 and higher
-
-        if (extStorageAppCachePath != null)
-        {
-            // Use the external storage for the cache
-            return extStorageAppCachePath;
+    public WebView getWebView(int index){
+        switch (index){
+            case Constant.FORGET_PASSWORD:
+                return wvForgetPass;
+            case Constant.CAN_NOT_LOGIN:
+                return wvCanNotLogin;
+            case Constant.AREA_COUPON:
+                return wvAreaCoupon;
+            case Constant.MEMBER_COUPON:
+                return wvMemberCoupon;
         }
-        else
-        {
-            // /data/data/com.blogspot.geekonjava.androidwebviewcacheonsd/cache
-            return super.getCacheDir();
-        }
+        return null;
     }
+
 }

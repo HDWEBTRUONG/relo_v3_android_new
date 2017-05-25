@@ -29,7 +29,7 @@ public class WebviewActivity extends BaseActivity {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-        replaceFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),true,getIntent().getExtras(),null);
+        replaceFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),false,getIntent().getExtras(),null);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class WebviewActivity extends BaseActivity {
     }
 
     @Override
-    public File getCacheDir() {
-        return getApplicationContext().getCacheDir();
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
