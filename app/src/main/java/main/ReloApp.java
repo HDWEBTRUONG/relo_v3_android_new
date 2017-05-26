@@ -15,6 +15,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
@@ -30,6 +35,8 @@ public class ReloApp extends Application {
     private WebView wvCanNotLogin;
     private WebView wvAreaCoupon;
     private WebView wvMemberCoupon;
+
+    private KeyStore keyStore;
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
@@ -101,6 +108,18 @@ public class ReloApp extends Application {
         wvAreaCoupon=setupWebview(Constant.WEBVIEW_URL_AREA_COUPON);
         wvMemberCoupon=setupWebview(Constant.WEBVIEW_URL_MEMBER_COUPON);
 
+        try {
+            keyStore=KeyStore.getInstance("AndroidKeyStore");
+            keyStore.load(null);
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        }
     }
 
     private WebView setupWebview(String url){
@@ -160,6 +179,9 @@ public class ReloApp extends Application {
                 return wvMemberCoupon;
         }
         return null;
+    }
+    public KeyStore getKeyStore(){
+        return keyStore;
     }
 
 }

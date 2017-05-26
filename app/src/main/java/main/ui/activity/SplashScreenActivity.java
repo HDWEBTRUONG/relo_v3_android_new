@@ -9,7 +9,10 @@ import android.widget.RelativeLayout;
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.NetworkUtil;
 import main.R;
+import main.ReloApp;
+import main.util.Constant;
 import main.util.DialogFactory;
+import main.util.Utils;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -24,6 +27,8 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Utils.createNewKeys(this,((ReloApp)getApplication()).getKeyStore());
 
         //== delay this screen a particular time
 //        imgApdll.setAnimation(fadeIn);

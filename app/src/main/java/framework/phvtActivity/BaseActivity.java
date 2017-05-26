@@ -16,6 +16,8 @@ import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
+import main.ReloApp;
+import main.util.Utils;
 
 /**
  * Base Fragment Activity for the application
@@ -343,5 +345,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         result += String.valueOf(calendar.get(Calendar.MINUTE)) + separate;
         result += String.valueOf(calendar.get(Calendar.MILLISECOND));
         return result;
+    }
+    public String encryptKeyStore(String txt){
+        return Utils.encryptString(((ReloApp)getApplication()).getKeyStore(),txt);
+    }
+    public String decryptKeyStore(String txt){
+        return Utils.decryptString(((ReloApp)getApplication()).getKeyStore(),txt);
     }
 }
