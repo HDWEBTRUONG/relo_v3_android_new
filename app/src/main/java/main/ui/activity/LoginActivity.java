@@ -11,9 +11,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import framework.phvtActivity.BaseActivity;
+import framework.phvtUtils.AppLog;
 import main.R;
 import main.ReloApp;
 import main.util.Constant;
+import main.util.LoginSharedPreference;
 import main.util.Utils;
 
 /**
@@ -67,7 +69,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-
     }
 
     @Override
@@ -83,6 +84,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             try {
                 if ((username != null && !username.isEmpty()) && (password != null && !password.isEmpty())) {
                     if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && password.equals(Constant.ACC_LOGIN_DEMO_PASSWORD)) {
+                        //save user and password encrypt KeyStore
+                        LoginSharedPreference.getInstance(this).setLogin(encryptKeyStore(username),encryptKeyStore(password));
+
                         Intent mainActivity = new Intent(this, MainActivity.class);
                         startActivity(mainActivity);
                         finish();
@@ -176,6 +180,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
+        editUsername.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getUserID()));
+        editPassword.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getPassword()));
     }
 
     @Override
