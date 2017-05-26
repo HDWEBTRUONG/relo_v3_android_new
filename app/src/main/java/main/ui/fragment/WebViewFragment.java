@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -21,9 +23,11 @@ import android.widget.TextView;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import main.R;
+import main.ReloApp;
 import main.ui.BaseFragmentToolbar;
 import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
+import main.util.Utils;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -32,8 +36,8 @@ import main.util.Constant;
 public class WebViewFragment extends BaseFragmentToolbar {
 
     WebView mWebView;
-    private ProgressBar horizontalProgress;
     private int checkWebview;
+    LinearLayout myContainer;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -47,16 +51,17 @@ public class WebViewFragment extends BaseFragmentToolbar {
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        init(root);
-
+        myContainer = (LinearLayout) root.findViewById(R.id.lnContainerWv);
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        mWebView = ((ReloApp)getActivity().getApplication()).getWebView(checkWebview);
+        try {
+            myContainer.addView(mWebView,
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        }catch (Exception ex){
 
-        String url = getArguments().getString(Constant.KEY_LOGIN_URL);
-
-        setupWebview();
-
-        mWebView.loadUrl(url);
+        }
     }
+
     @Override
     public void setupToolbar() {
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -92,9 +97,9 @@ public class WebViewFragment extends BaseFragmentToolbar {
         setToolbar(checkWebview);
     }
 
-    private void init(View view) {
-        mWebView = (WebView) view.findViewById(R.id.web_view);
-        horizontalProgress = (ProgressBar) view.findViewById(R.id.progressBar2);
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setToolbar(int checkWebview){
@@ -116,71 +121,19 @@ public class WebViewFragment extends BaseFragmentToolbar {
         rlGroupClose.setVisibility(View.VISIBLE);
     }
 
-    private void setupWebview(){
-        ////////////// setting webview
 
-        WebSettings webSettings = mWebView.getSettings();
-
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-        //set responsive
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadWithOverviewMode(true);
-
-        //set zoomable
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-
-        //Disable cache Webview
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        webSettings.setAppCachePath(getActivity().getCacheDir().getPath());
-        webSettings.setAllowFileAccess(true);
-
-        //////////////
-
-        mWebView.setWebViewClient(new CustomWebViewClient() {
-
-            @Override
-            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(getResources().getString(R.string.error_ssl));
-                builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        handler.proceed();
-                    }
-                });
-                builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        handler.cancel();
-                    }
-                });
-            }
-
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
-                    horizontalProgress.setVisibility(View.GONE);
-                } else {
-                    horizontalProgress.setProgress(newProgress);
-                    horizontalProgress.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
 
     @Override
     protected void registerEventHandlers() {
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mWebView!=null&&mWebView.getParent()!=null){
+            ((LinearLayout)mWebView.getParent()).removeView(mWebView);
+        }
+    }
+
 }
