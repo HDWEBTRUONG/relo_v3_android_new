@@ -43,12 +43,13 @@ public class SplashScreenActivity extends BaseActivity {
 
 
     private void mainProcess() {
-        boolean isNetWorkAvailable = NetworkUtil.isOnline(this);
+        /*boolean isNetWorkAvailable = NetworkUtil.isOnline(this);
         if (!isNetWorkAvailable) {
             DialogFactory.showMessage(this, getString(R.string.no_internet));
         } else {
             goNextScreen();
-        }
+        }*/
+        goNextScreen();
     }
 
     //TODO make redirection after splash screen gone

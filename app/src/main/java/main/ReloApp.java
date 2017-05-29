@@ -23,6 +23,7 @@ import java.security.cert.CertificateException;
 
 import main.ui.webview.CustomWebViewClient;
 import main.util.Constant;
+import main.util.LoginSharedPreference;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -37,6 +38,8 @@ public class ReloApp extends Application {
     private WebView wvMemberCoupon;
 
     private KeyStore keyStore;
+
+    private int version;
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
@@ -107,6 +110,7 @@ public class ReloApp extends Application {
         wvCanNotLogin=setupWebview(Constant.WEBVIEW_URL_CAN_NOT_LOGIN);
         wvAreaCoupon=setupWebview(Constant.WEBVIEW_URL_AREA_COUPON);
         wvMemberCoupon=setupWebview(Constant.WEBVIEW_URL_MEMBER_COUPON);
+        version = LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
 
         try {
             keyStore=KeyStore.getInstance("AndroidKeyStore");
@@ -182,6 +186,9 @@ public class ReloApp extends Application {
     }
     public KeyStore getKeyStore(){
         return keyStore;
+    }
+    public int getVersion(){
+        return version;
     }
 
 }

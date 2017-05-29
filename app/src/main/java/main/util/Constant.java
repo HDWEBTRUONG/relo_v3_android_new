@@ -5,6 +5,10 @@ package main.util;
  */
 
 public class Constant {
+    //link server coupon
+    public static final String BASE_URL = "http://54.202.202.214/relo/";
+    public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/relo_data.xml";
+
 
     //Google Analytics
     public static final String GA_POPULAR_COUPON_SCREEN = "人気クーポン";

@@ -1,6 +1,8 @@
 package main.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.security.KeyPairGeneratorSpec;
 import android.util.Base64;
@@ -26,6 +28,7 @@ import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
 import framework.phvtUtils.AppLog;
+import main.R;
 import main.ReloApp;
 
 /**
@@ -133,5 +136,27 @@ public class Utils {
             AppLog.log(Log.getStackTraceString(e));
         }
         return "";
+    }
+    public static int convertInt(String value){
+        if(value!=null&&!"".equals(value)){
+            try {
+                return Integer.valueOf(value);
+            }catch (Exception ex){
+                return 0;
+            }
+        }
+        return 0;
+    }
+    public static void showDialog(Context context,int title, int messagee){
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(context.getResources().getString(title));
+        alertDialog.setMessage(context.getResources().getString(messagee));
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }

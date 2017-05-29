@@ -42,6 +42,15 @@ public class WebViewFragment extends BaseFragmentToolbar {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        myContainer = (LinearLayout) view.findViewById(R.id.lnContainerWv);
+        checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        mWebView = ((ReloApp)getActivity().getApplication()).getWebView(checkWebview);
+        try {
+            myContainer.addView(mWebView,
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        }catch (Exception ex){
+
+        }
     }
 
     @Override
@@ -51,15 +60,7 @@ public class WebViewFragment extends BaseFragmentToolbar {
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        myContainer = (LinearLayout) root.findViewById(R.id.lnContainerWv);
-        checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
-        mWebView = ((ReloApp)getActivity().getApplication()).getWebView(checkWebview);
-        try {
-            myContainer.addView(mWebView,
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        }catch (Exception ex){
 
-        }
     }
 
     @Override

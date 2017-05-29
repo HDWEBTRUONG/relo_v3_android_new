@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by tonkhanh on 5/23/17.
  */
 
-public class VersionReponse {
+public class VersionReponse{
     @SerializedName("project")
     String project;
     @SerializedName("version")
