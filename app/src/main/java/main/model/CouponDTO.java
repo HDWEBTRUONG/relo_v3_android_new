@@ -17,6 +17,12 @@ public class CouponDTO{
     private String p_url;
     @SerializedName("c_url")
     private String c_url;
+    @SerializedName("like")
+    private int like;
+    @SerializedName("id")
+    private int id;
+
+
 
     public String getCategory() {
         return category;
@@ -56,5 +62,21 @@ public class CouponDTO{
 
     public void setC_url(String c_url) {
         this.c_url = c_url;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -3,20 +3,52 @@ package main.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.XML;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
 import main.R;
 import main.ReloApp;
+import main.api.ApiClient;
+import main.api.ApiInterface;
+import main.database.MyDatabaseHelper;
+import main.model.DataReponse;
+import main.model.VersionReponse;
 import main.util.Constant;
 import main.util.LoginSharedPreference;
 import main.util.Utils;
+import rx.Subscriber;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -34,10 +66,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     TextView link_webview_not_login;
     Button btnLogin;
 
+    Subscriber subscriber;
+    rx.Observable<VersionReponse> observable;
+    MyDatabaseHelper sqLiteOpenHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sqLiteOpenHelper = new MyDatabaseHelper(this);
         init();
     }
 
@@ -86,41 +123,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && password.equals(Constant.ACC_LOGIN_DEMO_PASSWORD)) {
                         //save user and password encrypt KeyStore
                         LoginSharedPreference.getInstance(this).setLogin(encryptKeyStore(username),encryptKeyStore(password));
-
-                        Intent mainActivity = new Intent(this, MainActivity.class);
-                        startActivity(mainActivity);
-                        finish();
+                        updateData();
                     }else{
                         txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
                         txtShowError.setVisibility(View.VISIBLE);
                     }
                 }else{
-                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                    alertDialog.setTitle(getResources().getString(R.string.popup_title_login));
-                    alertDialog.setMessage(getResources().getString(R.string.error_blank_id_password));
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
+                    Utils.showDialog(this,R.string.popup_title_login,R.string.error_blank_id_password);
                 }
             }catch (Exception e) {
                 e.printStackTrace();
             }
 
         }else{
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle(getResources().getString(R.string.popup_title_login));
-            alertDialog.setMessage(getResources().getString(R.string.error_connect_network));
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
+            Utils.showDialog(this,R.string.popup_title_login,R.string.error_connect_network);
         }
     }
 
@@ -201,6 +217,107 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.link_webview_not_login:
                 clickLinkNotLogin();
                 break;
+        }
+    }
+
+    private void updateData(){
+        subscriber=new Subscriber<VersionReponse>() {
+            @Override
+            public void onCompleted() {
+                AppLog.log("Complate");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                AppLog.log("Throwable: "+e);
+                gotoMain();
+            }
+
+            @Override
+            public void onNext(VersionReponse versionReponse) {
+                AppLog.log("onNext");
+                if(Utils.convertInt(versionReponse.getVersion())>((ReloApp)getApplication()).getVersion()){
+                    new UpdateTask().execute(versionReponse.getVersion());
+                }else{
+                    gotoMain();
+                }
+            }
+        };
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        observable =apiInterface.checkVersion();
+        addSubscription(observable,subscriber);
+    }
+    private void gotoMain(){
+        Intent mainActivity = new Intent(this, MainActivity.class);
+                        startActivity(mainActivity);
+                        finish();
+    }
+
+    class UpdateTask extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showLoading(LoginActivity.this);
+        }
+
+        protected Integer doInBackground(String... arg0) {
+            //Your implementation
+            Document doc = null;
+            URL xmlURL = null;
+            InputStream xml = null;
+
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = null;
+            try {
+                xmlURL = new URL(Constant.BASE_URL_UPDATE);
+                xml = xmlURL.openStream();
+                db = dbf.newDocumentBuilder();
+                doc = db.parse(xml);
+                xml.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }catch (SAXException e) {
+                e.printStackTrace();
+            }
+            saveData(doc);
+            return Utils.convertInt(arg0[0]);
+        }
+
+        protected void onPostExecute(Integer result) {
+            // TODO: do something with the feed
+            hideLoading();
+            LoginSharedPreference.getInstance(LoginActivity.this).setVersion(result);
+            gotoMain();
+        }
+    }
+
+    public void saveData(Document doc){
+        DOMSource domSource = new DOMSource(doc);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = null;
+        try {
+            transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        }catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        try {
+            DataReponse dataReponse=new Gson().fromJson(XML.toJSONObject(writer.toString()).toString(), DataReponse.class);
+            if(dataReponse!=null){
+                sqLiteOpenHelper.clearData();
+                sqLiteOpenHelper.saveCouponList(dataReponse.getData().getCoupon());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

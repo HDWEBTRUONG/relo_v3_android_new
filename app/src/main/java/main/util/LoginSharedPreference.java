@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class LoginSharedPreference {
     public final String KEY_USER="userID";
     public final String KEY_PASS="password";
+    public final String VERSION = "version";
     public static LoginSharedPreference sharedPreference;
 
     private final SharedPreferences sharedPreferences;
@@ -48,5 +49,13 @@ public class LoginSharedPreference {
     }
     public String getPassword(){
         return sharedPreferences.getString(KEY_PASS,"");
+    }
+    public void setVersion(int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(VERSION, value);
+        editor.apply();
+    }
+    public int getVersion(){
+        return sharedPreferences.getInt(VERSION,0);
     }
 }

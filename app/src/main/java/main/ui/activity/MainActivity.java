@@ -73,8 +73,8 @@ public class MainActivity extends BaseActivity {
                 R.drawable.ic_notifications_black_24dp, getString(R.string.title_membership)), MembershipFragment.class,
                 createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_MEMBER_COUPON, Constant.MEMBER_COUPON));
 
-        mTabHost.getTabWidget().setDividerDrawable(R.drawable.bg_driver_bottom_bar);
-        mTabHost.getTabWidget().setShowDividers(TabWidget.SHOW_DIVIDER_MIDDLE);
+        /*mTabHost.getTabWidget().setDividerDrawable(R.drawable.bg_driver_bottom_bar);
+        mTabHost.getTabWidget().setShowDividers(TabWidget.SHOW_DIVIDER_MIDDLE);*/
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {

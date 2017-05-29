@@ -1,5 +1,6 @@
 package framework.phvtActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -18,6 +21,12 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
 import main.ReloApp;
 import main.util.Utils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Base Fragment Activity for the application
@@ -52,6 +61,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Inflate layout and get mandatory Views
      */
+    private CompositeSubscription mCompositeSubscription;
+    private KProgressHUD kProgressHUDloading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -351,5 +363,48 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     public String decryptKeyStore(String txt){
         return Utils.decryptString(((ReloApp)getApplication()).getKeyStore(),txt);
+    }
+    public void addSubscription(Observable observable, Subscriber subscriber) {
+        if (mCompositeSubscription == null) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
+        mCompositeSubscription.add(observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber));
+
+
+    }
+
+    public void addSubscription(Subscription subscription) {
+        if (mCompositeSubscription == null) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
+        mCompositeSubscription.add(subscription);
+    }
+
+    public void onUnsubscribe() {
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
+            mCompositeSubscription.unsubscribe();
+    }
+    public void showLoading(Context context){
+        if(kProgressHUDloading==null){
+            kProgressHUDloading=KProgressHUD.create(context)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setLabel("Please wait")
+                    .setDetailsLabel("Downloading data")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
+        }
+        if(!kProgressHUDloading.isShowing()){
+            kProgressHUDloading.show();
+        }
+
+    }
+    public void hideLoading(){
+        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
+            kProgressHUDloading.dismiss();
+        }
     }
 }
