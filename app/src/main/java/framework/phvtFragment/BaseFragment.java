@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,12 @@ public abstract class BaseFragment extends Fragment {
      */
     public boolean addChildFragment(int viewGroupId, String childFragmentClassNameTag, boolean addToBackStack, Bundle data, FragmentTransitionInfo transition) {
         return FragmentHelper.addChildFragment(this, viewGroupId, childFragmentClassNameTag, addToBackStack, data, transition);
+    }
+    public void switchChildFragment(Fragment fragment, FragmentManager childFragmentManager, int idContent) {
+        String FRAGMENT_TAG = fragment.getClass().getSimpleName();
+        childFragmentManager.beginTransaction()
+                .replace(idContent, fragment, FRAGMENT_TAG)
+                .commitAllowingStateLoss();
     }
     //-------------------------------------------------------------------------------------------------------------------
 
@@ -307,5 +314,8 @@ public abstract class BaseFragment extends Fragment {
     public void requestAPI(HttpRequestClient client) {
         addAsyncHttpTask(client);
         client.execute();
+    }
+    public void removeView(){
+        ((ViewGroup)mRootLayout).removeAllViews();
     }
 }

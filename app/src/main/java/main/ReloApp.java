@@ -6,9 +6,11 @@ import android.net.http.SslError;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -168,7 +170,9 @@ public class ReloApp extends Application {
             }
 
         });
-        mWebView.loadUrl(url);
+        if(!"".equals(url)){
+            mWebView.loadUrl(url);
+        }
         return mWebView;
     }
     public WebView getWebView(int index){
@@ -181,6 +185,8 @@ public class ReloApp extends Application {
                 return wvAreaCoupon;
             case Constant.MEMBER_COUPON:
                 return wvMemberCoupon;
+            case Constant.DETAIL_COUPON:
+                return setupWebview("");
         }
         return null;
     }

@@ -7,11 +7,9 @@
     android:orientation="vertical"
     tools:context="main.ui.activity.MainActivity">
     <include layout="@layout/layout_toolbar_default"/>
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lnContainerWv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-    </LinearLayout>
-
+        android:layout_height="match_parent">
+    </RelativeLayout>
 </LinearLayout>
