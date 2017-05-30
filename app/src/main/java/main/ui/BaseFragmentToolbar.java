@@ -40,6 +40,11 @@ public abstract class BaseFragmentToolbar extends BaseFragment {
         rlGroupClose = (RelativeLayout) view.findViewById(R.id.group_close);
         lnGroupTitle = (LinearLayout) view.findViewById(R.id.group_title);
         imgClose = (ImageView) view.findViewById(R.id.imgClose);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         setupToolbar();
     }
 

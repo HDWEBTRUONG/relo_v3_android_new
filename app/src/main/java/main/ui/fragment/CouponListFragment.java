@@ -2,6 +2,7 @@ package main.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.view.ContextThemeWrapper;
@@ -27,7 +28,11 @@ import java.util.ArrayList;
 import framework.phvtFragment.BaseFragment;
 import main.R;
 import main.ReloApp;
+import main.database.MyDatabaseHelper;
+import main.model.CouponDTO;
 import main.ui.BaseFragmentToolbar;
+import main.ui.activity.MainActivity;
+import main.ui.activity.WebviewActivity;
 import main.ui.adapter.CouponListAdapter;
 import main.ui.model.Coupon;
 import main.util.Constant;
@@ -36,13 +41,21 @@ import main.util.Constant;
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragmentToolbar implements View.OnClickListener{
+public class CouponListFragment extends BaseFragmentToolbar implements View.OnClickListener,CouponListAdapter.iClickButton{
 
     Button btnMenuCategory;
     ListView lvCategoryMenu;
-    String[] listCategoryCoupon;
-    ArrayAdapter<String> itemsAdapter;
     MaterialSpinner spinner;
+    MyDatabaseHelper myDatabaseHelper;
+    CouponListAdapter adapter;
+    ArrayList<CouponDTO> listCoupon=new ArrayList<>();
+    MainActivity mainActivity;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        myDatabaseHelper=new MyDatabaseHelper(getActivity());
+    }
 
     private void init(View view) {
         btnMenuCategory = (Button) view.findViewById(R.id.bt_menu_category);
@@ -65,48 +78,31 @@ public class CouponListFragment extends BaseFragmentToolbar implements View.OnCl
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
         init(root);
-        //setToolbar();
 
-        ArrayList listCoupon = getListData();
-        final ListView lvCategory = (ListView)root.findViewById(R.id.list_category_listview);
-        lvCategory.setAdapter(new CouponListAdapter(getContext(), listCoupon));
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mainActivity = (MainActivity)getActivity();
+        listCoupon = getListData();
+        setAdapter();
     }
 
     private ArrayList getListData() {
-        ArrayList<Coupon> results = new ArrayList<Coupon>();
-
-        String categoryName = getResources().getString(R.string.item_coupon_category_name);
-        String companyName = getResources().getString(R.string.item_coupon_company_name);
-        String durationCoupon = getResources().getString(R.string.item_coupon_duration);
-
-        for (int i=0; i<10; i++) {
-            Coupon data = new Coupon();
-            data.setCategoryName(categoryName);
-            data.setCompanyName(companyName);
-            data.setDurationCoupon(durationCoupon);
-            results.add(data);
-        }
-
+        ArrayList<CouponDTO> results = new ArrayList<CouponDTO>();
+        results = myDatabaseHelper.getAllCoupon();
         // Add some more dummy data for testing
         return results;
     }
-
-    public void clickCategoryMenu(){
-        //Set Style for PopupMenu
-        Context wrapper = new ContextThemeWrapper(getContext(), R.style.popup_menu);
-        PopupMenu popup = new PopupMenu(wrapper, btnMenuCategory);
-        popup.getMenuInflater().inflate(R.menu.popup_categories, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-        popup.show();//showing popup menu
+    private void setAdapter(){
+        if(adapter==null){
+            adapter =new CouponListAdapter(getContext(), listCoupon,this);
+        }else{
+            adapter.notifyDataSetChanged();
+        }
+        lvCategoryMenu.setAdapter(adapter);
     }
-
 
     @Override
     protected void registerEventHandlers() {
@@ -139,6 +135,18 @@ public class CouponListFragment extends BaseFragmentToolbar implements View.OnCl
         lnGroupTitle.setVisibility(View.VISIBLE);
         lnGroupArrow.setVisibility(View.GONE);
         rlGroupClose.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void callback(CouponDTO data) {
+        Toast.makeText(getActivity(),"Click: "+data.getName(),Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.KEY_LOGIN_URL, data.getC_url());
+        bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
+        Intent intent = new Intent(getActivity(), WebviewActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /*@Override

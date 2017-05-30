@@ -81,8 +81,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
-    public List<CouponDTO> getAllCoupon(){
-        List<CouponDTO> datas= new ArrayList<>();
+    public ArrayList<CouponDTO> getAllCoupon(){
+        ArrayList<CouponDTO> datas= new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_COUPON;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -95,9 +95,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 note.setCategory(cursor.getString(1));
                 note.setName(cursor.getString(2));
                 note.setLimit(cursor.getString(3));
-                note.setP_url(cursor.getString(5));
-                note.setC_url(cursor.getString(6));
-                note.setLike(cursor.getInt(7));
+                note.setP_url(cursor.getString(4));
+                note.setC_url(cursor.getString(5));
+                note.setLike(cursor.getInt(6));
                 datas.add(note);
             } while (cursor.moveToNext());
         }

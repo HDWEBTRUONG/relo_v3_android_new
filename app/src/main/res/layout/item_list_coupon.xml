@@ -15,10 +15,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_10dp"
             android:layout_marginRight="@dimen/_10dp">
-            <ImageView android:layout_width="@dimen/_50dp"
-            android:layout_height="@dimen/_50dp"
-            android:src="@drawable/img_item_coupon"
-            android:id="@+id/img_item_coupon" />
+            <ImageView
+                android:layout_width="@dimen/_60dp"
+                android:layout_height="@dimen/_60dp"
+                android:src="@drawable/img_item_coupon"
+                android:id="@+id/img_item_coupon" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                 android:text="@string/item_coupon_company_name"
                 android:textStyle="bold"/>
             <Button
-                android:id="@+id/btnItem"
+                android:id="@+id/btnDetail"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_25dp"
                 android:layout_gravity="center"

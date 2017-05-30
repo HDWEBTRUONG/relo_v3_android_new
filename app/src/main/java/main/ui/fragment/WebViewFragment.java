@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
@@ -37,20 +38,25 @@ public class WebViewFragment extends BaseFragmentToolbar {
 
     WebView mWebView;
     private int checkWebview;
-    LinearLayout myContainer;
+    private String url;
+    RelativeLayout myContainer;
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        myContainer = (LinearLayout) view.findViewById(R.id.lnContainerWv);
+        url = getArguments().getString(Constant.KEY_LOGIN_URL);
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
         mWebView = ((ReloApp)getActivity().getApplication()).getWebView(checkWebview);
-        try {
-            myContainer.addView(mWebView,
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        }catch (Exception ex){
-
+        myContainer = (RelativeLayout) view.findViewById(R.id.lnContainerWv);
+        if(mWebView!=null&&mWebView.getParent()!=null){
+            ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
         }
+        if(checkWebview==Constant.DETAIL_COUPON){
+            mWebView.loadUrl(url);
+        }
+        myContainer.addView(mWebView,
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     @Override
@@ -115,6 +121,9 @@ public class WebViewFragment extends BaseFragmentToolbar {
         }else if(checkWebview== Constant.MEMBER_COUPON){ // 4.coupon membership
             mToolbarTilte.setText(getString(R.string.title_membership));
             imgClose.setVisibility(View.GONE);
+        }else if(checkWebview== Constant.DETAIL_COUPON){ // 5.coupon detail
+            mToolbarTilte.setText("Detail coupon");
+            imgClose.setVisibility(View.GONE);
         }
 
         lnGroupTitle.setVisibility(View.VISIBLE);
@@ -133,7 +142,7 @@ public class WebViewFragment extends BaseFragmentToolbar {
     public void onDestroyView() {
         super.onDestroyView();
         if(mWebView!=null&&mWebView.getParent()!=null){
-            ((LinearLayout)mWebView.getParent()).removeView(mWebView);
+            ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
         }
     }
 
