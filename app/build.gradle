@@ -24,6 +24,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/json-20140107.jar')
     compile 'com.google.android.gms:play-services-analytics:10.2.1'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
@@ -37,8 +38,8 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile files('libs/json-20140107.jar')
     compile 'com.kaopiz:kprogresshud:1.0.5'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

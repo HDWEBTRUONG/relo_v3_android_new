@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center|center_vertical">
-    <include layout="@layout/layout_toolbar_default"/>
     <LinearLayout
         android:id="@+id/lnGroupCategory"
         android:layout_width="match_parent"

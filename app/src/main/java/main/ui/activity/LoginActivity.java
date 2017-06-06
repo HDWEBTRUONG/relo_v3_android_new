@@ -248,7 +248,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         addSubscription(observable,subscriber);
     }
     private void gotoMain(){
-        Intent mainActivity = new Intent(this, MainActivity.class);
+        Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
                         finish();
     }
