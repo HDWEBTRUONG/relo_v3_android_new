@@ -3,8 +3,13 @@ package main.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.security.KeyPairGeneratorSpec;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -158,5 +163,22 @@ public class Utils {
                     }
                 });
         alertDialog.show();
+    }
+    public static Spanned createTextImage(final Context context, String txt, int img){
+        String imgString = String.format("<img src=\"%s\"/><font size='6'>" + txt + "</font>", img);
+        return Html.fromHtml(imgString, new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(final String source) {
+                Drawable d = null;
+                try {
+                    d = ContextCompat.getDrawable(context,Integer.parseInt(source));
+                    d.setBounds(0, 0, (int)(d.getIntrinsicWidth()/1.7f), (int)(d.getIntrinsicHeight()/1.7f));
+                } catch (Resources.NotFoundException e) {
+                } catch (NumberFormatException e) {
+                }
+
+                return d;
+            }
+        }, null);
     }
 }

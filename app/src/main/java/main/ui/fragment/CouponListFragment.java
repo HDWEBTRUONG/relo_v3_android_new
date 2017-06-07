@@ -18,6 +18,7 @@ import main.R;
 import main.ReloApp;
 import main.database.MyDatabaseHelper;
 import main.model.CouponDTO;
+import main.ui.BaseFragmentBottombar;
 import main.ui.activity.WebviewActivity;
 import main.ui.adapter.CouponListAdapter;
 import main.util.Constant;
@@ -26,7 +27,7 @@ import main.util.Constant;
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragment implements View.OnClickListener,CouponListAdapter.iClickButton{
+public class CouponListFragment extends BaseFragmentBottombar implements View.OnClickListener,CouponListAdapter.iClickButton{
 
     Button btnMenuCategory;
     ListView lvCategoryMenu;
@@ -70,6 +71,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         listCoupon = getListData();
         setAdapter();
+    }
+
+    @Override
+    public void setupBottombar() {
+        imvBackBottomBar.setVisibility(View.VISIBLE);
+        imvForwardBottomBar.setVisibility(View.VISIBLE);
+        imvCopyBottomBar.setVisibility(View.GONE);
+        imvReloadBottomBar.setVisibility(View.VISIBLE);
     }
 
     private ArrayList getListData() {

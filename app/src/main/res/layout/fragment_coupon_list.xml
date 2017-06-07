@@ -6,57 +6,66 @@
     android:layout_height="match_parent"
     android:layout_gravity="center|center_vertical">
     <LinearLayout
-        android:id="@+id/lnGroupCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="top"
-        android:gravity="top"
-        android:background="@color/transparent" >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/spinnerCategory"
-                android:visibility="invisible"
-                app:ms_background_color="#CFFF"
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/_5dp"
-                android:layout_height="@dimen/_30dp"/>
-            <Button
-                android:id="@+id/bt_menu_category"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
-                android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
-                android:text="@string/title_coupon_list"
-                android:paddingRight="@dimen/_110dp"
-                android:paddingLeft="@dimen/_110dp"
-                android:layout_margin="@dimen/_5dp"
-                android:background="@drawable/button_default"
-                android:textSize="@dimen/text_size_large"/>
-        </FrameLayout>
-    </LinearLayout>
-    <!--<ScrollView
-        android:id="@+id/scvListCoupon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/lnGroupCategory"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="top"
-            android:background="@color/transparent"
-            android:orientation="vertical" >-->
-            <ListView
-                android:id="@+id/list_category_listview"
+            android:gravity="top"
+            android:background="@color/transparent" >
+            <FrameLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_5dp">
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinnerCategory"
+                    android:visibility="invisible"
+                    app:ms_background_color="#CFFF"
+                    android:layout_width="match_parent"
+                    android:layout_margin="@dimen/_5dp"
+                    android:layout_height="@dimen/_40dp"/>
+                <Button
+                    android:id="@+id/bt_menu_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
+                    android:text="@string/title_coupon_list"
+                    android:paddingRight="@dimen/_110dp"
+                    android:paddingLeft="@dimen/_110dp"
+                    android:layout_margin="@dimen/_5dp"
+                    android:background="@color/color_btn_catalogy"
+                    android:textSize="@dimen/text_size_large"/>
+            </FrameLayout>
+        </LinearLayout>
+        <!--<ScrollView
+            android:id="@+id/scvListCoupon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:background="@color/transparent"
-                android:layout_height="wrap_content">
-            </ListView>
+                android:orientation="vertical" >-->
+        <ListView
+            android:id="@+id/list_category_listview"
+            android:layout_width="match_parent"
+            android:background="@color/transparent"
+            android:layout_height="wrap_content">
+        </ListView>
         <!--</LinearLayout>
     </ScrollView>-->
+    </LinearLayout>
+    <include layout="@layout/bottombar"/>
 </LinearLayout>

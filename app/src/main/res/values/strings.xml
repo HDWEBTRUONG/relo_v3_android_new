@@ -43,5 +43,6 @@
     <!--Check SSL -->
     <string name="error_ssl">ssl証明書が正しくないページですが開いてもいいですか"</string>
     <string name="limit_time">有効期限{0}まで	</string>
+    <string name="btn_title_like">お昇に入り</string>
 
 </resources>
