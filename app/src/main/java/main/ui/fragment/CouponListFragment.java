@@ -1,24 +1,12 @@
 package main.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -30,18 +18,16 @@ import main.R;
 import main.ReloApp;
 import main.database.MyDatabaseHelper;
 import main.model.CouponDTO;
-import main.ui.BaseFragmentToolbar;
-import main.ui.activity.MainActivity;
+import main.ui.BaseFragmentBottombar;
 import main.ui.activity.WebviewActivity;
 import main.ui.adapter.CouponListAdapter;
-import main.ui.model.Coupon;
 import main.util.Constant;
 
 /**
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragmentToolbar implements View.OnClickListener,CouponListAdapter.iClickButton{
+public class CouponListFragment extends BaseFragmentBottombar implements View.OnClickListener,CouponListAdapter.iClickButton{
 
     Button btnMenuCategory;
     ListView lvCategoryMenu;
@@ -49,7 +35,6 @@ public class CouponListFragment extends BaseFragmentToolbar implements View.OnCl
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
-    MainActivity mainActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,9 +69,16 @@ public class CouponListFragment extends BaseFragmentToolbar implements View.OnCl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainActivity = (MainActivity)getActivity();
         listCoupon = getListData();
         setAdapter();
+    }
+
+    @Override
+    public void setupBottombar() {
+        imvBackBottomBar.setVisibility(View.VISIBLE);
+        imvForwardBottomBar.setVisibility(View.VISIBLE);
+        imvCopyBottomBar.setVisibility(View.GONE);
+        imvReloadBottomBar.setVisibility(View.VISIBLE);
     }
 
     private ArrayList getListData() {
@@ -127,16 +119,6 @@ public class CouponListFragment extends BaseFragmentToolbar implements View.OnCl
             spinner.expand();
         }
     }
-
-    @Override
-    public void setupToolbar() {
-        mToolbarTilte.setText(getString(R.string.title_coupon_list));
-        imgClose.setVisibility(View.GONE);
-        lnGroupTitle.setVisibility(View.VISIBLE);
-        lnGroupArrow.setVisibility(View.GONE);
-        rlGroupClose.setVisibility(View.GONE);
-    }
-
     @Override
     public void callback(CouponDTO data) {
         Toast.makeText(getActivity(),"Click: "+data.getName(),Toast.LENGTH_SHORT).show();

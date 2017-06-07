@@ -20,7 +20,7 @@ public class MembershipFragment extends BaseFragment {
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-        addChildFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),false,getArguments(),null);
+        //addChildFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),false,getArguments(),null);
     }
 
     @Override

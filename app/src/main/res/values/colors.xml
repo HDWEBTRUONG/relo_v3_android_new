@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="trans">#00000000 </color>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryDark">#0361B8</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTreePoppy">#FFA51D</color>
     <color name="colorTreePoppy_press">#D48412</color>
@@ -24,4 +25,8 @@
     <color name="colorNavigationBottom">#303030</color>
     <color name="color_bg_bottom_ena">#3C3C3C</color>
     <color name="color_bg_bottom_dis">#8F8F8F</color>
+    <color name="color_indicator">#EEEF0D</color>
+    <color name="color_text_btn_like">#7EC338</color>
+    <color name="color_btn_catalogy">#DADEE6</color>
+
 </resources>

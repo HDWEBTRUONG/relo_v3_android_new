@@ -1,12 +1,21 @@
 package main.ui.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +27,10 @@ import java.util.ArrayList;
 import main.R;
 import main.model.CouponDTO;
 import main.ui.model.Coupon;
+import main.util.Utils;
+
+import static android.R.attr.button;
+import static android.R.attr.content;
 
 /**
  * Created by quynguyen on 3/27/17.
@@ -61,7 +74,9 @@ public class CouponListAdapter extends BaseAdapter{
             holder.companyView = (TextView) convertView.findViewById(R.id.tvCompanyName);
             holder.durationCoupon = (TextView) convertView.findViewById(R.id.tvDurationCoupon);
             holder.img_item_coupon = (ImageView) convertView.findViewById(R.id.img_item_coupon);
-            holder.bntDetail = (Button) convertView.findViewById(R.id.btnDetail);
+            holder.imvLike = (ImageView) convertView.findViewById(R.id.imvLike);
+            holder.lnBtnLike = (LinearLayout) convertView.findViewById(R.id.lnBtnLike);
+            holder.lnBtnDetail = (LinearLayout) convertView.findViewById(R.id.lnBtnDetail);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -75,7 +90,7 @@ public class CouponListAdapter extends BaseAdapter{
                 .load(listData.get(position).getP_url())
                 .into(holder.img_item_coupon);
 
-        holder.bntDetail.setOnClickListener(new View.OnClickListener() {
+        holder.lnBtnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(miClickButton!=null){
@@ -91,7 +106,9 @@ public class CouponListAdapter extends BaseAdapter{
         TextView companyView;
         TextView durationCoupon;
         ImageView img_item_coupon;
-        Button bntDetail;
+        ImageView imvLike;
+        LinearLayout lnBtnLike;
+        LinearLayout lnBtnDetail;
     }
     public interface iClickButton{
         void callback(CouponDTO data);

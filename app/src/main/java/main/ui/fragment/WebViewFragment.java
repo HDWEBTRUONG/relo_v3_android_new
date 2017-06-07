@@ -1,40 +1,24 @@
 package main.ui.fragment;
 
-import android.content.DialogInterface;
-import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import framework.phvtFragment.BaseFragment;
-import framework.phvtUtils.AppLog;
 import main.R;
 import main.ReloApp;
-import main.ui.BaseFragmentToolbar;
-import main.ui.webview.CustomWebViewClient;
+import main.ui.BaseFragmentBottombar;
 import main.util.Constant;
-import main.util.Utils;
 
 /**
  * Created by tonkhanh on 5/18/17.
  */
 
-public class WebViewFragment extends BaseFragmentToolbar {
+public class WebViewFragment extends BaseFragmentBottombar {
 
     WebView mWebView;
     private int checkWebview;
@@ -60,6 +44,14 @@ public class WebViewFragment extends BaseFragmentToolbar {
     }
 
     @Override
+    public void setupBottombar() {
+        imvBackBottomBar.setVisibility(View.VISIBLE);
+        imvForwardBottomBar.setVisibility(View.VISIBLE);
+        imvCopyBottomBar.setVisibility(View.VISIBLE);
+        imvReloadBottomBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public int getRootLayoutId() {
         return R.layout.fragment_webview;
     }
@@ -70,67 +62,9 @@ public class WebViewFragment extends BaseFragmentToolbar {
     }
 
     @Override
-    public void setupToolbar() {
-        imgBack.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if(mWebView.canGoBack()) {
-                    mWebView.goBack();
-                }
-            }
-        });
-
-        imgForward.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if (mWebView.canGoForward()) {
-                    mWebView.goForward();
-                }
-
-            }
-        });
-        imgClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        mToolbar.setBackgroundResource(R.color.colorMineShaft);
-        mToolbarTilte.setVisibility(View.VISIBLE);
-        setToolbar(checkWebview);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
     }
-
-    private void setToolbar(int checkWebview){
-        // Change Title webview
-        if( checkWebview== Constant.FORGET_PASSWORD ){ // 1: Forget ID/Password
-            mToolbarTilte.setText(getString(R.string.txt_link_forget_id_password));
-        }else if(checkWebview== Constant.CAN_NOT_LOGIN){ // 2: You can not login
-            mToolbarTilte.setText(getString(R.string.txt_link_can_not_login));
-        }else if(checkWebview== Constant.AREA_COUPON){ // 3. coupon area
-            mToolbarTilte.setText(getString(R.string.title_coupon_area));
-            imgClose.setVisibility(View.GONE);
-        }else if(checkWebview== Constant.MEMBER_COUPON){ // 4.coupon membership
-            mToolbarTilte.setText(getString(R.string.title_membership));
-            imgClose.setVisibility(View.GONE);
-        }else if(checkWebview== Constant.DETAIL_COUPON){ // 5.coupon detail
-            mToolbarTilte.setText("Detail coupon");
-            imgClose.setVisibility(View.GONE);
-        }
-
-        lnGroupTitle.setVisibility(View.VISIBLE);
-        lnGroupArrow.setVisibility(View.VISIBLE);
-        rlGroupClose.setVisibility(View.VISIBLE);
-    }
-
 
 
     @Override

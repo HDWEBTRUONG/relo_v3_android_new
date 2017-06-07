@@ -127,15 +127,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     }else{
                         txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
                         txtShowError.setVisibility(View.VISIBLE);
+                        btnLogin.setEnabled(true);
                     }
                 }else{
                     Utils.showDialog(this,R.string.popup_title_login,R.string.error_blank_id_password);
+                    btnLogin.setEnabled(true);
                 }
             }catch (Exception e) {
                 e.printStackTrace();
             }
 
         }else{
+            btnLogin.setEnabled(true);
             Utils.showDialog(this,R.string.popup_title_login,R.string.error_connect_network);
         }
     }
@@ -209,6 +212,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bt_login:
+                btnLogin.setEnabled(false);
                 clickLogin(v);
                 break;
             case R.id.link_webview_forget_id:
@@ -225,6 +229,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onCompleted() {
                 AppLog.log("Complate");
+                btnLogin.setEnabled(true);
             }
 
             @Override
@@ -248,7 +253,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         addSubscription(observable,subscriber);
     }
     private void gotoMain(){
-        Intent mainActivity = new Intent(this, MainActivity.class);
+        Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
                         finish();
     }
