@@ -9,7 +9,7 @@
     <string name="xlistview_header_last_time" />
     <string name="title_coupon_area">エリアクーポン</string>
     <string name="title_membership">会員サイト</string>
-    <string name="title_coupon_list">人気クーポン</string>
+    <string name="title_coupon_list">カテゴル絞り込み</string>
     <string name="no_internet">Check network Please</string>
 
     <!-- Login Fragment-->
@@ -38,11 +38,12 @@
     <string name="item_category_list_coupon_5">その他</string>
     <string name="item_coupon_category_name">グルメ</string>
     <string name="item_coupon_company_name">クーポンボタン</string>
-    <string name="item_coupon_duration">有効期限2017/03/31まで</string>
 
     <!--Check SSL -->
     <string name="error_ssl">ssl証明書が正しくないページですが開いてもいいですか"</string>
     <string name="limit_time">有効期限{0}まで	</string>
-    <string name="btn_title_like">お昇に入り</string>
+    <string name="btn_title_like">お気に入り</string>
+    <string name="btn_title_ticket_free">優待券へ</string>
+    <string name="title_history_push">お知らせ</string>
 
 </resources>

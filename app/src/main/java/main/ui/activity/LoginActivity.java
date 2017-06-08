@@ -45,6 +45,7 @@ import main.api.ApiInterface;
 import main.database.MyDatabaseHelper;
 import main.model.DataReponse;
 import main.model.VersionReponse;
+import main.ui.BaseActivityToolbar;
 import main.util.Constant;
 import main.util.LoginSharedPreference;
 import main.util.Utils;
@@ -54,11 +55,7 @@ import rx.Subscriber;
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener{
-
-    Toolbar mToolbar;
-    LinearLayout lnGroupTitleLogin;
-    TextView mToolbarTilte;
+public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
     EditText editUsername;
     EditText editPassword;
     TextView txtShowError;
@@ -79,21 +76,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void init() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        lnGroupTitleLogin = (LinearLayout) findViewById(R.id.group_title_login);
-        mToolbarTilte = (TextView) findViewById(R.id.title_toolbar_login);
         editUsername = (EditText) findViewById(R.id.edit_login_username);
         editPassword = (EditText) findViewById(R.id.edit_login_password);
         txtShowError = (TextView) findViewById(R.id.txt_show_error);
         link_webview_forget_id = (TextView) findViewById(R.id.link_webview_forget_id);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
         btnLogin = (Button) findViewById(R.id.bt_login);
-
-        lnGroupTitleLogin.setVisibility(View.VISIBLE);
-        mToolbar.setBackgroundResource(R.color.colorMineShaft);
-        mToolbarTilte.setVisibility(View.VISIBLE);
-        mToolbarTilte.setText(getString(R.string.txt_title_login));
-
         btnLogin.setOnClickListener(this);
         link_webview_forget_id.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
@@ -201,6 +189,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         super.onResume();
         editUsername.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getUserID()));
         editPassword.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getPassword()));
+    }
+
+    @Override
+    public void setupToolbar() {
+        title_toolbar.setVisibility(View.VISIBLE);
+        title_toolbar.setText(getString(R.string.txt_title_login));
     }
 
     @Override

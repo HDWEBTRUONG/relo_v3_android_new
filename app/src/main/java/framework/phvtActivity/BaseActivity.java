@@ -1,5 +1,6 @@
 package framework.phvtActivity;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -405,6 +406,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void hideLoading(){
         if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
             kProgressHUDloading.dismiss();
+        }
+    }
+    public void openDialogFragment(DialogFragment dialogFragment) {
+        android.app.FragmentManager mFragmentManager = getFragmentManager();
+        android.app.Fragment prev = mFragmentManager.findFragmentByTag(dialogFragment.getClass().getName());
+        if (prev == null) {
+            dialogFragment.show(mFragmentManager, dialogFragment.getClass().getName());
         }
     }
 }

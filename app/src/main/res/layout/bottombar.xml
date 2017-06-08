@@ -6,7 +6,7 @@
     >
     <include layout="@layout/line_layout"/>
     <LinearLayout
-        android:layout_marginTop="@dimen/_0.5dp"
+        android:layout_marginTop="@dimen/_0.3dp"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">

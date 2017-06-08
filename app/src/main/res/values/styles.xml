@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:textColor">@color/colorText</item>
-        <item name="actionBarSize">@dimen/_42dp</item>
+        <item name="actionBarSize">@dimen/_45dp</item>
         <!--<item name="android:popupBackground">@style/popup_menu</item>-->
     </style>
 
@@ -31,5 +31,8 @@
     </style>
     <style name="TabTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+    <style name="DialogTheme" parent="@style/Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
