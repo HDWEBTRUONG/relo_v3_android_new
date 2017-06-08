@@ -60,7 +60,7 @@
                     android:layout_marginTop="@dimen/_3dp"
                     android:layout_marginBottom="@dimen/_3dp"
                     android:textSize="@dimen/text_size_11sp"
-                    android:text="@string/item_coupon_duration"
+                    android:text="@string/limit_time"
                     android:layout_alignParentRight="true"
                     android:textAlignment="textEnd"
                     android:layout_centerVertical="true"
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:text="@string/txt_bt_login"
+                android:text="@string/btn_title_ticket_free"
                 android:textColor="@color/color_text_btn_like"
                 android:textSize="@dimen/text_size_14sp"/>
         </LinearLayout>

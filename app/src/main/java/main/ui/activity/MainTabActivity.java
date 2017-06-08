@@ -3,28 +3,44 @@ package main.ui.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import framework.phvtActivity.BaseActivity;
 import main.R;
+import main.ui.BaseActivityToolbar;
 import main.ui.adapter.ViewPagerAdapter;
 import main.ui.fragment.CouponAreaFragment;
 import main.ui.fragment.CouponListFragment;
+import main.ui.fragment.HistoryPushDialogFragment;
 import main.ui.fragment.MembershipFragment;
 import main.util.Constant;
 
-public class MainTabActivity extends BaseActivity {
+public class MainTabActivity extends BaseActivityToolbar {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+    @Override
+    public void setupToolbar() {
+        toolbar.setVisibility(View.VISIBLE);
+        imvMenu.setVisibility(View.VISIBLE);
+        imvInfo.setVisibility(View.VISIBLE);
+        tvCount.setVisibility(View.VISIBLE);
+        //toolbar.setTitle("Abcd");
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        //event
+        imvInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialogFragment(new HistoryPushDialogFragment());
+            }
+        });
     }
 
     @Override
@@ -34,7 +50,10 @@ public class MainTabActivity extends BaseActivity {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
