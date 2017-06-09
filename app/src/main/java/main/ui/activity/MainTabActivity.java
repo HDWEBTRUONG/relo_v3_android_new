@@ -2,14 +2,23 @@ package main.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import framework.phvtActivity.BaseActivity;
+import framework.phvtUtils.AppLog;
 import main.R;
 import main.ui.BaseActivityToolbar;
+import main.ui.adapter.MenuListAdapter;
 import main.ui.adapter.ViewPagerAdapter;
 import main.ui.fragment.CouponAreaFragment;
 import main.ui.fragment.CouponListFragment;
@@ -20,10 +29,15 @@ import main.util.Constant;
 public class MainTabActivity extends BaseActivityToolbar {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    MenuListAdapter mMenuAdapter;
+    String[] titleMenu;
+    DrawerLayout mDrawerLayoutMenu;
+    ListView mDrawerListMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Generate title
     }
 
     @Override
@@ -41,6 +55,16 @@ public class MainTabActivity extends BaseActivityToolbar {
                 openDialogFragment(new HistoryPushDialogFragment());
             }
         });
+        imvMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {
+                    mDrawerLayoutMenu.closeDrawer(mDrawerListMenu);
+                } else {
+                    mDrawerLayoutMenu.openDrawer(mDrawerListMenu);
+                }
+            }
+        });
     }
 
     @Override
@@ -54,6 +78,52 @@ public class MainTabActivity extends BaseActivityToolbar {
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        titleMenu = new String[] { "TOPへ戻る", "アプリの使い方"};
+
+        // Locate DrawerLayout in drawer_main.xml
+        mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
+
+        // Locate ListView in drawer_main.xml
+        mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_listview_menu, null, false);
+        mDrawerListMenu.addHeaderView(header);
+
+        // Set a custom shadow that overlays the main content when the drawer
+        // opens
+        mDrawerLayoutMenu.setDrawerShadow(R.drawable.bg_catalory_coupon,
+                GravityCompat.START);
+
+        mDrawerLayoutMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        // Pass results to MenuListAdapter Class
+        mMenuAdapter = new MenuListAdapter(this, titleMenu);
+
+        // Set the MenuListAdapter to the ListView
+        mDrawerListMenu.setAdapter(mMenuAdapter);
+        mDrawerListMenu.setOnItemClickListener(new DrawerItemClickListener());
+    }
+    private class DrawerItemClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            selectItem(position);
+        }
+    }
+    private void selectItem(int position) {
+        // Locate Position
+        AppLog.log("Menu: "+position);
+        switch (position) {
+            case 0:
+
+                break;
+            case 1:
+                break;
+        }
+        mDrawerListMenu.setItemChecked(position, true);
+        // Close drawer
+        mDrawerLayoutMenu.closeDrawer(mDrawerListMenu);
     }
 
     @Override
@@ -65,13 +135,11 @@ public class MainTabActivity extends BaseActivityToolbar {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         CouponAreaFragment couponAreaFragment = new CouponAreaFragment();
         couponAreaFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
+
         adapter.addFragment(couponAreaFragment, getString(R.string.title_coupon_area));
-
-
         adapter.addFragment(new CouponListFragment(), getString(R.string.title_coupon_list));
-
-
         adapter.addFragment(new MembershipFragment(), getString(R.string.title_membership));
+
         viewPager.setAdapter(adapter);
     }
 

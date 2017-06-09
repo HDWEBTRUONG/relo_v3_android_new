@@ -21,8 +21,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5dp"
-                android:layout_marginBottom="@dimen/_5dp">
+                android:layout_marginTop="@dimen/_3dp"
+                android:layout_marginBottom="@dimen/_3dp">
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinnerCategory"
                     android:visibility="invisible"
@@ -30,21 +30,29 @@
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/_5dp"
                     android:layout_height="@dimen/_40dp"/>
-                <Button
-                    android:id="@+id/bt_menu_category"
+                <LinearLayout
+                    android:id="@+id/lnCatalory"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
-                    android:text="@string/title_coupon_list"
-                    android:paddingRight="@dimen/_110dp"
-                    android:paddingLeft="@dimen/_110dp"
-                    android:layout_margin="@dimen/_5dp"
+                    android:orientation="horizontal"
                     android:background="@color/color_btn_catalogy"
-                    android:textSize="@dimen/text_size_large"/>
+                    android:layout_margin="@dimen/_5dp"
+                    android:clickable="true"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:text="@string/catalogy"
+                        android:textSize="@dimen/text_size_large"
+                        android:textColor="@color/colorPrimaryDark"/>
+                    <ImageView
+                        android:id="@+id/imvLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_down_white_24dp"/>
+                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
         <!--<ScrollView

@@ -101,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
+                android:textColor="#FFBA00"
                 android:text="@string/btn_title_like"
                 android:textSize="@dimen/text_size_14sp"/>
         </LinearLayout>
