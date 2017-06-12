@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ import main.util.Constant;
 
 public class CouponListFragment extends BaseFragmentBottombar implements View.OnClickListener,CouponListAdapter.iClickButton{
 
-    Button btnMenuCategory;
+    LinearLayout lnCatalory;
     ListView lvCategoryMenu;
     MaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
@@ -43,7 +44,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
     }
 
     private void init(View view) {
-        btnMenuCategory = (Button) view.findViewById(R.id.bt_menu_category);
+        lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
         spinner = (MaterialSpinner) view.findViewById(R.id.spinnerCategory);
         spinner.setItems("カテゴリを選ぶ 1", "カテゴリを選ぶ 2", "カテゴリを選ぶ 3", "カテゴリを選ぶ 4", "カテゴリを選ぶ 5");
@@ -53,7 +54,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
                 Toast.makeText(getActivity(), "Clicked " + item, Toast.LENGTH_SHORT).show();
             }
         });
-        btnMenuCategory.setOnClickListener(this);
+        lnCatalory.setOnClickListener(this);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.bt_menu_category){
+        if(v.getId()==R.id.lnCatalory){
             //clickCategoryMenu();
             spinner.expand();
         }

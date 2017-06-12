@@ -18,7 +18,7 @@
                     android:layout_height="?actionBarSize"
                     android:background="@color/trans"
                     android:minHeight="?attr/actionBarSize"
-                    app:title="Club Off Alliance"
+                    app:title="@string/title_app"
                     app:titleTextAppearance="@style/TabTitleText"
                     app:logo="@drawable/test_ic_logo"
                     android:visibility="gone"

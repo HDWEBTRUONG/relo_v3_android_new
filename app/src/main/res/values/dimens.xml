@@ -8,6 +8,7 @@
     <dimen name="text_size_medium">12sp</dimen>
     <dimen name="text_size_medium14">14sp</dimen>
     <dimen name="text_size_large">15sp</dimen>
+    <dimen name="text_size_large16">16sp</dimen>
     <dimen name="text_size_xlarge">18sp</dimen>
     <dimen name="line_height">@dimen/_0.3dp</dimen>
     <dimen name="line_width">@dimen/_0.3dp</dimen>

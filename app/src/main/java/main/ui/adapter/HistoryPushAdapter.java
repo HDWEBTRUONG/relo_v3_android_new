@@ -44,6 +44,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
     public void onBindViewHolder(HisViewHolder holder, int position) {
         HistoryPushDTO data = listData.get(position);
         holder.tvHistoryTime.setText(data.getTimeHis());
+        holder.tvHistoryContent.setText(data.getContentHis());
         holder.tvHistoryLink.setText(data.getUrlHis());
         String str_text = "<a href={0}><span>{1}</span></a>";
         holder.tvHistoryLink.setLinkTextColor(Color.BLUE);
