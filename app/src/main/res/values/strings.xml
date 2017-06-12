@@ -43,7 +43,7 @@
     <string name="error_ssl">ssl証明書が正しくないページですが開いてもいいですか"</string>
     <string name="limit_time">有効期限{0}まで	</string>
     <string name="btn_title_like">お気に入り</string>
-    <string name="btn_title_ticket_free">優待券へ</string>
+    <string name="btn_title_ticket_free">画面提示クーポン</string>
     <string name="title_history_push">お知らせ</string>
     <string name="catalogy">カテゴル絞り込み</string>
     <string name="title_app">Club Off Alliance</string>
