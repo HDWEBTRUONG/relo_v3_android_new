@@ -43,13 +43,11 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
         HistoryPushDTO d1 = new HistoryPushDTO();
         d1.setTimeHis("2017/06/08");
         d1.setContentHis("5/5~ 5/7西武園無料DAY開催");
-        d1.setLinkHis("詳細ニこちら");
         d1.setUrlHis("https://www.google.com.vn");
         listData.add(d1);
         HistoryPushDTO d2 = new HistoryPushDTO();
         d2.setTimeHis("2017/4/20");
         d2.setContentHis("人員クポンに「ケンタッキ」を追加。");
-        d2.setLinkHis("詳細：」こちら");
         d2.setUrlHis("https://www.google.com.vn");
         listData.add(d2);
         setAdapter();
