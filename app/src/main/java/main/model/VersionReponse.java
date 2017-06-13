@@ -7,15 +7,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class VersionReponse{
-    @SerializedName("project")
-    String project;
     @SerializedName("version")
     String version;
-
-    public String getProject() {
-        return project;
-    }
-
     public String getVersion() {
         return version;
     }

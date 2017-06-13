@@ -21,6 +21,8 @@ import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
 import main.ReloApp;
+import main.api.ApiClient;
+import main.api.ApiInterface;
 import main.util.Utils;
 import rx.Observable;
 import rx.Subscriber;
@@ -46,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Current main fragment of the fragment activity
      */
     protected BaseFragment mMainActiveFragment;
+    protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     //----------------------------------------------------------------------------------------------------
 
