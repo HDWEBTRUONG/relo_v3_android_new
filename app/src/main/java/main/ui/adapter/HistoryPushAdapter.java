@@ -52,11 +52,11 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.tvHistoryLink.setMovementMethod(LinkMovementMethod.getInstance());
             holder.tvHistoryLink.setText(Html.fromHtml(MessageFormat.format(str_text,
-                    data.getUrlHis(),data.getLinkHis()), Html.FROM_HTML_MODE_LEGACY));
+                    data.getUrlHis(),mContext.getString(R.string.his_link)), Html.FROM_HTML_MODE_LEGACY));
         }
         else {
             holder.tvHistoryLink.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.tvHistoryLink.setText(Html.fromHtml(MessageFormat.format(str_text,data.getUrlHis(),data.getLinkHis()).toString()));
+            holder.tvHistoryLink.setText(Html.fromHtml(MessageFormat.format(str_text,data.getUrlHis(),mContext.getString(R.string.his_link)).toString()));
         }
     }
 

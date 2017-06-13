@@ -7,16 +7,14 @@ package main.model;
 public class HistoryPushDTO {
     private String timeHis;
     private String contentHis;
-    private String linkHis;
     private String urlHis;
 
     public HistoryPushDTO() {
     }
 
-    public HistoryPushDTO(String timeHis, String contentHis, String linkHis, String urlHis) {
+    public HistoryPushDTO(String timeHis, String contentHis, String urlHis) {
         this.timeHis = timeHis;
         this.contentHis = contentHis;
-        this.linkHis = linkHis;
         this.urlHis = urlHis;
     }
 
@@ -34,14 +32,6 @@ public class HistoryPushDTO {
 
     public void setContentHis(String contentHis) {
         this.contentHis = contentHis;
-    }
-
-    public String getLinkHis() {
-        return linkHis;
-    }
-
-    public void setLinkHis(String linkHis) {
-        this.linkHis = linkHis;
     }
 
     public String getUrlHis() {
