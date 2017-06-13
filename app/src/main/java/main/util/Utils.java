@@ -152,6 +152,17 @@ public class Utils {
         }
         return 0;
     }
+    public static int convertIntVersion(String value){
+        if(value!=null&&!"".equals(value)){
+            try {
+                return Integer.valueOf(value.replace(".","").replace(",",""));
+            }catch (Exception ex){
+                return 0;
+            }
+        }
+        return 0;
+    }
+
     public static void showDialog(Context context,int title, int messagee){
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(context.getResources().getString(title));

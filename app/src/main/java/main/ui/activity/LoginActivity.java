@@ -42,6 +42,7 @@ import main.R;
 import main.ReloApp;
 import main.api.ApiClient;
 import main.api.ApiInterface;
+import main.api.MyCallBack;
 import main.database.MyDatabaseHelper;
 import main.model.DataReponse;
 import main.model.VersionReponse;
@@ -62,9 +63,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     TextView link_webview_forget_id;
     TextView link_webview_not_login;
     Button btnLogin;
-
-    Subscriber subscriber;
-    rx.Observable<VersionReponse> observable;
     MyDatabaseHelper sqLiteOpenHelper;
 
 
@@ -219,32 +217,28 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
 
     private void updateData(){
-        subscriber=new Subscriber<VersionReponse>() {
+        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
             @Override
-            public void onCompleted() {
-                AppLog.log("Complate");
-                btnLogin.setEnabled(true);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                AppLog.log("Throwable: "+e);
-                gotoMain();
-            }
-
-            @Override
-            public void onNext(VersionReponse versionReponse) {
-                AppLog.log("onNext");
-                if(Utils.convertInt(versionReponse.getVersion())>((ReloApp)getApplication()).getVersion()){
-                    new UpdateTask().execute(versionReponse.getVersion());
+            public void onSuccess(VersionReponse model) {
+                if(Utils.convertIntVersion(model.getVersion())>((ReloApp)getApplication()).getVersion()){
+                    new UpdateTask().execute(model.getVersion());
                 }else{
                     gotoMain();
                 }
             }
-        };
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        observable =apiInterface.checkVersion();
-        addSubscription(observable,subscriber);
+
+            @Override
+            public void onFailure(String msg) {
+                AppLog.log(msg);
+                gotoMain();
+            }
+
+            @Override
+            public void onFinish() {
+                AppLog.log("Complate");
+                btnLogin.setEnabled(true);
+            }
+        });
     }
     private void gotoMain(){
         Intent mainActivity = new Intent(this, MainTabActivity.class);
@@ -284,7 +278,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 e.printStackTrace();
             }
             saveData(doc);
-            return Utils.convertInt(arg0[0]);
+            return Utils.convertIntVersion(arg0[0]);
         }
 
         protected void onPostExecute(Integer result) {
