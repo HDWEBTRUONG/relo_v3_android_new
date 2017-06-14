@@ -42,6 +42,7 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     @Override
     public void setupToolbar() {
+        lnToolbar.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
         imvMenu.setVisibility(View.VISIBLE);
         imvInfo.setVisibility(View.VISIBLE);
@@ -133,12 +134,16 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         CouponAreaFragment couponAreaFragment = new CouponAreaFragment();
         couponAreaFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
-
         adapter.addFragment(couponAreaFragment, getString(R.string.title_coupon_area));
+
         adapter.addFragment(new CouponListFragment(), getString(R.string.title_coupon_list));
-        adapter.addFragment(new MembershipFragment(), getString(R.string.title_membership));
+
+        MembershipFragment membershipFragment = new MembershipFragment();
+        membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_MEMBER_COUPON, Constant.MEMBER_COUPON));
+        adapter.addFragment(membershipFragment, getString(R.string.title_membership));
 
         viewPager.setAdapter(adapter);
     }

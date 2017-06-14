@@ -12,13 +12,14 @@ import framework.phvtFragment.BaseFragment;
 import main.R;
 import main.ReloApp;
 import main.ui.BaseFragmentBottombar;
+import main.ui.BaseFragmentToolbarBottombar;
 import main.util.Constant;
 
 /**
  * Created by tonkhanh on 5/18/17.
  */
 
-public class WebViewFragment extends BaseFragmentBottombar {
+public class WebViewFragment extends BaseFragmentToolbarBottombar {
 
     WebView mWebView;
     private int checkWebview;
@@ -44,7 +45,40 @@ public class WebViewFragment extends BaseFragmentBottombar {
     }
 
     @Override
+    public void setupToolbar() {
+        switch (checkWebview){
+            case Constant.FORGET_PASSWORD:
+                lnToolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setText(R.string.forget_title);
+                imvMenu.setVisibility(View.VISIBLE);
+                imvMenu.setImageResource(R.drawable.ic_close_48dp);
+                imvMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
+                break;
+            case Constant.CAN_NOT_LOGIN:
+                lnToolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setText(R.string.cannot_login_title);
+                imvMenu.setVisibility(View.VISIBLE);
+                imvMenu.setImageResource(R.drawable.ic_close_48dp);
+                imvMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
+                break;
+        }
+    }
+
+    @Override
     public void setupBottombar() {
+        lnBottom.setVisibility(View.VISIBLE);
         imvBackBottomBar.setVisibility(View.VISIBLE);
         imvForwardBottomBar.setVisibility(View.VISIBLE);
         imvCopyBottomBar.setVisibility(View.VISIBLE);

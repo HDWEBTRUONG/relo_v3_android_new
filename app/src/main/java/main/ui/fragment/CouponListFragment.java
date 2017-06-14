@@ -76,6 +76,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
 
     @Override
     public void setupBottombar() {
+        lnBottom.setVisibility(View.VISIBLE);
         imvBackBottomBar.setVisibility(View.VISIBLE);
         imvForwardBottomBar.setVisibility(View.VISIBLE);
         imvCopyBottomBar.setVisibility(View.GONE);

@@ -19,6 +19,8 @@ import main.R;
  */
 
 public abstract class BaseFragmentBottombar extends BaseFragment {
+
+    protected LinearLayout lnBottom;
     protected ImageView imvBackBottomBar;
     protected ImageView imvForwardBottomBar;
     protected ImageView imvCopyBottomBar;
@@ -28,6 +30,7 @@ public abstract class BaseFragmentBottombar extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        lnBottom = (LinearLayout) view.findViewById(R.id.lnBottom);
         imvBackBottomBar = (ImageView) view.findViewById(R.id.imvBackBottomBar);
         imvForwardBottomBar = (ImageView) view.findViewById(R.id.imvForwardBottomBar);
         imvCopyBottomBar = (ImageView) view.findViewById(R.id.imvCopyBottomBar);
