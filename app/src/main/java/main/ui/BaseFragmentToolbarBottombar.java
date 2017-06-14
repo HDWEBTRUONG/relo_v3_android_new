@@ -1,10 +1,11 @@
 package main.ui;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -16,17 +17,20 @@ import main.R;
  */
 
 public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar{
-    Toolbar toolbar;
-    ImageView imvMenu;
-    ImageView imvInfo;
-    TextView tvCount;
-    TextView title_toolbar;
+
+    protected LinearLayout lnToolbar;
+    protected Toolbar toolbar;
+    protected ImageView imvMenu;
+    protected ImageView imvInfo;
+    protected TextView tvCount;
+    protected TextView title_toolbar;
 
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        lnToolbar = (LinearLayout) view.findViewById(R.id.lnToolbar);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         imvMenu = (ImageView) view.findViewById(R.id.imvMenu);
         imvInfo = (ImageView) view.findViewById(R.id.imvInfo);

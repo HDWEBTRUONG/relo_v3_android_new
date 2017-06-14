@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import main.R;
@@ -14,6 +15,7 @@ import main.R;
  */
 
 public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
+    protected LinearLayout lnToolbar;
     protected Toolbar toolbar;
     protected ImageView imvMenu;
     protected ImageView imvInfo;
@@ -23,6 +25,7 @@ public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
     @Nullable
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        lnToolbar = (LinearLayout) view.findViewById(R.id.lnToolbar);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         imvMenu = (ImageView) view.findViewById(R.id.imvMenu);
         imvInfo = (ImageView) view.findViewById(R.id.imvInfo);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +17,7 @@ import main.R;
  */
 
 public abstract class BaseActivityToolbar extends BaseActivity {
+    protected LinearLayout lnToolbar;
     protected Toolbar toolbar;
     protected ImageView imvMenu;
     protected ImageView imvInfo;
@@ -25,6 +27,7 @@ public abstract class BaseActivityToolbar extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lnToolbar = (LinearLayout) findViewById(R.id.lnToolbar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         imvMenu = (ImageView) findViewById(R.id.imvMenu);
         imvInfo = (ImageView) findViewById(R.id.imvInfo);

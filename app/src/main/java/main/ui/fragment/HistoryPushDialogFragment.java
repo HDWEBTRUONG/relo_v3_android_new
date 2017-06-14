@@ -74,6 +74,7 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
 
     @Override
     public void setupActionBar() {
+        lnToolbar.setVisibility(View.VISIBLE);
         title_toolbar.setVisibility(View.VISIBLE);
         title_toolbar.setText(R.string.title_history_push);
         imvMenu.setVisibility(View.VISIBLE);

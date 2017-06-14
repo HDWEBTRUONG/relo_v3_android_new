@@ -191,6 +191,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
     @Override
     public void setupToolbar() {
+        lnToolbar.setVisibility(View.VISIBLE);
         title_toolbar.setVisibility(View.VISIBLE);
         title_toolbar.setText(getString(R.string.txt_title_login));
     }

@@ -33,7 +33,7 @@
             android:layout_marginBottom="@dimen/_3dp"
             android:textSize="@dimen/text_size_15sp"
             android:linksClickable="true"
-            android:text="Link detail push"/>
+            android:text="@string/his_link"/>
     </LinearLayout>
     <include layout="@layout/line_layout"/>
 </LinearLayout>
