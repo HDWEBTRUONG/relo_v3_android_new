@@ -48,6 +48,7 @@ import main.model.DataReponse;
 import main.model.VersionReponse;
 import main.ui.BaseActivityToolbar;
 import main.util.Constant;
+import main.util.EASHelper;
 import main.util.LoginSharedPreference;
 import main.util.Utils;
 import rx.Subscriber;
@@ -60,7 +61,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     EditText editUsername;
     EditText editPassword;
     TextView txtShowError;
-    TextView link_webview_forget_id;
     TextView link_webview_not_login;
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
@@ -77,11 +77,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         editUsername = (EditText) findViewById(R.id.edit_login_username);
         editPassword = (EditText) findViewById(R.id.edit_login_password);
         txtShowError = (TextView) findViewById(R.id.txt_show_error);
-        link_webview_forget_id = (TextView) findViewById(R.id.link_webview_forget_id);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
-        link_webview_forget_id.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
     }
 
@@ -208,9 +206,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 btnLogin.setEnabled(false);
                 clickLogin(v);
                 break;
-            case R.id.link_webview_forget_id:
+            /*case R.id.link_webview_forget_id:
                 clickForget();
-                break;
+                break;*/
             case R.id.link_webview_not_login:
                 clickLinkNotLogin();
                 break;

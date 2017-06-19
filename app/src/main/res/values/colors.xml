@@ -29,4 +29,12 @@
     <color name="color_text_btn_like">#7EC338</color>
     <color name="color_btn_catalogy">#DADEE6</color>
 
+    <!-- zeplin color-->
+    <color name="gray240">#F0F0F0</color>
+    <color name="gray221">#DDDDDD</color>
+    <color name="color_hint_text_170">#AAAAAA</color>
+    <color name="color_textview_84">#545454</color>
+    <color name="peacockBlue">#0055A6</color>
+    <color name="azureTwo">#009CFF</color>
+
 </resources>
