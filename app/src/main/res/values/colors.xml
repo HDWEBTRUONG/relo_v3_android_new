@@ -2,7 +2,7 @@
 <resources>
     <color name="trans">#00000000 </color>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#0361B8</color>
+    <color name="colorPrimaryDark">#0055A6</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTreePoppy">#FFA51D</color>
     <color name="colorTreePoppy_press">#D48412</color>
@@ -27,7 +27,7 @@
     <color name="color_bg_bottom_dis">#8F8F8F</color>
     <color name="color_indicator">#EEEF0D</color>
     <color name="color_text_btn_like">#7EC338</color>
-    <color name="color_btn_catalogy">#DADEE6</color>
+    <color name="black">#000000</color>
 
     <!-- zeplin color-->
     <color name="gray240">#F0F0F0</color>
@@ -36,5 +36,14 @@
     <color name="color_textview_84">#545454</color>
     <color name="peacockBlue">#0055A6</color>
     <color name="azureTwo">#009CFF</color>
+    <color name="oceanBlue">#0461B9</color>
+    <color name="azure">#008AFF</color>
+    <color name="paleGrey">#DADEE6</color>
+    <color name="orangeish">#FF8E48</color>
+    <color name="warmGrey">#999999</color>
+    <color name="yellowOrange">#FFBA00</color>
+    <color name="whiteFour">#DDDDDD</color>
+    <color name="apple">#7DC338</color>
+    <color name="pinkishGrey">#BEBEBE</color>
 
 </resources>

@@ -7,7 +7,7 @@
                 android:bottom="@dimen/_15dp"
                 android:left="@dimen/_1dp"
                 android:right="@dimen/_1dp"/>
-            <stroke android:color="@color/apple" android:width="@dimen/_0.3dp"/>
+            <stroke android:color="@color/whiteFour" android:width="@dimen/_0.3dp"/>
         </shape>
     </item>
     <item>
@@ -17,7 +17,7 @@
                 android:bottom="@dimen/_15dp"
                 android:left="@dimen/_1dp"
                 android:right="@dimen/_1dp"/>
-            <stroke android:color="@color/apple" android:width="@dimen/_0.3dp"/>
+            <stroke android:color="@color/whiteFour" android:width="@dimen/_0.3dp"/>
         </shape>
     </item>
 </selector>

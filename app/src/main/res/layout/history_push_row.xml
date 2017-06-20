@@ -12,8 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2017/05/12"
-            android:textSize="@dimen/text_size_14sp"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/text_size_14sp"/>
         <TextView
             android:id="@+id/tvHistoryContent"
             android:layout_width="match_parent"
@@ -31,7 +30,8 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:layout_marginBottom="@dimen/_3dp"
-            android:textSize="@dimen/text_size_15sp"
+            android:textColor="@color/azure"
+            android:textSize="@dimen/text_size_14sp"
             android:linksClickable="true"
             android:text="@string/his_link"/>
     </LinearLayout>

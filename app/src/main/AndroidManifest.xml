@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity"></activity>
+        <activity android:name=".ui.activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity android:name=".ui.activity.WebviewActivity"></activity>
         <activity android:name=".ui.activity.MainTabActivity"></activity>
     </application>

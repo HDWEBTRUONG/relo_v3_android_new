@@ -52,19 +52,20 @@
                     android:textColor="@color/white"
                     android:text="@string/item_coupon_category_name"
                     android:textSize="@dimen/text_size_11sp"
-                    android:background="@drawable/bg_catalory_coupon"/>
+                    android:background="@drawable/bg_catelogy_style"/>
                 <TextView
                     android:id="@+id/tvDurationCoupon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3dp"
                     android:layout_marginBottom="@dimen/_3dp"
+                    android:layout_marginRight="@dimen/_5dp"
                     android:textSize="@dimen/text_size_11sp"
                     android:text="@string/limit_time"
                     android:layout_alignParentRight="true"
                     android:textAlignment="textEnd"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/color_btn_catalogy"/>
+                    android:textColor="@color/warmGrey"/>
             </RelativeLayout>
             <TextView
                 android:id="@+id/tvCompanyName"
@@ -73,7 +74,8 @@
                 android:maxLines="2"
                 android:layout_marginTop="@dimen/_3dp"
                 android:layout_marginBottom="@dimen/_3dp"
-                android:textSize="@dimen/text_size_15sp"
+                android:textSize="@dimen/text_size_large16"
+                android:textColor="@color/black"
                 android:ellipsize="end"
                 android:text="@string/item_coupon_company_name"
                 android:textStyle="bold"/>
@@ -89,26 +91,23 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:clickable="true"
-            android:background="@drawable/button_list_coupon"
+            android:background="@drawable/button_list_coupon_fac"
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/imvLike"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/test_ic_start"/>
+                android:layout_height                                                                                                                                                                                                                                                                                                                                                                                          ="wrap_content"
+                android:layout_marginRight="@dimen/_3dp"
+                android:src="@drawable/icon_star_on"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:textColor="#FFBA00"
+                android:textColor="@color/yellowOrange"
                 android:text="@string/btn_title_like"
                 android:textSize="@dimen/text_size_14sp"/>
         </LinearLayout>
-        <View
-            android:layout_width="@dimen/_0.3dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorIron"/>
         <LinearLayout
             android:id="@+id/lnBtnDetail"
             android:layout_width="match_parent"
@@ -121,9 +120,8 @@
                 android:id="@+id/imvDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:src="@drawable/test_ic_detail"/>
+                android:layout_marginRight="@dimen/_4dp"
+                android:src="@drawable/icon_coupon"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

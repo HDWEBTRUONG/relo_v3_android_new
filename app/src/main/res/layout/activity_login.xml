@@ -81,7 +81,7 @@
                 android:layout_marginRight="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_2dp"
                 android:layout_marginBottom="@dimen/_2dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:textSize="@dimen/text_size_medium"/>
             <TextView
                 android:id="@+id/txt_show_error"
@@ -90,8 +90,8 @@
                 android:text="@string/error_login_wrong_id_password"
                 android:textColor="@color/colorMonaLisa"
                 android:visibility="gone"
-                android:paddingTop="@dimen/_10dp"
-                android:paddingBottom="@dimen/_10dp"/>
+                android:layout_marginLeft="@dimen/_20dp"
+                android:layout_marginRight="@dimen/_20dp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

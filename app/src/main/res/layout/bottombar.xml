@@ -22,7 +22,7 @@
                 android:id="@+id/imvBackBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/test_ic_back"
+                android:src="@drawable/btn_preview_off"
                 android:visibility="gone"
                 android:layout_gravity="center"/>
         </LinearLayout>
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:src="@drawable/test_ic_forward"
+                android:src="@drawable/btn_next_off"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
@@ -47,10 +47,10 @@
             android:gravity="center"
             android:layout_weight="1">
             <ImageView
-                android:id="@+id/imvCopyBottomBar"
+                android:id="@+id/imvBrowserBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/test_ic_copy"
+                android:src="@drawable/btn_browser"
                 android:visibility="gone"
                 android:layout_gravity="center"/>
         </LinearLayout>
@@ -64,7 +64,7 @@
                 android:id="@+id/imvReloadBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/test_ic_reload"
+                android:src="@drawable/btn_reload_off"
                 android:visibility="gone"
                 android:layout_gravity="center"/>
         </LinearLayout>

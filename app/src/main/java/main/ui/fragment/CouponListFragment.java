@@ -79,7 +79,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
         lnBottom.setVisibility(View.VISIBLE);
         imvBackBottomBar.setVisibility(View.VISIBLE);
         imvForwardBottomBar.setVisibility(View.VISIBLE);
-        imvCopyBottomBar.setVisibility(View.GONE);
+        imvBrowserBottomBar.setVisibility(View.GONE);
         imvReloadBottomBar.setVisibility(View.VISIBLE);
     }
 

@@ -3,9 +3,14 @@ package main.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +30,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,9 +64,7 @@ import rx.Subscriber;
  */
 
 public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
-    EditText editUsername;
-    EditText editPassword;
-    TextView txtShowError;
+
     TextView link_webview_not_login;
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
@@ -74,9 +78,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
 
     private void init() {
-        editUsername = (EditText) findViewById(R.id.edit_login_username);
-        editPassword = (EditText) findViewById(R.id.edit_login_password);
-        txtShowError = (TextView) findViewById(R.id.txt_show_error);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
@@ -100,8 +101,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
             // Get Data From UI
-            String username = editUsername.getText().toString();
-            String password = editPassword.getText().toString();
+            String username = "admin";
+            String password = "relo";
             try {
                 if ((username != null && !username.isEmpty()) && (password != null && !password.isEmpty())) {
                     if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && password.equals(Constant.ACC_LOGIN_DEMO_PASSWORD)) {
@@ -109,8 +110,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         LoginSharedPreference.getInstance(this).setLogin(encryptKeyStore(username),encryptKeyStore(password));
                         updateData();
                     }else{
-                        txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
-                        txtShowError.setVisibility(View.VISIBLE);
+                        //txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
+                        //txtShowError.setVisibility(View.VISIBLE);
                         btnLogin.setEnabled(true);
                     }
                 }else{
@@ -183,8 +184,22 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        editUsername.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getUserID()));
-        editPassword.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getPassword()));
+        //editUsername.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getUserID()));
+        //editPassword.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getPassword()));
+        String str_text = "<a href={0}><span>{1}</span></a>";
+        link_webview_not_login.setLinkTextColor(ContextCompat.getColor(this,R.color.azureTwo));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
+            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,
+                    Constant.WEBVIEW_URL_CAN_NOT_LOGIN,getString(R.string.txt_link_can_not_login)), Html.FROM_HTML_MODE_LEGACY));
+
+        }
+        else {
+            link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
+            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,Constant.WEBVIEW_URL_CAN_NOT_LOGIN,getString(R.string.txt_link_can_not_login)).toString()));
+        }
+        hideSoftKeyboard();
     }
 
     @Override
@@ -204,7 +219,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         switch (v.getId()){
             case R.id.bt_login:
                 btnLogin.setEnabled(false);
-                clickLogin(v);
+                //clickLogin(v);
+                updateData();
                 break;
             /*case R.id.link_webview_forget_id:
                 clickForget();
