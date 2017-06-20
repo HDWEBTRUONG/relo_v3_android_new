@@ -78,11 +78,22 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
 
     @Override
     public void setupBottombar() {
-        lnBottom.setVisibility(View.VISIBLE);
-        imvBackBottomBar.setVisibility(View.VISIBLE);
-        imvForwardBottomBar.setVisibility(View.VISIBLE);
-        imvCopyBottomBar.setVisibility(View.VISIBLE);
-        imvReloadBottomBar.setVisibility(View.VISIBLE);
+        switch (checkWebview){
+            case Constant.AREA_COUPON:
+                lnBottom.setVisibility(View.VISIBLE);
+                imvBackBottomBar.setVisibility(View.VISIBLE);
+                imvForwardBottomBar.setVisibility(View.VISIBLE);
+                imvBrowserBottomBar.setVisibility(View.GONE);
+                imvReloadBottomBar.setVisibility(View.VISIBLE);
+                break;
+            case Constant.MEMBER_COUPON:
+                lnBottom.setVisibility(View.VISIBLE);
+                imvBackBottomBar.setVisibility(View.VISIBLE);
+                imvForwardBottomBar.setVisibility(View.VISIBLE);
+                imvBrowserBottomBar.setVisibility(View.VISIBLE);
+                imvReloadBottomBar.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override

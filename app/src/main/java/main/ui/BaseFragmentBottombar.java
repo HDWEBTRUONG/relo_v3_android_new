@@ -23,7 +23,7 @@ public abstract class BaseFragmentBottombar extends BaseFragment {
     protected LinearLayout lnBottom;
     protected ImageView imvBackBottomBar;
     protected ImageView imvForwardBottomBar;
-    protected ImageView imvCopyBottomBar;
+    protected ImageView imvBrowserBottomBar;
     protected ImageView imvReloadBottomBar;
 
 
@@ -33,7 +33,7 @@ public abstract class BaseFragmentBottombar extends BaseFragment {
         lnBottom = (LinearLayout) view.findViewById(R.id.lnBottom);
         imvBackBottomBar = (ImageView) view.findViewById(R.id.imvBackBottomBar);
         imvForwardBottomBar = (ImageView) view.findViewById(R.id.imvForwardBottomBar);
-        imvCopyBottomBar = (ImageView) view.findViewById(R.id.imvCopyBottomBar);
+        imvBrowserBottomBar = (ImageView) view.findViewById(R.id.imvBrowserBottomBar);
         imvReloadBottomBar = (ImageView) view.findViewById(R.id.imvReloadBottomBar);
     }
 

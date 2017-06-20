@@ -92,7 +92,7 @@ public class MainTabActivity extends BaseActivityToolbar {
 
         // Set a custom shadow that overlays the main content when the drawer
         // opens
-        mDrawerLayoutMenu.setDrawerShadow(R.drawable.bg_catalory_coupon,
+        mDrawerLayoutMenu.setDrawerShadow(R.drawable.bg_catelogy_coupon,
                 GravityCompat.START);
 
         mDrawerLayoutMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

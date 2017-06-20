@@ -3,6 +3,7 @@ package main.ui.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -47,7 +48,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         holder.tvHistoryContent.setText(data.getContentHis());
         holder.tvHistoryLink.setText(data.getUrlHis());
         String str_text = "<a href={0}><span>{1}</span></a>";
-        holder.tvHistoryLink.setLinkTextColor(Color.BLUE);
+        holder.tvHistoryLink.setLinkTextColor(ContextCompat.getColor(mContext,R.color.azure));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.tvHistoryLink.setMovementMethod(LinkMovementMethod.getInstance());
