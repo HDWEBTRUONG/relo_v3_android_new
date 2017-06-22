@@ -393,12 +393,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
             mCompositeSubscription.unsubscribe();
     }
-    public void showLoading(Context context){
+    public void showLoadingData(Context context){
         if(kProgressHUDloading==null){
             kProgressHUDloading=KProgressHUD.create(context)
                     .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setLabel("Please wait")
                     .setDetailsLabel("Downloading data")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
+        }
+        if(!kProgressHUDloading.isShowing()){
+            kProgressHUDloading.show();
+        }
+
+    }
+    public void showLoading(Context context){
+        if(kProgressHUDloading==null){
+            kProgressHUDloading=KProgressHUD.create(context)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
                     .setAnimationSpeed(2)
                     .setDimAmount(0.5f);

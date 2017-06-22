@@ -5,67 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center|center_vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/lnGroupCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="top"
+            android:background="@color/transparent"
             android:gravity="top"
-            android:background="@color/transparent" >
+            android:orientation="vertical">
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3dp"
-                android:layout_marginBottom="@dimen/_3dp">
+                android:layout_marginBottom="@dimen/_3dp"
+                android:layout_marginTop="@dimen/_3dp">
+
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinnerCategory"
-                    android:visibility="invisible"
-                    app:ms_background_color="#CFFF"
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40dp"
                     android:layout_margin="@dimen/_5dp"
-                    android:layout_height="@dimen/_40dp"/>
+                    android:visibility="invisible"
+                    app:ms_background_color="#CFFF" />
+
                 <LinearLayout
                     android:id="@+id/lnCatalory"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_catelogy_coupon"
-                    android:layout_margin="@dimen/_5dp"
                     android:layout_gravity="center"
+                    android:layout_margin="@dimen/_5dp"
+                    android:background="@drawable/bg_catelogy_coupon"
                     android:clickable="true"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="@string/catalogy"
-                        android:textSize="@dimen/text_size_large"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textColor="@color/peacockBlueTwo"
+                        android:textSize="@dimen/text_size_large" />
+
                     <ImageView
                         android:id="@+id/imvLike"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/_5dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/icon_arrow"/>
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:src="@drawable/icon_arrow" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
+
         <ListView
             android:id="@+id/list_category_listview"
             android:layout_width="match_parent"
-            android:background="@color/transparent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"></ListView>
         <!--</LinearLayout>
     </ScrollView>-->
     </LinearLayout>
+
     <include layout="@layout/bottombar"/>
 </LinearLayout>

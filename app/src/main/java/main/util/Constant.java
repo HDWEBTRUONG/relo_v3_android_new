@@ -21,7 +21,7 @@ public class Constant {
     public static final String WEBVIEW_URL_FORGET_LOGIN = "https://sp.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html";
     public static final String WEBVIEW_URL_CAN_NOT_LOGIN = "https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.html";
     public static final String WEBVIEW_URL_AREA_COUPON = "https://www.google.com/maps/@10.764855,106.6468148,15z";
-    public static final String WEBVIEW_URL_MEMBER_COUPON = "http://devpro.edu.vn";
+    public static final String WEBVIEW_URL_MEMBER_COUPON = "https://www.google.com/search?q=go#q=onSslError+webview+android";
 
     //Key username
     public static final String ACC_LOGIN_DEMO_USERNAME ="admin";

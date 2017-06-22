@@ -22,7 +22,7 @@
                 android:id="@+id/imvBackBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_preview_off"
+                android:src="@drawable/ic_back_wv"
                 android:visibility="gone"
                 android:layout_gravity="center"/>
         </LinearLayout>
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:src="@drawable/btn_next_off"
+                android:src="@drawable/ic_forward_wv"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
