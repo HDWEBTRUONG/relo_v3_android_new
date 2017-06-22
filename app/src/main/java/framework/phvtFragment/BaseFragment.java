@@ -1,6 +1,7 @@
 package framework.phvtFragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,8 @@ import framework.phvtUtils.AppLog;
  * @author thaonp & phatvt
  */
 public abstract class BaseFragment extends Fragment {
+
+    private KProgressHUD kProgressHUDloading;
     //----------------------------------------------------------------------------------------------------
     /**
      * Root layout view
@@ -317,5 +322,23 @@ public abstract class BaseFragment extends Fragment {
     }
     public void removeView(){
         ((ViewGroup)mRootLayout).removeAllViews();
+    }
+    public void showLoading(Context context){
+        if(kProgressHUDloading==null){
+            kProgressHUDloading=KProgressHUD.create(context)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setCancellable(false)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
+        }
+        if(!kProgressHUDloading.isShowing()){
+            kProgressHUDloading.show();
+        }
+
+    }
+    public void hideLoading(){
+        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
+            kProgressHUDloading.dismiss();
+        }
     }
 }

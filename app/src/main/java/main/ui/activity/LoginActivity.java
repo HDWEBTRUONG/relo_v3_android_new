@@ -192,12 +192,12 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
             link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,
-                    Constant.WEBVIEW_URL_CAN_NOT_LOGIN,getString(R.string.txt_link_can_not_login)), Html.FROM_HTML_MODE_LEGACY));
+                    "#",getString(R.string.txt_link_can_not_login)), Html.FROM_HTML_MODE_LEGACY));
 
         }
         else {
             link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
-            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,Constant.WEBVIEW_URL_CAN_NOT_LOGIN,getString(R.string.txt_link_can_not_login)).toString()));
+            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,"#",getString(R.string.txt_link_can_not_login)).toString()));
         }
         hideSoftKeyboard();
     }
@@ -266,7 +266,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showLoading(LoginActivity.this);
+            showLoadingData(LoginActivity.this);
         }
 
         protected Integer doInBackground(String... arg0) {

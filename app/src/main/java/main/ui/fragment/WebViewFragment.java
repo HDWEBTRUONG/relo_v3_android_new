@@ -1,9 +1,17 @@
 package main.ui.fragment;
 
+import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,6 +21,7 @@ import main.R;
 import main.ReloApp;
 import main.ui.BaseFragmentBottombar;
 import main.ui.BaseFragmentToolbarBottombar;
+import main.ui.webview.MyWebViewClient;
 import main.util.Constant;
 
 /**
@@ -33,6 +42,9 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         url = getArguments().getString(Constant.KEY_LOGIN_URL);
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
         mWebView = ((ReloApp)getActivity().getApplication()).getWebView(checkWebview);
+
+        setupWebView(mWebView);
+
         myContainer = (RelativeLayout) view.findViewById(R.id.lnContainerWv);
         if(mWebView!=null&&mWebView.getParent()!=null){
             ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
@@ -74,6 +86,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 });
                 break;
         }
+
     }
 
     @Override
@@ -94,6 +107,22 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
                 break;
         }
+        imvBackBottomBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.goBack();
+                imvBackBottomBar.setEnabled(false);
+            }
+        });
+        imvForwardBottomBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.goForward();
+                imvForwardBottomBar.setEnabled(false);
+            }
+        });
+        imvBackBottomBar.setEnabled(mWebView.canGoBack());
+        imvForwardBottomBar.setEnabled(mWebView.canGoForward());
     }
 
     @Override
@@ -115,6 +144,47 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     @Override
     protected void registerEventHandlers() {
 
+    }
+
+    private void setupWebView(final WebView webView) {
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptEnabled(true);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        //Disable cache Webview
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        webView.setWebViewClient(new MyWebViewClient(getActivity()) {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                showLoading(getActivity());
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                hideLoading();
+                imvBackBottomBar.setEnabled(webView.canGoBack());
+                imvForwardBottomBar.setEnabled(webView.canGoForward());
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                //TODO hide loading
+                hideLoading();
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(view, handler, error);
+                //TODO hide loading
+                hideLoading();
+            }
+        });
     }
 
     @Override

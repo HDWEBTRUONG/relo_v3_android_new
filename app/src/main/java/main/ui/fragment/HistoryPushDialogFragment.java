@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import main.R;
 import main.model.HistoryPushDTO;
-import main.ui.BaseDialogFragment;
 import main.ui.BaseDialogFragmentToolbar;
 import main.ui.adapter.HistoryPushAdapter;
 
@@ -24,7 +23,7 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
     @Override
     protected void init(View view) {
         rclHistoryPush = (RecyclerView) view.findViewById(R.id.rclHistoryPush);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rclHistoryPush.setLayoutManager(mLayoutManager);
     }
 
