@@ -9,8 +9,12 @@ import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -24,6 +28,7 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
 import main.ReloApp;
 import main.api.ApiClient;
+import main.api.ApiClientJP;
 import main.api.ApiInterface;
 import main.util.Utils;
 import rx.Observable;
@@ -51,6 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected BaseFragment mMainActiveFragment;
     protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    protected ApiInterface apiInterfaceJP = ApiClientJP.getClient().create(ApiInterface.class);
 
     //----------------------------------------------------------------------------------------------------
 

@@ -85,6 +85,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
         //temp
         imvBackBottomBar.setEnabled(false);
         imvForwardBottomBar.setEnabled(false);
+        imvReloadBottomBar.setEnabled(false);
     }
 
     private ArrayList getListData() {

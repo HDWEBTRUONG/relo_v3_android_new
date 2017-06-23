@@ -64,7 +64,7 @@
                 android:id="@+id/imvReloadBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_reload_off"
+                android:src="@drawable/ic_reload_wv"
                 android:visibility="gone"
                 android:layout_gravity="center"/>
         </LinearLayout>

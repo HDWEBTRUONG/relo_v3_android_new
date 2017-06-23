@@ -2,6 +2,7 @@ package main.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import framework.phvtUtils.AppLog;
 import main.R;
 import main.model.HistoryPushDTO;
 
@@ -43,22 +45,15 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
 
     @Override
     public void onBindViewHolder(HisViewHolder holder, int position) {
-        HistoryPushDTO data = listData.get(position);
+        final HistoryPushDTO data = listData.get(position);
         holder.tvHistoryTime.setText(data.getTimeHis());
         holder.tvHistoryContent.setText(data.getContentHis());
-        holder.tvHistoryLink.setText(data.getUrlHis());
-        String str_text = "<a href={0}><span>{1}</span></a>";
-        holder.tvHistoryLink.setLinkTextColor(ContextCompat.getColor(mContext,R.color.azure));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.tvHistoryLink.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.tvHistoryLink.setText(Html.fromHtml(MessageFormat.format(str_text,
-                    data.getUrlHis(),mContext.getString(R.string.his_link)), Html.FROM_HTML_MODE_LEGACY));
-        }
-        else {
-            holder.tvHistoryLink.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.tvHistoryLink.setText(Html.fromHtml(MessageFormat.format(str_text,data.getUrlHis(),mContext.getString(R.string.his_link)).toString()));
-        }
+        holder.tvHistoryLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppLog.log(data.getUrlHis());
+            }
+        });
     }
 
     @Override
@@ -74,6 +69,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
             tvHistoryTime = (TextView) view.findViewById(R.id.tvHistoryTime);
             tvHistoryContent = (TextView) view.findViewById(R.id.tvHistoryContent);
             tvHistoryLink = (TextView) view.findViewById(R.id.tvHistoryLink);
+            tvHistoryLink.setPaintFlags(tvHistoryLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 }

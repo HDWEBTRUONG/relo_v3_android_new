@@ -7,6 +7,7 @@ package main.util;
 public class Constant {
     //link server coupon
     public static final String BASE_URL = "http://54.202.202.214/relo/";
+    public static final String BASE_URL_JP = "https://sp.club-off.com/";
     public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/relo_data.xml";
 
 
@@ -25,7 +26,8 @@ public class Constant {
 
     //Key username
     public static final String ACC_LOGIN_DEMO_USERNAME ="admin";
-    public static final String ACC_LOGIN_DEMO_PASSWORD = "123456";
+    public static final String ACC_ID_APP = "relo";
+    public static final String ACC_USER_MAIL = "admin@gmail.com";
 
     /** GA LOGIN**/
     public static final String GA_LOGIN_SCREEN = "ログイン";
