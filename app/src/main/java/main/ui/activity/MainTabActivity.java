@@ -1,7 +1,12 @@
 package main.ui.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
@@ -34,10 +40,16 @@ public class MainTabActivity extends BaseActivityToolbar {
     DrawerLayout mDrawerLayoutMenu;
     ListView mDrawerListMenu;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Generate title
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -133,6 +145,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        viewPager.setOffscreenPageLimit(3);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         CouponAreaFragment couponAreaFragment = new CouponAreaFragment();
@@ -154,4 +167,5 @@ public class MainTabActivity extends BaseActivityToolbar {
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW, keyCheckWebview);
         return bundle;
     }
+
 }

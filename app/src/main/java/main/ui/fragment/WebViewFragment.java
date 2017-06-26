@@ -52,8 +52,9 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         if(mWebView!=null&&mWebView.getParent()!=null){
             ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
         }
-        if(checkWebview==Constant.DETAIL_COUPON){
+        if(checkWebview==Constant.DETAIL_COUPON||checkWebview==Constant.AREA_COUPON){
             mWebView.loadUrl(url);
+            AppLog.log("URL: "+url);
         }
         myContainer.addView(mWebView,
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
@@ -67,7 +68,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 title_toolbar.setVisibility(View.VISIBLE);
                 title_toolbar.setText(R.string.forget_title);
                 imvMenu.setVisibility(View.VISIBLE);
-                imvMenu.setImageResource(R.drawable.ic_close_48dp);
+                imvMenu.setImageResource(R.drawable.icon_close);
                 imvMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,7 +81,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 title_toolbar.setVisibility(View.VISIBLE);
                 title_toolbar.setText(R.string.cannot_login_title);
                 imvMenu.setVisibility(View.VISIBLE);
-                imvMenu.setImageResource(R.drawable.ic_close_48dp);
+                imvMenu.setImageResource(R.drawable.icon_close);
                 imvMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -127,7 +128,6 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppLog.log("imvForwardBottomBar: "+mWebView.getUrl());
                 getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
             }
         });

@@ -111,7 +111,7 @@ public class ReloApp extends Application {
         super.onCreate();
         wvForgetPass=setupWebview(Constant.WEBVIEW_URL_FORGET_LOGIN);
         wvCanNotLogin=setupWebview(Constant.WEBVIEW_URL_CAN_NOT_LOGIN);
-        wvAreaCoupon=setupWebview(Constant.WEBVIEW_URL_AREA_COUPON);
+        wvAreaCoupon=setupWebview("");//Constant.WEBVIEW_URL_AREA_COUPON);
         wvMemberCoupon=setupWebview(Constant.WEBVIEW_URL_MEMBER_COUPON);
         version = LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
 
@@ -132,24 +132,6 @@ public class ReloApp extends Application {
     private WebView setupWebview(String url){
         ////////////// setting webview
         WebView mWebView = new WebView(getApplicationContext());
-        WebSettings webSettings = mWebView.getSettings();
-
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-        //set responsive
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadWithOverviewMode(true);
-
-        //set zoomable
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-
-        //////////////
-
         mWebView.setWebViewClient(new CustomWebViewClient() {
 
             @Override
