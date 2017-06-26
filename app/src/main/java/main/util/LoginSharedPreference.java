@@ -10,7 +10,8 @@ import android.preference.PreferenceManager;
 
 public class LoginSharedPreference {
     public final String KEY_USER="userID";
-    public final String KEY_PASS="password";
+    public final String KEY_ID_APP="IDApp";
+    public final String KEY_MAIL="UserMail";
     public final String VERSION = "version";
     public static LoginSharedPreference sharedPreference;
 
@@ -33,22 +34,31 @@ public class LoginSharedPreference {
         editor.putString(KEY_USER, userID);
         editor.apply();
     }
-    public void setPassword(String password){
+    public void setAppID(String appID){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_PASS, password);
+        editor.putString(KEY_ID_APP, appID);
         editor.apply();
     }
-    public void setLogin(String userID,String password){
+    public void setUserMail(String userMail){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_MAIL, userMail);
+        editor.apply();
+    }
+    public void setLogin(String userID,String appID,String userMail){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USER, userID);
-        editor.putString(KEY_PASS, password);
+        editor.putString(KEY_ID_APP, appID);
+        editor.putString(KEY_MAIL, userMail);
         editor.apply();
     }
     public String getUserID(){
         return sharedPreferences.getString(KEY_USER,"");
     }
-    public String getPassword(){
-        return sharedPreferences.getString(KEY_PASS,"");
+    public String getAppID(){
+        return sharedPreferences.getString(KEY_ID_APP,"");
+    }
+    public String getUserMail(){
+        return sharedPreferences.getString(KEY_MAIL,"");
     }
     public void setVersion(int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();

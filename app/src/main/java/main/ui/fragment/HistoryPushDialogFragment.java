@@ -47,7 +47,7 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
         HistoryPushDTO d2 = new HistoryPushDTO();
         d2.setTimeHis("2017/4/20");
         d2.setContentHis("人員クポンに「ケンタッキ」を追加。");
-        d2.setUrlHis("https://www.google.com.vn");
+        d2.setUrlHis("https://stackoverflow.com");
         listData.add(d2);
         setAdapter();
     }

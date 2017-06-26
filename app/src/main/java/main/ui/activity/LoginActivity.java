@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,10 +48,13 @@ import framework.phvtUtils.AppLog;
 import main.R;
 import main.ReloApp;
 import main.api.ApiClient;
+import main.api.ApiClientJP;
 import main.api.ApiInterface;
 import main.api.MyCallBack;
 import main.database.MyDatabaseHelper;
 import main.model.DataReponse;
+import main.model.LoginReponse;
+import main.model.LoginRequest;
 import main.model.VersionReponse;
 import main.ui.BaseActivityToolbar;
 import main.util.Constant;
@@ -66,8 +70,10 @@ import rx.Subscriber;
 public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
 
     TextView link_webview_not_login;
+    TextView txt_show_error;
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
+    EditText edtLoginUsername,edtLoginIdApp,edtLoginPassword;
 
 
     @Override
@@ -79,6 +85,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
     private void init() {
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        txt_show_error = (TextView) findViewById(R.id.txt_show_error);
+        edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
+        edtLoginIdApp = (EditText) findViewById(R.id.edtLoginIdApp);
+        edtLoginPassword = (EditText) findViewById(R.id.edtLoginPassword);
+
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
@@ -100,18 +111,38 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void clickLogin(View view){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
-            // Get Data From UI
-            String username = "admin";
-            String password = "relo";
+            String username = edtLoginUsername.getText().toString();
+            String idApp = edtLoginIdApp.getText().toString();
+            String userMail = edtLoginPassword.getText().toString();
+            LoginRequest loginRequest = new LoginRequest(username,userMail,idApp);
+            addSubscription(apiInterfaceJP.logon(loginRequest), new MyCallBack<LoginReponse>() {
+                @Override
+                public void onSuccess(LoginReponse model) {
+                    AppLog.log(model.toString());
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    AppLog.log(msg);
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            });
+
+
             try {
-                if ((username != null && !username.isEmpty()) && (password != null && !password.isEmpty())) {
-                    if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && password.equals(Constant.ACC_LOGIN_DEMO_PASSWORD)) {
+                if ((username != null && !username.isEmpty()) && (idApp != null && !idApp.isEmpty())&& (userMail != null && !userMail.isEmpty())) {
+                    if(username.equals(Constant.ACC_LOGIN_DEMO_USERNAME) && idApp.equals(Constant.ACC_ID_APP) && userMail.equals(Constant.ACC_USER_MAIL)) {
                         //save user and password encrypt KeyStore
-                        LoginSharedPreference.getInstance(this).setLogin(encryptKeyStore(username),encryptKeyStore(password));
+                        LoginSharedPreference.getInstance(this).setLogin(EASHelper.setEncryptedString(username),
+                                EASHelper.setEncryptedString(idApp),EASHelper.setEncryptedString(userMail));
                         updateData();
                     }else{
-                        //txtShowError.setText(getResources().getString(R.string.error_login_wrong_id_password));
-                        //txtShowError.setVisibility(View.VISIBLE);
+                        txt_show_error.setText(getResources().getString(R.string.error_login_wrong_id_password));
+                        txt_show_error.setVisibility(View.VISIBLE);
                         btnLogin.setEnabled(true);
                     }
                 }else{
@@ -184,21 +215,14 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        //editUsername.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getUserID()));
-        //editPassword.setText(decryptKeyStore(LoginSharedPreference.getInstance(this).getPassword()));
-        String str_text = "<a href={0}><span>{1}</span></a>";
-        link_webview_not_login.setLinkTextColor(ContextCompat.getColor(this,R.color.azureTwo));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
-            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,
-                    "#",getString(R.string.txt_link_can_not_login)), Html.FROM_HTML_MODE_LEGACY));
-
+        try {
+            edtLoginUsername.setText(EASHelper.getDecryptedValue(LoginSharedPreference.getInstance(this).getUserID()));
+            edtLoginIdApp.setText(EASHelper.getDecryptedValue(LoginSharedPreference.getInstance(this).getAppID()));
+            edtLoginPassword.setText(EASHelper.getDecryptedValue(LoginSharedPreference.getInstance(this).getUserMail()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            link_webview_not_login.setMovementMethod(LinkMovementMethod.getInstance());
-            link_webview_not_login.setText(Html.fromHtml(MessageFormat.format(str_text,"#",getString(R.string.txt_link_can_not_login)).toString()));
-        }
+        link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
     }
 
@@ -219,8 +243,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         switch (v.getId()){
             case R.id.bt_login:
                 btnLogin.setEnabled(false);
-                //clickLogin(v);
-                updateData();
+                clickLogin(v);
                 break;
             /*case R.id.link_webview_forget_id:
                 clickForget();

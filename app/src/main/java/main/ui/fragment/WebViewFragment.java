@@ -1,6 +1,8 @@
 package main.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import framework.phvtFragment.BaseFragment;
+import framework.phvtUtils.AppLog;
 import main.R;
 import main.ReloApp;
 import main.ui.BaseFragmentBottombar;
@@ -121,6 +124,21 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 imvForwardBottomBar.setEnabled(false);
             }
         });
+        imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppLog.log("imvForwardBottomBar: "+mWebView.getUrl());
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
+            }
+        });
+
+        imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.reload();
+            }
+        });
+
         imvBackBottomBar.setEnabled(mWebView.canGoBack());
         imvForwardBottomBar.setEnabled(mWebView.canGoForward());
     }
