@@ -35,7 +35,7 @@
                     android:background="@drawable/bg_trans"
                     android:hint="@string/txt_login_username"
                     android:lines="1"
-                    android:text="admin"
+                    android:text="70000000513"
                     android:singleLine="true"
                     android:textColor="@color/color_hint_text_170"
                     android:textColorHint="@color/color_hint_text_170"
@@ -48,13 +48,14 @@
                     <include layout="@layout/line_layout"/>
                 </LinearLayout>
                 <EditText
-                    android:id="@+id/edtLoginIdApp"
+                    android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
                     android:hint="@string/txt_login_app_id"
                     android:layout_gravity="center"
                     android:lines="1"
-                    android:text="relo"
+                    android:text="7619"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:background="@drawable/bg_trans"
                     android:textColor="@color/color_hint_text_170"
@@ -62,14 +63,14 @@
                     android:textColorHint="@color/color_hint_text_170"/>
             </LinearLayout>
             <EditText
-                android:id="@+id/edtLoginPassword"
+                android:id="@+id/edtMail"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55dp"
                 android:layout_marginTop="@dimen/_20dp"
                 android:hint="@string/txt_login_mail"
                 android:layout_gravity="center"
                 android:lines="1"
-                android:text="admin@gmail.com"
+                android:text="kubo@relo.jp"
                 android:singleLine="true"
                 android:background="@drawable/bg_edittext_login2"
                 android:textColor="@color/color_hint_text_170"
