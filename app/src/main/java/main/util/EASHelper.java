@@ -3,9 +3,13 @@ package main.util;
 
 import android.util.Base64;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -13,34 +17,5 @@ import javax.crypto.spec.SecretKeySpec;
  */
 
 public class EASHelper {
-    private static final String ALGO = "AES";
-    private static final byte[] keyValue = new byte[]{'T', 'h', 'e', 'R', 'o', 'o', 'K', 'n', 'a', 't','E','n', 'i', 'r','i','n'};
-
-    public static String setEncryptedString(String data) throws Exception {
-        Key key = getKey();
-        Cipher cipher = Cipher.getInstance(ALGO);
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encryptedValue = cipher.doFinal(data.getBytes("UTF-8"));
-
-        return Base64.encodeToString(encryptedValue, Base64.DEFAULT);
-    }
-
-    public static String getDecryptedValue(String data) throws Exception {
-
-        if(data != null) {
-            Key key = getKey();
-            Cipher cipher = Cipher.getInstance(ALGO);
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decodebyte = Base64.decode(data.getBytes("UTF-8"), Base64.DEFAULT);
-            byte[] decValue = cipher.doFinal(decodebyte);
-
-            return new String(decValue);
-        }
-
-        return null;
-    }
-
-    private static Key getKey() throws Exception {
-        return new SecretKeySpec(keyValue, ALGO);
-    }
+    public static String password="ab012345678901234567890123456789";
 }

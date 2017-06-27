@@ -49,4 +49,6 @@ public class Constant {
     public static final int MEMBER_COUPON =  AREA_COUPON + 1;
     public static final int DETAIL_COUPON =  MEMBER_COUPON + 1;
 
+    public static final int HTTPOK = 200;
+
 }

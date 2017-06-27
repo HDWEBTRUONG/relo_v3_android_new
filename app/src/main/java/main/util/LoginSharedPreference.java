@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 
 public class LoginSharedPreference {
     public final String KEY_USER="userID";
-    public final String KEY_ID_APP="IDApp";
+    public final String KEY_ID_APP="IDApp";//pass word
     public final String KEY_MAIL="UserMail";
     public final String VERSION = "version";
     public static LoginSharedPreference sharedPreference;
