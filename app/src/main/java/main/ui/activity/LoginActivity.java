@@ -1,22 +1,13 @@
 package main.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,7 +24,6 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.text.MessageFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,13 +35,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import main.R;
 import main.ReloApp;
-import main.api.ApiClient;
-import main.api.ApiClientJP;
-import main.api.ApiInterface;
 import main.api.MyCallBack;
 import main.database.MyDatabaseHelper;
 import main.model.DataReponse;
@@ -63,7 +50,6 @@ import main.util.Constant;
 import main.util.EASHelper;
 import main.util.LoginSharedPreference;
 import main.util.Utils;
-import rx.Subscriber;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -71,6 +57,7 @@ import rx.Subscriber;
 
 public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
 
+    ImageView img_logo;
     TextView link_webview_not_login;
     TextView txt_show_error;
     Button btnLogin;
@@ -86,6 +73,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
 
     private void init() {
+        img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
@@ -95,6 +83,21 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
+
+        if(main.BuildConfig.DEBUG){
+            img_logo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)){
+                        edtLoginUsername.setText("70000000513");
+                        edtPassword.setText("7619");
+                    }else{
+                        edtLoginUsername.setText(Constant.ACC_LOGIN_DEMO_USERNAME);
+                        edtPassword.setText(Constant.ACC_LOGIN_DEMO_PASS);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -113,7 +116,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void clickLogin(View view){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
-            showLoading(this);
             String usernameTemp="";
             try {
                 usernameTemp = AESCrypt.encrypt(EASHelper.password, edtLoginUsername.getText().toString());
@@ -123,49 +125,53 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             final String username=usernameTemp;
             final String userMail = edtMail.getText().toString().trim();
             final String password = edtPassword.getText().toString();
-            if ((username != null && !username.isEmpty()) && (password != null && !password.isEmpty())&& (userMail != null && !userMail.isEmpty())) {
-                        LoginRequest loginRequest = new LoginRequest(username,userMail,password);
-                        addSubscription(apiInterfaceJP.logon(loginRequest), new MyCallBack<LoginReponse>() {
-                            @Override
-                            public void onSuccess(LoginReponse model) {
-                                if(model.getStatus()==Constant.HTTPOK){
-                                    updateData();
-                                    //save user and password encrypt KeyStore
-                                    try {
-                                        LoginSharedPreference.getInstance(LoginActivity.this).setLogin(username,
-                                                userMail,password);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }else{
-                                    txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
-                                    txt_show_error.setVisibility(View.VISIBLE);
-                                    btnLogin.setEnabled(true);
-                                }
-                            }
 
-                            @Override
-                            public void onFailure(String msg) {
-                                AppLog.log(msg);
+            //hard code login test
+            if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)&&password.equals(Constant.ACC_LOGIN_DEMO_PASS)){
+                updateData();
+                return;
+            }
+            //end test
 
-                                //TODO login failure
-                                txt_show_error.setText(msg);
-                                txt_show_error.setVisibility(View.VISIBLE);
-                                btnLogin.setEnabled(true);
+            if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
+                showLoading(this);
+                LoginRequest loginRequest = new LoginRequest(username,userMail,password);
+                addSubscription(apiInterfaceJP.logon(loginRequest), new MyCallBack<LoginReponse>() {
+                    @Override
+                    public void onSuccess(LoginReponse model) {
+                        if(model.getStatus()==Constant.HTTPOK){
+                            updateData();
+                            //save user and password encrypt KeyStore
+                            LoginSharedPreference.getInstance(LoginActivity.this).setLogin(username, userMail,password);
+                        }else{
+                            txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
+                            txt_show_error.setVisibility(View.VISIBLE);
+                            btnLogin.setEnabled(true);
+                        }
+                    }
 
-                            }
+                    @Override
+                    public void onFailure(String msg) {
+                        AppLog.log(msg);
 
-                            @Override
-                            public void onFinish() {
-                                hideLoading();
-                            }
-                        });
-
-                    }else{
-                        txt_show_error.setText(getResources().getString(R.string.error_login_wrong_id_password));
+                        //TODO login failure
+                        txt_show_error.setText(msg);
                         txt_show_error.setVisibility(View.VISIBLE);
                         btnLogin.setEnabled(true);
+
                     }
+
+                    @Override
+                    public void onFinish() {
+                        hideLoading();
+                    }
+                });
+
+            }else{
+                txt_show_error.setText(getResources().getString(R.string.error_login_wrong_id_password));
+                txt_show_error.setVisibility(View.VISIBLE);
+                btnLogin.setEnabled(true);
+            }
 
         }else{
             btnLogin.setEnabled(true);
@@ -229,7 +235,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        try {
+        /*try {
             if(LoginSharedPreference.getInstance(this)!=null&&LoginSharedPreference.getInstance(this).getUserID()!=null){
                 String userLoca = LoginSharedPreference.getInstance(this).getUserID();
                 if(userLoca!=null&&userLoca.length()>0)
@@ -239,7 +245,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             edtMail.setText(LoginSharedPreference.getInstance(this).getUserMail());
         }catch (GeneralSecurityException e){
             //handle error
-        }
+        }*/
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
     }

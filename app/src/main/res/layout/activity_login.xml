@@ -16,7 +16,8 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <!-- Login account -->
-            <ImageView android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/logo_login"
                 android:layout_margin="@dimen/_35dp"

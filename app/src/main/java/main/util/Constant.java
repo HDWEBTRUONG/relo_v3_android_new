@@ -25,8 +25,8 @@ public class Constant {
     public static final String WEBVIEW_URL_MEMBER_COUPON = "https://www.google.com/search?q=go#q=onSslError+webview+android";
 
     //Key username
-    public static final String ACC_LOGIN_DEMO_USERNAME ="admin";
-    public static final String ACC_ID_APP = "relo";
+    public static final String ACC_LOGIN_DEMO_USERNAME ="test";
+    public static final String ACC_LOGIN_DEMO_PASS = "123";
     public static final String ACC_USER_MAIL = "admin@gmail.com";
 
     /** GA LOGIN**/
