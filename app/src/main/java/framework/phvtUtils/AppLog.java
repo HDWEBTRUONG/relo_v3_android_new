@@ -2,7 +2,7 @@ package framework.phvtUtils;
 
 import android.util.Log;
 
-import main.BuildConfig;
+import jp.relo.cluboff.BuildConfig;
 
 
 /**
