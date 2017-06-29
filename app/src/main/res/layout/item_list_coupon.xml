@@ -100,6 +100,7 @@
                 android:layout_marginRight="@dimen/_3dp"
                 android:src="@drawable/icon_star_on"/>
             <TextView
+                android:id="@+id/tvLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -123,6 +124,7 @@
                 android:layout_marginRight="@dimen/_4dp"
                 android:src="@drawable/icon_coupon"/>
             <TextView
+                android:id="@+id/tvLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
