@@ -26,6 +26,7 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.Utils;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
 import rx.Subscription;
@@ -71,9 +72,10 @@ public class CouponAreaFragment extends BaseFragment {
     }
 
     private void requestLocation4Webview(){
-        if(!isGooglePlayServicesAvailable(getActivity())){
+        if(!Utils.isGooglePlayServicesAvailable(getActivity())){
             return;
         }
+
         final LocationRequest request = LocationRequest.create() //standard GMS LocationRequest
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setNumUpdates(1)
@@ -118,18 +120,6 @@ public class CouponAreaFragment extends BaseFragment {
                 });
 
         // addChildFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),false,getArguments(),null);
-    }
-
-    public boolean isGooglePlayServicesAvailable(Activity activity) {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
-        if(status != ConnectionResult.SUCCESS) {
-            if(googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
-            }
-            return false;
-        }
-        return true;
     }
 
     private boolean checkPermissions() {

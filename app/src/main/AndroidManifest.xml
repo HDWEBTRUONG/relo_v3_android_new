@@ -33,6 +33,27 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.activity.MainTabActivity"
             android:screenOrientation="portrait"></activity>
+        <receiver
+            android:name="com.nifty.cloud.mb.core.NCMBGcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="jp.relo.cluboff" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="jp.relo.cluboff.ncmb.NCMBService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <!-- Listen Push Notify to show Dialog Coupon -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
