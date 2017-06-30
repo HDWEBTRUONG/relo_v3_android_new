@@ -17,6 +17,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import jp.relo.cluboff.model.UserInfo;
 import jp.relo.cluboff.ui.webview.CustomWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -28,6 +29,7 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 
 public class ReloApp extends Application {
     private Tracker mTracker;
+    UserInfo userInfo;
 
     private WebView wvForgetPass;
     private WebView wvCanNotLogin;
@@ -172,6 +174,14 @@ public class ReloApp extends Application {
     }
     public int getVersion(){
         return version;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
 }
