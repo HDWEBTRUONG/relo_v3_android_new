@@ -116,7 +116,6 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
         Activity act = getActivity();
         if (act != null) {
             ReloApp app = (ReloApp) act.getApplication();
-            app.trackingAnalytics(Constant.GA_POPULAR_COUPON_SCREEN);
         }
     }
 
