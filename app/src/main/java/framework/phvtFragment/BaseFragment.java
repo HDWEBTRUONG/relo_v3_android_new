@@ -24,6 +24,8 @@ import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.R;
+import jp.relo.cluboff.ui.activity.MainTabActivity;
 
 /**
  * Base Fragment for all Fragment in the application
@@ -131,6 +133,15 @@ public abstract class BaseFragment extends Fragment {
         String FRAGMENT_TAG = fragment.getClass().getSimpleName();
         childFragmentManager.beginTransaction()
                 .replace(idContent, fragment, FRAGMENT_TAG)
+                .commitAllowingStateLoss();
+    }
+    public void switchFragment(Fragment fragment, MainTabActivity activity, Bundle bundle) {
+        String FRAGMENT_TAG = fragment.getClass().getSimpleName();
+        fragment.setArguments(bundle);
+        activity.getSupportFragmentManager().beginTransaction()
+                //.setCustomAnimations(R.anim.fadein,R.anim.fadeout)
+                .replace(R.id.flContainerCouponList, fragment, FRAGMENT_TAG)
+                .addToBackStack(FRAGMENT_TAG)
                 .commitAllowingStateLoss();
     }
     //-------------------------------------------------------------------------------------------------------------------

@@ -244,7 +244,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 clickForget();
                 break;*/
             case R.id.link_webview_not_login:
-                //clickLinkNotLogin();
+                clickLinkNotLogin();
                 break;
         }
     }
@@ -277,6 +277,13 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
                         finish();
+    }
+    public void clickForget(){
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
+    }
+
+    public void clickLinkNotLogin(){
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
     }
 
     class UpdateTask extends AsyncTask<String, Void, Integer> {

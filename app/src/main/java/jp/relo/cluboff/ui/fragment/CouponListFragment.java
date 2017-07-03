@@ -28,7 +28,7 @@ import jp.relo.cluboff.util.Constant;
  * Created by HuyTran on 3/21/17.
  */
 
-public class CouponListFragment extends BaseFragmentBottombar implements View.OnClickListener,CouponListAdapter.iClickButton{
+public class CouponListFragment extends BaseFragment implements View.OnClickListener,CouponListAdapter.iClickButton{
 
     LinearLayout lnCatalory;
     ListView lvCategoryMenu;
@@ -37,11 +37,15 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
     public static String WILL_NET_SERVER="1";
+    public switchFragment iSwitchFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDatabaseHelper=new MyDatabaseHelper(getActivity());
+    }
+    public void setiSwitchFragment(switchFragment iSwitchFragment){
+      this.iSwitchFragment = iSwitchFragment;
     }
 
     private void init(View view) {
@@ -75,19 +79,6 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
         setAdapter();
     }
 
-    @Override
-    public void setupBottombar() {
-        lnBottom.setVisibility(View.VISIBLE);
-        imvBackBottomBar.setVisibility(View.VISIBLE);
-        imvForwardBottomBar.setVisibility(View.VISIBLE);
-        imvBrowserBottomBar.setVisibility(View.GONE);
-        imvReloadBottomBar.setVisibility(View.VISIBLE);
-
-        //temp
-        imvBackBottomBar.setEnabled(false);
-        imvForwardBottomBar.setEnabled(false);
-        imvReloadBottomBar.setEnabled(false);
-    }
 
     private ArrayList getListData() {
         ArrayList<CouponDTO> results = new ArrayList<CouponDTO>();
@@ -134,15 +125,13 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
             url =data.getLink_path();
         }else{
             //ToDo add url
-            url = ""+ data.getLink_path();
+            url = "https://www.google.com.vn/?gfe_rd=cr&ei=MgdaWZiME6Kl8weVlaiYBQ#q=android";//""+ data.getLink_path();
         }
 
         Bundle bundle = new Bundle();
         bundle.putString(Constant.KEY_LOGIN_URL, url);
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
-        Intent intent = new Intent(getActivity(), WebviewActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        iSwitchFragment.callSwitchFragment(bundle);
     }
 
     @Override
@@ -157,9 +146,7 @@ public class CouponListFragment extends BaseFragmentBottombar implements View.On
         adapter.notifyDataSetChanged();
     }
 
-    /*@Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }*/
+    interface switchFragment{
+        void callSwitchFragment(Bundle bundle);
+    }
 }
