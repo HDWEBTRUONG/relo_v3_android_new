@@ -17,13 +17,19 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.IControlBottom;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -35,6 +41,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     private int checkWebview;
     private String url;
     RelativeLayout myContainer;
+    public IControlBottom iControlBottom;
 
 
     @Override
@@ -56,6 +63,10 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         }
         myContainer.addView(mWebView,
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+
+    }
+    public void setControlBottom(IControlBottom iControlBottom){
+        this.iControlBottom =iControlBottom;
     }
 
     @Override
@@ -152,8 +163,23 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        if(iControlBottom!=null){
+            iControlBottom.canReload(true);
+        }
     }
 
 
@@ -185,6 +211,10 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 hideLoading();
                 imvBackBottomBar.setEnabled(webView.canGoBack());
                 imvForwardBottomBar.setEnabled(webView.canGoForward());
+                if(iControlBottom!=null){
+                    iControlBottom.canBack(webView.canGoBack());
+                    iControlBottom.canForward(webView.canGoForward());
+                }
             }
 
             @Override
@@ -208,6 +238,19 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         super.onDestroyView();
         if(mWebView!=null&&mWebView.getParent()!=null){
             ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
+        }
+        if(iControlBottom!=null){
+            iControlBottom.disableAll();
+        }
+    }
+    @Subscribe
+    public void onEvent(ControlWebEventBus event) {
+        if(event.isCallBack()){
+            mWebView.goBack();
+        }else if(event.isCallForward()){
+            mWebView.goForward();
+        }else {
+            mWebView.reload();
         }
     }
 

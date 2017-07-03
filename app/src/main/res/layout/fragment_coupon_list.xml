@@ -74,6 +74,4 @@
         <!--</LinearLayout>
     </ScrollView>-->
     </LinearLayout>
-
-    <include layout="@layout/bottombar"/>
 </LinearLayout>

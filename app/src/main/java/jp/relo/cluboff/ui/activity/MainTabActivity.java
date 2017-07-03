@@ -18,6 +18,7 @@ import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.adapter.MenuListAdapter;
 import jp.relo.cluboff.ui.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.ui.fragment.CouponAreaFragment;
+import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.MembershipFragment;
@@ -150,7 +151,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         couponAreaFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
         adapter.addFragment(couponAreaFragment, getString(R.string.title_coupon_area));
 
-        adapter.addFragment(new CouponListFragment(), getString(R.string.title_coupon_list));
+        adapter.addFragment(new CouponListContainerFragment(), getString(R.string.title_coupon_list));
 
         MembershipFragment membershipFragment = new MembershipFragment();
         membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_MEMBER_COUPON, Constant.MEMBER_COUPON));
