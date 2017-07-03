@@ -7,6 +7,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <permission
+        android:name="jp.relo.cluboff.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="jp.relo.cluboff.permission.C2D_MESSAGE" />
+    <!-- App receives GCM messages. -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:name="jp.relo.cluboff.ReloApp"
@@ -33,23 +40,28 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.activity.MainTabActivity"
             android:screenOrientation="portrait"></activity>
+
         <receiver
-            android:name="com.nifty.cloud.mb.core.NCMBGcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="jp.relo.cluboff" />
             </intent-filter>
         </receiver>
 
+        <service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />
         <service
-            android:name="jp.relo.cluboff.ncmb.NCMBService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
+            android:name="biz.appvisor.push.android.sdk.NotificationStartService"
+            android:exported="false" >
         </service>
+        <service
+            android:name="biz.appvisor.push.android.sdk.RichPushIntentService"
+            android:exported="false" >
+        </service>
+
         <!-- Listen Push Notify to show Dialog Coupon -->
         <meta-data
             android:name="com.google.android.gms.version"

@@ -58,9 +58,4 @@ public class Constant {
     //Push GCM
     public static final String GCM_SENDER_ID = BuildConfig.GCM_SENDER_ID;
 
-    //NCMB Keys ( Push notification )
-    public static String NOTIFY_APPLICATION_KEY_NCMB = BuildConfig.PUSH_APPLICATION_KEY;
-    public static String NOTIFY_CLIENT_KEY_NCMB = BuildConfig.PUSH_CLIENT_KEY;
-    public static final String PREF_USER_INFO = "PREF_USER_INFO";
-
 }

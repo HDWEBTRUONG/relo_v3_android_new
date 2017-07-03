@@ -179,19 +179,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }
     }
 
-    public void clickForget(){
-        trackingAnalytics(false,Constant.GA_LOGIN_SCREEN,Constant.GA_LOGIN_SCREEN_ACTION,
-                Constant.GA_LOGIN_SCREEN_FORGET_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
-        // Go to webview
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
-    }
 
-    public void clickLinkNotLogin(){
-        trackingAnalytics(false,Constant.GA_LOGIN_SCREEN, Constant.GA_LOGIN_SCREEN_ACTION,
-                Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_LABEL, Constant.GA_LOGIN_SCREEN_CAN_NOT_LOGIN_VALUE);
-        // Go to webview
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
-    }
 
     /**
      *
@@ -214,23 +202,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         startActivity(intent);
     }
 
-    /**
-     * Tracking Google Analytic Login Screen
-     * @param isOnlyScreen
-     * @param category
-     * @param action
-     * @param label
-     * @param value
-     */
-    public void trackingAnalytics(Boolean isOnlyScreen, String category, String action, String label, long value){
-        ReloApp application = (ReloApp) getApplication();
-        if(isOnlyScreen){
-            application.trackingAnalyticByScreen(Constant.GA_LOGIN_SCREEN);
-        }else {
-            application.trackingWithAnalyticGoogleServices(category, action, label, value);
-        }
-
-    }
 
     @Override
     protected void onResume() {
@@ -273,7 +244,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 clickForget();
                 break;*/
             case R.id.link_webview_not_login:
-                clickLinkNotLogin();
+                //clickLinkNotLogin();
                 break;
         }
     }

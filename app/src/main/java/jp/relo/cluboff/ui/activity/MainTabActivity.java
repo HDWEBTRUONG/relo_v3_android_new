@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
@@ -31,12 +32,17 @@ public class MainTabActivity extends BaseActivityToolbar {
     String[] titleMenu;
     DrawerLayout mDrawerLayoutMenu;
     ListView mDrawerListMenu;
+    //main AppVisor processor
+    private AppVisorPush appVisorPush;
 
+    //Main AppVisor data through BUNDLE Data
+    private Bundle bundle=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Generate title
+        pushProcess();
     }
 
     @Override
@@ -158,6 +164,44 @@ public class MainTabActivity extends BaseActivityToolbar {
         bundle.putString(key,url);
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW, keyCheckWebview);
         return bundle;
+    }
+
+    //handle message from PushVisor
+    public void pushProcess(){
+        this.appVisorPush = AppVisorPush.sharedInstance();
+        this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
+
+        // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, WebviewActivity.class, getString(R.string.app_name));
+        // プッシュ通知の反応率を測定(必須)
+        this.appVisorPush.trackPushWithActivity(this);
+
+        String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
+        AppLog.log("###################################");
+        AppLog.log("####### [ Appvisor uuid ]=", mDevice_Token_Pushnotification);
+        AppLog.log("###################################");
+
+        //Push message & data available data
+        if (this.appVisorPush.checkIfStartByAppVisorPush(this)){
+            //Configuration PushVisor
+            bundle = this.appVisorPush.getBundleFromAppVisorPush(this);
+            String message = bundle.getString("message");
+
+            //Debug Params message
+            String xString = bundle.getString("x");
+            String yString = bundle.getString("y");
+            String zString = bundle.getString("z");
+            String wString = bundle.getString("w");
+
+            //Debug infomation push
+            message = message + " X=" + xString + " Y=" + yString + " Z=" + zString + " W="+ wString;
+
+            //Logging
+            AppLog.log("###################################");
+            AppLog.log("####### [ Appvisor message ] = ", message);
+            AppLog.log("###################################");
+
+        }
     }
 
 }

@@ -20,19 +20,11 @@ android {
     productFlavors{
 
         relo_dev{
-            buildConfigField "String", "NOTIFY_APPLICATION_KEY", '"053783832795fdd71457a12a03ac4e2815b5d91f9a8a78335162e38e67ff044d"'
-            buildConfigField "String", "NOTIFY_CLIENT_KEY", '"ce128960dd747c968359493771eb18c4cd368d9e41e88e5091e3f043711d094d"'
-            buildConfigField "String", "GCM_SENDER_ID", '"866234032360"'
-            buildConfigField "String", "PUSH_APPLICATION_KEY", '"053783832795fdd71457a12a03ac4e2815b5d91f9a8a78335162e38e67ff044d"'
-            buildConfigField "String", "PUSH_CLIENT_KEY", '"ce128960dd747c968359493771eb18c4cd368d9e41e88e5091e3f043711d094d"'
+            buildConfigField "String", "GCM_SENDER_ID", '"183409966717"'
         }
 
         relo_prod{
-            buildConfigField "String", "NOTIFY_APPLICATION_KEY", '"7f7bd645a0944f6c8df502775e6720b78eb95c7ddd348f10d3293fc25a0fbe4b"'
-            buildConfigField "String", "NOTIFY_CLIENT_KEY", '"8b3fc5a7c299d585f760e24f4b90b6430e7126e499eae221157a6dfd5c89179c"'
-            buildConfigField "String", "GCM_SENDER_ID", '"866234032360"'
-            buildConfigField "String", "PUSH_APPLICATION_KEY", '"7f7bd645a0944f6c8df502775e6720b78eb95c7ddd348f10d3293fc25a0fbe4b"'
-            buildConfigField "String", "PUSH_CLIENT_KEY", '"8b3fc5a7c299d585f760e24f4b90b6430e7126e499eae221157a6dfd5c89179c"'
+            buildConfigField "String", "GCM_SENDER_ID", '"183409966717"'
         }
     }
 
@@ -44,7 +36,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/json-20140107.jar')
-    compile 'com.google.android.gms:play-services-analytics:10.2.1'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:support-vector-drawable:25.2.0'
@@ -66,8 +57,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.2.1'
     compile 'com.google.android.gms:play-services-places:10.2.1'
     compile 'com.scottyab:aescrypt:0.0.1'
-    compile files('libs/NCMB.jar')
     compile 'com.google.android.gms:play-services-gcm:10.2.1'
+    compile files('libs/appvisor_push_2.2.0.jar')
+    compile files('libs/gcm.jar')
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
