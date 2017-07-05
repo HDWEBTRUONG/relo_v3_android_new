@@ -9,7 +9,7 @@ import jp.relo.cluboff.BuildConfig;
 public class Constant {
     //link server coupon
     public static final String BASE_URL = "http://54.202.202.214/relo/";
-    public static final String BASE_URL_JP = "https://sp.club-off.com/";
+    public static final String BASE_URL_JP = "http://sptest.club-off.com/";
     //public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/relo_data.xml";
     public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/coupon.xml";
 
@@ -53,9 +53,15 @@ public class Constant {
     public static final int DETAIL_COUPON =  MEMBER_COUPON + 1;
 
     public static final int HTTPOK = 200;
+    public static final String HTTPOKSTR = "200";
 
     public static final String PUSH_ACTION = "jp.relo.cluboff.pushing";
     //Push GCM
     public static final String GCM_SENDER_ID = BuildConfig.GCM_SENDER_ID;
+
+    public static final String GA_CATALOGY = "click";
+    public static final String GA_ACTION = "login";
+    public static final String GA_DIMENSION_VALUE = "success";
+
 
 }

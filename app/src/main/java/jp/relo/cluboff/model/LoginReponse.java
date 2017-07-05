@@ -1,40 +1,33 @@
 package jp.relo.cluboff.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by tonkhanh on 6/23/17.
  */
 
-public class LoginReponse extends BaseReponse {
-    @SerializedName("brandid")
-    private String brandid;
-    @SerializedName("userid")
-    private String userid;
-    @SerializedName("url")
-    private String url;
+public class LoginReponse {
+    @SerializedName("Header")
+    @Expose
+    private Header header;
+    @SerializedName("Info")
+    @Expose
+    private Info info;
 
-    public String getBrandid() {
-        return brandid;
+    public Header getHeader() {
+        return header;
     }
 
-    public void setBrandid(String brandid) {
-        this.brandid = brandid;
+    public void setHeader(Header header) {
+        this.header = header;
     }
 
-    public String getUserid() {
-        return userid;
+    public Info getInfo() {
+        return info;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setInfo(Info info) {
+        this.info = info;
     }
 }
