@@ -8,10 +8,10 @@ import jp.relo.cluboff.BuildConfig;
 
 public class Constant {
     //link server coupon
-    public static final String BASE_URL = "http://54.202.202.214/relo/";
-    public static final String BASE_URL_JP = "http://sptest.club-off.com/";
+    public static final String BASE_URL = BuildConfig.BASE_URL;
+    public static final String BASE_URL_JP = BuildConfig.BASE_URL_JP;
     //public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/relo_data.xml";
-    public static final String BASE_URL_UPDATE = "http://54.202.202.214/relo/coupon.xml";
+    public static final String BASE_URL_UPDATE = BuildConfig.BASE_URL_UPDATE;
 
 
     //Google Analytics
@@ -22,10 +22,10 @@ public class Constant {
     public static final String KEY_CHECK_WEBVIEW = "checkWebview";
 
     // Some URL of webview
-    public static final String WEBVIEW_URL_FORGET_LOGIN = "https://sp.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html";
-    public static final String WEBVIEW_URL_CAN_NOT_LOGIN = "https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.html";
-    public static final String WEBVIEW_URL_AREA_COUPON = "https://www.google.com/maps/@10.764855,106.6468148,15z";
-    public static final String WEBVIEW_URL_MEMBER_COUPON = "https://www.google.com/search?q=go#q=onSslError+webview+android";
+    public static final String WEBVIEW_URL_FORGET_LOGIN = BuildConfig.WEBVIEW_URL_FORGET_LOGIN;
+    public static final String WEBVIEW_URL_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_URL_CAN_NOT_LOGIN;
+    public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
+    public static final String WEBVIEW_URL_MEMBER_COUPON = BuildConfig.WEBVIEW_URL_MEMBER_COUPON;
 
     //Key username
     public static final String ACC_LOGIN_DEMO_USERNAME ="test";
