@@ -63,5 +63,7 @@ public class Constant {
     public static final String GA_ACTION = "login";
     public static final String GA_DIMENSION_VALUE = "success";
 
+    public static final String TEST_GA_LOGIN_ANALYTICS = "LoginSrceen";
+
 
 }

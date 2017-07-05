@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
-        ((ReloApp)getApplication()).trackingAnalytics("Login");
+        ((ReloApp)getApplication()).trackingAnalytics(Constant.TEST_GA_LOGIN_ANALYTICS);
         init();
     }
 
@@ -175,8 +175,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     @Override
                     public void onFinish() {
                         hideLoading();
-                        //test
-                        setGoogleAnalytic(123456789);
                     }
                 });
 
