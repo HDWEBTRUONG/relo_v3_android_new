@@ -69,6 +69,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
+        ((ReloApp)getApplication()).trackingAnalytics("Login");
         init();
     }
 
@@ -89,8 +90,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 @Override
                 public void onClick(View v) {
                     if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)){
-                        edtLoginUsername.setText("70000000513");
-                        edtPassword.setText("7619");
+                        edtLoginUsername.setText("00008440");
+                        edtPassword.setText("300590");
                     }else{
                         edtLoginUsername.setText(Constant.ACC_LOGIN_DEMO_USERNAME);
                         edtPassword.setText(Constant.ACC_LOGIN_DEMO_PASS);
@@ -122,7 +123,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             }catch (GeneralSecurityException e){
                 //handle error
             }
-            final String username=usernameTemp;
+            final String username=edtLoginUsername.getText().toString();//usernameTemp;
             final String userMail = edtMail.getText().toString().trim();
             final String password = edtPassword.getText().toString();
 
@@ -136,11 +137,18 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
                 showLoading(this);
                 LoginRequest loginRequest = new LoginRequest(username,userMail,password);
-                addSubscription(apiInterfaceJP.logon(loginRequest), new MyCallBack<LoginReponse>() {
+                addSubscription(apiInterfaceJP.logon(username,userMail,password), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
-                        if(model.getStatus()==Constant.HTTPOK){
+                        if(Constant.HTTPOKSTR.equals((model.getHeader().getStatus()))){
                             updateData();
+                            int brandid=0;
+                            try {
+                                brandid= Integer.valueOf(AESCrypt.decrypt(EASHelper.password,model.getInfo().getBrandid()));
+                            } catch (GeneralSecurityException e) {
+                                e.printStackTrace();
+                            }
+                            setGoogleAnalytic(brandid);
                             //save user and password encrypt KeyStore
                             LoginSharedPreference.getInstance(LoginActivity.this).setLogin(username, userMail,password);
                         }else{
@@ -152,6 +160,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(String msg) {
+                        if(msg==null){
+                            msg="";
+                        }
                         AppLog.log(msg);
 
                         //TODO login failure
@@ -164,6 +175,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     @Override
                     public void onFinish() {
                         hideLoading();
+                        //test
+                        setGoogleAnalytic(123456789);
                     }
                 });
 
@@ -177,6 +190,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             btnLogin.setEnabled(true);
             Utils.showDialog(this,R.string.popup_title_login,R.string.error_connect_network);
         }
+    }
+
+    public void setGoogleAnalytic(int brandid){
+        ReloApp reloApp = (ReloApp) getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY,Constant.GA_ACTION,Constant.GA_DIMENSION_VALUE,brandid);
     }
 
 

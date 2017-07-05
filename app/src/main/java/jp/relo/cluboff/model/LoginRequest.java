@@ -1,18 +1,26 @@
 package jp.relo.cluboff.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by tonkhanh on 6/23/17.
  */
 
 public class LoginRequest {
+    @SerializedName("kaiinno")
     private String kaiinno;
+    @SerializedName("emailad")
     private String emailad;
-    private String pass;
+   // @SerializedName("pass")
+    //private String pass;
+    @SerializedName("brandid")
+    private String brandid;
 
     public LoginRequest(String kaiinno, String emailad, String pass) {
         this.kaiinno = kaiinno;
         this.emailad = emailad;
-        this.pass = pass;
+        //this.pass = pass;
+        this.brandid = pass;
     }
 
     public String getKaiinno() {
@@ -31,11 +39,11 @@ public class LoginRequest {
         this.emailad = emailad;
     }
 
-    public String getPass() {
+   /* public String getPass() {
         return pass;
     }
 
     public void setPass(String pass) {
         this.pass = pass;
-    }
+    }*/
 }
