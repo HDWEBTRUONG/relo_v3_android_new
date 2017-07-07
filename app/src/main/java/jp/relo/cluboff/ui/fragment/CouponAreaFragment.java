@@ -1,7 +1,6 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,19 +11,16 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import java.text.MessageFormat;
-
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.model.AreaCouponPost;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
@@ -57,8 +53,10 @@ public class CouponAreaFragment extends BaseFragment {
         if (!checkPermissions()) {
             requestPermission();
         }else{
-            requestLocation4Webview();
+            //requestLocation4Webview();
+            openArea();
         }
+
     }
 
     @Override
@@ -112,10 +110,10 @@ public class CouponAreaFragment extends BaseFragment {
                 }).subscribe(new Action1<Location>() {
                     @Override
                     public void call(Location location) {
-                        String url = MessageFormat.format("https://www.google.com/maps/@{0},{1},18z?nogmmr=1",location.getLatitude(),location.getLongitude());
                         Bundle bundle = getArguments();
-                        bundle.putString(Constant.KEY_LOGIN_URL,url);
-                        addChildFragment(R.id.frContainerWebview, WebViewFragment.class.getName(),true,bundle,null);
+                        bundle.putString(Constant.KEY_LOGIN_URL,Constant.WEBVIEW_URL_AREA_COUPON);
+                        bundle.putString(Constant.KEY_POST_WEBVIEW,new AreaCouponPost().toString());
+                        addChildFragment(R.id.frContainerWebview, PostAreaWebViewFragment.class.getName(),true,bundle,null);
                     }
                 });
 
@@ -139,7 +137,8 @@ public class CouponAreaFragment extends BaseFragment {
                     boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (location) {
                         Toast.makeText(getActivity(), "Permission is Accepted", Toast.LENGTH_SHORT).show();
-                        requestLocation4Webview();
+                        //requestLocation4Webview();
+                        openArea();
                     }else{
                         Toast.makeText(getActivity(), "Please accept permission access to get location", Toast.LENGTH_SHORT).show();
                     }
@@ -150,6 +149,13 @@ public class CouponAreaFragment extends BaseFragment {
             default:
                 break;
         }
+    }
+
+    public void openArea(){
+        Bundle bundle = getArguments();
+        bundle.putString(Constant.KEY_LOGIN_URL,Constant.WEBVIEW_URL_AREA_COUPON);
+        bundle.putString(Constant.KEY_POST_WEBVIEW,new AreaCouponPost().toString());
+        addChildFragment(R.id.frContainerWebview, PostAreaWebViewFragment.class.getName(),true,bundle,null);
     }
 
     @Override

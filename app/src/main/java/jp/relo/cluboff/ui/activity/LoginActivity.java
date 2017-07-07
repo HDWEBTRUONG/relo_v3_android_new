@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.text.MessageFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,6 +45,7 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.DataReponse;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
+import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.util.Constant;
@@ -122,6 +124,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 usernameTemp = AESCrypt.encrypt(EASHelper.password, edtLoginUsername.getText().toString());
             }catch (GeneralSecurityException e){
                 //handle error
+                AppLog.log(e.toString());
             }
             final String username=edtLoginUsername.getText().toString();//usernameTemp;
             final String userMail = edtMail.getText().toString().trim();
@@ -148,6 +151,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                             } catch (GeneralSecurityException e) {
                                 e.printStackTrace();
                             }
+                            //TODO: Load webview menber
+
                             setGoogleAnalytic(brandid);
                             //save user and password encrypt KeyStore
                             LoginSharedPreference.getInstance(LoginActivity.this).setLogin(username, userMail,password);
@@ -294,10 +299,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         startActivity(mainActivity);
                         finish();
     }
-    public void clickForget(){
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FORGET_LOGIN, Constant.FORGET_PASSWORD);
-    }
-
     public void clickLinkNotLogin(){
         goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
     }
