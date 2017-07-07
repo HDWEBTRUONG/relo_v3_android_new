@@ -52,5 +52,6 @@
     <string name="forget_title">Title forget login</string>
     <string name="cannot_login_title">Can not login</string>
     <string name="appvisor_push_app_id">abc</string>
+    <string name="template_url_member">https://{0}/index.cfm</string>
 
 </resources>

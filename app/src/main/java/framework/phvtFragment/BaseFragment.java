@@ -335,21 +335,26 @@ public abstract class BaseFragment extends Fragment {
         ((ViewGroup)mRootLayout).removeAllViews();
     }
     public void showLoading(Context context){
-        if(kProgressHUDloading==null){
-            kProgressHUDloading=KProgressHUD.create(context)
-                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                    .setCancellable(false)
-                    .setAnimationSpeed(2)
-                    .setDimAmount(0.5f);
-        }
-        if(!kProgressHUDloading.isShowing()){
-            kProgressHUDloading.show();
+        if(isVisible()){
+            if(kProgressHUDloading==null){
+                kProgressHUDloading=KProgressHUD.create(context)
+                        .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                        .setCancellable(false)
+                        .setAnimationSpeed(2)
+                        .setDimAmount(0.5f);
+            }
+            if(!kProgressHUDloading.isShowing()){
+                kProgressHUDloading.show();
+            }
         }
 
     }
     public void hideLoading(){
-        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
-            kProgressHUDloading.dismiss();
+        if(isVisible()){
+            if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
+                kProgressHUDloading.dismiss();
+            }
         }
+
     }
 }

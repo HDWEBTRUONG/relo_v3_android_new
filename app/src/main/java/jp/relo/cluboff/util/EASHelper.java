@@ -17,5 +17,5 @@ import javax.crypto.spec.SecretKeySpec;
  */
 
 public class EASHelper {
-    public static String password="ab012345678901234567890123456789";
+    public static String password="cluboffapp0244az";
 }
