@@ -63,5 +63,6 @@
     <string name="premission_accepted">Permission is Accepted</string>
     <string name="premissionaccepted_no_accepted">Please accept permission access to get location</string>
     <string name="premission_error">Please accept permission access</string>
+    <string name="test_push_handel">Push Handel</string>
 
 </resources>

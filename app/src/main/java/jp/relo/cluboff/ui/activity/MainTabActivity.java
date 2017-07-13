@@ -169,12 +169,12 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
 
     //handle message from PushVisor
-    public void pushProcess(){
+    public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
         this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, WebviewActivity.class, getString(R.string.app_name));
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, DetailPushActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
 
@@ -182,39 +182,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         AppLog.log("###################################");
         AppLog.log("####### [ Appvisor uuid ]=", mDevice_Token_Pushnotification);
         AppLog.log("###################################");
-
-        //Push message & data available data
-        if (this.appVisorPush.checkIfStartByAppVisorPush(this)){
-            //Configuration PushVisor
-            bundle = this.appVisorPush.getBundleFromAppVisorPush(this);
-            String message = bundle.getString("message");
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("title");
-            alertDialogBuilder.setMessage(message);
-            alertDialogBuilder.setPositiveButton("OK", null);
-
-// Display an alert dialog
-            alertDialogBuilder.create().show();
-            //Debug Params message
-            String xString = bundle.getString("x");
-            String yString = bundle.getString("y");
-            String zString = bundle.getString("z");
-            String wString = bundle.getString("w");
-
-            //Debug infomation push
-            message = message + " X=" + xString + " Y=" + yString + " Z=" + zString + " W="+ wString;
-
-            //Logging
-            AppLog.log("###################################");
-            AppLog.log("####### [ Appvisor message ] = ", message);
-            AppLog.log("###################################");
-            Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-
-        }
     }
-    protected void onNewIntent (Intent intent)
-    {
+    @Override
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
+        //process for PushIntent owner
         setIntent(intent);
     }
 
