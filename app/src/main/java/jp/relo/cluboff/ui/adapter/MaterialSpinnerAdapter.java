@@ -18,15 +18,11 @@ public class MaterialSpinnerAdapter <T> extends MaterialSpinnerBaseAdapter {
     }
 
     @Override public int getCount() {
-        return items.size() - 1;
+        return items.size();
     }
 
     @Override public T getItem(int position) {
-        if (position >= getSelectedIndex()) {
-            return items.get(position + 1);
-        } else {
-            return items.get(position);
-        }
+        return items.get(position);
     }
 
     @Override public T get(int position) {

@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jaredrummler.materialspinner.MaterialSpinner;
-
 import java.util.ArrayList;
 
 import framework.phvtFragment.BaseFragment;
@@ -20,6 +18,7 @@ import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.ui.adapter.CouponListAdapter;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.views.MyMaterialSpinner;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -29,7 +28,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     LinearLayout lnCatalory;
     ListView lvCategoryMenu;
-    com.jaredrummler.materialspinner.MaterialSpinner spinner;
+    MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
@@ -48,19 +47,20 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void init(View view) {
         lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
-        spinner = (com.jaredrummler.materialspinner.MaterialSpinner) view.findViewById(R.id.spinnerCategory);
+        spinner = (MyMaterialSpinner) view.findViewById(R.id.spinnerCategory);
         setCategory();
     }
 
     private void setCategory() {
         ArrayList<CatagoryDTO> categoryList=myDatabaseHelper.getCategory();
-        //spinner.set
+        CatagoryDTO allItem = new CatagoryDTO("","All");
+        categoryList.add(0,allItem);
         spinner.setItems(categoryList);
-        spinner.setOnItemSelectedListener(new com.jaredrummler.materialspinner.MaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
+        spinner.setOnItemSelectedListener(new MyMaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
 
             @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, CatagoryDTO item) {
-                Toast.makeText(getActivity(), "Clicked " + item.getCatagoryID(), Toast.LENGTH_SHORT).show();
+            public void onItemSelected(MyMaterialSpinner view, int position, long id, CatagoryDTO item) {
+                getListDataCategoryID(item.getCatagoryID());
             }
         });
         lnCatalory.setOnClickListener(this);
@@ -79,22 +79,20 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listCoupon = getListData();
-        setAdapter();
+        getListDataCategoryID("");
     }
 
 
-    private ArrayList getListData() {
-        ArrayList<CouponDTO> results = new ArrayList<CouponDTO>();
-        results = myDatabaseHelper.getCouponWithDate();
-        // Add some more dummy data for testing
-        return results;
+    private void getListDataCategoryID(String categoryID) {
+        listCoupon.clear();
+        listCoupon = myDatabaseHelper.getCouponWithDateCategoryID(categoryID);
+        setAdapter();
     }
     private void setAdapter(){
         if(adapter==null){
             adapter =new CouponListAdapter(getContext(), listCoupon,this);
         }else{
-            adapter.notifyDataSetChanged();
+            adapter.setDataChange(listCoupon);
         }
         lvCategoryMenu.setAdapter(adapter);
     }
@@ -123,7 +121,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
     @Override
     public void callback(CouponDTO data) {
-        Toast.makeText(getActivity(),"Click: "+data.getCoupon_name(),Toast.LENGTH_SHORT).show();
         String url="";
         if(data.getCoupon_type().equals(WILL_NET_SERVER)){
             url =data.getLink_path();
