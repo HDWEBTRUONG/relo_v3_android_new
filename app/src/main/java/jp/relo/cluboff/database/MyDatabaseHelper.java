@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.util.Utils;
@@ -127,13 +128,21 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return datas;
     }
 
-    public ArrayList<CouponDTO> getCouponWithDate(){
+
+    public ArrayList<CouponDTO> getCouponWithDateCategoryID(String categoryID){
         ArrayList<CouponDTO> datas= new ArrayList<>();
         String now= Utils.valueNowTime();
-        String selectQuery = "SELECT  * FROM " + TABLE_COUPON +" WHERE "+COLUMN_EXPIRATION_FROM+" < "+
-                now + " AND "+
-                COLUMN_EXPIRATION_TO +" > "+now;
-
+        String selectQuery = "";
+        if("".equals(categoryID)){
+            selectQuery = "SELECT  * FROM " + TABLE_COUPON +" WHERE "
+                    +COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    COLUMN_EXPIRATION_TO +" > "+now;
+        }else{
+            selectQuery = "SELECT  * FROM " + TABLE_COUPON +" WHERE "+COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
+                    +COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    COLUMN_EXPIRATION_TO +" > "+now+")";
+        }
+        AppLog.log(selectQuery);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 

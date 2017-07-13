@@ -51,6 +51,10 @@ public class CouponListAdapter extends BaseAdapter{
     public long getItemId(int position) {
         return 0;
     }
+    public void setDataChange(ArrayList<CouponDTO> listData){
+        this.listData = listData;
+        notifyDataSetChanged();
+    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {

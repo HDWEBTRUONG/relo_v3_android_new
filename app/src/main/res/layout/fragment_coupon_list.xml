@@ -26,7 +26,7 @@
                 android:layout_marginBottom="@dimen/_3dp"
                 android:layout_marginTop="@dimen/_3dp">
 
-                <com.jaredrummler.materialspinner.MaterialSpinner
+                <jp.relo.cluboff.views.MyMaterialSpinner
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/spinnerCategory"
                     android:layout_width="match_parent"
