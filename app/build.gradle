@@ -17,10 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors{
+    productFlavors {
 
-        relo_dev{
-            buildConfigField "String", "GCM_SENDER_ID", '"183409966717"'
+        relo_dev {
+            buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
             buildConfigField "String", "BASE_URL", '"http://54.202.202.214/relo/"'
             buildConfigField "String", "BASE_URL_JP", '"http://test2.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"http://54.202.202.214/relo/coupon.xml"'
@@ -30,8 +30,8 @@ android {
             buildConfigField "String", "WEBVIEW_URL_MEMBER_COUPON", '"https://www.google.com/search?q=go#q=onSslError+webview+android"'
         }
 
-        relo_prod{
-            buildConfigField "String", "GCM_SENDER_ID", '"183409966717"'
+        relo_prod {
+            buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
             buildConfigField "String", "BASE_URL", '"http://54.202.202.214/relo/"'
             buildConfigField "String", "BASE_URL_JP", '"http://sptest.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"http://54.202.202.214/relo/coupon.xml"'
@@ -50,6 +50,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/json-20140107.jar')
+    compile files('libs/appvisor_push_2.2.0.jar')
+    compile files('libs/gcm.jar')
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:support-vector-drawable:25.2.0'
@@ -64,16 +66,13 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.kaopiz:kprogresshud:1.0.5'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:cardview-v7:23.3.+'
-    compile 'com.android.support:recyclerview-v7:23.3.+'
+    compile 'com.android.support:cardview-v7:23.3.0'
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'pl.charmas.android:android-reactive-location:0.10@aar'
     compile 'com.google.android.gms:play-services-location:10.2.1'
     compile 'com.google.android.gms:play-services-places:10.2.1'
     compile 'com.scottyab:aescrypt:0.0.1'
     compile 'com.google.android.gms:play-services-gcm:10.2.1'
-    compile files('libs/appvisor_push_2.2.0.jar')
-    compile files('libs/gcm.jar')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.android.gms:play-services-analytics:10.2.1'
 }

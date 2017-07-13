@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <permission
         android:name="jp.relo.cluboff.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -14,10 +15,10 @@
     <uses-permission android:name="jp.relo.cluboff.permission.C2D_MESSAGE" />
     <!-- App receives GCM messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="jp.relo.cluboff.ReloApp"
+        android:name=".ReloApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,17 +35,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.activity.WebviewActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.activity.MainTabActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.WebviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MainTabActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -56,37 +60,44 @@
         <service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />
         <service
             android:name="biz.appvisor.push.android.sdk.NotificationStartService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
         <service
             android:name="biz.appvisor.push.android.sdk.RichPushIntentService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <!-- Listen Push Notify to show Dialog Coupon -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false"/>
 
-        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-             installation campaign reporting -->
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!--
+             Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
+        <activity android:name=".ui.activity.DetailPushActivity"></activity>
     </application>
 
 </manifest>

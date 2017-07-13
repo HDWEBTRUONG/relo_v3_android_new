@@ -1,65 +1,21 @@
 {
   "project_info": {
-    "project_number": "183409966717",
-    "firebase_url": "https://relo-172309.firebaseio.com",
-    "project_id": "relo-172309",
-    "storage_bucket": "relo-172309.appspot.com"
+    "project_number": "373028143595",
+    "firebase_url": "https://relotest-79a37.firebaseio.com",
+    "project_id": "relotest-79a37",
+    "storage_bucket": "relotest-79a37.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:183409966717:android:a1be2d9daf0780d4",
-        "android_client_info": {
-          "package_name": "jp.relo.cluboff"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "183409966717-4fptieaor120m6vkf0f06tmb3659bonc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.relo.cluboff",
-            "certificate_hash": "7cf92d1c3d687fd2888ed6ece2cc13926cb8dc4e"
-          }
-        },
-        {
-          "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA1XykYYyEMMvK41Gi8VqjN-7J2N3LXHzQ"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:183409966717:android:2ba1100b5cbbd8e2",
+        "mobilesdk_app_id": "1:373028143595:android:2ba1100b5cbbd8e2",
         "android_client_info": {
           "package_name": "jp.relo.cluboff.test"
         }
       },
       "oauth_client": [
         {
-          "client_id": "183409966717-edp2q68rn6iqvs29faf1oeq54qqq8u26.apps.googleusercontent.com",
+          "client_id": "373028143595-uloc7nsulov8lrpbidscn10eosoqijlh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "jp.relo.cluboff.test",
@@ -67,13 +23,13 @@
           }
         },
         {
-          "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
+          "client_id": "373028143595-strb0hirkeodr7bmrnpur1q6c069utui.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA1XykYYyEMMvK41Gi8VqjN-7J2N3LXHzQ"
+          "current_key": "AIzaSyBYuj9sRJPIUo7uhW2AjoW_wlxBCGnXcGE"
         }
       ],
       "services": {
@@ -84,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
+              "client_id": "373028143595-strb0hirkeodr7bmrnpur1q6c069utui.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
