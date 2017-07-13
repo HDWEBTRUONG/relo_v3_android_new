@@ -1,5 +1,8 @@
 package jp.relo.cluboff.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import jp.relo.cluboff.util.Constant;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -17,11 +20,14 @@ public class ApiClientJP {
         if (retrofit==null) {
             OkHttpClient client = new OkHttpClient.Builder()
                     .build();
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constant.BASE_URL_JP)
                     .client(client)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;

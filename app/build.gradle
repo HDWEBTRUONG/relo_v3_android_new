@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "jp.relo.cluboff"
+        applicationId "jp.relo.cluboff.test"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -22,7 +22,7 @@ android {
         relo_dev{
             buildConfigField "String", "GCM_SENDER_ID", '"183409966717"'
             buildConfigField "String", "BASE_URL", '"http://54.202.202.214/relo/"'
-            buildConfigField "String", "BASE_URL_JP", '"http://sptest.club-off.com/"'
+            buildConfigField "String", "BASE_URL_JP", '"http://test2.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"http://54.202.202.214/relo/coupon.xml"'
             buildConfigField "String", "WEBVIEW_URL_FORGET_LOGIN", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
             buildConfigField "String", "WEBVIEW_URL_CAN_NOT_LOGIN", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.html"'

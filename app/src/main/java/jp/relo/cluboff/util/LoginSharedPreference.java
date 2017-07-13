@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+
 /**
  * Created by tonkhanh on 5/26/17.
  */
@@ -29,21 +31,7 @@ public class LoginSharedPreference {
         this.context = context;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
-    public void setUserName(String userID){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_USER, userID);
-        editor.apply();
-    }
-    public void setAppID(String appID){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_ID_APP, appID);
-        editor.apply();
-    }
-    public void setUserMail(String userMail){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_MAIL, userMail);
-        editor.apply();
-    }
+
     public void setLogin(String userID,String appID,String userMail){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USER, userID);
@@ -51,15 +39,7 @@ public class LoginSharedPreference {
         editor.putString(KEY_MAIL, userMail);
         editor.apply();
     }
-    public String getUserID(){
-        return sharedPreferences.getString(KEY_USER,"");
-    }
-    public String getAppID(){
-        return sharedPreferences.getString(KEY_ID_APP,"");
-    }
-    public String getUserMail(){
-        return sharedPreferences.getString(KEY_MAIL,"");
-    }
+
     public void setVersion(int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(VERSION, value);
@@ -68,4 +48,38 @@ public class LoginSharedPreference {
     public int getVersion(){
         return sharedPreferences.getInt(VERSION,0);
     }
+
+    public <T> void put(String key, T data) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (data instanceof String) {
+            editor.putString(key, (String) data);
+        } else if (data instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) data);
+        } else if (data instanceof Float) {
+            editor.putFloat(key, (Float) data);
+        } else if (data instanceof Integer) {
+            editor.putInt(key, (Integer) data);
+        } else if (data instanceof Long) {
+            editor.putLong(key, (Long) data);
+        }else {
+            editor.putString(key, new Gson().toJson(data));
+        }
+        editor.apply();
+    }
+    @SuppressWarnings("unchecked")
+    public <T> T get(String key, Class<T> anonymousClass) {
+        if (anonymousClass == String.class) {
+            return (T) sharedPreferences.getString(key, "");
+        } else if (anonymousClass == Boolean.class) {
+            return (T) Boolean.valueOf(sharedPreferences.getBoolean(key, false));
+        } else if (anonymousClass == Float.class) {
+            return (T) Float.valueOf(sharedPreferences.getFloat(key, 0));
+        } else if (anonymousClass == Integer.class) {
+            return (T) Integer.valueOf(sharedPreferences.getInt(key, 0));
+        } else if (anonymousClass == Long.class) {
+            return (T) Long.valueOf(sharedPreferences.getLong(key, 0));
+        }
+        return null;
+    }
+
 }

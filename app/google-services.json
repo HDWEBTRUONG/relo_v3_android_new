@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183409966717:android:2ba1100b5cbbd8e2",
+        "android_client_info": {
+          "package_name": "jp.relo.cluboff.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183409966717-edp2q68rn6iqvs29faf1oeq54qqq8u26.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.relo.cluboff.test",
+            "certificate_hash": "7cf92d1c3d687fd2888ed6ece2cc13926cb8dc4e"
+          }
+        },
+        {
+          "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1XykYYyEMMvK41Gi8VqjN-7J2N3LXHzQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183409966717-v2sovc3o794ub7pahuf41tsndro99ieu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

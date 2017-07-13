@@ -65,6 +65,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
+    public static final String TAG_LOGIN_SAVE ="TAG_LOGIN_SAVE";
 
 
     @Override
@@ -92,8 +93,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 @Override
                 public void onClick(View v) {
                     if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)){
-                        edtLoginUsername.setText("00008440");
-                        edtPassword.setText("300590");
+                        edtLoginUsername.setText(R.string.Test_00008440);
+                        edtPassword.setText(R.string.Test_300590);
                     }else{
                         edtLoginUsername.setText(Constant.ACC_LOGIN_DEMO_USERNAME);
                         edtPassword.setText(Constant.ACC_LOGIN_DEMO_PASS);
@@ -122,6 +123,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             String usernameTemp="";
             try {
                 usernameTemp = AESCrypt.encrypt(EASHelper.password, edtLoginUsername.getText().toString());
+                //AppLog.log(AESCrypt.decrypt(EASHelper.password,"eQJbP+flwdhcyx2IANy8Cw=="));
             }catch (GeneralSecurityException e){
                 //handle error
                 AppLog.log(e.toString());
@@ -139,7 +141,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
                 showLoading(this);
-                LoginRequest loginRequest = new LoginRequest(username,userMail,password);
+                //LoginRequest loginRequest = new LoginRequest(username,userMail,password);
                 addSubscription(apiInterfaceJP.logon(username,userMail,password), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
@@ -155,7 +157,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                             setGoogleAnalytic(brandid);
                             //save user and password encrypt KeyStore
-                            LoginSharedPreference.getInstance(LoginActivity.this).setLogin(username, userMail,password);
+                            LoginSharedPreference.getInstance(LoginActivity.this).put(TAG_LOGIN_SAVE,model.getInfo());
+
                         }else{
                             txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
                             txt_show_error.setVisibility(View.VISIBLE);

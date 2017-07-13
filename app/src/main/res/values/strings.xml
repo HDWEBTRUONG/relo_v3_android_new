@@ -51,7 +51,17 @@
     <string name="his_link">詳細はこちら</string>
     <string name="forget_title">Title forget login</string>
     <string name="cannot_login_title">Can not login</string>
-    <string name="appvisor_push_app_id">abc</string>
+    <string name="appvisor_push_app_id">sALZBaJwjb</string>
     <string name="template_url_member">https://{0}/index.cfm</string>
+
+    <!--******************Test string**********************-->
+    <string name="Test_300590">300590</string>
+    <string name="Test_kubo_relo_jp">kubo@relo.jp</string>
+    <string name="Test_00008440">00008440</string>
+
+    <!--******************Temp string**********************-->
+    <string name="premission_accepted">Permission is Accepted</string>
+    <string name="premissionaccepted_no_accepted">Please accept permission access to get location</string>
+    <string name="premission_error">Please accept permission access</string>
 
 </resources>

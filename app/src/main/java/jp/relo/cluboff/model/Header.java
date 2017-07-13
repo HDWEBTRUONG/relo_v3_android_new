@@ -8,11 +8,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Header {
-    @SerializedName("Status")
-    @Expose
+    @SerializedName("status")
     private String status;
     @SerializedName("detail")
-    @Expose
     private String detail;
 
     public String getStatus() {

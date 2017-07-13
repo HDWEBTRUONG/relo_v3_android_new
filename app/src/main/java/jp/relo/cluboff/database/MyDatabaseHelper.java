@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.util.Utils;
 
@@ -170,6 +171,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         newValues.put(COLUMN_LIKE, 1);
 
         db.update(TABLE_COUPON, newValues, COLUMN_COUPON_ID+"="+id, null);
+    }
+    public ArrayList<CatagoryDTO> getCategory(){
+        ArrayList<CatagoryDTO> datas= new ArrayList<>();
+        String selectQuery = "SELECT DISTINCT "+COLUMN_CATEGORY_ID+", "+COLUMN_CATEGORY+" FROM " + TABLE_COUPON;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                CatagoryDTO catagoryDTO = new CatagoryDTO();
+                catagoryDTO.setCatagoryID(cursor.getString(0));
+                catagoryDTO.setGetCatagoryName(cursor.getString(1));
+                datas.add(catagoryDTO);
+            } while (cursor.moveToNext());
+        }
+
+        return datas;
     }
 
 
