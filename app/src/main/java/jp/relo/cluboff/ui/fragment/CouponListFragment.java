@@ -1,11 +1,9 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,9 +16,8 @@ import framework.phvtFragment.BaseFragment;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.database.MyDatabaseHelper;
+import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
-import jp.relo.cluboff.ui.BaseFragmentBottombar;
-import jp.relo.cluboff.ui.activity.WebviewActivity;
 import jp.relo.cluboff.ui.adapter.CouponListAdapter;
 import jp.relo.cluboff.util.Constant;
 
@@ -32,7 +29,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     LinearLayout lnCatalory;
     ListView lvCategoryMenu;
-    MaterialSpinner spinner;
+    com.jaredrummler.materialspinner.MaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
@@ -51,12 +48,19 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void init(View view) {
         lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
-        spinner = (MaterialSpinner) view.findViewById(R.id.spinnerCategory);
-        spinner.setItems("カテゴリを選ぶ 1", "カテゴリを選ぶ 2", "カテゴリを選ぶ 3", "カテゴリを選ぶ 4", "カテゴリを選ぶ 5");
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+        spinner = (com.jaredrummler.materialspinner.MaterialSpinner) view.findViewById(R.id.spinnerCategory);
+        setCategory();
+    }
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Toast.makeText(getActivity(), "Clicked " + item, Toast.LENGTH_SHORT).show();
+    private void setCategory() {
+        ArrayList<CatagoryDTO> categoryList=myDatabaseHelper.getCategory();
+        //spinner.set
+        spinner.setItems(categoryList);
+        spinner.setOnItemSelectedListener(new com.jaredrummler.materialspinner.MaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
+
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, CatagoryDTO item) {
+                Toast.makeText(getActivity(), "Clicked " + item.getCatagoryID(), Toast.LENGTH_SHORT).show();
             }
         });
         lnCatalory.setOnClickListener(this);
@@ -125,7 +129,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             url =data.getLink_path();
         }else{
             //ToDo add url
-            url = "https://www.google.com.vn/?gfe_rd=cr&ei=MgdaWZiME6Kl8weVlaiYBQ#q=android";//""+ data.getLink_path();
+            url = Constant.TEST_LINK_COUPON;//""+ data.getLink_path();
         }
 
         Bundle bundle = new Bundle();

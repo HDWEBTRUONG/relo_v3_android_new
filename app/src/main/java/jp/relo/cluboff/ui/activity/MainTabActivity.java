@@ -1,15 +1,18 @@
 package jp.relo.cluboff.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
@@ -88,7 +91,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        titleMenu = new String[] { "TOPへ戻る", "アプリの使い方"};
+        titleMenu = new String[] { Constant.TEST_MENU_TOP, Constant.TEST_MENU_TUTORIAL};
 
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
@@ -185,7 +188,13 @@ public class MainTabActivity extends BaseActivityToolbar {
             //Configuration PushVisor
             bundle = this.appVisorPush.getBundleFromAppVisorPush(this);
             String message = bundle.getString("message");
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("title");
+            alertDialogBuilder.setMessage(message);
+            alertDialogBuilder.setPositiveButton("OK", null);
 
+// Display an alert dialog
+            alertDialogBuilder.create().show();
             //Debug Params message
             String xString = bundle.getString("x");
             String yString = bundle.getString("y");
@@ -199,8 +208,14 @@ public class MainTabActivity extends BaseActivityToolbar {
             AppLog.log("###################################");
             AppLog.log("####### [ Appvisor message ] = ", message);
             AppLog.log("###################################");
+            Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
 
         }
+    }
+    protected void onNewIntent (Intent intent)
+    {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
 }

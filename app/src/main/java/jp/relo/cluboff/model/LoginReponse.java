@@ -9,10 +9,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginReponse {
     @SerializedName("Header")
-    @Expose
     private Header header;
     @SerializedName("Info")
-    @Expose
     private Info info;
 
     public Header getHeader() {
