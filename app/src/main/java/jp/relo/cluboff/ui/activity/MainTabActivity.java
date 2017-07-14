@@ -2,11 +2,12 @@ package jp.relo.cluboff.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,24 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.database.MyDatabaseHelper;
+import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.adapter.MenuListAdapter;
 import jp.relo.cluboff.ui.adapter.ViewPagerAdapter;
-import jp.relo.cluboff.ui.fragment.CouponAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 
 public class MainTabActivity extends BaseActivityToolbar {
     private TabLayout tabLayout;
@@ -36,13 +43,55 @@ public class MainTabActivity extends BaseActivityToolbar {
     ListView mDrawerListMenu;
     //main AppVisor processor
     private AppVisorPush appVisorPush;
+    private HistoryPushDialogFragment historyPushDialogFragment;
+    long countPush=0;
 
     //Main AppVisor data through BUNDLE Data
     private Bundle bundle=null;
+    MyDatabaseHelper myDatabaseHelper;
+    Handler handler;
+    public static final int UPDATE_COUNT=1;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void onEvent(MessageEvent event) {
+        if(event.getMessage().equals(MyAppVisorPushIntentService.class.getSimpleName())||
+                event.getMessage().equals(HistoryPushDialogFragment.class.getSimpleName())){
+            loadCountPush();
+        }
+        else{
+            loadCountPush();
+            openHistoryPush();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handler = new Handler() {
+            public void handleMessage(Message msg) {
+                if(msg.what== UPDATE_COUNT){
+                    if(countPush==0){
+                        tvCount.setVisibility(View.GONE);
+                    }else{
+                        tvCount.setVisibility(View.VISIBLE);
+                        tvCount.setText(""+countPush);
+                    }
+                }
+
+            }
+        };
         // Generate title
         pushProcess();
     }
@@ -50,6 +99,19 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onResume() {
         super.onResume();
+        loadCountPush();
+    }
+
+    public void loadCountPush(){
+        //myDatabaseHelper=new MyDatabaseHelper(this);
+        countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();//myDatabaseHelper.getCountPush();
+        handler.sendEmptyMessage(UPDATE_COUNT);
+    }
+    public void openHistoryPush(){
+        if(historyPushDialogFragment==null){
+            historyPushDialogFragment = new HistoryPushDialogFragment();
+        }
+        openDialogFragment(historyPushDialogFragment);
     }
 
     @Override
@@ -59,13 +121,13 @@ public class MainTabActivity extends BaseActivityToolbar {
         imvMenu.setVisibility(View.VISIBLE);
         imvInfo.setVisibility(View.VISIBLE);
         tvCount.setVisibility(View.VISIBLE);
-        //toolbar.setTitle("Abcd");
 
         //event
         imvInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialogFragment(new HistoryPushDialogFragment());
+                LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
+                openHistoryPush();
             }
         });
         imvMenu.setOnClickListener(new View.OnClickListener() {
