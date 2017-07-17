@@ -12,7 +12,9 @@ import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
+import jp.relo.cluboff.util.Utils;
 
 /**
  * Created by tonkhanh on 6/8/17.
@@ -21,10 +23,12 @@ import jp.relo.cluboff.model.HistoryPushDTO;
 public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.HisViewHolder>{
     ArrayList<HistoryPushDTO> listData;
     Context mContext;
+    private MyDatabaseHelper myDatabaseHelper;
 
     public HistoryPushAdapter(Context mContext,ArrayList<HistoryPushDTO> listData) {
         this.listData = listData;
         this.mContext = mContext;
+        myDatabaseHelper = new MyDatabaseHelper(mContext);
     }
 
     @Override
@@ -38,7 +42,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
     @Override
     public void onBindViewHolder(HisViewHolder holder, int position) {
         final HistoryPushDTO data = listData.get(position);
-        holder.tvHistoryTime.setText(data.getTimeHis());
+        holder.tvHistoryTime.setText(Utils.long2Time(data.getTimeHis()));
         holder.tvHistoryContent.setText(data.getContentHis());
         holder.tvHistoryLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +50,10 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
                 AppLog.log(data.getUrlHis());
             }
         });
+        /*if(data.getIsReaded()==0){
+            myDatabaseHelper.readCoupon(data.getIdHis());
+            listData.get(position).setIsReaded(1);
+        }*/
     }
 
     @Override
@@ -64,4 +72,5 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
             tvHistoryLink.setPaintFlags(tvHistoryLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         }
     }
+
 }

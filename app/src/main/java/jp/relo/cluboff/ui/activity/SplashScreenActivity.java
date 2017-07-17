@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtActivity.BaseActivity;
+import framework.phvtDatabase.DatabaseHelper;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
@@ -20,12 +21,12 @@ import jp.relo.cluboff.util.Utils;
 public class SplashScreenActivity extends BaseActivity {
 
     private static final int DELAY_TIME_SPLASH_ACTIVITY = 2000;
-    private RelativeLayout splashLayout;
+    public static boolean checkOpenedThisScreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        checkOpenedThisScreen=false;
         Utils.createNewKeys(this,((ReloApp)getApplication()).getKeyStore());
 
         Handler handler = new Handler();
@@ -40,6 +41,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     //TODO make redirection after splash screen gone
     private void goNextScreen() {
+        checkOpenedThisScreen = true;
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
@@ -53,7 +55,6 @@ public class SplashScreenActivity extends BaseActivity {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-        splashLayout = (RelativeLayout) findViewById(R.id.splash_layout);
     }
 
     @Override

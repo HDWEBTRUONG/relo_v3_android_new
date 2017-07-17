@@ -3,6 +3,7 @@ package jp.relo.cluboff.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
+import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.util.Utils;
 
 /**
@@ -35,8 +37,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ADD_BLAND = "add_bland";
     public static final String COLUMN_LIKE = "like";
 
+    /*---------------Table Pushvisor------------*/
+    public static final String TABLE_PUSH = "TB_PUSH";
+    public static final String COLUMN_PUSH_ID = "push_id";
+    public static final String COLUMN_PUSH_TITLE = "push_title";
+    public static final String COLUMN_PUSH_TIME = "push_time";
+    public static final String COLUMN_PUSH_CONTENT = "push_content";
+    public static final String COLUMN_PUSH_X = "push_x";
+    public static final String COLUMN_PUSH_Y = "push_y";
+    public static final String COLUMN_PUSH_Z= "push_z";
+    public static final String COLUMN_PUSH_W = "push_w";
+    public static final String COLUMN_PUSH_URL = "push_url";
+    public static final String COLUMN_PUSH_READ = "push_read";
+
     public static final String DATABASE_NAME = "relo.db";
     public static final int DATABASE_VERSION = 1;
+    public static final int LIMIT_PUSH_LIST = 50;
 
     public MyDatabaseHelper(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -61,12 +77,28 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_LIKE + " INTEGER"+ ")";
         // Execute script.
         db.execSQL(scriptCoupon);
+
+        String scriptPush = "CREATE TABLE " + TABLE_PUSH + "("
+                + COLUMN_PUSH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_PUSH_TITLE + " TEXT,"
+                + COLUMN_PUSH_TIME + " INTEGER,"
+                + COLUMN_PUSH_CONTENT + " TEXT,"
+                + COLUMN_PUSH_X + " TEXT,"
+                + COLUMN_PUSH_Y + " TEXT,"
+                + COLUMN_PUSH_Z + " TEXT,"
+                + COLUMN_PUSH_W + " TEXT,"
+                + COLUMN_PUSH_URL + " TEXT,"
+                + COLUMN_PUSH_READ + " INTEGER"
+                + ")";
+        // Execute script.
+        db.execSQL(scriptPush);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop table
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUPON);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUSH);
         // Recreate
         onCreate(db);
     }
@@ -97,37 +129,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
-    public ArrayList<CouponDTO> getAllCoupon(){
-        ArrayList<CouponDTO> datas= new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_COUPON;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                CouponDTO note = new CouponDTO();
-                note.setID(cursor.getInt(0));
-                note.setShgrid(cursor.getString(1));
-                note.setCategory_id(cursor.getString(2));
-                note.setCategory_name(cursor.getString(3));
-                note.setCoupon_name(cursor.getString(4));
-                note.setCoupon_image_path(cursor.getString(5));
-                note.setCoupon_type(cursor.getString(6));
-                note.setLink_path(cursor.getString(7));
-                note.setExpiration_from(cursor.getString(8));
-                note.setExpiration_to(cursor.getString(9));
-                note.setPriority(cursor.getInt(10));
-                note.setMemo(cursor.getString(11));
-                note.setAdd_bland(cursor.getString(12));
-                note.setLiked(cursor.getInt(13));
-                datas.add(note);
-            } while (cursor.moveToNext());
-        }
-
-        return datas;
-    }
-
 
     public ArrayList<CouponDTO> getCouponWithDateCategoryID(String categoryID){
         ArrayList<CouponDTO> datas= new ArrayList<>();
@@ -199,6 +200,62 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return datas;
     }
+    public void savePush(HistoryPushDTO data){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PUSH_TITLE, data.getTitlePush());
+        values.put(COLUMN_PUSH_TIME, data.getTimeHis());
+        values.put(COLUMN_PUSH_CONTENT, data.getContentHis());
+        values.put(COLUMN_PUSH_X, data.getxHis());
+        values.put(COLUMN_PUSH_Y, data.getyHis());
+        values.put(COLUMN_PUSH_Z, data.getzHis());
+        values.put(COLUMN_PUSH_W, data.getzHis());
+        values.put(COLUMN_PUSH_URL, data.getUrlHis());
+        values.put(COLUMN_PUSH_READ, 0);
 
+        db.insert(TABLE_PUSH, null, values);
+        db.close();
+    }
+
+    public ArrayList<HistoryPushDTO> getPush(){
+        ArrayList<HistoryPushDTO> datas= new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_PUSH + " LIMIT "+LIMIT_PUSH_LIST;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HistoryPushDTO item = new HistoryPushDTO();
+                item.setIdHis(cursor.getInt(0));
+                item.setTitlePush(cursor.getString(1));
+                item.setTimeHis(cursor.getInt(2));
+                item.setContentHis(cursor.getString(3));
+                item.setxHis(cursor.getString(4));
+                item.setyHis(cursor.getString(5));
+                item.setzHis(cursor.getString(6));
+                item.setwHis(cursor.getString(7));
+                item.setUrlHis(cursor.getString(8));
+                item.setIsReaded(cursor.getInt(9));
+
+                datas.add(item);
+            } while (cursor.moveToNext());
+        }
+
+        return datas;
+    }
+    public long getCountPush(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long cnt  = DatabaseUtils.queryNumEntries(db, TABLE_PUSH,COLUMN_PUSH_READ+" = 0");
+        db.close();
+        return cnt;
+    }
+
+    public void readCoupon(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put(COLUMN_PUSH_READ, 1);
+
+        db.update(TABLE_PUSH, newValues, COLUMN_PUSH_ID+"="+id, null);
+    }
 
 }

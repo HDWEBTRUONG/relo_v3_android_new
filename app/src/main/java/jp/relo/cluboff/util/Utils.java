@@ -45,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -333,7 +335,18 @@ public class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return context.getDrawable(id);
         }
-        return context.getResources().getDrawable(id);
+        return ContextCompat.getDrawable(context,id);
+    }
+
+    public static long dateTimeValue()
+    {
+        return new Date().getTime();
+    }
+    public static String long2Time(long time){
+        java.util.Date dateObj = new java.util.Date(time);
+        SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy/MM/dd");
+        StringBuilder strTime = new StringBuilder( dateformatYYYYMMDD.format( dateObj ) );
+        return strTime.toString();
     }
 
 }
