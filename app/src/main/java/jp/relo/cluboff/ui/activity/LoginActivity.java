@@ -4,37 +4,21 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.scottyab.aescrypt.AESCrypt;
-
-import org.json.JSONException;
-import org.json.XML;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.text.MessageFormat;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
@@ -42,12 +26,11 @@ import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.MyDatabaseHelper;
-import jp.relo.cluboff.model.DataReponse;
+import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.LoginReponse;
-import jp.relo.cluboff.model.LoginRequest;
-import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
+import jp.relo.cluboff.util.AESCrypt;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.EASHelper;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -66,6 +49,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
     public static final String TAG_LOGIN_SAVE ="TAG_LOGIN_SAVE";
+    ArrayList<CouponDTO> listResult = new ArrayList<>();
 
 
     @Override
@@ -145,19 +129,21 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 addSubscription(apiInterfaceJP.logon(username,userMail,password), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
-                        if(Constant.HTTPOKSTR.equals((model.getHeader().getStatus()))){
-                            updateData();
+                        if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                             int brandid=0;
                             try {
-                                brandid= Integer.valueOf(AESCrypt.decrypt(EASHelper.password,model.getInfo().getBrandid()));
+                                String txt = "";
+                                String mess = model.getInfo().getBrandid();
+                                txt = AESCrypt.decrypt(EASHelper.password,mess);
+                                AppLog.log("------------------: "+ txt);
+                                brandid= Integer.valueOf(txt);
                             } catch (GeneralSecurityException e) {
                                 e.printStackTrace();
                             }
-                            //TODO: Load webview menber
-
+                            LoginSharedPreference.getInstance(LoginActivity.this).put(TAG_LOGIN_SAVE,model.getInfo());
+                            updateData();
                             setGoogleAnalytic(brandid);
                             //save user and password encrypt KeyStore
-                            LoginSharedPreference.getInstance(LoginActivity.this).put(TAG_LOGIN_SAVE,model.getInfo());
 
                         }else{
                             txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
@@ -292,7 +278,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
             @Override
             public void onFinish() {
-                AppLog.log("Complate");
                 btnLogin.setEnabled(true);
             }
         });
@@ -306,71 +291,121 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
     }
 
-    class UpdateTask extends AsyncTask<String, Void, Integer> {
-
+    public void saveData(ArrayList<CouponDTO> datas){
+        if(datas!=null){
+            sqLiteOpenHelper.clearData();
+            sqLiteOpenHelper.saveCouponList(datas);
+        }
+    }
+    class UpdateTask extends AsyncTask<String, Void, Void> {
+        URL url;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             showLoadingData(LoginActivity.this);
         }
 
-        protected Integer doInBackground(String... arg0) {
-            //Your implementation
-            Document doc = null;
-            URL xmlURL = null;
-            InputStream xml = null;
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = null;
+        protected Void doInBackground(String... arg0) {
+            CouponDTO item= new CouponDTO();
+            boolean isOpened= false;
             try {
-                xmlURL = new URL(Constant.BASE_URL_UPDATE);
-                xml = xmlURL.openStream();
-                db = dbf.newDocumentBuilder();
-                doc = db.parse(xml);
-                xml.close();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }catch (IOException e) {
-                e.printStackTrace();
-            }catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }catch (SAXException e) {
-                e.printStackTrace();
+                url = new URL(Constant.BASE_URL_UPDATE);
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                if ( factory == null){
+                    hideLoading();
+                    LoginSharedPreference.getInstance(LoginActivity.this).setVersion(0);
+                    gotoMain();
+                    return null;
+                }
+
+                factory.setNamespaceAware(false);
+                XmlPullParser xpp = factory.newPullParser();
+
+                // We will get the XML from an input stream
+                xpp.setInput(getInputStream(url), "UTF_8");
+
+                // Returns the type of current event: START_TAG, END_TAG, etc..
+                int eventType = xpp.getEventType();
+                while (eventType != XmlPullParser.END_DOCUMENT){
+                    String name = "";
+                    switch (eventType) {
+                        case XmlPullParser.START_DOCUMENT:
+                            break;
+                        case XmlPullParser.START_TAG:
+                            name = xpp.getName().toUpperCase();
+                            switch (name){
+                                case CouponDTO.TAG_COUPON:
+                                    listResult = new ArrayList<>();
+                                    break;
+                                case CouponDTO.TAG_ITEM:
+                                    isOpened = true;
+                                    item = new CouponDTO();
+                                    break;
+                                case CouponDTO.TAG_SHGRID:
+                                    item.setShgrid(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_CATEGORY_ID:
+                                    item.setCategory_id(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_CATEGORY_NAME:
+                                    item.setCategory_name(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_COUPON_NAME:
+                                    item.setCoupon_name(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_COUPON_IMAGE_PATH:
+                                    item.setCoupon_image_path(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_COUPON_TYPE:
+                                    item.setCoupon_type(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_LINK_PATH:
+                                    item.setLink_path(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_EXPIRATION_FROM:
+                                    item.setExpiration_from(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_EXPIRATION_TO:
+                                    item.setExpiration_to(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_PRIORITY:
+                                    item.setPriority(Utils.parserInt(xpp.nextText()));
+                                    break;
+                                case CouponDTO.TAG_ADD_BLAND:
+                                    item.setAdd_bland(xpp.nextText());
+                                    break;
+                                case CouponDTO.TAG_MEMO:
+                                    item.setMemo(xpp.nextText());
+                                    break;
+                            }
+                        case XmlPullParser.END_TAG:
+                            name = xpp.getName().toUpperCase();
+                            if (name.equalsIgnoreCase(CouponDTO.TAG_ITEM) && item != null && isOpened){
+                                listResult.add(item);
+                                isOpened = false;
+                            }
+                    }
+                    eventType = xpp.next();
+                    }
+                } catch (Exception e){
+
             }
-            saveData(doc);
-            return Utils.convertIntVersion(arg0[0]);
+            saveData(listResult);
+            // save version number get from api
+            LoginSharedPreference.getInstance(LoginActivity.this).setVersion(Utils.convertIntVersion(arg0[0]));
+            return null;
         }
 
-        protected void onPostExecute(Integer result) {
-            // TODO: do something with the feed
+        protected void onPostExecute(Void result) {
             hideLoading();
-            LoginSharedPreference.getInstance(LoginActivity.this).setVersion(result);
             gotoMain();
         }
     }
-
-    public void saveData(Document doc){
-        DOMSource domSource = new DOMSource(doc);
-        StringWriter writer = new StringWriter();
-        StreamResult result = new StreamResult(writer);
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = null;
+    public InputStream getInputStream(URL url) {
         try {
-            transformer = tf.newTransformer();
-            transformer.transform(domSource, result);
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        }catch (TransformerException e) {
-            e.printStackTrace();
-        }
-        try {
-            DataReponse dataReponse=new Gson().fromJson(XML.toJSONObject(writer.toString()).toString(), DataReponse.class);
-            if(dataReponse!=null){
-                sqLiteOpenHelper.clearData();
-                sqLiteOpenHelper.saveCouponList(dataReponse.getData().getCoupon());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return url.openConnection().getInputStream();
+        } catch (IOException e) {
+            return null;
         }
     }
 }

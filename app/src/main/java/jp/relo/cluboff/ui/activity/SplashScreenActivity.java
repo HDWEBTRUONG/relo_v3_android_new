@@ -1,9 +1,19 @@
 package jp.relo.cluboff.ui.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.scottyab.aescrypt.AESCrypt;
+
+import java.security.GeneralSecurityException;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtActivity.BaseActivity;
@@ -12,6 +22,7 @@ import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.EASHelper;
 import jp.relo.cluboff.util.Utils;
 
 /**
@@ -28,7 +39,6 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         checkOpenedThisScreen=false;
         Utils.createNewKeys(this,((ReloApp)getApplication()).getKeyStore());
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -60,5 +70,4 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void registerEventHandlers() {
     }
-
 }

@@ -1,9 +1,12 @@
 package jp.relo.cluboff.model;
 
+import com.scottyab.aescrypt.AESCrypt;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.EASHelper;
 
 /**
  * Created by tonkhanh on 7/6/17.

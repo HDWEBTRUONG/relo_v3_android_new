@@ -33,6 +33,7 @@ public class Constant {
 
     public static final int HTTPOK = 200;
     public static final String HTTPOKSTR = "200";
+    public static final String HTTPOKJP = "00";
 
 
     //****************TEXT TEMP******************//
@@ -46,7 +47,7 @@ public class Constant {
     //****************TEXT DEMO******************//
     public static final String TEST_MENU_TOP = "TOPへ戻る";
     public static final String TEST_MENU_TUTORIAL = "アプリの使い方";
-    public static final String TEST_LINK_COUPON = "https://www.google.com.vn/?gfe_rd=cr&ei=MgdaWZiME6Kl8weVlaiYBQ#q=android";
+    public static final String TEST_LINK_COUPON = "https://sptest.club-off.com/relo";
     //Key username
     public static final String ACC_LOGIN_DEMO_USERNAME ="test";
     public static final String ACC_LOGIN_DEMO_PASS = "123";
@@ -54,6 +55,5 @@ public class Constant {
     public static final String ACC_TEST_ID_LOGIN = "00008440";
     public static final String ACC_TEST_ID_LOGIN_ENCRY = "f4od/GCIvlp402l4ZOkYzg";
     public static final String ACC_TEST_URL_LOGIN = "sptest.club-off.com/relo";
-
 
 }

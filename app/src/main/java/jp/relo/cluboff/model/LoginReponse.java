@@ -28,4 +28,5 @@ public class LoginReponse {
     public void setInfo(Info info) {
         this.info = info;
     }
+
 }

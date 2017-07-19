@@ -53,6 +53,7 @@
     <string name="cannot_login_title">Can not login</string>
     <string name="appvisor_push_app_id">sALZBaJwjb</string>
     <string name="template_url_member">https://{0}/index.cfm</string>
+    <string name="template_url_coupon">{0}/coa_directlink.cfm</string>
 
     <!--******************Test string**********************-->
     <string name="Test_300590">300590</string>

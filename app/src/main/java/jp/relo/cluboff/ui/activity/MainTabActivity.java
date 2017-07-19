@@ -100,6 +100,11 @@ public class MainTabActivity extends BaseActivityToolbar {
     protected void onResume() {
         super.onResume();
         loadCountPush();
+        selectPage(1);
+    }
+    void selectPage(int pageIndex){
+        tabLayout.setScrollPosition(pageIndex,0f,true);
+        viewPager.setCurrentItem(pageIndex);
     }
 
     public void loadCountPush(){
@@ -236,7 +241,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, DetailPushActivity.class, getString(R.string.app_name));
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, MainTabActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
 
