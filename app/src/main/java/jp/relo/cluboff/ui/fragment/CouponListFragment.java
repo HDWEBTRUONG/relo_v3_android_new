@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import framework.phvtFragment.BaseFragment;
@@ -28,6 +30,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     LinearLayout lnCatalory;
     ListView lvCategoryMenu;
+    TextView tvCategory;
     MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
@@ -47,6 +50,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void init(View view) {
         lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
+        tvCategory = (TextView) view.findViewById(R.id.tvCategory);
         spinner = (MyMaterialSpinner) view.findViewById(R.id.spinnerCategory);
         setCategory();
     }
@@ -61,6 +65,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onItemSelected(MyMaterialSpinner view, int position, long id, CatagoryDTO item) {
                 getListDataCategoryID(item.getCatagoryID());
+                tvCategory.setText(item.getGetCatagoryName());
             }
         });
         lnCatalory.setOnClickListener(this);
@@ -126,7 +131,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             url =data.getLink_path();
         }else{
             //ToDo add url
-            url = Constant.TEST_LINK_COUPON;//""+ data.getLink_path();
+            url = MessageFormat.format(getString(R.string.template_url_coupon),Constant.TEST_LINK_COUPON);//""+ data.getLink_path();
         }
 
         Bundle bundle = new Bundle();

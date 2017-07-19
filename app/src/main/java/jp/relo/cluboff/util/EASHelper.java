@@ -18,4 +18,5 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EASHelper {
     public static String password="cluboffapp0244az";
+    public static String padding="pkcs5padding";
 }

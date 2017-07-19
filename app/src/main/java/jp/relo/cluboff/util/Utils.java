@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.gson.annotations.Expose;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,6 +55,7 @@ import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 
@@ -347,6 +349,18 @@ public class Utils {
         SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy/MM/dd");
         StringBuilder strTime = new StringBuilder( dateformatYYYYMMDD.format( dateObj ) );
         return strTime.toString();
+    }
+    public static int parserInt(String num){
+        if(StringUtil.isEmpty(num)){
+            return 0;
+        }else{
+            try{
+                return Integer.parseInt(num);
+            }catch (Exception ex){
+                AppLog.log(ex.toString());
+                return 0;
+            }
+        }
     }
 
 }

@@ -1,11 +1,27 @@
 package jp.relo.cluboff.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by tonkhanh on 5/23/17.
  */
 public class CouponDTO{
+    public static final String TAG_COUPON = "COUPON";
+    public static final String TAG_ITEM = "ITEM";
+    public static final String TAG_SHGRID = "SHGRID";
+    public static final String TAG_CATEGORY_ID = "CATEGORY_ID";
+    public static final String TAG_CATEGORY_NAME = "CATEGORY_NAME";
+    public static final String TAG_COUPON_NAME = "COUPON_NAME";
+    public static final String TAG_COUPON_IMAGE_PATH = "COUPON_IMAGE_PATH";
+    public static final String TAG_COUPON_TYPE = "COUPON_TYPE";
+    public static final String TAG_LINK_PATH = "LINK_PATH";
+    public static final String TAG_EXPIRATION_FROM = "EXPIRATION_FROM";
+    public static final String TAG_EXPIRATION_TO = "EXPIRATION_TO";
+    public static final String TAG_PRIORITY = "PRIORITY";
+    public static final String TAG_ADD_BLAND = "ADD_BLAND";
+    public static final String TAG_MEMO = "MEMO";
+
 
     @SerializedName("shgrid")
     private String shgrid;
@@ -37,9 +53,11 @@ public class CouponDTO{
     @SerializedName("priority")
     private int priority;
 
+    @Expose
     @SerializedName("memo")
     private String memo;
 
+    @Expose
     @SerializedName("add_bland")
     private String add_bland;
 

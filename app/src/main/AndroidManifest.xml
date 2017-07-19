@@ -43,10 +43,13 @@
             android:name=".ui.activity.WebviewActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.PushActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MainTabActivity"
             android:screenOrientation="portrait" />
 
-        <receiver
+        <!--<receiver
             android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -55,7 +58,7 @@
 
                 <category android:name="jp.relo.cluboff" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
         <receiver
             android:name=".services.MyAppVisorPushBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -67,7 +70,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />
+        <!--<service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />-->
         <service android:name=".services.MyAppVisorPushIntentService"/>
         <service
             android:name="biz.appvisor.push.android.sdk.NotificationStartService"
@@ -105,7 +108,6 @@
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
-        <activity android:name=".ui.activity.DetailPushActivity"></activity>
     </application>
 
 </manifest>
