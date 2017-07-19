@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * Created by tonkhanh on 5/26/17.
@@ -88,8 +89,13 @@ public class LoginSharedPreference {
             return (T) Integer.valueOf(sharedPreferences.getInt(key, 0));
         } else if (anonymousClass == Long.class) {
             return (T) Long.valueOf(sharedPreferences.getLong(key, 0));
+        }else{
+            try{
+                return new Gson().fromJson(sharedPreferences.getString(key, ""),anonymousClass);
+            }catch (JsonSyntaxException exJ){
+               return null;
+            }
         }
-        return null;
     }
 
 }

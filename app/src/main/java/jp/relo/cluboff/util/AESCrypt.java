@@ -95,7 +95,7 @@ public class AESCrypt {
     public static byte[] encrypt(final SecretKeySpec key, final byte[] iv, final byte[] message)
             throws GeneralSecurityException {
         final Cipher cipher = Cipher.getInstance(AES_MODE);
-        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+        IvParameterSpec ivSpec = new IvParameterSpec(Base64.decode(iv,Base64.DEFAULT));
         cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec);
         byte[] cipherText = cipher.doFinal(message);
 

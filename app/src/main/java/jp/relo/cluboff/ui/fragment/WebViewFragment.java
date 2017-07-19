@@ -28,6 +28,8 @@ import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.MemberPost;
+import jp.relo.cluboff.model.PostDetail;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.CustomWebViewClient;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -42,6 +44,10 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
 
     WebView mWebView;
     private int checkWebview;
+    private String urlType = "";
+    private String userid = "";
+    private String requestno = "";
+    private String senicode = "";
     private String url;
     public IControlBottom iControlBottom;
 
@@ -49,8 +55,15 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        url = getArguments().getString(Constant.KEY_LOGIN_URL);
-        checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        Bundle bundle = getArguments();
+        url = bundle.getString(Constant.KEY_LOGIN_URL);
+        checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        urlType = bundle.getString(Constant.KEY_URL_TYPE);
+        if(!urlType.equals(CouponListFragment.WILL_NET_SERVER)){
+            userid = bundle.getString(Constant.TAG_USER_ID);
+            requestno = bundle.getString(Constant.TAG_REQUESTNO);
+            senicode = bundle.getString(Constant.TAG_SENICODE);
+        }
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
 
@@ -199,7 +212,16 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 hideLoading();
             }
         });
-        mWebView.loadUrl(url);
+        if(urlType.equals(CouponListFragment.WILL_NET_SERVER)){
+            mWebView.loadUrl(url);
+        }else{
+            PostDetail postDetail = new PostDetail();
+            postDetail.setUserid(userid);
+            postDetail.setRequestno(requestno);
+            postDetail.setSenicode(senicode);
+            mWebView.postUrl( url, postDetail.toString().getBytes());
+        }
+
     }
 
     @Override

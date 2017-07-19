@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="trans">#00000000 </color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#0055A6</color>
     <color name="colorAccent">#FF4081</color>
@@ -47,5 +46,6 @@
     <color name="pinkishGrey">#BEBEBE</color>
     <color name="peacockBlueTwo">#0044BA</color>
     <color name="pinkishGreyTwo">#CCCCCC</color>
+    <color name="color_background_category">#EBEBF1</color>
 
 </resources>

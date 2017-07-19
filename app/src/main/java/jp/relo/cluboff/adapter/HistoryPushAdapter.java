@@ -1,4 +1,4 @@
-package jp.relo.cluboff.ui.adapter;
+package jp.relo.cluboff.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -54,6 +54,10 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
             myDatabaseHelper.readCoupon(data.getIdHis());
             listData.get(position).setIsReaded(1);
         }*/
+    }
+    public void setNotifyDataSetChanged(ArrayList<HistoryPushDTO> listData){
+        this.listData = listData;
+        notifyDataSetChanged();
     }
 
     @Override

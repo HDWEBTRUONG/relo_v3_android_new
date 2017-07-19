@@ -1,4 +1,4 @@
-package jp.relo.cluboff.ui.adapter;
+package jp.relo.cluboff.adapter;
 
 import android.content.Context;
 

@@ -105,11 +105,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         ArrayList<CouponDTO> datas= new ArrayList<>();
         String now= Utils.valueNowTime();
         String selectQuery = "";
-        if("".equals(categoryID)){
+        if(ConstansDB.COUPON_ALL.equals(categoryID)){
             selectQuery = "SELECT  * FROM " + TableCoupon.TABLE_COUPON +" WHERE "
                     +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                     TableCoupon.COLUMN_EXPIRATION_TO +" > "+now;
-        }else{
+        }else if(ConstansDB.COUPON_FAV.equals(categoryID)) {
+            selectQuery = "SELECT  * FROM " + TableCoupon.TABLE_COUPON +" WHERE "+TableCoupon.COLUMN_LIKE +" = '"+1+"' AND ("
+                    +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")";
+        }
+        else{
             selectQuery = "SELECT  * FROM " + TableCoupon.TABLE_COUPON +" WHERE "+TableCoupon.COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
                     +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                     TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")";
@@ -120,22 +125,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                CouponDTO note = new CouponDTO();
-                note.setID(cursor.getInt(0));
-                note.setShgrid(cursor.getString(1));
-                note.setCategory_id(cursor.getString(2));
-                note.setCategory_name(cursor.getString(3));
-                note.setCoupon_name(cursor.getString(4));
-                note.setCoupon_image_path(cursor.getString(5));
-                note.setCoupon_type(cursor.getString(6));
-                note.setLink_path(cursor.getString(7));
-                note.setExpiration_from(cursor.getString(8));
-                note.setExpiration_to(cursor.getString(9));
-                note.setPriority(cursor.getInt(10));
-                note.setMemo(cursor.getString(11));
-                note.setAdd_bland(cursor.getString(12));
-                note.setLiked(cursor.getInt(13));
-                datas.add(note);
+                        CouponDTO note = new CouponDTO();
+                        note.setID(cursor.getInt(0));
+                        note.setShgrid(cursor.getString(1));
+                        note.setCategory_id(cursor.getString(2));
+                        note.setCategory_name(cursor.getString(3));
+                        note.setCoupon_name(cursor.getString(4));
+                        note.setCoupon_image_path(cursor.getString(5));
+                        note.setCoupon_type(cursor.getString(6));
+                        note.setLink_path(cursor.getString(7));
+                        note.setExpiration_from(cursor.getString(8));
+                        note.setExpiration_to(cursor.getString(9));
+                        note.setPriority(cursor.getInt(10));
+                        note.setMemo(cursor.getString(11));
+                        note.setAdd_bland(cursor.getString(12));
+                        note.setLiked(cursor.getInt(13));
+                        datas.add(note);
             } while (cursor.moveToNext());
         }
 
@@ -146,10 +151,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TableCoupon.TABLE_COUPON, null, null);
     }
-    public void likeCoupon(int id){
+    public void likeCoupon(int id, int value){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newValues = new ContentValues();
-        newValues.put(TableCoupon.COLUMN_LIKE, 1);
+        newValues.put(TableCoupon.COLUMN_LIKE, value);
 
         db.update(TableCoupon.TABLE_COUPON, newValues, TableCoupon.COLUMN_COUPON_ID+"="+id, null);
     }

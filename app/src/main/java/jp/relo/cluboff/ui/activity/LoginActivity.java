@@ -28,9 +28,11 @@ import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.LoginReponse;
+import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.util.AESCrypt;
+import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.EASHelper;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -48,7 +50,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
-    public static final String TAG_LOGIN_SAVE ="TAG_LOGIN_SAVE";
     ArrayList<CouponDTO> listResult = new ArrayList<>();
 
 
@@ -104,51 +105,39 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void clickLogin(View view){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
-            String usernameTemp="";
-            try {
-                usernameTemp = AESCrypt.encrypt(EASHelper.password, edtLoginUsername.getText().toString());
-                //AppLog.log(AESCrypt.decrypt(EASHelper.password,"eQJbP+flwdhcyx2IANy8Cw=="));
-            }catch (GeneralSecurityException e){
-                //handle error
-                AppLog.log(e.toString());
-            }
-            final String username=edtLoginUsername.getText().toString();//usernameTemp;
+            final String username=edtLoginUsername.getText().toString();
             final String userMail = edtMail.getText().toString().trim();
             final String password = edtPassword.getText().toString();
 
-            //hard code login test
-            if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)&&password.equals(Constant.ACC_LOGIN_DEMO_PASS)){
-                updateData();
-                return;
-            }
-            //end test
-
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
                 showLoading(this);
-                //LoginRequest loginRequest = new LoginRequest(username,userMail,password);
                 addSubscription(apiInterfaceJP.logon(username,userMail,password), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
-                        if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
-                            int brandid=0;
-                            try {
-                                String txt = "";
-                                String mess = model.getInfo().getBrandid();
-                                txt = AESCrypt.decrypt(EASHelper.password,mess);
-                                AppLog.log("------------------: "+ txt);
-                                brandid= Integer.valueOf(txt);
-                            } catch (GeneralSecurityException e) {
-                                e.printStackTrace();
-                            }
-                            LoginSharedPreference.getInstance(LoginActivity.this).put(TAG_LOGIN_SAVE,model.getInfo());
-                            updateData();
-                            setGoogleAnalytic(brandid);
-                            //save user and password encrypt KeyStore
+                        if(model!=null){
+                            if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
+                                int brandid=0;
+                                try {
+                                    String txt = "";
+                                    String mess = model.getInfo().getBrandid();
+                                    txt = AESCrypt.decrypt(EASHelper.password,mess);
+                                    brandid= Utils.convertInt(txt);
+                                } catch (GeneralSecurityException e) {
+                                    e.printStackTrace();
+                                }
+                                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
+                                //save value input
+                                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
+                                        new LoginRequest(username,userMail,password));
+                                updateData();
+                                setGoogleAnalytic(brandid);
+                                //save user and password encrypt KeyStore
 
-                        }else{
-                            txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
-                            txt_show_error.setVisibility(View.VISIBLE);
-                            btnLogin.setEnabled(true);
+                            }else{
+                                txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
+                                txt_show_error.setVisibility(View.VISIBLE);
+                                btnLogin.setEnabled(true);
+                            }
                         }
                     }
 
@@ -216,17 +205,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        /*try {
-            if(LoginSharedPreference.getInstance(this)!=null&&LoginSharedPreference.getInstance(this).getUserID()!=null){
-                String userLoca = LoginSharedPreference.getInstance(this).getUserID();
-                if(userLoca!=null&&userLoca.length()>0)
-                edtLoginUsername.setText(AESCrypt.decrypt(EASHelper.password,userLoca));
-            }
-            edtPassword.setText(LoginSharedPreference.getInstance(this).getAppID());
-            edtMail.setText(LoginSharedPreference.getInstance(this).getUserMail());
-        }catch (GeneralSecurityException e){
-            //handle error
-        }*/
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
     }

@@ -13,9 +13,8 @@ import jp.relo.cluboff.R;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.model.MessageEvent;
-import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
-import jp.relo.cluboff.ui.adapter.HistoryPushAdapter;
+import jp.relo.cluboff.adapter.HistoryPushAdapter;
 
 /**
  * Created by tonkhanh on 6/8/17.
@@ -56,7 +55,7 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
         if(adapter==null){
             adapter = new HistoryPushAdapter(getActivity(), listData);
         }else{
-            adapter.notifyDataSetChanged();
+            adapter.setNotifyDataSetChanged(listData);
         }
         rclHistoryPush.setAdapter(adapter);
     }

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,8 +24,8 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
-import jp.relo.cluboff.ui.adapter.MenuListAdapter;
-import jp.relo.cluboff.ui.adapter.ViewPagerAdapter;
+import jp.relo.cluboff.adapter.MenuListAdapter;
+import jp.relo.cluboff.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;

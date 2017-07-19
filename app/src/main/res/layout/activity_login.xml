@@ -56,7 +56,6 @@
                     android:layout_gravity="center"
                     android:lines="1"
                     android:text="@string/Test_300590"
-                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:background="@drawable/bg_trans"
                     android:textColor="@color/color_hint_text_170"

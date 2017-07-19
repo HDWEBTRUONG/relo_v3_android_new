@@ -20,7 +20,6 @@ import jp.relo.cluboff.util.LoginSharedPreference;
  */
 
 public class ReloApp extends Application {
-    private KeyStore keyStore;
     private int version;
     private Tracker mTracker;
 
@@ -31,23 +30,9 @@ public class ReloApp extends Application {
         super.onCreate();
         version = LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
 
-        try {
-            keyStore=KeyStore.getInstance("AndroidKeyStore");
-            keyStore.load(null);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        }
     }
 
-    public KeyStore getKeyStore(){
-        return keyStore;
-    }
+
     public int getVersion(){
         return version;
     }
