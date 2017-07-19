@@ -366,12 +366,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         result += String.valueOf(calendar.get(Calendar.MILLISECOND));
         return result;
     }
-    public String encryptKeyStore(String txt){
-        return Utils.encryptString(((ReloApp)getApplication()).getKeyStore(),txt);
-    }
-    public String decryptKeyStore(String txt){
-        return Utils.decryptString(((ReloApp)getApplication()).getKeyStore(),txt);
-    }
+
     public void addSubscription(Observable observable, Subscriber subscriber) {
         if (mCompositeSubscription == null) {
             mCompositeSubscription = new CompositeSubscription();

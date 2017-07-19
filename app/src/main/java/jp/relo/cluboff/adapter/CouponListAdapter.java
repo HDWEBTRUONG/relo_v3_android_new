@@ -1,4 +1,4 @@
-package jp.relo.cluboff.ui.adapter;
+package jp.relo.cluboff.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -96,16 +96,14 @@ public class CouponListAdapter extends BaseAdapter{
         holder.lnBtnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miClickButton.like(item.getID());
+                miClickButton.like(item.getID(),item.getLiked());
             }
         });
 
         if(item.getLiked()==ISLIKED){
-            holder.lnBtnLike.setEnabled(true);
             holder.imvLike.setImageResource(R.drawable.icon_star_off);
             holder.tvLike.setTextColor(ContextCompat.getColor(mContext,R.color.pinkishGreyTwo));
         }else{
-            holder.lnBtnLike.setEnabled(false);
             holder.imvLike.setImageResource(R.drawable.icon_star_on);
             holder.tvLike.setTextColor(ContextCompat.getColor(mContext,R.color.yellowOrange));
         }
@@ -125,6 +123,6 @@ public class CouponListAdapter extends BaseAdapter{
     }
     public interface iClickButton{
         void callback(CouponDTO data);
-        void like(int id);
+        void like(int id, int isLiked);
     }
 }

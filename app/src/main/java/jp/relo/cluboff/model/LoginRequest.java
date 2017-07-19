@@ -39,11 +39,11 @@ public class LoginRequest {
         this.emailad = emailad;
     }
 
-   /* public String getPass() {
-        return pass;
+    public String getBrandid() {
+        return brandid;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
-    }*/
+    public void setBrandid(String brandid) {
+        this.brandid = brandid;
+    }
 }

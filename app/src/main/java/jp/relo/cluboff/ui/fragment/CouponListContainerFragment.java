@@ -1,10 +1,13 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
@@ -16,10 +19,35 @@ import jp.relo.cluboff.util.IControlBottom;
  */
 
 public class CouponListContainerFragment extends BaseFragmentBottombar implements CouponListFragment.switchFragment, IControlBottom {
+    MainTabActivity mainTabActivity;
     @Override
     public void onResume() {
         super.onResume();
+        mainTabActivity = (MainTabActivity)getActivity();
         switchFragmentCoupon(false,null);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK&&event.getAction() == KeyEvent.ACTION_UP){
+                    if(mainTabActivity.getSupportFragmentManager().getBackStackEntryCount()>1){
+                        mainTabActivity.getSupportFragmentManager().popBackStack();
+                        return true;
+                    }else{
+                        mainTabActivity.finish();
+                        return true;
+                    }
+
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -78,12 +106,12 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
         if(isDetail){
             WebViewFragment webViewFragment = new WebViewFragment();
             webViewFragment.setControlBottom(this);
-            switchFragment(webViewFragment,((MainTabActivity)getActivity()),bundle);
+            switchFragment(webViewFragment,mainTabActivity,bundle);
         }else{
             disbleBottom();
             CouponListFragment couponListFragment = new CouponListFragment();
             couponListFragment.setiSwitchFragment(this);
-            switchFragment(couponListFragment,((MainTabActivity)getActivity()),null);
+            switchFragment(couponListFragment,mainTabActivity,null);
         }
     }
 

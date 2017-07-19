@@ -1,24 +1,22 @@
 package jp.relo.cluboff.ui.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import framework.phvtFragment.BaseFragment;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
-import jp.relo.cluboff.ui.adapter.CouponListAdapter;
+import jp.relo.cluboff.adapter.CouponListAdapter;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.views.MyMaterialSpinner;
 
@@ -57,8 +55,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void setCategory() {
         ArrayList<CatagoryDTO> categoryList=myDatabaseHelper.getCategory();
-        CatagoryDTO allItem = new CatagoryDTO("","All");
-        categoryList.add(0,allItem);
+        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,ConstansDB.COUPON_ALL_TITLE));
+        categoryList.add(1,new CatagoryDTO(ConstansDB.COUPON_FAV,ConstansDB.COUPON_FAV_TITLE));
         spinner.setItems(categoryList);
         spinner.setOnItemSelectedListener(new MyMaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
 
@@ -91,30 +89,23 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void getListDataCategoryID(String categoryID) {
         listCoupon.clear();
         listCoupon = myDatabaseHelper.getCouponWithDateCategoryID(categoryID);
-        setAdapter();
+        setAdapter(true);
     }
-    private void setAdapter(){
+    private void setAdapter(boolean isReload){
         if(adapter==null){
             adapter =new CouponListAdapter(getContext(), listCoupon,this);
+            lvCategoryMenu.setAdapter(adapter);
         }else{
             adapter.setDataChange(listCoupon);
+            if(isReload){
+                lvCategoryMenu.setAdapter(adapter);
+            }
         }
-        lvCategoryMenu.setAdapter(adapter);
     }
 
     @Override
     protected void registerEventHandlers() {
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Test GA
-        Activity act = getActivity();
-        if (act != null) {
-            ReloApp app = (ReloApp) act.getApplication();
-        }
     }
 
     @Override
@@ -131,25 +122,31 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             url =data.getLink_path();
         }else{
             //ToDo add url
-            url = MessageFormat.format(getString(R.string.template_url_coupon),Constant.TEST_LINK_COUPON);//""+ data.getLink_path();
+            //url = MessageFormat.format(getString(R.string.template_url_coupon),Constant.TEST_LINK_COUPON);//""+ data.getLink_path();
+            url = "http://sptest.club-off.com/relo/coa_directlink.cfm";
         }
 
         Bundle bundle = new Bundle();
         bundle.putString(Constant.KEY_LOGIN_URL, url);
+        bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
+        bundle.putString(Constant.TAG_USER_ID, "f4od/GCIvlp402l4ZOkYzg==");
+        bundle.putString(Constant.TAG_REQUESTNO, "19136");
+        bundle.putString(Constant.TAG_SENICODE, "1");
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
         iSwitchFragment.callSwitchFragment(bundle);
     }
 
     @Override
-    public void like(int id) {
-        myDatabaseHelper.likeCoupon(id);
-        for(CouponDTO item : listCoupon){
-            if(item.getID() == id){
-                item.setLiked(1);
+    public void like(int id, int isLiked) {
+        int newLikeValue = isLiked == 0?1:0;
+        myDatabaseHelper.likeCoupon(id,newLikeValue);
+        for(int i =0; i < listCoupon.size();i++){
+            if(listCoupon.get(i).getID() == id){
+                listCoupon.get(i).setLiked(newLikeValue);
                 break;
             }
         }
-        adapter.notifyDataSetChanged();
+        setAdapter(false);
     }
 
     interface switchFragment{

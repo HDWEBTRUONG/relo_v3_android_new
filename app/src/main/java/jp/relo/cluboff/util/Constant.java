@@ -20,6 +20,7 @@ public class Constant {
 
     public static final String KEY_ALIAS_APP = "reloalias";
     public static final String KEY_LOGIN_URL = "loginUrl";
+    public static final String KEY_URL_TYPE= "urlType";
     public static final String KEY_CHECK_WEBVIEW = "checkWebview";
     public static final String KEY_POST_WEBVIEW = "postDataWebview";
 
@@ -56,4 +57,8 @@ public class Constant {
     public static final String ACC_TEST_ID_LOGIN_ENCRY = "f4od/GCIvlp402l4ZOkYzg";
     public static final String ACC_TEST_URL_LOGIN = "sptest.club-off.com/relo";
 
+
+    public static final String TAG_USER_ID= "userid";
+    public static final String TAG_REQUESTNO= "requestno";
+    public static final String TAG_SENICODE= "senicode";
 }

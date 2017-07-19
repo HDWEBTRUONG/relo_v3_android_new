@@ -31,8 +31,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import jp.relo.cluboff.ui.adapter.MaterialSpinnerAdapter;
-import jp.relo.cluboff.ui.adapter.MaterialSpinnerBaseAdapter;
+import jp.relo.cluboff.adapter.MaterialSpinnerAdapter;
+import jp.relo.cluboff.adapter.MaterialSpinnerBaseAdapter;
 import jp.relo.cluboff.util.Utils;
 
 /**

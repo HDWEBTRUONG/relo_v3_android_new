@@ -1,4 +1,4 @@
-package jp.relo.cluboff.ui.model;
+package jp.relo.cluboff.model;
 
 /**
  * Created by quynguyen on 3/24/17.

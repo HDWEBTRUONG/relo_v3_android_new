@@ -30,10 +30,11 @@
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/spinnerCategory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
                     android:layout_margin="@dimen/_5dp"
                     android:visibility="visible"
-                    app:ms_background_color="#CFFF"/>
+                    app:ms_background_color="@color/color_background_category"/>
 
                 <LinearLayout
                     android:id="@+id/lnCatalory"
