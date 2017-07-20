@@ -15,6 +15,8 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -70,6 +72,11 @@ public class SplashScreenActivity extends BaseActivity {
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
                                 //TODO Save value reponse
+                                try {
+                                    brandid = Utils.convertInt(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 goMainScreen();
                                 setGoogleAnalytic(brandid);
 

@@ -33,6 +33,8 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -68,21 +70,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
-
-        if(jp.relo.cluboff.BuildConfig.DEBUG){
-            img_logo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(edtLoginUsername.getText().toString().equals(Constant.ACC_LOGIN_DEMO_USERNAME)){
-                        edtLoginUsername.setText(R.string.Test_00008440);
-                        edtPassword.setText(R.string.Test_300590);
-                    }else{
-                        edtLoginUsername.setText(Constant.ACC_LOGIN_DEMO_USERNAME);
-                        edtPassword.setText(Constant.ACC_LOGIN_DEMO_PASS);
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -113,7 +100,12 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         if(model!=null){
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
-                                //TODO Save value reponse
+                                try {
+                                    brandid = Utils.convertInt(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                //Save reponse value
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
@@ -196,6 +188,12 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         super.onResume();
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
+        if(loginRequest!=null){
+            edtLoginUsername.setText(loginRequest.getKaiinno());
+            edtPassword.setText(loginRequest.getBrandid());
+            edtMail.setText(loginRequest.getEmailad());
+        }
     }
 
     @Override

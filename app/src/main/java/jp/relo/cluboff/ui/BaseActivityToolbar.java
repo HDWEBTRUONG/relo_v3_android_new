@@ -1,9 +1,11 @@
 package jp.relo.cluboff.ui;
 
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import framework.phvtActivity.BaseActivity;
@@ -20,6 +22,8 @@ public abstract class BaseActivityToolbar extends BaseActivity {
     protected ImageView imvInfo;
     protected TextView tvCount;
     protected TextView title_toolbar;
+    protected RelativeLayout rlMenu;
+    protected RelativeLayout flInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,8 @@ public abstract class BaseActivityToolbar extends BaseActivity {
         imvInfo = (ImageView) findViewById(R.id.imvInfo);
         tvCount = (TextView) findViewById(R.id.tvCount);
         title_toolbar = (TextView) findViewById(R.id.title_toolbar);
+        rlMenu = (RelativeLayout) findViewById(R.id.rlMenu);
+        flInfo = (RelativeLayout) findViewById(R.id.flInfo);
     }
 
     @Override

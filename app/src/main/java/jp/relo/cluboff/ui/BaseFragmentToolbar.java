@@ -3,6 +3,7 @@ package jp.relo.cluboff.ui;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -21,6 +22,8 @@ public abstract class BaseFragmentToolbar extends BaseFragment{
     protected ImageView imvInfo;
     protected TextView tvCount;
     protected TextView title_toolbar;
+    protected RelativeLayout rlMenu;
+    protected RelativeLayout flInfo;
 
 
 
@@ -32,6 +35,8 @@ public abstract class BaseFragmentToolbar extends BaseFragment{
         imvInfo = (ImageView) view.findViewById(R.id.imvInfo);
         tvCount = (TextView) view.findViewById(R.id.tvCount);
         title_toolbar = (TextView) view.findViewById(R.id.title_toolbar);
+        rlMenu = (RelativeLayout) view.findViewById(R.id.rlMenu);
+        flInfo = (RelativeLayout) view.findViewById(R.id.flInfo);
     }
 
     @Override

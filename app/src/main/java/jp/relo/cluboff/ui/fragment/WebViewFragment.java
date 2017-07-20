@@ -81,7 +81,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 title_toolbar.setText(R.string.cannot_login_title);
                 imvMenu.setVisibility(View.VISIBLE);
                 imvMenu.setImageResource(R.drawable.icon_close);
-                imvMenu.setOnClickListener(new View.OnClickListener() {
+                rlMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         getActivity().finish();
