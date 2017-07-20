@@ -339,7 +339,7 @@ public abstract class BaseFragment extends Fragment {
             if(kProgressHUDloading==null){
                 kProgressHUDloading=KProgressHUD.create(context)
                         .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                        .setCancellable(false)
+                        .setCancellable(true)
                         .setAnimationSpeed(2)
                         .setDimAmount(0.5f);
             }
