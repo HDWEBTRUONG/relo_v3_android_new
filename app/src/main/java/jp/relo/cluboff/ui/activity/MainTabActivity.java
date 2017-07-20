@@ -127,14 +127,14 @@ public class MainTabActivity extends BaseActivityToolbar {
         tvCount.setVisibility(View.VISIBLE);
 
         //event
-        imvInfo.setOnClickListener(new View.OnClickListener() {
+        flInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
                 openHistoryPush();
             }
         });
-        imvMenu.setOnClickListener(new View.OnClickListener() {
+        rlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {

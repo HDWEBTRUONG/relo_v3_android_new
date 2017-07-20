@@ -77,7 +77,7 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
         title_toolbar.setText(R.string.title_history_push);
         imvMenu.setVisibility(View.VISIBLE);
         imvMenu.setImageResource(R.drawable.icon_close);
-        imvMenu.setOnClickListener(new View.OnClickListener() {
+        rlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

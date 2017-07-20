@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import jp.relo.cluboff.R;
@@ -21,6 +22,8 @@ public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
     protected ImageView imvInfo;
     protected TextView tvCount;
     protected TextView title_toolbar;
+    protected RelativeLayout rlMenu;
+    protected RelativeLayout flInfo;
 
     @Nullable
     @Override
@@ -31,6 +34,8 @@ public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
         imvInfo = (ImageView) view.findViewById(R.id.imvInfo);
         tvCount = (TextView) view.findViewById(R.id.tvCount);
         title_toolbar = (TextView) view.findViewById(R.id.title_toolbar);
+        rlMenu = (RelativeLayout) view.findViewById(R.id.rlMenu);
+        flInfo = (RelativeLayout) view.findViewById(R.id.flInfo);
         setupActionBar();
     }
 
