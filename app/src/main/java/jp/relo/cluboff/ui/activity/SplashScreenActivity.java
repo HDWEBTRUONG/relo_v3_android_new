@@ -1,24 +1,10 @@
 package jp.relo.cluboff.ui.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
-import android.view.View;
-import android.widget.RelativeLayout;
 
-import com.scottyab.aescrypt.AESCrypt;
-
-import java.security.GeneralSecurityException;
-
-import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtActivity.BaseActivity;
-import framework.phvtDatabase.DatabaseHelper;
-import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
@@ -27,7 +13,6 @@ import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
-import jp.relo.cluboff.util.EASHelper;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 
@@ -43,15 +28,7 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //test encryct
-        try {
-            AppLog.log("----------------"+jp.relo.cluboff.util.AESCrypt.encrypt(EASHelper.password,"00008440"));
-            //MYSZiKTu+yVrBcwU8SSapQ==
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-
-        checkOpenedThisScreen=false;
+                checkOpenedThisScreen=false;
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -92,14 +69,7 @@ public class SplashScreenActivity extends BaseActivity {
                         if(model!=null){
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
-                                try {
-                                    String txt = "";
-                                    String mess = model.getInfo().getBrandid();
-                                    txt = jp.relo.cluboff.util.AESCrypt.decrypt(EASHelper.password,mess);
-                                    brandid= Utils.convertInt(txt);
-                                } catch (GeneralSecurityException e) {
-                                    e.printStackTrace();
-                                }
+                                //TODO Save value reponse
                                 goMainScreen();
                                 setGoogleAnalytic(brandid);
 

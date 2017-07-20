@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +16,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
@@ -31,10 +29,8 @@ import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
-import jp.relo.cluboff.util.AESCrypt;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
-import jp.relo.cluboff.util.EASHelper;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 
@@ -117,14 +113,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         if(model!=null){
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
-                                try {
-                                    String txt = "";
-                                    String mess = model.getInfo().getBrandid();
-                                    txt = AESCrypt.decrypt(EASHelper.password,mess);
-                                    brandid= Utils.convertInt(txt);
-                                } catch (GeneralSecurityException e) {
-                                    e.printStackTrace();
-                                }
+                                //TODO Save value reponse
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
