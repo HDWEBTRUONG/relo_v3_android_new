@@ -55,8 +55,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void setCategory() {
         ArrayList<CatagoryDTO> categoryList=myDatabaseHelper.getCategory();
-        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,ConstansDB.COUPON_ALL_TITLE));
-        categoryList.add(1,new CatagoryDTO(ConstansDB.COUPON_FAV,ConstansDB.COUPON_FAV_TITLE));
+        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
+        categoryList.add(1,new CatagoryDTO(ConstansDB.COUPON_FAV,getString(R.string.catalogy_fav)));
         spinner.setItems(categoryList);
         spinner.setOnItemSelectedListener(new MyMaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
 
