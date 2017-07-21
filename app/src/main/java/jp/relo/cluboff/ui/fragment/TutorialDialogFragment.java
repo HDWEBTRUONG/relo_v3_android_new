@@ -5,7 +5,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
@@ -15,63 +16,48 @@ import android.webkit.WebView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
+import jp.relo.cluboff.adapter.HistoryPushAdapter;
+import jp.relo.cluboff.database.MyDatabaseHelper;
+import jp.relo.cluboff.model.HistoryPushDTO;
+import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
+import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 
 /**
- * Created by tonkhanh on 5/18/17.
+ * Created by tonkhanh on 6/8/17.
  */
 
-public class WebViewFragment extends BaseFragmentToolbarBottombar {
-
+public class TutorialDialogFragment extends BaseDialogFragmentToolbarBottombar {
     WebView mWebView;
-    private int checkWebview;
-    private String url;
-
-
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = getArguments();
-        url = bundle.getString(Constant.KEY_LOGIN_URL);
-        checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+    protected void init(View view) {
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
-
     }
+
     @Override
-    public void setupToolbar() {
-        switch (checkWebview){
-            case Constant.CAN_NOT_LOGIN:
-                lnToolbar.setVisibility(View.VISIBLE);
-                title_toolbar.setVisibility(View.VISIBLE);
-                title_toolbar.setText(R.string.cannot_login_title);
-                imvMenu.setVisibility(View.VISIBLE);
-                imvMenu.setImageResource(R.drawable.icon_close);
-                rlMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getActivity().finish();
-                    }
-                });
-                break;
-        }
+    protected void setEvent(View view) {
 
     }
 
     @Override
-    public void setupBottombar() {
-        switch (checkWebview){
-            case Constant.MEMBER_COUPON:
-                lnBottom.setVisibility(View.VISIBLE);
-                imvBackBottomBar.setVisibility(View.VISIBLE);
-                imvForwardBottomBar.setVisibility(View.VISIBLE);
-                imvBrowserBottomBar.setVisibility(View.VISIBLE);
-                imvReloadBottomBar.setVisibility(View.VISIBLE);
-                break;
-        }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void setupBottomlbar() {
+        lnBottom.setVisibility(View.VISIBLE);
+        imvBackBottomBar.setVisibility(View.VISIBLE);
+        imvForwardBottomBar.setVisibility(View.VISIBLE);
+        imvBrowserBottomBar.setVisibility(View.VISIBLE);
+        imvReloadBottomBar.setVisibility(View.VISIBLE);
+
         imvBackBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,36 +90,35 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         imvForwardBottomBar.setEnabled(mWebView.canGoForward());
     }
 
+
     @Override
     public int getRootLayoutId() {
         return R.layout.fragment_webview;
     }
 
     @Override
-    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
+    public void bindView(View view) {
 
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void setupActionBar() {
+        lnToolbar.setVisibility(View.VISIBLE);
+        title_toolbar.setVisibility(View.VISIBLE);
+        title_toolbar.setText(R.string.menu_tutorial);
+        imvMenu.setVisibility(View.VISIBLE);
+        imvMenu.setImageResource(R.drawable.icon_close);
+        rlMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    protected void registerEventHandlers() {
-
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     private void setupWebView() {
@@ -174,13 +159,9 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 hideLoading();
             }
         });
+
+        String url = Constant.WEBVIEW_URL_TUTORIAL;
         mWebView.loadUrl(url);
 
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
 }

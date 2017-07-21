@@ -32,7 +32,6 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
 
     WebView mWebView;
     private int checkWebview;
-    RelativeLayout myContainer;
 
 
     @Override
@@ -40,18 +39,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         super.onViewCreated(view, savedInstanceState);
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
-        //if(((ReloApp)getActivity().getApplication()).getWebView().is)
-        //mWebView = ((ReloApp)getActivity().getApplication()).getWebView();
         setupWebView();
-        /*myContainer = (RelativeLayout) view.findViewById(R.id.lnContainerWv);
-        if(mWebView!=null&&mWebView.getParent()!=null){
-            ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
-        }
-        myContainer.addView(mWebView,
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));*/
-        String url  = MessageFormat.format(getString(R.string.template_url_member),Constant.ACC_TEST_URL_LOGIN);
-        mWebView.postUrl( url, new MemberPost().toString().getBytes());
-
     }
 
     @Override
@@ -155,13 +143,12 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             }
 
         });
+        String url  = MessageFormat.format(getString(R.string.template_url_member),Constant.ACC_TEST_URL_LOGIN);
+        mWebView.postUrl( url, new MemberPost().toString().getBytes());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        /*if(mWebView!=null&&mWebView.getParent()!=null){
-            ((RelativeLayout)mWebView.getParent()).removeView(mWebView);
-        }*/
     }
 }

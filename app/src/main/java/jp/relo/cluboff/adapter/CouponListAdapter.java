@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.CouponDTO;
+import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
 
 /**
@@ -83,9 +84,28 @@ public class CouponListAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
         final CouponDTO item = listData.get(position);
-        holder.categoryView.setText(item.getCategory_name());
         holder.companyView.setText(item.getCoupon_name());
         holder.durationCoupon.setText(MessageFormat.format(mContext.getString(R.string.limit_time), Utils.convertDateShort(item.getExpiration_to())));
+
+        holder.categoryView.setText(item.getCategory_name());
+        holder.categoryView.setVisibility(View.VISIBLE);
+
+        if(Constant.VALUE_CATALOGY_25.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_25);
+        }else if(Constant.VALUE_CATALOGY_27.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_27);
+            ;
+        }else if(Constant.VALUE_CATALOGY_32.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_32);
+        }else if(Constant.VALUE_CATALOGY_126.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_126);
+        }else if(Constant.VALUE_CATALOGY_999.equalsIgnoreCase(item.getCategory_id()) &&
+                !StringUtil.isEmpty(item.getAdd_bland())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_999);
+        }else{
+            holder.categoryView.setVisibility(View.GONE);
+        }
+
 
         Picasso.with(mContext)
                 .load(item.getCoupon_image_path())

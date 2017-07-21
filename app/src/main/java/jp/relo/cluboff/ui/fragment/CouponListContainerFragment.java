@@ -104,7 +104,7 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
     }
     public  void switchFragmentCoupon(boolean isDetail,Bundle bundle){
         if(isDetail){
-            WebViewFragment webViewFragment = new WebViewFragment();
+            WebViewDetailCouponFragment webViewFragment = new WebViewDetailCouponFragment();
             webViewFragment.setControlBottom(this);
             switchFragment(webViewFragment,mainTabActivity,bundle);
         }else{

@@ -12,6 +12,12 @@ public class PostDetail {
     String requestno;
     String senicode;
 
+    public PostDetail() {
+        this.userid = "";
+        this.requestno = "";
+        this.senicode = "";
+    }
+
     public String getUserid() {
         return userid;
     }

@@ -48,4 +48,11 @@
     <color name="pinkishGreyTwo">#CCCCCC</color>
     <color name="color_background_category">#EBEBF1</color>
 
+    <!--color category-->
+    <color name="color_category_32">#FEC108</color>
+    <color name="color_category_126">#1FB450</color>
+    <color name="color_category_27">#EB7B32</color>
+    <color name="color_category_25">#5E99D5</color>
+    <color name="color_category_999">#AFABAB</color>
+
 </resources>
