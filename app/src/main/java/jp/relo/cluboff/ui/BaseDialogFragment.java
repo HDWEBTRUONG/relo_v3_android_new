@@ -3,6 +3,7 @@ package jp.relo.cluboff.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import jp.relo.cluboff.R;
 
 /**
@@ -23,6 +26,7 @@ import jp.relo.cluboff.R;
 
 public abstract class BaseDialogFragment  extends DialogFragment {
     protected Activity mMainActivity;
+    private KProgressHUD kProgressHUDloading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,5 +85,24 @@ public abstract class BaseDialogFragment  extends DialogFragment {
 
 
     protected void executeBase() {
+    }
+
+    public void showLoading(Context context){
+        if(kProgressHUDloading==null){
+            kProgressHUDloading= KProgressHUD.create(context)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
+        }
+        if(!kProgressHUDloading.isShowing()){
+            kProgressHUDloading.show();
+        }
+
+    }
+    public void hideLoading(){
+        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
+            kProgressHUDloading.dismiss();
+        }
     }
 }

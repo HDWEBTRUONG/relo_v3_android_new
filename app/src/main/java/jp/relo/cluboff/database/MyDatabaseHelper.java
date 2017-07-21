@@ -6,17 +6,23 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.database.tables.TableCategory;
 import jp.relo.cluboff.database.tables.TableCoupon;
 import jp.relo.cluboff.database.tables.TablePush;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.util.Utils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -24,9 +30,13 @@ import jp.relo.cluboff.util.Utils;
  */
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
+    SQLiteDatabase sqLiteDatabase;
 
     public MyDatabaseHelper(Context context)  {
         super(context, ConstansDB.DATABASE_NAME, null, ConstansDB.DATABASE_VERSION);
+    }
+    public SQLiteDatabase getSqLiteDatabase(){
+        return this.getWritableDatabase();
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -143,7 +153,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                         datas.add(note);
             } while (cursor.moveToNext());
         }
-
+        db.close();
         return datas;
     }
 
@@ -155,27 +165,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newValues = new ContentValues();
         newValues.put(TableCoupon.COLUMN_LIKE, value);
-
         db.update(TableCoupon.TABLE_COUPON, newValues, TableCoupon.COLUMN_COUPON_ID+"="+id, null);
+        db.close();
     }
-    public ArrayList<CatagoryDTO> getCategory(){
-        ArrayList<CatagoryDTO> datas= new ArrayList<>();
-        String selectQuery = "SELECT DISTINCT "+TableCoupon.COLUMN_CATEGORY_ID+", "+TableCoupon.COLUMN_CATEGORY+" FROM " + TableCoupon.TABLE_COUPON;
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                CatagoryDTO catagoryDTO = new CatagoryDTO();
-                catagoryDTO.setCatagoryID(cursor.getString(0));
-                catagoryDTO.setGetCatagoryName(cursor.getString(1));
-                datas.add(catagoryDTO);
-            } while (cursor.moveToNext());
-        }
-
-        return datas;
-    }
     public void savePush(HistoryPushDTO data){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -188,7 +181,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TablePush.COLUMN_PUSH_W, data.getzHis());
         values.put(TablePush.COLUMN_PUSH_URL, data.getUrlHis());
         values.put(TablePush.COLUMN_PUSH_READ, 0);
-
         db.insert(TablePush.TABLE_PUSH, null, values);
         db.close();
     }
@@ -196,7 +188,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<HistoryPushDTO> getPush(){
         ArrayList<HistoryPushDTO> datas= new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TablePush.TABLE_PUSH + " LIMIT "+ ConstansDB.LIMIT_PUSH_LIST;
-
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -216,7 +207,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 datas.add(item);
             } while (cursor.moveToNext());
         }
-
+        db.close();
         return datas;
     }
     public long getCountPush(){
@@ -230,8 +221,33 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newValues = new ContentValues();
         newValues.put(TablePush.COLUMN_PUSH_READ, 1);
-
         db.update(TablePush.TABLE_PUSH, newValues, TablePush.COLUMN_PUSH_ID+"="+id, null);
+        db.close();
     }
+
+    private static <T> Observable<T> makeObservable(final Callable<T> func) {
+        return Observable.create(
+                new Observable.OnSubscribe<T>() {
+                    @Override
+                    public void call(Subscriber<? super T> subscriber) {
+                        try {
+                            subscriber.onNext(func.call());
+                        } catch(Exception ex) {
+                            Log.e("s", "Error reading from the database", ex);
+                        }
+                    }
+                });
+    }
+
+    public Observable<List<CatagoryDTO>> getCatagorysRX(String categoryID) {
+        return makeObservable(TableCategory.getCategory(this))
+                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
+    }
+    public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID) {
+        return makeObservable(TableCoupon.getCouponWithDateCategoryID(this,categoryID))
+                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
+    }
+
+
 
 }

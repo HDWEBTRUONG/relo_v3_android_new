@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
@@ -30,6 +31,7 @@ import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
+import jp.relo.cluboff.ui.fragment.TutorialDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 
@@ -43,13 +45,14 @@ public class MainTabActivity extends BaseActivityToolbar {
     //main AppVisor processor
     private AppVisorPush appVisorPush;
     private HistoryPushDialogFragment historyPushDialogFragment;
+    private TutorialDialogFragment tutorialDialogFragment;
     long countPush=0;
 
-    //Main AppVisor data through BUNDLE Data
-    private Bundle bundle=null;
-    MyDatabaseHelper myDatabaseHelper;
     Handler handler;
-    public static final int UPDATE_COUNT=1;
+    public static final int INDEX_AREA=0;
+    public static final int INDEX_TOP=1;
+    public static final int INDEX_MEMBER=2;
+    public static final int UPDATE_COUNT=4;
 
     @Override
     protected void onStart() {
@@ -99,16 +102,34 @@ public class MainTabActivity extends BaseActivityToolbar {
     protected void onResume() {
         super.onResume();
         loadCountPush();
-        selectPage(1);
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null){
+            String target = bundle.getString(Constant.TARGET_PUSH);
+            if(Constant.TARGET_PUSH_SCREEN_AREA.equalsIgnoreCase(target)){
+                selectPage(INDEX_AREA);
+            }else if(Constant.TARGET_PUSH_SCREEN_SITE.equalsIgnoreCase(target)){
+                selectPage(INDEX_MEMBER);
+            }else if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
+                LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
+                loadCountPush();
+                selectPage(INDEX_TOP);
+                openHistoryPush();
+            }else{
+                selectPage(INDEX_TOP);
+            }
+        }else{
+            selectPage(INDEX_TOP);
+        }
     }
     void selectPage(int pageIndex){
-        tabLayout.setScrollPosition(pageIndex,0f,true);
-        viewPager.setCurrentItem(pageIndex);
+        if(tabLayout!=null&&viewPager!=null){
+            tabLayout.setScrollPosition(pageIndex,0f,true);
+            viewPager.setCurrentItem(pageIndex);
+        }
     }
 
     public void loadCountPush(){
-        //myDatabaseHelper=new MyDatabaseHelper(this);
-        countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();//myDatabaseHelper.getCountPush();
+        countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();
         handler.sendEmptyMessage(UPDATE_COUNT);
     }
     public void openHistoryPush(){
@@ -157,7 +178,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        titleMenu = new String[] { Constant.TEST_MENU_TOP, Constant.TEST_MENU_TUTORIAL};
+        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
 
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
@@ -192,12 +213,15 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
     private void selectItem(int position) {
         // Locate Position
-        AppLog.log("Menu: "+position);
         switch (position) {
-            case 0:
-
-                break;
             case 1:
+                selectPage(INDEX_TOP);
+                break;
+            case 2:
+                if(tutorialDialogFragment==null){
+                    tutorialDialogFragment = new TutorialDialogFragment();
+                }
+                openDialogFragment(tutorialDialogFragment);
                 break;
         }
         mDrawerListMenu.setItemChecked(position, true);
@@ -240,7 +264,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, MainTabActivity.class, getString(R.string.app_name));
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
 

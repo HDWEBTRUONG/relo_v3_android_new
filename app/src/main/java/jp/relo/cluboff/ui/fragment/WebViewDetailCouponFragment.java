@@ -14,21 +14,31 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.PostDetail;
+import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.IControlBottom;
 
 /**
  * Created by tonkhanh on 5/18/17.
  */
 
-public class WebViewFragment extends BaseFragmentToolbarBottombar {
+public class WebViewDetailCouponFragment extends BaseFragmentBottombar {
 
     WebView mWebView;
     private int checkWebview;
+    private String urlType = "";
+    private String userid = "";
+    private String requestno = "";
+    private String senicode = "";
     private String url;
+    public IControlBottom iControlBottom;
 
 
     @Override
@@ -37,28 +47,18 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         Bundle bundle = getArguments();
         url = bundle.getString(Constant.KEY_LOGIN_URL);
         checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        urlType = bundle.getString(Constant.KEY_URL_TYPE);
+        if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
+            userid = bundle.getString(Constant.TAG_USER_ID);
+            requestno = bundle.getString(Constant.TAG_REQUESTNO);
+            senicode = bundle.getString(Constant.TAG_SENICODE);
+        }
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
 
     }
-    @Override
-    public void setupToolbar() {
-        switch (checkWebview){
-            case Constant.CAN_NOT_LOGIN:
-                lnToolbar.setVisibility(View.VISIBLE);
-                title_toolbar.setVisibility(View.VISIBLE);
-                title_toolbar.setText(R.string.cannot_login_title);
-                imvMenu.setVisibility(View.VISIBLE);
-                imvMenu.setImageResource(R.drawable.icon_close);
-                rlMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getActivity().finish();
-                    }
-                });
-                break;
-        }
-
+    public void setControlBottom(IControlBottom iControlBottom){
+        this.iControlBottom =iControlBottom;
     }
 
     @Override
@@ -117,6 +117,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -128,6 +129,9 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onResume() {
         super.onResume();
+        if(iControlBottom!=null){
+            iControlBottom.canReload(true);
+        }
     }
 
 
@@ -159,7 +163,10 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 hideLoading();
                 imvBackBottomBar.setEnabled(mWebView.canGoBack());
                 imvForwardBottomBar.setEnabled(mWebView.canGoForward());
-
+                if(iControlBottom!=null){
+                    iControlBottom.canBack(mWebView.canGoBack());
+                    iControlBottom.canForward(mWebView.canGoForward());
+                }
             }
             @SuppressWarnings("deprecation")
             @Override
@@ -174,13 +181,34 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 hideLoading();
             }
         });
-        mWebView.loadUrl(url);
+        if(CouponListFragment.WILL_NET_SERVER.equals(urlType)){
+            mWebView.loadUrl(url);
+        }else{
+            PostDetail postDetail = new PostDetail();
+            postDetail.setUserid(userid);
+            postDetail.setRequestno(requestno);
+            postDetail.setSenicode(senicode);
+            mWebView.postUrl( url, postDetail.toString().getBytes());
+        }
 
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(iControlBottom!=null){
+            iControlBottom.disableAll();
+        }
+    }
+    @Subscribe
+    public void onEvent(ControlWebEventBus event) {
+        if(event.isCallBack()){
+            mWebView.goBack();
+        }else if(event.isCallForward()){
+            mWebView.goForward();
+        }else {
+            mWebView.reload();
+        }
     }
 
 }

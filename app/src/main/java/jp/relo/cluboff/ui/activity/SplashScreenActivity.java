@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import java.util.List;
+
 import framework.phvtActivity.BaseActivity;
+import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
+import jp.relo.cluboff.database.MyDatabaseHelper;
+import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.util.ConstansSharedPerence;
@@ -17,6 +22,8 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -25,12 +32,11 @@ import jp.relo.cluboff.util.ase.BackAES;
 public class SplashScreenActivity extends BaseActivity {
 
     private static final int DELAY_TIME_SPLASH_ACTIVITY = 2000;
-    public static boolean checkOpenedThisScreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-                checkOpenedThisScreen=false;
+        PushvisorHandlerActivity.checkOpenedThisScreen=false;
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -43,13 +49,13 @@ public class SplashScreenActivity extends BaseActivity {
 
     //TODO make redirection after splash screen gone
     private void goNextScreen() {
-        checkOpenedThisScreen = true;
+        PushvisorHandlerActivity.checkOpenedThisScreen = true;
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
     private void goMainScreen() {
-        checkOpenedThisScreen = true;
+        PushvisorHandlerActivity.checkOpenedThisScreen = true;
         startActivity(new Intent(this, MainTabActivity.class));
         finish();
     }

@@ -47,12 +47,13 @@
                     android:id="@+id/tvCategoryName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/white"
                     android:text="@string/item_coupon_category_name"
                     android:textSize="@dimen/text_size_11sp"
-                    android:background="@drawable/bg_catelogy_style"/>
+                    android:background="@drawable/bg_catelogy_27"
+                    android:layout_alignBaseline="@+id/tvDurationCoupon"
+                    android:layout_alignBottom="@+id/tvDurationCoupon"
+                    android:layout_alignParentStart="true" />
                 <TextView
                     android:id="@+id/tvDurationCoupon"
                     android:layout_width="wrap_content"

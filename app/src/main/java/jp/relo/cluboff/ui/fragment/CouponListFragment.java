@@ -1,24 +1,32 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import framework.phvtFragment.BaseFragment;
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.adapter.CouponListAdapter;
 import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
-import jp.relo.cluboff.adapter.CouponListAdapter;
+import jp.relo.cluboff.model.Info;
+import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.views.MyMaterialSpinner;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -35,11 +43,19 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
     public static String WILL_NET_SERVER="1";
     public switchFragment iSwitchFragment;
+    private Handler mHandler;
+
+    public static final int MSG_LOAD_CATEGORY = 0;
+    public static final int MSG_LOAD_DATA = 1;
+    public static final int MSG_CREATE_ADAPTER = 2;
+    public static final int MSG_UPDATE_ADAPTER = 3;
+    public static final int MSG_SET_CATEGORY = 4;
+    ArrayList<CatagoryDTO> categoryList = new ArrayList<>();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myDatabaseHelper=new MyDatabaseHelper(getActivity());
     }
     public void setiSwitchFragment(switchFragment iSwitchFragment){
       this.iSwitchFragment = iSwitchFragment;
@@ -50,11 +66,22 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
         tvCategory = (TextView) view.findViewById(R.id.tvCategory);
         spinner = (MyMaterialSpinner) view.findViewById(R.id.spinnerCategory);
-        setCategory();
     }
 
-    private void setCategory() {
-        ArrayList<CatagoryDTO> categoryList=myDatabaseHelper.getCategory();
+    private void loadCategory() {
+        myDatabaseHelper.getCatagorysRX("").observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<CatagoryDTO>>() {
+                    @Override
+                    public void call(List<CatagoryDTO> catagoryDTOs) {
+                        categoryList.clear();
+                        categoryList.addAll(catagoryDTOs);
+                        mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                    }
+                });
+
+
+    }
+    public void setCategory(){
         categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
         categoryList.add(1,new CatagoryDTO(ConstansDB.COUPON_FAV,getString(R.string.catalogy_fav)));
         spinner.setItems(categoryList);
@@ -82,14 +109,38 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getListDataCategoryID("");
+        myDatabaseHelper=new MyDatabaseHelper(getActivity());
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case CouponListFragment.MSG_LOAD_CATEGORY:
+                        loadCategory();
+                        break;
+                    case CouponListFragment.MSG_LOAD_DATA:
+                        getListDataCategoryID(ConstansDB.COUPON_ALL);
+                        break;
+                    case CouponListFragment.MSG_CREATE_ADAPTER:
+                        setAdapter(true);
+                        break;
+                    case CouponListFragment.MSG_UPDATE_ADAPTER:
+                        setAdapter(false);
+                        break;
+                    case CouponListFragment.MSG_SET_CATEGORY:
+                        setCategory();
+                        break;
+                }
+            }
+        };
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
     }
 
 
     private void getListDataCategoryID(String categoryID) {
         listCoupon.clear();
         listCoupon = myDatabaseHelper.getCouponWithDateCategoryID(categoryID);
-        setAdapter(true);
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
     }
     private void setAdapter(boolean isReload){
         if(adapter==null){
@@ -129,8 +180,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         Bundle bundle = new Bundle();
         bundle.putString(Constant.KEY_LOGIN_URL, url);
         bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
-        bundle.putString(Constant.TAG_USER_ID, "f4od/GCIvlp402l4ZOkYzg==");
-        bundle.putString(Constant.TAG_REQUESTNO, "19136");
+        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
+        String userID = "";
+        String request = "";
+        if(info!=null){
+            userID = info.getUserid();
+            request = info.getBrandid();
+        }
+        bundle.putString(Constant.TAG_USER_ID, userID);
+        bundle.putString(Constant.TAG_REQUESTNO, request);
         bundle.putString(Constant.TAG_SENICODE, "1");
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
         iSwitchFragment.callSwitchFragment(bundle);
@@ -146,7 +204,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 break;
             }
         }
-        setAdapter(false);
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
     }
 
     interface switchFragment{
