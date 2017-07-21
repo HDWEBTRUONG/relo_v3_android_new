@@ -15,6 +15,7 @@ import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 
 /**
  * Created by tonkhanh on 7/21/17.
@@ -45,6 +46,9 @@ public class PushvisorHandlerActivity extends Activity {
                 Bundle mBundle = new Bundle();
                 mBundle.putString(Constant.TARGET_PUSH, screenTarget);
                 intent.putExtras(mBundle);
+                if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(screenTarget)){
+                    LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
+                }
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

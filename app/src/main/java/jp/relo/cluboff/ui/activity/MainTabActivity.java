@@ -110,8 +110,6 @@ public class MainTabActivity extends BaseActivityToolbar {
             }else if(Constant.TARGET_PUSH_SCREEN_SITE.equalsIgnoreCase(target)){
                 selectPage(INDEX_MEMBER);
             }else if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
-                LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
-                loadCountPush();
                 selectPage(INDEX_TOP);
                 openHistoryPush();
             }else{
