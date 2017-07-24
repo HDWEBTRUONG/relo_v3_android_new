@@ -18,6 +18,7 @@ public class Constant {
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
     public static final String WEBVIEW_URL_MEMBER_COUPON = BuildConfig.WEBVIEW_URL_MEMBER_COUPON;
     public static final String WEBVIEW_URL_TUTORIAL = BuildConfig.WEBVIEW_URL_TUTORIAL;
+    public static final String WEBVIEW_STRING_DETAIL_COUPON = BuildConfig.WEBVIEW_STRING_DETAIL_COUPON;
 
     public static final String KEY_ALIAS_APP = "reloalias";
     public static final String KEY_LOGIN_URL = "loginUrl";

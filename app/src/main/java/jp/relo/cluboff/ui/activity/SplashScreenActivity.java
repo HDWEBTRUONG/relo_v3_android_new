@@ -47,7 +47,6 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
 
-    //TODO make redirection after splash screen gone
     private void goNextScreen() {
         PushvisorHandlerActivity.checkOpenedThisScreen = true;
         startActivity(new Intent(this, LoginActivity.class));
@@ -77,7 +76,6 @@ public class SplashScreenActivity extends BaseActivity {
                         if(model!=null){
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
-                                //TODO Save value reponse
                                 try {
                                     brandid = Utils.convertInt(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type));
                                 } catch (Exception e) {

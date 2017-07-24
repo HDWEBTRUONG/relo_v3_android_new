@@ -29,6 +29,7 @@ android {
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
             buildConfigField "String", "WEBVIEW_URL_MEMBER_COUPON", '"https://www.google.com/search?q=go#q=onSslError+webview+android"'
             buildConfigField "String", "WEBVIEW_URL_TUTORIAL", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.htm"'
+            buildConfigField "String", "WEBVIEW_STRING_DETAIL_COUPON", '"coa_directlink.cfm"'
         }
 
         relo_prod {
@@ -41,6 +42,7 @@ android {
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://www.e-map.ne.jp/smt/rclzmap/loc.htm"'
             buildConfigField "String", "WEBVIEW_URL_MEMBER_COUPON", '"https://www.google.com/search?q=go#q=onSslError+webview+android"'
             buildConfigField "String", "WEBVIEW_URL_TUTORIAL", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.htm"'
+            buildConfigField "String", "WEBVIEW_STRING_DETAIL_COUPONWEBVIEW_STRING_DETAIL_COUPON", '"coa_directlink.cfm"'
         }
     }
 

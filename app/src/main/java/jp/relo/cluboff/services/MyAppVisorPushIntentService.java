@@ -53,9 +53,10 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
                 String yString = bundle.getString("y");
                 String zString = bundle.getString("z");
                 String wString = bundle.getString("w");
+                long timtString = bundle.getLong("google.sent_time");
                 HistoryPushDTO dataPush = new HistoryPushDTO();
                 dataPush.setTitlePush(title);
-                dataPush.setTimeHis(Utils.dateTimeValue());
+                dataPush.setTimeHis(timtString);
                 dataPush.setContentHis(message);
                 dataPush.setxHis(xString);
                 dataPush.setyHis(yString);
@@ -72,7 +73,6 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
                     if(StringUtil.isEmpty(url)){
                         int pushID = Utils.convertInt(pushIDStr);
                         cancelNotification(context,pushID);
-                        AppLog.log("Canceled pushvisor--------------");
                     }
                 }else{
                     AppLog.log("Out isBackgroundRunning");

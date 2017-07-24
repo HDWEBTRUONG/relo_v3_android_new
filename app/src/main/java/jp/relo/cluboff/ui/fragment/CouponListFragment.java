@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,12 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.Info;
+import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 import jp.relo.cluboff.views.MyMaterialSpinner;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -69,13 +73,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void loadCategory() {
-        myDatabaseHelper.getCatagorysRX("").observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCatagorysRX(ConstansDB.COUPON_ALL).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CatagoryDTO>>() {
                     @Override
                     public void call(List<CatagoryDTO> catagoryDTOs) {
                         categoryList.clear();
                         categoryList.addAll(catagoryDTOs);
                         mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
                     }
                 });
 
@@ -132,15 +137,21 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
-        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
     }
 
 
     private void getListDataCategoryID(String categoryID) {
         listCoupon.clear();
-        listCoupon = myDatabaseHelper.getCouponWithDateCategoryID(categoryID);
-        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
-        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<CouponDTO>>() {
+                    @Override
+                    public void call(List<CouponDTO> couponDTOs) {
+                        listCoupon.addAll(couponDTOs);
+                        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
+                    }
+                });
+
     }
     private void setAdapter(boolean isReload){
         if(adapter==null){
@@ -169,26 +180,30 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void callback(CouponDTO data) {
         String url="";
+        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
         if(data.getCoupon_type().equals(WILL_NET_SERVER)){
             url =data.getLink_path();
         }else{
-            //ToDo add url
-            //url = MessageFormat.format(getString(R.string.template_url_coupon),Constant.TEST_LINK_COUPON);//""+ data.getLink_path();
             url = "http://sptest.club-off.com/relo/coa_directlink.cfm";
-        }
+            if(info!=null){
+                try {
+                    url = MessageFormat.format(getString(R.string.template_url_coupon),BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+                    //url  = BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type)+Constant.WEBVIEW_STRING_DETAIL_COUPON;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+            }
+        }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.KEY_LOGIN_URL, url);
         bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
-        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
         String userID = "";
-        String request = "";
         if(info!=null){
             userID = info.getUserid();
-            request = info.getBrandid();
         }
         bundle.putString(Constant.TAG_USER_ID, userID);
-        bundle.putString(Constant.TAG_REQUESTNO, request);
+        bundle.putString(Constant.TAG_REQUESTNO, data.getShgrid());
         bundle.putString(Constant.TAG_SENICODE, "1");
         bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
         iSwitchFragment.callSwitchFragment(bundle);

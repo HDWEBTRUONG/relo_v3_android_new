@@ -345,7 +345,7 @@ public class Utils {
         return new Date().getTime();
     }
     public static String long2Time(long time){
-        java.util.Date dateObj = new java.util.Date(time);
+        Date dateObj = new Date(time);
         SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy/MM/dd");
         StringBuilder strTime = new StringBuilder( dateformatYYYYMMDD.format( dateObj ) );
         return strTime.toString();
@@ -362,5 +362,16 @@ public class Utils {
             }
         }
     }
-
+    public static long parserLong(String num){
+        if(StringUtil.isEmpty(num)){
+            return 0;
+        }else{
+            try{
+                return Long.parseLong(num);
+            }catch (Exception ex){
+                AppLog.log(ex.toString());
+                return 0;
+            }
+        }
+    }
 }
