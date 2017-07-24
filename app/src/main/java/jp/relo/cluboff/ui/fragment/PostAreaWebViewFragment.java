@@ -17,6 +17,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.AreaCouponPost;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
@@ -32,18 +33,17 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     WebView mWebView;
     private String url;
     private String strPost;
-
-    private final static int REQUEST_CHECK_SETTINGS = 0;
     public static final int MULTIPLE_PERMISSIONS = 10;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION};
-
+    boolean isLoadding = false;
+    boolean isVisibleToUser;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
-        setupWebView(mWebView);
+        setupWebView();
 
         if (!checkPermissions()) {
             requestPermission();
@@ -82,7 +82,8 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWebView.reload();
+                mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                //mWebView.reload();
             }
         });
 
@@ -111,30 +112,34 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
 
     }
 
-    private void setupWebView(final WebView webView) {
-        WebSettings webSettings = webView.getSettings();
+    private void setupWebView() {
+        WebSettings webSettings = mWebView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         //Disable cache Webview
         webSettings.setAppCacheEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
-        webView.setWebViewClient(new MyWebViewClient(getActivity()) {
+        mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoading(getActivity());
+                isLoadding = true;
+                if(isVisibleToUser){
+                    showLoading(getActivity());
+                }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                isLoadding = false;
                 if(isVisible()){
                     hideLoading();
-                    imvBackBottomBar.setEnabled(webView.canGoBack());
-                    imvForwardBottomBar.setEnabled(webView.canGoForward());
+                    imvBackBottomBar.setEnabled(mWebView.canGoBack());
+                    imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                 }
 
             }
@@ -142,7 +147,6 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                //TODO hide loading
                 if(isVisible()){
                     hideLoading();
                 }
@@ -150,7 +154,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
 
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
+        mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
@@ -161,6 +165,17 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        this.isVisibleToUser = isVisibleToUser;
+        if(isVisibleToUser){
+            if(isLoadding){
+                showLoading(getActivity());
+            }
+        }
     }
 
     private boolean checkPermissions() {

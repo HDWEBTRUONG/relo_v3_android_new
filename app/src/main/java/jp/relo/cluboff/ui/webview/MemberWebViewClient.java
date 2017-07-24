@@ -28,7 +28,6 @@ public class MemberWebViewClient extends WebViewClient {
 
     @Override
     public void onLoadResource(WebView view, String url) {
-        // TODO Auto-generated method stub
         super.onLoadResource(view, url);
     }
 

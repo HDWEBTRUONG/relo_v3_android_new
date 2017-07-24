@@ -57,7 +57,6 @@ public class TableCoupon {
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")";
                 }
-                AppLog.log(selectQuery);
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 

@@ -1,6 +1,8 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.View;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.database.MyDatabaseHelper;
@@ -15,17 +18,23 @@ import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by tonkhanh on 6/8/17.
  */
 
-public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
+public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar implements HistoryPushAdapter.iCallDismiss {
     RecyclerView rclHistoryPush;
     ArrayList<HistoryPushDTO> listData= new ArrayList<>();
     HistoryPushAdapter adapter;
     MyDatabaseHelper myDatabaseHelper;
-
+    Handler mHander;
+    public static final int HANDLER_LOAD_PUSH = 0;
+    public static final int HANDLER_SET_ADAPTER = 1;
+    public static final int HANDLER_CLOSE = 2;
+    HistoryPushAdapter.iCallDetailCoupon miCallDetailCoupon;
 
     @Override
     protected void init(View view) {
@@ -33,7 +42,9 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rclHistoryPush.setLayoutManager(mLayoutManager);
     }
-
+    public void setICallDetailCoupon(HistoryPushAdapter.iCallDetailCoupon miCallDetailCoupon){
+        this.miCallDetailCoupon = miCallDetailCoupon;
+    }
     @Override
     protected void setEvent(View view) {
 
@@ -42,18 +53,41 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loaddata();
+        mHander = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case HANDLER_LOAD_PUSH:
+                        loaddata();
+                        break;
+                    case HANDLER_SET_ADAPTER:
+                        setAdapter();
+                        break;
+                    case HANDLER_CLOSE:
+                        dismiss();
+                        break;
+                }
+            }
+        };
+        mHander.sendEmptyMessage(HANDLER_LOAD_PUSH);
     }
 
     private void loaddata() {
         myDatabaseHelper=new MyDatabaseHelper(getActivity());
-        listData = myDatabaseHelper.getPush();
-        setAdapter();
+        listData.clear();
+        myDatabaseHelper.getPushRX().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<HistoryPushDTO>>() {
+                    @Override
+                    public void call(List<HistoryPushDTO> historyPushDTOs) {
+                        listData.addAll(historyPushDTOs);
+                        mHander.sendEmptyMessage(HANDLER_SET_ADAPTER);
+                    }
+                });
     }
 
     private void setAdapter(){
         if(adapter==null){
-            adapter = new HistoryPushAdapter(getActivity(), listData);
+            adapter = new HistoryPushAdapter(getActivity(), listData, miCallDetailCoupon, this);
         }else{
             adapter.setNotifyDataSetChanged(listData);
         }
@@ -89,5 +123,10 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar {
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().post(new MessageEvent(HistoryPushDialogFragment.class.getSimpleName()));
+    }
+
+    @Override
+    public void callDismiss() {
+        mHander.sendEmptyMessage(HANDLER_CLOSE);
     }
 }

@@ -128,8 +128,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                             msg="";
                         }
                         AppLog.log(msg);
-
-                        //TODO login failure
                         txt_show_error.setText(msg);
                         txt_show_error.setVisibility(View.VISIBLE);
                         btnLogin.setEnabled(true);
@@ -172,7 +170,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
      *       <b>2 - You can not login</b>
      * </p>
      */
-    //TODO make redirection after splash screen gone
+
     private void goNextWebview(String key, String url, int keyCheckWebview) {
         Bundle bundle = new Bundle();
         bundle.putString(key,url);

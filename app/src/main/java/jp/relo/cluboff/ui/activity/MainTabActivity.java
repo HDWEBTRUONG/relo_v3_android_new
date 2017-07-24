@@ -21,6 +21,7 @@ import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
@@ -128,12 +129,19 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     public void loadCountPush(){
         countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();
+
         handler.sendEmptyMessage(UPDATE_COUNT);
     }
     public void openHistoryPush(){
         if(historyPushDialogFragment==null){
             historyPushDialogFragment = new HistoryPushDialogFragment();
         }
+        historyPushDialogFragment.setICallDetailCoupon(new HistoryPushAdapter.iCallDetailCoupon() {
+            @Override
+            public void callbackDetail(int tabIndex) {
+                selectPage(tabIndex);
+            }
+        });
         openDialogFragment(historyPushDialogFragment);
     }
 
@@ -274,7 +282,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
         //process for PushIntent owner
         setIntent(intent);
     }

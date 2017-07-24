@@ -32,7 +32,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
 
     WebView mWebView;
     private int checkWebview;
-
+    boolean isLoadding = false;
+    boolean isVisibleToUser;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mWebView!=null &&  mWebView.getUrl()!=null)
                 getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
             }
         });
@@ -77,7 +79,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWebView.reload();
+                mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                // mWebView.reload();
             }
         });
 
@@ -119,12 +122,16 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoading(getActivity());
+                isLoadding = true;
+                if(isVisibleToUser){
+                    showLoading(getActivity());
+                }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                isLoadding = false;
                 if(isVisible()){
                     hideLoading();
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
@@ -136,7 +143,6 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                //TODO hide loading
                 if(isVisible()){
                     hideLoading();
                 }
@@ -145,6 +151,17 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         });
         String url  = MessageFormat.format(getString(R.string.template_url_member),Constant.ACC_TEST_URL_LOGIN);
         mWebView.postUrl( url, new MemberPost().toString().getBytes());
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        this.isVisibleToUser = isVisibleToUser;
+        if(isVisibleToUser){
+            if(isLoadding){
+                showLoading(getActivity());
+            }
+        }
     }
 
     @Override

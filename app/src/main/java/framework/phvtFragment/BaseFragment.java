@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import framework.phvtActivity.BaseActivity;
@@ -26,6 +28,7 @@ import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
+import retrofit2.http.Field;
 
 /**
  * Base Fragment for all Fragment in the application
