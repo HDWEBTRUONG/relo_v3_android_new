@@ -16,13 +16,19 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.text.MessageFormat;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
+import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
+import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -80,7 +86,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-                // mWebView.reload();
+                 //mWebView.reload();
+
             }
         });
 
@@ -149,8 +156,24 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             }
 
         });
-        String url  = MessageFormat.format(getString(R.string.template_url_member),Constant.ACC_TEST_URL_LOGIN);
-        mWebView.postUrl( url, new MemberPost().toString().getBytes());
+        loadUrl();
+    }
+
+    private void loadUrl(){
+        String url="";
+        MemberPost memberPost = new MemberPost();
+        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
+        if(info!=null){
+            try {
+                url = MessageFormat.format(getString(R.string.template_url_member), BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            memberPost.setU(info.getUserid());
+            memberPost.setCOA_APP("1");
+        }
+        mWebView.postUrl( url, memberPost.toString().getBytes());
     }
 
     @Override

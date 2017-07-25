@@ -188,7 +188,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             if(info!=null){
                 try {
                     url = MessageFormat.format(getString(R.string.template_url_coupon),BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
-                    //url  = BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type)+Constant.WEBVIEW_STRING_DETAIL_COUPON;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

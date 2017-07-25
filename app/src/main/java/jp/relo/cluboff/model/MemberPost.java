@@ -14,8 +14,7 @@ public class MemberPost {
     private String COA_APP;
 
     public MemberPost() {
-        this.u = Constant.ACC_TEST_ID_LOGIN_ENCRY;
-        this.COA_APP = "1";
+
     }
 
     public String getU() {

@@ -17,6 +17,7 @@ import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
+import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
 
@@ -63,11 +64,11 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
                 String target = data.getwHis();
                 if(miCallDetailCoupon !=null&&!Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
                     if(Constant.TARGET_PUSH_SCREEN_AREA.equalsIgnoreCase(target)){
-                        miCallDetailCoupon.callbackDetail(0);
+                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_AREA);
                     }else if(Constant.TARGET_PUSH_SCREEN_SITE.equalsIgnoreCase(target)){
-                        miCallDetailCoupon.callbackDetail(2);
+                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_MEMBER);
                     }else{
-                        miCallDetailCoupon.callbackDetail(1);
+                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_TOP);
                     }
                     if(miCallDismiss!=null){
                         miCallDismiss.callDismiss();
