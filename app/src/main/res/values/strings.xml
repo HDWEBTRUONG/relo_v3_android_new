@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Relo Club</string>
-    <string name="title_home">Home</string>
     <string name="xlistview_footer_hint_ready" />
     <string name="xlistview_footer_hint_normal" />
     <string name="xlistview_header_hint_normal" />
@@ -10,14 +9,12 @@
     <string name="title_coupon_area">エリアクーポン</string>
     <string name="title_membership">会員サイト</string>
     <string name="title_coupon_list">人気クーポン</string>
-    <string name="no_internet">Check network Please</string>
 
     <!-- Login Fragment-->
     <string name="txt_bt_login">ログインボタン</string>
     <string name="txt_login_username">ログインID</string>
     <string name="txt_login_app_id">アプリID</string>
     <string name="txt_login_mail">メールアドレス</string>
-    <string name="txt_link_forget_id_password">会員ID・パスワードを忘れた方はこちら</string>
     <string name="txt_link_can_not_login">入力項目がご不明の場合はこちら</string>
     <string name="txt_note_login">※本アプリを利用するには、事前にクラブオフサイトでの情報登録が必要です。</string>
     <string name="txt_title_login">ログイン</string>
@@ -48,24 +45,16 @@
     <string name="title_history_push">お知らせ</string>
     <string name="catalogy">カテゴル絞り込み</string>
     <string name="catalogy_fav">お気に入り</string>
-    <string name="title_app">Club Off Alliance</string>
     <string name="his_link">詳細はこちら</string>
-    <string name="forget_title">Title forget login</string>
     <string name="cannot_login_title">ログインできません。</string>
     <string name="appvisor_push_app_id">sALZBaJwjb</string>
-    <string name="template_url_member">https://{0}/index.cfm</string>
+    <string name="template_url_member">https://{0}index.cfm</string>
     <string name="template_url_coupon">https://{0}coa_directlink.cfm</string>
 
-    <!--******************Test string**********************-->
-    <string name="Test_300590">300590</string>
-    <string name="Test_kubo_relo_jp">kubo@relo.jp</string>
-    <string name="Test_00008440">00008440</string>
-
     <!--******************Temp string**********************-->
-    <string name="premission_accepted">Permission is Accepted</string>
-    <string name="premissionaccepted_no_accepted">Please accept permission access to get location</string>
-    <string name="premission_error">Please accept permission access</string>
-    <string name="test_push_handel">Push Handel</string>
+    <string name="premission_accepted">承認しました。</string>
+    <string name="premissionaccepted_no_accepted">ロケーションを取得するため、アクセスを承認してください。</string>
+    <string name="premission_error">アクセス許可を承認してください。</string>
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
 

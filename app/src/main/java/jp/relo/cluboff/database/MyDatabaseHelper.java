@@ -30,8 +30,6 @@ import rx.schedulers.Schedulers;
  */
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-    SQLiteDatabase sqLiteDatabase;
-
     public MyDatabaseHelper(Context context)  {
         super(context, ConstansDB.DATABASE_NAME, null, ConstansDB.DATABASE_VERSION);
     }

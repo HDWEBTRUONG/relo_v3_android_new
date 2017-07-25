@@ -195,7 +195,6 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                     boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (location) {
                         Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
-                        loadUrl();
                     }else{
                         Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
                     }
@@ -204,6 +203,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                 }
                 break;
             default:
+                loadUrl();
                 break;
         }
     }

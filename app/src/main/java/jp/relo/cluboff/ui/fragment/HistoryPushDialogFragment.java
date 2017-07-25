@@ -26,15 +26,17 @@ import rx.functions.Action1;
  */
 
 public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar implements HistoryPushAdapter.iCallDismiss {
+
     RecyclerView rclHistoryPush;
     ArrayList<HistoryPushDTO> listData= new ArrayList<>();
     HistoryPushAdapter adapter;
     MyDatabaseHelper myDatabaseHelper;
     Handler mHander;
+    HistoryPushAdapter.iCallDetailCoupon miCallDetailCoupon;
+
     public static final int HANDLER_LOAD_PUSH = 0;
     public static final int HANDLER_SET_ADAPTER = 1;
     public static final int HANDLER_CLOSE = 2;
-    HistoryPushAdapter.iCallDetailCoupon miCallDetailCoupon;
 
     @Override
     protected void init(View view) {
@@ -42,9 +44,11 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar impleme
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rclHistoryPush.setLayoutManager(mLayoutManager);
     }
+
     public void setICallDetailCoupon(HistoryPushAdapter.iCallDetailCoupon miCallDetailCoupon){
         this.miCallDetailCoupon = miCallDetailCoupon;
     }
+
     @Override
     protected void setEvent(View view) {
 

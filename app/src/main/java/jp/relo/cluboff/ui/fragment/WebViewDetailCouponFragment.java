@@ -33,7 +33,6 @@ import jp.relo.cluboff.util.IControlBottom;
 public class WebViewDetailCouponFragment extends BaseFragment {
 
     WebView mWebView;
-    private int checkWebview;
     private String urlType = "";
     private String userid = "";
     private String requestno = "";
@@ -47,7 +46,6 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         url = bundle.getString(Constant.KEY_LOGIN_URL);
-        checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
         urlType = bundle.getString(Constant.KEY_URL_TYPE);
         if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
             userid = bundle.getString(Constant.TAG_USER_ID);

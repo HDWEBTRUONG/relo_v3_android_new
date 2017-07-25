@@ -19,15 +19,13 @@ import org.greenrobot.eventbus.Subscribe;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
-import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
-import jp.relo.cluboff.database.MyDatabaseHelper;
+import jp.relo.cluboff.adapter.MenuListAdapter;
+import jp.relo.cluboff.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
-import jp.relo.cluboff.adapter.MenuListAdapter;
-import jp.relo.cluboff.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
@@ -129,7 +127,6 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     public void loadCountPush(){
         countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();
-
         handler.sendEmptyMessage(UPDATE_COUNT);
     }
     public void openHistoryPush(){
