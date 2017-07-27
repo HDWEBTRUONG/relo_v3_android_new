@@ -35,11 +35,13 @@ public class MemberPost {
 
     @Override
     public String toString() {
-        try {
-            return "u=" + URLEncoder.encode(u, "UTF-8") +
-                    "&COA_APP=" + URLEncoder.encode(COA_APP, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if(u!=null && COA_APP!=null){
+            try {
+                return "u=" + URLEncoder.encode(u, "UTF-8") +
+                        "&COA_APP=" + URLEncoder.encode(COA_APP, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }

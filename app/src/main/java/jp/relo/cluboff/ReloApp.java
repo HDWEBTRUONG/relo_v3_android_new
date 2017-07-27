@@ -20,7 +20,6 @@ import jp.relo.cluboff.util.LoginSharedPreference;
  */
 
 public class ReloApp extends Application {
-    private int version;
     private Tracker mTracker;
 
 
@@ -28,13 +27,7 @@ public class ReloApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        version = LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
 
-    }
-
-
-    public int getVersion(){
-        return version;
     }
 
     /**

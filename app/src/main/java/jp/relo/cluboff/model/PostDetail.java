@@ -8,22 +8,22 @@ import java.net.URLEncoder;
  */
 
 public class PostDetail {
-    String userid;
+    String kaiinno;
     String requestno;
     String senicode;
 
     public PostDetail() {
-        this.userid = "";
+        this.kaiinno = "";
         this.requestno = "";
         this.senicode = "";
     }
 
     public String getUserid() {
-        return userid;
+        return kaiinno;
     }
 
     public void setUserid(String userid) {
-        this.userid = userid;
+        this.kaiinno = userid;
     }
 
     public String getRequestno() {
@@ -44,7 +44,7 @@ public class PostDetail {
     @Override
     public String toString() {
         try {
-            return "userid=" + URLEncoder.encode(userid, "UTF-8") +
+            return "kaiinno=" + URLEncoder.encode(kaiinno, "UTF-8") +
                     "&requestno=" + URLEncoder.encode(requestno, "UTF-8")+
                     "&senicode=" + URLEncoder.encode(senicode, "UTF-8");
         } catch (UnsupportedEncodingException e) {

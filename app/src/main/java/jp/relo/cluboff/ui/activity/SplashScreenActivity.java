@@ -16,6 +16,7 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
+import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -70,7 +71,17 @@ public class SplashScreenActivity extends BaseActivity {
             if(StringUtil.isEmpty(kaiinno)||StringUtil.isEmpty(emailad)||StringUtil.isEmpty(brandid)||!isNetworkAvailable){
                 goNextScreen();
             }else{
-                addSubscription(apiInterfaceJP.logon(kaiinno,emailad,brandid), new MyCallBack<LoginReponse>() {
+                String usernameEN = "";
+                String userMailEN = "";
+                String passwordEN = "";
+                try {
+                    usernameEN = new String(BackAES.encrypt(kaiinno,AESHelper.password, AESHelper.type));
+                    userMailEN = new String(BackAES.encrypt(emailad,AESHelper.password, AESHelper.type));
+                    passwordEN = new String(BackAES.encrypt(brandid,AESHelper.password, AESHelper.type));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                addSubscription(apiInterfaceJP.logon(usernameEN,userMailEN,passwordEN), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
                         if(model!=null){
@@ -81,7 +92,7 @@ public class SplashScreenActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                goMainScreen();
+                                updateData();
                                 setGoogleAnalytic(brandid);
 
                             }else{
@@ -122,5 +133,29 @@ public class SplashScreenActivity extends BaseActivity {
     public void setGoogleAnalytic(int brandid){
         ReloApp reloApp = (ReloApp) getApplication();
         reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY,Constant.GA_ACTION,Constant.GA_DIMENSION_VALUE,brandid);
+    }
+
+    private void updateData(){
+        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
+            @Override
+            public void onSuccess(VersionReponse model) {
+                if(Utils.convertIntVersion(model.getVersion())>LoginSharedPreference.getInstance(getApplicationContext()).getVersion()){
+                    goNextScreen();
+                }else{
+                    goMainScreen();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                AppLog.log(msg);
+                goMainScreen();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 }

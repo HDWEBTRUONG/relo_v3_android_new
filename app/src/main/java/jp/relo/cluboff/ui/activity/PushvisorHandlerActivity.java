@@ -65,7 +65,7 @@ public class PushvisorHandlerActivity extends Activity {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
-        this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
+        this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
         this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher,

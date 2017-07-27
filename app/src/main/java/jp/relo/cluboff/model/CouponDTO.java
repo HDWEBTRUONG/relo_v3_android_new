@@ -61,7 +61,6 @@ public class CouponDTO{
     @SerializedName("add_bland")
     private String add_bland;
 
-    private int ID;
     private int liked;
 
     public String getShgrid() {
@@ -112,16 +111,8 @@ public class CouponDTO{
         return add_bland;
     }
 
-    public int getID() {
-        return ID;
-    }
-
     public int getLiked() {
         return liked;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public void setLiked(int liked) {

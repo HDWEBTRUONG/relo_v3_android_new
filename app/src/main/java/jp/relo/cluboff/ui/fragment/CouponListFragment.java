@@ -23,6 +23,7 @@ import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
+import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -187,7 +188,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             url = "http://sptest.club-off.com/relo/coa_directlink.cfm";
             if(info!=null){
                 try {
-                    url = MessageFormat.format(getString(R.string.template_url_coupon),BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+                    url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -198,8 +199,9 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         bundle.putString(Constant.KEY_LOGIN_URL, url);
         bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
         String userID = "";
-        if(info!=null){
-            userID = info.getUserid();
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
+        if(loginRequest!=null){
+            userID = loginRequest.getKaiinno();
         }
         bundle.putString(Constant.TAG_USER_ID, userID);
         bundle.putString(Constant.TAG_REQUESTNO, data.getShgrid());
@@ -209,11 +211,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void like(int id, int isLiked) {
+    public void like(String id, int isLiked) {
         int newLikeValue = isLiked == 0?1:0;
         myDatabaseHelper.likeCoupon(id,newLikeValue);
         for(int i =0; i < listCoupon.size();i++){
-            if(listCoupon.get(i).getID() == id){
+            if(listCoupon.get(i).getShgrid().equals(id)){
                 listCoupon.get(i).setLiked(newLikeValue);
                 break;
             }

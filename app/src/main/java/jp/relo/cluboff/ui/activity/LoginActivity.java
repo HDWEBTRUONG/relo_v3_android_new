@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +22,13 @@ import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CouponDTO;
+import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.VersionReponse;
@@ -44,11 +48,16 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
     ImageView img_logo;
     TextView link_webview_not_login;
-    TextView txt_show_error;
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
     ArrayList<CouponDTO> listResult = new ArrayList<>();
+    Handler mhandler;
+    public static final int MSG_ERROR_EMPTY = 0;
+    public static final int MSG_ERROR_FAILURE = 1;
+    public static final int MSG_ERROR_ELSE = 2;
+    public static final int MSG_NOT_NETWORK = 3;
+    public static final int MSG_ENABLE_LOGIN = 4;
 
 
     @Override
@@ -56,13 +65,38 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         super.onCreate(savedInstanceState);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
         ((ReloApp)getApplication()).trackingAnalytics(Constant.TEST_GA_LOGIN_ANALYTICS);
+        mhandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case MSG_ERROR_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
+                        btnLogin.setEnabled(true);
+                        break;
+                    case MSG_ERROR_FAILURE:
+                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
+                        btnLogin.setEnabled(true);
+                        break;
+                    case MSG_ERROR_ELSE:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password);
+                        btnLogin.setEnabled(true);
+                        break;
+                    case MSG_NOT_NETWORK:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
+                        btnLogin.setEnabled(true);
+                        break;
+                    case MSG_ENABLE_LOGIN:
+                        btnLogin.setEnabled(true);
+                        break;
+                }
+            }
+        };
         init();
     }
 
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
-        txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         edtMail = (EditText) findViewById(R.id.edtMail);
@@ -70,6 +104,24 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
+
+
+        //TODO TEST
+        if(BuildConfig.DEBUG)
+        img_logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Info info = new Info();
+                info.setUserid("f4od/GCIvlp402l4ZOkYzg==");
+                info.setBrandid("eQJbP+flwdhcyx2IANy8Cw==");
+                info.setUrl("YYQRiZbhLbVEFIedQfJ/y7Im+nF4UM556ev5E7b0KpU=");
+                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,info);
+                //save value input
+                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
+                        new LoginRequest("00008440","kubo@relo.jp","300590"));
+                updateData();
+            }
+        });
     }
 
     @Override
@@ -85,16 +137,25 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void registerEventHandlers() {
 
     }
-    public void clickLogin(View view){
+    public void clickLogin(){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
-            final String username=edtLoginUsername.getText().toString();
+            final String username=edtLoginUsername.getText().toString().trim();
             final String userMail = edtMail.getText().toString().trim();
-            final String password = edtPassword.getText().toString();
-
+            final String password = edtPassword.getText().toString().trim();
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
+                String usernameEN = "";
+                String userMailEN = "";
+                String passwordEN = "";
+                try {
+                    usernameEN = new String(BackAES.encrypt(username,AESHelper.password, AESHelper.type));
+                    userMailEN = new String(BackAES.encrypt(userMail,AESHelper.password, AESHelper.type));
+                    passwordEN = new String(BackAES.encrypt(password,AESHelper.password, AESHelper.type));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 showLoading(this);
-                addSubscription(apiInterfaceJP.logon(username,userMail,password), new MyCallBack<LoginReponse>() {
+                addSubscription(apiInterfaceJP.logon(usernameEN,userMailEN,passwordEN), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
                         if(model!=null){
@@ -115,9 +176,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                                 //save user and password encrypt KeyStore
 
                             }else{
-                                txt_show_error.setText(getResources().getString(R.string.error_blank_id_password));
-                                txt_show_error.setVisibility(View.VISIBLE);
-                                btnLogin.setEnabled(true);
+                                mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
                             }
                         }
                     }
@@ -128,9 +187,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                             msg="";
                         }
                         AppLog.log(msg);
-                        txt_show_error.setText(msg);
-                        txt_show_error.setVisibility(View.VISIBLE);
-                        btnLogin.setEnabled(true);
+                        mhandler.sendEmptyMessage(MSG_ERROR_FAILURE);
 
                     }
 
@@ -141,14 +198,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 });
 
             }else{
-                txt_show_error.setText(getResources().getString(R.string.error_login_wrong_id_password));
-                txt_show_error.setVisibility(View.VISIBLE);
-                btnLogin.setEnabled(true);
+                mhandler.sendEmptyMessage(MSG_ERROR_EMPTY);
             }
 
         }else{
-            btnLogin.setEnabled(true);
-            Utils.showDialog(this,R.string.popup_title_login,R.string.error_connect_network);
+            mhandler.sendEmptyMessage(MSG_NOT_NETWORK);
         }
     }
 
@@ -204,6 +258,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     protected void onStop() {
         super.onStop();
+        mhandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -211,11 +266,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         switch (v.getId()){
             case R.id.bt_login:
                 btnLogin.setEnabled(false);
-                clickLogin(v);
+                clickLogin();
                 break;
-            /*case R.id.link_webview_forget_id:
-                clickForget();
-                break;*/
             case R.id.link_webview_not_login:
                 clickLinkNotLogin();
                 break;
@@ -226,7 +278,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
             @Override
             public void onSuccess(VersionReponse model) {
-                if(Utils.convertIntVersion(model.getVersion())>((ReloApp)getApplication()).getVersion()){
+                if(Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getApplicationContext()).getVersion()){
                     new UpdateTask().execute(model.getVersion());
                 }else{
                     gotoMain();
@@ -241,7 +293,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
             @Override
             public void onFinish() {
-                btnLogin.setEnabled(true);
+                mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
             }
         });
     }
@@ -355,6 +407,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             }
             saveData(listResult);
             // save version number get from api
+            if(arg0[0]!=null)
             LoginSharedPreference.getInstance(LoginActivity.this).setVersion(Utils.convertIntVersion(arg0[0]));
             return null;
         }

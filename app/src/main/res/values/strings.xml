@@ -21,19 +21,13 @@
     <string name="error_login_wrong_id_password">ログインですることができませんでした。\n入力内容が間違っているか、大会後の可能性がございます。会員IDもしくはパスワードを再度</string>
     <string name="error_connect_network">通信に失敗しました</string>
     <string name="error_blank_id_password">「RELO CLUB 会員ID」と「パスワード」 を入力してください</string>
-    <string name="popup_title_login">エラー</string>
     <string name="popup_yes">Yes</string>
     <string name="popup_no">No</string>
+    <string name="popup_ok">OK</string>
+    <string name="popup_error_api">エラーが起きていましたので、もう一度やり直してください。</string>
 
     <!-- List Coupon -->
     <string name="txt_title_category_list_coupon">カテゴリを選ぶ</string>
-
-    <!-- Item category of list Coupon -->
-    <string name="item_category_list_coupon_1">すべて</string>
-    <string name="item_category_list_coupon_2">グルメ</string>
-    <string name="item_category_list_coupon_3">カラオケ</string>
-    <string name="item_category_list_coupon_4">スーツ・メガネ</string>
-    <string name="item_category_list_coupon_5">その他</string>
     <string name="item_coupon_category_name">グルメ</string>
     <string name="item_coupon_company_name">クーポンボタン</string>
 
@@ -47,14 +41,13 @@
     <string name="catalogy_fav">お気に入り</string>
     <string name="his_link">詳細はこちら</string>
     <string name="cannot_login_title">ログインできません。</string>
-    <string name="appvisor_push_app_id">sALZBaJwjb</string>
-    <string name="template_url_member">https://{0}index.cfm</string>
-    <string name="template_url_coupon">https://{0}coa_directlink.cfm</string>
 
-    <!--******************Temp string**********************-->
+    <!--******************Premission locale string**********************-->
     <string name="premission_accepted">承認しました。</string>
     <string name="premissionaccepted_no_accepted">ロケーションを取得するため、アクセスを承認してください。</string>
     <string name="premission_error">アクセス許可を承認してください。</string>
+
+    <!--******************Menu string**********************-->
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
 
