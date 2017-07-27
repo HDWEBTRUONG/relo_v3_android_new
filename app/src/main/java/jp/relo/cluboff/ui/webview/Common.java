@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
+
+import framework.phvtUtils.AppLog;
 
 /**
  * Created by tonkhanh on 6/22/17.
@@ -17,32 +20,37 @@ public class Common {
         if (activity == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("ssl証明書が正しくないページですが開いてもいいですか");
-        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.proceed();
-            }
-        });
-        builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.cancel();
-            }
-        });
-        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    handler.cancel();
-                    dialog.dismiss();
-                    return true;
+        try{
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("ssl証明書が正しくないページですが開いてもいいですか");
+            builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.proceed();
                 }
-                return false;
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            });
+            builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    handler.cancel();
+                }
+            });
+            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        handler.cancel();
+                        dialog.dismiss();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }catch (WindowManager.BadTokenException ex){
+            AppLog.log(ex.toString());
+        }
+
     }
 }

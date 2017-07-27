@@ -248,7 +248,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         adapter.addFragment(new CouponListContainerFragment(), getString(R.string.title_coupon_list));
 
         PostMemberWebViewFragment membershipFragment = new PostMemberWebViewFragment();
-        membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_MEMBER_COUPON, Constant.MEMBER_COUPON));
+        membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON));
         adapter.addFragment(membershipFragment, getString(R.string.title_membership));
 
         viewPager.setAdapter(adapter);
@@ -264,7 +264,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
-        this.appVisorPush.setAppInfor(getApplicationContext(), getString(R.string.appvisor_push_app_id));
+        this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
         this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));

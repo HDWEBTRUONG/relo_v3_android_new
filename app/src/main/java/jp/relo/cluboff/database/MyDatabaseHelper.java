@@ -15,6 +15,7 @@ import java.util.concurrent.Callable;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.database.tables.TableCategory;
 import jp.relo.cluboff.database.tables.TableCoupon;
+import jp.relo.cluboff.database.tables.TableFav;
 import jp.relo.cluboff.database.tables.TablePush;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
@@ -40,8 +41,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Script to create table.
         String scriptCoupon = "CREATE TABLE " + TableCoupon.TABLE_COUPON + "("
-                + TableCoupon.COLUMN_COUPON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + TableCoupon.COLUMN_SHGRID + " TEXT,"
+                + TableCoupon.COLUMN_SHGRID + " TEXT PRIMARY KEY,"
                 + TableCoupon.COLUMN_CATEGORY_ID + " TEXT,"
                 + TableCoupon.COLUMN_CATEGORY + " TEXT,"
                 + TableCoupon.COLUMN_COUPON + " TEXT,"
@@ -52,8 +52,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TableCoupon.COLUMN_EXPIRATION_TO + " TEXT,"
                 + TableCoupon.COLUMN_PRIORITY + " TEXT,"
                 + TableCoupon.COLUMN_MEMO + " TEXT,"
-                + TableCoupon.COLUMN_ADD_BLAND + " TEXT,"
-                + TableCoupon.COLUMN_LIKE + " INTEGER"+ ")";
+                + TableCoupon.COLUMN_ADD_BLAND + " TEXT)";
         // Execute script.
         db.execSQL(scriptCoupon);
 
@@ -71,6 +70,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + ")";
         // Execute script.
         db.execSQL(scriptPush);
+
+        String scriptFav = "CREATE TABLE " + TableFav.TABLE_FAV + "("
+                + TableFav.COLUMN_SHGRID + " TEXT PRIMARY KEY,"
+                + TableFav.COLUMN_LIKE + " INTEGER"
+                + ")";
+        // Execute script.
+        db.execSQL(scriptFav);
     }
 
     @Override
@@ -78,6 +84,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // Drop table
         db.execSQL("DROP TABLE IF EXISTS " + TableCoupon.TABLE_COUPON);
         db.execSQL("DROP TABLE IF EXISTS " + TablePush.TABLE_PUSH);
+        db.execSQL("DROP TABLE IF EXISTS " + TableFav.TABLE_FAV);
         // Recreate
         onCreate(db);
     }
@@ -96,7 +103,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TableCoupon.COLUMN_PRIORITY, data.getPriority());
         values.put(TableCoupon.COLUMN_MEMO, data.getMemo());
         values.put(TableCoupon.COLUMN_ADD_BLAND, data.getAdd_bland());
-        values.put(TableCoupon.COLUMN_LIKE, 0);
 
         db.insert(TableCoupon.TABLE_COUPON, null, values);
         db.close();
@@ -113,11 +119,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TableCoupon.TABLE_COUPON, null, null);
     }
-    public void likeCoupon(int id, int value){
+    public void likeCoupon(String id, int value){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newValues = new ContentValues();
-        newValues.put(TableCoupon.COLUMN_LIKE, value);
-        db.update(TableCoupon.TABLE_COUPON, newValues, TableCoupon.COLUMN_COUPON_ID+"="+id, null);
+        newValues.put(TableFav.COLUMN_SHGRID, id);
+        newValues.put(TableFav.COLUMN_LIKE, value);
+        db.insertWithOnConflict(TableFav.TABLE_FAV, null, newValues, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
 

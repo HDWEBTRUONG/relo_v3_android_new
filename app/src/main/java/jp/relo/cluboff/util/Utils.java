@@ -2,33 +2,23 @@ package jp.relo.cluboff.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.gson.annotations.Expose;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,8 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -57,7 +45,7 @@ import javax.security.auth.x500.X500Principal;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ui.activity.MainTabActivity;
+import jp.relo.cluboff.views.SweetAlertDialog;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -190,7 +178,7 @@ public class Utils {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(context.getResources().getString(title));
         alertDialog.setMessage(context.getResources().getString(messagee));
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, context.getResources().getString(R.string.popup_ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -198,23 +186,32 @@ public class Utils {
                 });
         alertDialog.show();
     }
-    public static Spanned createTextImage(final Context context, String txt, int img){
-        String imgString = String.format("<img src=\"%s\"/><font size='6'>" + txt + "</font>", img);
-        return Html.fromHtml(imgString, new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(final String source) {
-                Drawable d = null;
-                try {
-                    d = ContextCompat.getDrawable(context,Integer.parseInt(source));
-                    d.setBounds(0, 0, (int)(d.getIntrinsicWidth()/1.7f), (int)(d.getIntrinsicHeight()/1.7f));
-                } catch (Resources.NotFoundException e) {
-                } catch (NumberFormatException e) {
-                }
-
-                return d;
-            }
-        }, null);
+    public static void showDialog(Context context, int messagee){
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setMessage(context.getResources().getString(messagee));
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, context.getResources().getString(R.string.popup_ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
+
+    public static void showDialogLIB(Context context, int messagee){
+        new SweetAlertDialog(context)
+                .setTitleText("")
+                .setContentText(context.getResources().getString(messagee))
+                .setConfirmText(context.getResources().getString(R.string.popup_ok))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }
+
     public static String convertDate(String dateString){
         if(dateString==null){
             return "";

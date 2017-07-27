@@ -17,7 +17,7 @@ import rx.Observable;
  */
 
 public interface ApiInterface {
-    @GET("relo_ver.json")
+    @GET("coa/xml_version.json")
     Observable<VersionReponse> checkVersion();
 
 
@@ -25,7 +25,7 @@ public interface ApiInterface {
     Observable<LoginReponse> logon(@Body LoginRequest login);
 
     @FormUrlEncoded
-    @POST("coa/coa_login_test.cfm")
+    @POST("coa/coa_login.cfm")
     Observable<LoginReponse> logon(@Field("kaiinno") String kaiinno,@Field("emailad") String emailad,@Field("brandid") String brandid);
 
 }

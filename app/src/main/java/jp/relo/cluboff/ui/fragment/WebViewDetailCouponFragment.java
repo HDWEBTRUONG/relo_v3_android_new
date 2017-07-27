@@ -19,12 +19,17 @@ import org.greenrobot.eventbus.Subscribe;
 import framework.phvtFragment.BaseFragment;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.PostDetail;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
+import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
+import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -139,7 +144,16 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             mWebView.loadUrl(url);
         }else{
             PostDetail postDetail = new PostDetail();
-            postDetail.setUserid(userid);
+            String userID = "";
+            LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
+            if(loginRequest!=null){
+                try {
+                    userID = new String(BackAES.encrypt(userid, AESHelper.password, AESHelper.type));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            postDetail.setUserid(userID);
             postDetail.setRequestno(requestno);
             postDetail.setSenicode(senicode);
             mWebView.postUrl( url, postDetail.toString().getBytes());

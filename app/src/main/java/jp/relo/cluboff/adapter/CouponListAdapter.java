@@ -138,7 +138,7 @@ public class CouponListAdapter extends BaseAdapter{
         holder.lnBtnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miClickButton.like(item.getID(),item.getLiked());
+                miClickButton.like(item.getShgrid(),item.getLiked());
             }
         });
 
@@ -167,6 +167,6 @@ public class CouponListAdapter extends BaseAdapter{
     }
     public interface iClickButton{
         void callback(CouponDTO data);
-        void like(int id, int isLiked);
+        void like(String id, int isLiked);
     }
 }

@@ -20,6 +20,7 @@ import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.Info;
+import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -163,15 +164,25 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         String url="";
         MemberPost memberPost = new MemberPost();
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
         if(info!=null){
             try {
-                url = MessageFormat.format(getString(R.string.template_url_member), BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+                url = MessageFormat.format(Constant.TEMPLATE_URL_MEMBER, BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            memberPost.setU(info.getUserid());
-            memberPost.setCOA_APP("1");
+            String  usernameEn = info.getUserid();
+            String  COA_APPEn = "1";
+            try {
+                if(loginRequest!=null){
+                    usernameEn = new String(BackAES.encrypt(loginRequest.getKaiinno(), AESHelper.password, AESHelper.type));
+                }
+                COA_APPEn = new String(BackAES.encrypt("1", AESHelper.password, AESHelper.type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            memberPost.setU(usernameEn);
+            memberPost.setCOA_APP(COA_APPEn);
         }
         mWebView.postUrl( url, memberPost.toString().getBytes());
     }

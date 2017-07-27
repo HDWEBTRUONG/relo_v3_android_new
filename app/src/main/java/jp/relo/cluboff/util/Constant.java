@@ -13,18 +13,21 @@ public class Constant {
     public static final String BASE_URL_UPDATE = BuildConfig.BASE_URL_UPDATE;
 
     // Some URL of webview
-    public static final String WEBVIEW_URL_FORGET_LOGIN = BuildConfig.WEBVIEW_URL_FORGET_LOGIN;
     public static final String WEBVIEW_URL_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_URL_CAN_NOT_LOGIN;
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
-    public static final String WEBVIEW_URL_MEMBER_COUPON = BuildConfig.WEBVIEW_URL_MEMBER_COUPON;
     public static final String WEBVIEW_URL_TUTORIAL = BuildConfig.WEBVIEW_URL_TUTORIAL;
-    public static final String WEBVIEW_STRING_DETAIL_COUPON = BuildConfig.WEBVIEW_STRING_DETAIL_COUPON;
+
+    //Template url
+    public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
+    public static final String TEMPLATE_URL_COUPON = BuildConfig.TEMPLATE_URL_COUPON;
+
+    //Appvisor id
+    public static final String APPVISOR_ID = BuildConfig.APPVISOR_ID;
 
     public static final String KEY_ALIAS_APP = "reloalias";
     public static final String KEY_LOGIN_URL = "loginUrl";
     public static final String KEY_URL_TYPE= "urlType";
     public static final String KEY_CHECK_WEBVIEW = "checkWebview";
-    public static final String KEY_POST_WEBVIEW = "postDataWebview";
 
 
     // Const for Weview throught login page
