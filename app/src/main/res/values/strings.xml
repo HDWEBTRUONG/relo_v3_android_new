@@ -51,4 +51,15 @@
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
 
+    <!--error code reponse-->
+    <string name="err_0001">会員登録がありません。</string>
+    <string name="err_0002">入力内容に誤りがあります。</string>
+    <string name="err_0005">お客様は現在ご利用いただけません。</string>
+    <string name="err_0006">お客様は現在ご利用いただけません。</string>
+    <string name="err_0007">お客様は現在ご利用いただけません。</string>
+    <string name="err_0010">お客様は現在ご利用いただけません。</string>
+    <string name="err_0021">当クラブホームページより、情報の登録後ご利用ください。</string>
+    <string name="err_0022">当クラブホームページより、情報の登録後ご利用ください。</string>
+    <string name="err_0023">入力内容に誤りがあります。</string>
+    <string name="err_0099">入力内容に誤りがあります。</string>
 </resources>

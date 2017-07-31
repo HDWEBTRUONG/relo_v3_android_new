@@ -17,10 +17,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import framework.phvtFragment.BaseFragment;
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.DetailCouponDetailVisible;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.PostDetail;
+import jp.relo.cluboff.model.PostDetailType1;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -42,8 +45,14 @@ public class WebViewDetailCouponFragment extends BaseFragment {
     private String userid = "";
     private String requestno = "";
     private String senicode = "";
+
+
+    private String brndid = "";
+
     private String url;
     public IControlBottom iControlBottom;
+    boolean isLoadding = false;
+    boolean isVisibleToUser;
 
 
     @Override
@@ -54,9 +63,11 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         urlType = bundle.getString(Constant.KEY_URL_TYPE);
         if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
             userid = bundle.getString(Constant.TAG_USER_ID);
-            requestno = bundle.getString(Constant.TAG_REQUESTNO);
             senicode = bundle.getString(Constant.TAG_SENICODE);
+        }else{
+            brndid = bundle.getString(Constant.TAG_BRNDID);
         }
+        requestno = bundle.getString(Constant.TAG_REQUESTNO);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
 
@@ -115,17 +126,24 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoading(getActivity());
+                isLoadding = true;
+                if(isVisible()){
+                    showLoading(getActivity());
+                }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                hideLoading();
-                if(iControlBottom!=null){
-                    iControlBottom.canBack(mWebView.canGoBack());
-                    iControlBottom.canForward(mWebView.canGoForward());
+                isLoadding = false;
+                if(isVisible()) {
+                    hideLoading();
+                    if(iControlBottom!=null){
+                        iControlBottom.canBack(mWebView.canGoBack());
+                        iControlBottom.canForward(mWebView.canGoForward());
+                    }
                 }
+
             }
             @SuppressWarnings("deprecation")
             @Override
@@ -140,25 +158,33 @@ public class WebViewDetailCouponFragment extends BaseFragment {
                 hideLoading();
             }
         });
+        loadDetail();
+    }
+    private void loadDetail(){
+        String userID = "";
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
+        if(loginRequest!=null){
+            try {
+                userID = new String(BackAES.encrypt(userid, AESHelper.password, AESHelper.type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if(CouponListFragment.WILL_NET_SERVER.equals(urlType)){
-            mWebView.loadUrl(url);
+            PostDetailType1 postDetailType1 = new PostDetailType1();
+            postDetailType1.setKid(userID);
+            postDetailType1.setRequestno(requestno);
+            postDetailType1.setBrndid(brndid);
+            mWebView.postUrl( url, postDetailType1.toString().getBytes());
+            AppLog.log(postDetailType1.toString());
         }else{
             PostDetail postDetail = new PostDetail();
-            String userID = "";
-            LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
-            if(loginRequest!=null){
-                try {
-                    userID = new String(BackAES.encrypt(userid, AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
             postDetail.setUserid(userID);
             postDetail.setRequestno(requestno);
             postDetail.setSenicode(senicode);
             mWebView.postUrl( url, postDetail.toString().getBytes());
+            AppLog.log(postDetail.toString());
         }
-
     }
 
     @Override
@@ -176,8 +202,17 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             mWebView.goForward();
         }else {
             mWebView.loadUrl( "javascript:window.location.reload( true )" );
-            //mWebView.reload();
         }
+    }
+    @Subscribe
+    public void onEvent(DetailCouponDetailVisible event) {
+            this.isVisibleToUser = event.isVisible();
+            if(isVisibleToUser){
+                if(isLoadding){
+                    showLoading(getActivity());
+                }
+            }
+
     }
 
 }

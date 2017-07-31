@@ -20,6 +20,7 @@ public class Constant {
     //Template url
     public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
     public static final String TEMPLATE_URL_COUPON = BuildConfig.TEMPLATE_URL_COUPON;
+    public static final String TEMPLATE_ARG = BuildConfig.TEMPLATE_ARG;
 
     //Appvisor id
     public static final String APPVISOR_ID = BuildConfig.APPVISOR_ID;
@@ -38,9 +39,18 @@ public class Constant {
     public static final int DETAIL_COUPON =  MEMBER_COUPON + 1;
     public static final int TUTURIAL_APP =  DETAIL_COUPON + 1;
 
-    public static final int HTTPOK = 200;
-    public static final String HTTPOKSTR = "200";
     public static final String HTTPOKJP = "00";
+    public static final String HTTP0000 = "0000";
+    public static final String HTTP0001 = "0001";
+    public static final String HTTP0002 = "0002";
+    public static final String HTTP0005 = "0005";
+    public static final String HTTP0006 = "0006";
+    public static final String HTTP0007 = "0007";
+    public static final String HTTP0010 = "0010";
+    public static final String HTTP0021 = "0021";
+    public static final String HTTP0022 = "0022";
+    public static final String HTTP0023 = "0023";
+    public static final String HTTP0099 = "0099";
 
 
     //****************TEXT TEMP******************//
@@ -59,6 +69,7 @@ public class Constant {
     public static final String TAG_USER_ID= "userid";
     public static final String TAG_REQUESTNO= "requestno";
     public static final String TAG_SENICODE= "senicode";
+    public static final String TAG_BRNDID = "brndid";
 
         //****************CATEGORY ID******************//
     public static final String VALUE_CATALOGY_25 = "25";

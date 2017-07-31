@@ -10,6 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
+import jp.relo.cluboff.model.DetailCouponDetailVisible;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.IControlBottom;
@@ -138,5 +139,10 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
     @Override
     public void disableAll() {
         disbleBottom();
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        EventBus.getDefault().post(new DetailCouponDetailVisible(isVisibleToUser));
     }
 }

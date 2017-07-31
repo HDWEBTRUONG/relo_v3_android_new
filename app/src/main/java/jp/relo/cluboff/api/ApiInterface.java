@@ -20,10 +20,6 @@ public interface ApiInterface {
     @GET("coa/xml_version.json")
     Observable<VersionReponse> checkVersion();
 
-
-    @POST("coa/coa_login_test.cfm")
-    Observable<LoginReponse> logon(@Body LoginRequest login);
-
     @FormUrlEncoded
     @POST("coa/coa_login.cfm")
     Observable<LoginReponse> logon(@Field("kaiinno") String kaiinno,@Field("emailad") String emailad,@Field("brandid") String brandid);

@@ -17,12 +17,20 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import java.text.MessageFormat;
+
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.AreaCouponPost;
+import jp.relo.cluboff.model.Info;
+import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
+import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.ase.AESHelper;
+import jp.relo.cluboff.util.ase.BackAES;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -210,7 +218,25 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
 
     private void loadUrl() {
         url = Constant.WEBVIEW_URL_AREA_COUPON;
-        strPost = new AreaCouponPost().toString();
+        AreaCouponPost areaCouponPost = new AreaCouponPost();
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
+        String userID = "";
+        if(loginRequest!=null){
+            try {
+                userID = new String(BackAES.encrypt(loginRequest.getKaiinno(), AESHelper.password, AESHelper.type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        areaCouponPost.setP_s7(userID);
+        String arg = "";
+        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE,Info.class);
+        if(info!=null){
+            arg = MessageFormat.format(Constant.TEMPLATE_ARG,info.getUrl());
+        }
+        areaCouponPost.setArg(arg);
+        strPost = areaCouponPost.toString();
+        AppLog.log(strPost);
         mWebView.postUrl( url, strPost.getBytes());
     }
 

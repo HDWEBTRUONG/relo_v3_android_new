@@ -10,6 +10,7 @@ import jp.relo.cluboff.util.Constant;
  */
 
 public class AreaCouponPost {
+    private String arg;
     private String p_s1;
     private String p_s6;
     private String p_s7;
@@ -94,18 +95,27 @@ public class AreaCouponPost {
         this.p_s36 = p_s36;
     }
 
+    public String getArg() {
+        return arg;
+    }
+
+    public void setArg(String arg) {
+        this.arg = arg;
+    }
+
     @Override
     public String toString() {
         try {
-            return "p_s1=" + URLEncoder.encode(p_s1, "UTF-8") +
-                    "&p_s6=" + URLEncoder.encode(p_s6, "UTF-8") +
+            return "p_s1=" + p_s1 +
+                    "&arg="+URLEncoder.encode(arg, "UTF-8")+
+                    "&p_s6=" + p_s6 +
                     "&p_s7=" + URLEncoder.encode(p_s7, "UTF-8") +
-                    "&p_s22=" + URLEncoder.encode(p_s22, "UTF-8") +
-                    "&p_s25=" + URLEncoder.encode(p_s25, "UTF-8") +
-                    "&p_s29=" + URLEncoder.encode(p_s29, "UTF-8") +
-                    "&p_s34=" + URLEncoder.encode(p_s34, "UTF-8") +
+                    "&p_s22=" + p_s22 +
+                    "&p_s25=" + p_s25 +
+                    "&p_s29=" + p_s29 +
+                    "&p_s34=" + p_s34 +
                     "&p_s36=" + URLEncoder.encode(p_s36, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return e.toString();
         }
     }

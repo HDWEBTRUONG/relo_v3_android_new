@@ -102,7 +102,8 @@ public class SplashScreenActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(String msg) {
+                    public void onFailure(int msg) {
+                        AppLog.log(""+msg);
                         goNextScreen();
                     }
 
@@ -147,8 +148,8 @@ public class SplashScreenActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(String msg) {
-                AppLog.log(msg);
+            public void onFailure(int msg) {
+                AppLog.log(""+msg);
                 goMainScreen();
             }
 

@@ -182,18 +182,15 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     }
 
                     @Override
-                    public void onFailure(String msg) {
-                        if(msg==null){
-                            msg="";
-                        }
-                        AppLog.log(msg);
-                        mhandler.sendEmptyMessage(MSG_ERROR_FAILURE);
+                    public void onFailure(int msg) {
+                        Utils.showDialogLIB(LoginActivity.this,msg);
 
                     }
 
                     @Override
                     public void onFinish() {
                         hideLoading();
+                        mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
                     }
                 });
 
@@ -286,8 +283,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(String msg) {
-                AppLog.log(msg);
+            public void onFailure(int msg) {
+                AppLog.log(""+msg);
                 gotoMain();
             }
 
