@@ -182,10 +182,22 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void callback(CouponDTO data) {
         String url="";
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
+        Bundle bundle = new Bundle();
         if(data.getCoupon_type().equals(WILL_NET_SERVER)){
             url =data.getLink_path();
+            String mBrndid = "";
+            if(info!=null) {
+                try {
+                    mBrndid = BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            bundle.putString(Constant.TAG_BRNDID, mBrndid);
+
         }else{
-            url = "http://sptest.club-off.com/relo/coa_directlink.cfm";
+            bundle.putString(Constant.TAG_SENICODE, "1");
+            url = "";
             if(info!=null){
                 try {
                     url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
@@ -195,18 +207,16 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
             }
         }
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.KEY_LOGIN_URL, url);
-        bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
         String userID = "";
         LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
         if(loginRequest!=null){
             userID = loginRequest.getKaiinno();
         }
         bundle.putString(Constant.TAG_USER_ID, userID);
+        bundle.putString(Constant.KEY_LOGIN_URL, url);
+        bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
+
         bundle.putString(Constant.TAG_REQUESTNO, data.getShgrid());
-        bundle.putString(Constant.TAG_SENICODE, "1");
-        bundle.putInt(Constant.KEY_CHECK_WEBVIEW,Constant.DETAIL_COUPON);
         iSwitchFragment.callSwitchFragment(bundle);
     }
 

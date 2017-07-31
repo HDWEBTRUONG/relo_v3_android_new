@@ -7,19 +7,10 @@ import com.google.gson.annotations.SerializedName;
  * Created by tonkhanh on 6/23/17.
  */
 
-public class LoginReponse {
-    @SerializedName("Header")
-    private Header header;
+public class LoginReponse extends BaseReponse {
+
     @SerializedName("Info")
     private Info info;
-
-    public Header getHeader() {
-        return header;
-    }
-
-    public void setHeader(Header header) {
-        this.header = header;
-    }
 
     public Info getInfo() {
         return info;
