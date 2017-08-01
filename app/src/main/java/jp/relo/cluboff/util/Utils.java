@@ -198,15 +198,18 @@ public class Utils {
         alertDialog.show();
     }
 
-    public static void showDialogLIB(Context context, int messagee){
+    public static void showDialogLIB(Context context, final int messagee, final iUpdateIU miUpdateIU){
         new SweetAlertDialog(context)
                 .setTitleText("")
-                .setContentText(context.getResources().getString(messagee))
+                .setContentText(context.getResources().getString(R.string.err_api))
                 .setConfirmText(context.getResources().getString(R.string.popup_ok))
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
+                        if(miUpdateIU!=null){
+                            miUpdateIU.updateError(messagee);
+                        }
                     }
                 })
                 .show();

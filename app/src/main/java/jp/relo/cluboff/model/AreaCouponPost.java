@@ -107,14 +107,14 @@ public class AreaCouponPost {
     public String toString() {
         try {
             return "p_s1=" + p_s1 +
-                    "&arg="+URLEncoder.encode(arg, "UTF-8")+
+                    "&arg="+arg+
                     "&p_s6=" + p_s6 +
-                    "&p_s7=" + URLEncoder.encode(p_s7, "UTF-8") +
+                    "&p_s7=" + p_s7+
                     "&p_s22=" + p_s22 +
                     "&p_s25=" + p_s25 +
                     "&p_s29=" + p_s29 +
                     "&p_s34=" + p_s34 +
-                    "&p_s36=" + URLEncoder.encode(p_s36, "UTF-8");
+                    "&p_s36=" + p_s36;
         } catch (Exception e) {
             return e.toString();
         }

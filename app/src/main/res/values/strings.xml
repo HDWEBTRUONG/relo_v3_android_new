@@ -53,6 +53,7 @@
     <string name="menu_FAQ">FAQ</string>
 
     <!--error code reponse-->
+    <string name="err_api">ログインができませんでした。</string>
     <string name="err_0001">会員登録がありません。</string>
     <string name="err_0002">入力内容に誤りがあります。</string>
     <string name="err_0005">お客様は現在ご利用いただけません。</string>

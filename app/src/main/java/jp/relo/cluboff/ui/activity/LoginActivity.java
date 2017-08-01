@@ -39,18 +39,20 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
+public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener, iUpdateIU {
 
     ImageView img_logo;
     TextView link_webview_not_login;
     Button btnLogin;
     MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
+    TextView txt_show_error;
     ArrayList<CouponDTO> listResult = new ArrayList<>();
     Handler mhandler;
     public static final int MSG_ERROR_EMPTY = 0;
@@ -58,11 +60,13 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_ERROR_ELSE = 2;
     public static final int MSG_NOT_NETWORK = 3;
     public static final int MSG_ENABLE_LOGIN = 4;
+    iUpdateIU miUpdateIU;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        miUpdateIU = this;
         sqLiteOpenHelper = new MyDatabaseHelper(this);
         ((ReloApp)getApplication()).trackingAnalytics(Constant.TEST_GA_LOGIN_ANALYTICS);
         mhandler = new Handler(){
@@ -70,19 +74,19 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what){
                     case MSG_ERROR_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password,null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_FAILURE:
-                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
+                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api,null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_ELSE:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password, null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_NOT_NETWORK:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network, null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ENABLE_LOGIN:
@@ -97,6 +101,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         edtMail = (EditText) findViewById(R.id.edtMail);
@@ -183,7 +188,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(int msg) {
-                        Utils.showDialogLIB(LoginActivity.this,msg);
+                        Utils.showDialogLIB(LoginActivity.this,msg, miUpdateIU);
 
                     }
 
@@ -313,6 +318,15 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             sqLiteOpenHelper.saveCouponList(datas);
         }
     }
+
+    @Override
+    public void updateError(int txt) {
+        if(txt_show_error!=null){
+            txt_show_error.setVisibility(View.VISIBLE);
+            txt_show_error.setText(txt);
+        }
+    }
+
     class UpdateTask extends AsyncTask<String, Void, Void> {
         URL url;
         @Override
