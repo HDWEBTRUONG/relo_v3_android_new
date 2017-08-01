@@ -50,6 +50,7 @@
     <!--******************Menu string**********************-->
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
+    <string name="menu_FAQ">FAQ</string>
 
     <!--error code reponse-->
     <string name="err_0001">会員登録がありません。</string>

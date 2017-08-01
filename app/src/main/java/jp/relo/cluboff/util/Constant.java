@@ -16,6 +16,7 @@ public class Constant {
     public static final String WEBVIEW_URL_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_URL_CAN_NOT_LOGIN;
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
     public static final String WEBVIEW_URL_TUTORIAL = BuildConfig.WEBVIEW_URL_TUTORIAL;
+    public static final String WEBVIEW_URL_FAQ = BuildConfig.WEBVIEW_URL_FAQ;
 
     //Template url
     public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
@@ -70,6 +71,7 @@ public class Constant {
     public static final String TAG_REQUESTNO= "requestno";
     public static final String TAG_SENICODE= "senicode";
     public static final String TAG_BRNDID = "brndid";
+        public static final String TAG_IS_FIRST = "isFirst";
 
         //****************CATEGORY ID******************//
     public static final String VALUE_CATALOGY_25 = "25";

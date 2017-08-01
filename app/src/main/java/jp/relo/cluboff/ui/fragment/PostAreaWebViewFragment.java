@@ -209,10 +209,9 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                 } else {
                     Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
                 }
-                break;
-            default:
                 loadUrl();
                 break;
+
         }
     }
 

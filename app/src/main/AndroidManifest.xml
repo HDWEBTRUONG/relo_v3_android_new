@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activity.SplashScreenActivity"
+            android:name=".ui.activity.HandlerStartActivity"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -37,6 +37,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.SplashScreenActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.activity.LoginActivity"

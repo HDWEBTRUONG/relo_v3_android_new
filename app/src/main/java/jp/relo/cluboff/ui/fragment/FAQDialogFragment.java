@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +17,11 @@ import android.webkit.WebView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.database.MyDatabaseHelper;
@@ -32,7 +36,7 @@ import jp.relo.cluboff.util.Constant;
  * Created by tonkhanh on 6/8/17.
  */
 
-public class TutorialDialogFragment extends BaseDialogFragmentToolbarBottombar {
+public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
     WebView mWebView;
     @Override
     protected void init(View view) {
@@ -105,7 +109,7 @@ public class TutorialDialogFragment extends BaseDialogFragmentToolbarBottombar {
     public void setupActionBar() {
         lnToolbar.setVisibility(View.VISIBLE);
         title_toolbar.setVisibility(View.VISIBLE);
-        title_toolbar.setText(R.string.menu_tutorial);
+        title_toolbar.setText(R.string.menu_FAQ);
         imvMenu.setVisibility(View.VISIBLE);
         imvMenu.setImageResource(R.drawable.icon_close);
         rlMenu.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +130,7 @@ public class TutorialDialogFragment extends BaseDialogFragmentToolbarBottombar {
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         //Disable cache Webview
         webSettings.setAppCacheEnabled(true);
@@ -160,7 +165,7 @@ public class TutorialDialogFragment extends BaseDialogFragmentToolbarBottombar {
             }
         });
 
-        String url = Constant.WEBVIEW_URL_TUTORIAL;
+        String url = Constant.WEBVIEW_URL_FAQ;
         mWebView.loadUrl(url);
 
     }

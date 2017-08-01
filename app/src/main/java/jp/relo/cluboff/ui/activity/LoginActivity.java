@@ -266,9 +266,13 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 clickLogin();
                 break;
             case R.id.link_webview_not_login:
-                clickLinkNotLogin();
+                openTutorial();
                 break;
         }
+    }
+    public void openTutorial(){
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        startActivity(intent);
     }
 
     private void updateData(){
