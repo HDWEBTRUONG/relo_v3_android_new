@@ -11,6 +11,7 @@ import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
+import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.VersionReponse;
@@ -31,7 +32,12 @@ public class HandlerStartActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
         if(notFirst){
-            autoLogin();
+            if(LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class) !=null){
+                goMainScreen();
+            }else{
+                goNextScreen();
+            }
+            //autoLogin();
         }else{
             goSplashScreen();
         }

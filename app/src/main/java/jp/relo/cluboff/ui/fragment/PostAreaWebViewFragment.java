@@ -228,7 +228,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             }
         }
         areaCouponPost.setP_s7(userID);
-        String arg = "https://sp.club-off.com/sptest.club-off.com/relo";
+        String arg = "";
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE,Info.class);
         if(info!=null){
             arg = MessageFormat.format(Constant.TEMPLATE_ARG,info.getUrl());

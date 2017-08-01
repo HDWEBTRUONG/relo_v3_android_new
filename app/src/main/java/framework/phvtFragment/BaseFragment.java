@@ -27,8 +27,17 @@ import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import retrofit2.http.Field;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Base Fragment for all Fragment in the application
@@ -38,6 +47,9 @@ import retrofit2.http.Field;
 public abstract class BaseFragment extends Fragment {
 
     private KProgressHUD kProgressHUDloading;
+    private CompositeSubscription mCompositeSubscription;
+    protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    protected ApiInterface apiInterfaceJP = ApiClientJP.getClient().create(ApiInterface.class);
     //----------------------------------------------------------------------------------------------------
     /**
      * Root layout view
@@ -337,6 +349,22 @@ public abstract class BaseFragment extends Fragment {
     public void removeView(){
         ((ViewGroup)mRootLayout).removeAllViews();
     }
+
+    public void showLoadingData(Context context){
+        if(kProgressHUDloading==null){
+            kProgressHUDloading=KProgressHUD.create(context)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setLabel("Please wait")
+                    .setDetailsLabel("Downloading data")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
+        }
+        if(!kProgressHUDloading.isShowing()){
+            kProgressHUDloading.show();
+        }
+
+    }
     public void showLoading(Context context){
         if(isVisible()){
             if(kProgressHUDloading==null){
@@ -359,5 +387,28 @@ public abstract class BaseFragment extends Fragment {
             }
         }
 
+    }
+    public void addSubscription(Observable observable, Subscriber subscriber) {
+        if (mCompositeSubscription == null) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
+        mCompositeSubscription.add(observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber));
+
+
+    }
+
+    public void addSubscription(Subscription subscription) {
+        if (mCompositeSubscription == null) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
+        mCompositeSubscription.add(subscription);
+    }
+
+    public void onUnsubscribe() {
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
+            mCompositeSubscription.unsubscribe();
     }
 }
