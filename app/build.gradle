@@ -30,7 +30,7 @@ android {
             buildConfigField "String", "WEBVIEW_URL_FAQ", '"https://www.club-off.com/contents/files/bra/common/topics/app/faq/index.html"'
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://{0}/index.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
-            buildConfigField "String", "TEMPLATE_ARG", '"https://sp.club-off.com/{0}"'
+            buildConfigField "String", "TEMPLATE_ARG", '"u%3Dhttps%3A%2F%2Fsp%2EClub-off%2Ecom%2F{0}"'
             buildConfigField "String", "APPVISOR_ID", '"sALZBaJwjb"'
         }
 

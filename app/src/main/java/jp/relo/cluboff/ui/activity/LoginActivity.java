@@ -39,54 +39,59 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener{
+public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener, iUpdateIU {
 
     ImageView img_logo;
     TextView link_webview_not_login;
     Button btnLogin;
-    MyDatabaseHelper sqLiteOpenHelper;
     EditText edtLoginUsername,edtPassword,edtMail;
-    ArrayList<CouponDTO> listResult = new ArrayList<>();
+    TextView txt_show_error;
     Handler mhandler;
     public static final int MSG_ERROR_EMPTY = 0;
     public static final int MSG_ERROR_FAILURE = 1;
     public static final int MSG_ERROR_ELSE = 2;
     public static final int MSG_NOT_NETWORK = 3;
     public static final int MSG_ENABLE_LOGIN = 4;
+    public static final int MSG_GOTO_MAIN = 5;
+    iUpdateIU miUpdateIU;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sqLiteOpenHelper = new MyDatabaseHelper(this);
+        miUpdateIU = this;
         ((ReloApp)getApplication()).trackingAnalytics(Constant.TEST_GA_LOGIN_ANALYTICS);
         mhandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what){
                     case MSG_ERROR_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password,null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_FAILURE:
-                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
+                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api,null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_ELSE:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password, null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_NOT_NETWORK:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network, null);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ENABLE_LOGIN:
                         btnLogin.setEnabled(true);
+                        break;
+                    case MSG_GOTO_MAIN:
+                        gotoMain();
                         break;
                 }
             }
@@ -97,6 +102,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         edtMail = (EditText) findViewById(R.id.edtMail);
@@ -119,7 +125,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 //save value input
                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
                         new LoginRequest("00008440","kubo@relo.jp","300590"));
-                updateData();
             }
         });
     }
@@ -171,10 +176,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
                                         new LoginRequest(username,userMail,password));
-                                updateData();
                                 setGoogleAnalytic(brandid);
                                 //save user and password encrypt KeyStore
-
+                                mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
                             }else{
                                 mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
                             }
@@ -183,7 +187,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(int msg) {
-                        Utils.showDialogLIB(LoginActivity.this,msg);
+                        Utils.showDialogLIB(LoginActivity.this,msg, miUpdateIU);
 
                     }
 
@@ -275,29 +279,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         startActivity(intent);
     }
 
-    private void updateData(){
-        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
-            @Override
-            public void onSuccess(VersionReponse model) {
-                if(Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getApplicationContext()).getVersion()){
-                    new UpdateTask().execute(model.getVersion());
-                }else{
-                    gotoMain();
-                }
-            }
 
-            @Override
-            public void onFailure(int msg) {
-                AppLog.log(""+msg);
-                gotoMain();
-            }
-
-            @Override
-            public void onFinish() {
-                mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
-            }
-        });
-    }
     private void gotoMain(){
         Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
@@ -307,122 +289,14 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
     }
 
-    public void saveData(ArrayList<CouponDTO> datas){
-        if(datas!=null){
-            sqLiteOpenHelper.clearData();
-            sqLiteOpenHelper.saveCouponList(datas);
+
+    @Override
+    public void updateError(int txt) {
+        if(txt_show_error!=null){
+            txt_show_error.setVisibility(View.VISIBLE);
+            txt_show_error.setText(txt);
         }
     }
-    class UpdateTask extends AsyncTask<String, Void, Void> {
-        URL url;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showLoadingData(LoginActivity.this);
-        }
 
-        protected Void doInBackground(String... arg0) {
-            CouponDTO item= new CouponDTO();
-            boolean isOpened= false;
-            try {
-                url = new URL(Constant.BASE_URL_UPDATE);
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                if ( factory == null){
-                    hideLoading();
-                    LoginSharedPreference.getInstance(LoginActivity.this).setVersion(0);
-                    gotoMain();
-                    return null;
-                }
 
-                factory.setNamespaceAware(false);
-                XmlPullParser xpp = factory.newPullParser();
-
-                // We will get the XML from an input stream
-                xpp.setInput(getInputStream(url), "UTF_8");
-
-                // Returns the type of current event: START_TAG, END_TAG, etc..
-                int eventType = xpp.getEventType();
-                while (eventType != XmlPullParser.END_DOCUMENT){
-                    String name = "";
-                    switch (eventType) {
-                        case XmlPullParser.START_DOCUMENT:
-                            break;
-                        case XmlPullParser.START_TAG:
-                            name = xpp.getName().toUpperCase();
-                            switch (name){
-                                case CouponDTO.TAG_COUPON:
-                                    listResult = new ArrayList<>();
-                                    break;
-                                case CouponDTO.TAG_ITEM:
-                                    isOpened = true;
-                                    item = new CouponDTO();
-                                    break;
-                                case CouponDTO.TAG_SHGRID:
-                                    item.setShgrid(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_CATEGORY_ID:
-                                    item.setCategory_id(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_CATEGORY_NAME:
-                                    item.setCategory_name(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_NAME:
-                                    item.setCoupon_name(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_IMAGE_PATH:
-                                    item.setCoupon_image_path(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_TYPE:
-                                    item.setCoupon_type(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_LINK_PATH:
-                                    item.setLink_path(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_EXPIRATION_FROM:
-                                    item.setExpiration_from(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_EXPIRATION_TO:
-                                    item.setExpiration_to(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_PRIORITY:
-                                    item.setPriority(Utils.parserInt(xpp.nextText()));
-                                    break;
-                                case CouponDTO.TAG_ADD_BLAND:
-                                    item.setAdd_bland(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_MEMO:
-                                    item.setMemo(xpp.nextText());
-                                    break;
-                            }
-                        case XmlPullParser.END_TAG:
-                            name = xpp.getName().toUpperCase();
-                            if (name.equalsIgnoreCase(CouponDTO.TAG_ITEM) && item != null && isOpened){
-                                listResult.add(item);
-                                isOpened = false;
-                            }
-                    }
-                    eventType = xpp.next();
-                    }
-                } catch (Exception e){
-
-            }
-            saveData(listResult);
-            // save version number get from api
-            if(arg0[0]!=null)
-            LoginSharedPreference.getInstance(LoginActivity.this).setVersion(Utils.convertIntVersion(arg0[0]));
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            hideLoading();
-            gotoMain();
-        }
-    }
-    public InputStream getInputStream(URL url) {
-        try {
-            return url.openConnection().getInputStream();
-        } catch (IOException e) {
-            return null;
-        }
-    }
 }

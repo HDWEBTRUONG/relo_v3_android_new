@@ -135,7 +135,6 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
         //Disable cache Webview
         webSettings.setAppCacheEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
