@@ -1,6 +1,7 @@
 package jp.relo.cluboff.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,16 @@ public class MenuListAdapter extends BaseAdapter {
         imgIcon = (ImageView) itemView.findViewById(R.id.icon);
 
         // Set the results into TextViews
-        txtTitle.setText(mTitle[position]);
+        if(position == mTitle.length-1){
+            String txt = "<b>"+mTitle[position]+"</b>";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                txtTitle.setText(Html.fromHtml(txt,Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                txtTitle.setText(Html.fromHtml(txt));
+            }
+        }else{
+            txtTitle.setText(mTitle[position]);
+        }
 
         return itemView;
     }

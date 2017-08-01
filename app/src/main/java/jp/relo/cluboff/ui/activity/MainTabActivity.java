@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,10 @@ import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
+import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
-import jp.relo.cluboff.ui.fragment.TutorialDialogFragment;
+import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 
@@ -44,7 +46,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     //main AppVisor processor
     private AppVisorPush appVisorPush;
     private HistoryPushDialogFragment historyPushDialogFragment;
-    private TutorialDialogFragment tutorialDialogFragment;
+    private FAQDialogFragment faqDialogFragment;
     long countPush=0;
 
     Handler handler;
@@ -181,8 +183,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
-
+        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial), getString(R.string.menu_FAQ)};
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
 
@@ -221,10 +222,13 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_TOP);
                 break;
             case 2:
-                if(tutorialDialogFragment==null){
-                    tutorialDialogFragment = new TutorialDialogFragment();
+                openDialogFragment(new HowToDialogFragment());
+                break;
+            case 3:
+                if(faqDialogFragment==null){
+                    faqDialogFragment = new FAQDialogFragment();
                 }
-                openDialogFragment(tutorialDialogFragment);
+                openDialogFragment(faqDialogFragment);
                 break;
         }
         mDrawerListMenu.setItemChecked(position, true);
