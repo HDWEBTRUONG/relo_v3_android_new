@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,10 +31,8 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.Info;
-import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.VersionReponse;
-import jp.relo.cluboff.ui.activity.LoginActivity;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -51,7 +50,7 @@ import rx.functions.Action1;
 public class CouponListFragment extends BaseFragment implements View.OnClickListener,CouponListAdapter.iClickButton{
 
     LinearLayout lnCatalory;
-    ListView lvCategoryMenu;
+    ListView lvCoupon;
     TextView tvCategory;
     MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
@@ -71,6 +70,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ArrayList<CouponDTO> listResult = new ArrayList<>();
 
     MyDatabaseHelper sqLiteOpenHelper;
+    int position = 0;
 
 
     @Override
@@ -78,13 +78,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         sqLiteOpenHelper = new MyDatabaseHelper(getActivity());
     }
+
     public void setiSwitchFragment(switchFragment iSwitchFragment){
       this.iSwitchFragment = iSwitchFragment;
     }
 
     private void init(View view) {
         lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
-        lvCategoryMenu = (ListView) view.findViewById(R.id.list_category_listview);
+        lvCoupon = (ListView) view.findViewById(R.id.list_category_listview);
         tvCategory = (TextView) view.findViewById(R.id.tvCategory);
         spinner = (MyMaterialSpinner) view.findViewById(R.id.spinnerCategory);
     }
@@ -132,6 +133,21 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         myDatabaseHelper=new MyDatabaseHelper(getActivity());
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK&&event.getAction() == KeyEvent.ACTION_UP){
+                        getActivity().finish();
+                        return true;
+
+                }
+                return false;
+            }
+        });
+
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -157,7 +173,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
-        mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+        if(listCoupon.isEmpty()){
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+        }else{
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+            showLoading(getActivity());
+        }
     }
 
 
@@ -176,11 +197,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void setAdapter(boolean isReload){
         if(adapter==null){
             adapter =new CouponListAdapter(getContext(), listCoupon,this);
-            lvCategoryMenu.setAdapter(adapter);
+            lvCoupon.setAdapter(adapter);
         }else{
             adapter.setDataChange(listCoupon);
             if(isReload){
-                lvCategoryMenu.setAdapter(adapter);
+                lvCoupon.setAdapter(adapter);
+                lvCoupon.setSelection(position);
             }
         }
         hideLoading();
@@ -194,7 +216,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.lnCatalory){
-            //clickCategoryMenu();
             spinner.expand();
         }
     }
@@ -251,6 +272,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             }
         }
         mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
+    }
+
+    @Override
+    public void positionClick(int position) {
+        this.position = position;
     }
 
     interface switchFragment{

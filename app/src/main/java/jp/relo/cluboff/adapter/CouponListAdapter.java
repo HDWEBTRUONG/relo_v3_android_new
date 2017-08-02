@@ -130,6 +130,7 @@ public class CouponListAdapter extends BaseAdapter{
             public void onClick(View v) {
                 if(miClickButton!=null){
                     miClickButton.callback(item);
+                    miClickButton.positionClick(position);
                 }
             }
         });
@@ -168,5 +169,6 @@ public class CouponListAdapter extends BaseAdapter{
     public interface iClickButton{
         void callback(CouponDTO data);
         void like(String id, int isLiked);
+        void positionClick(int position);
     }
 }

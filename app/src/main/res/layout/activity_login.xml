@@ -37,7 +37,7 @@
                     android:hint="@string/txt_login_username"
                     android:lines="1"
                     android:singleLine="true"
-                    android:textColor="@color/color_hint_text_170"
+                    android:textColor="@color/color_textview_84"
                     android:textColorHint="@color/color_hint_text_170"
                     android:textSize="@dimen/text_size_large16" />
 
@@ -48,29 +48,29 @@
                     <include layout="@layout/line_layout"/>
                 </LinearLayout>
                 <EditText
-                    android:id="@+id/edtPassword"
+                    android:id="@+id/edtMail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
-                    android:hint="@string/txt_login_app_id"
+                    android:hint="@string/txt_login_mail"
                     android:layout_gravity="center"
                     android:lines="1"
                     android:singleLine="true"
                     android:background="@drawable/bg_trans"
-                    android:textColor="@color/color_hint_text_170"
+                    android:textColor="@color/color_textview_84"
                     android:textSize="@dimen/text_size_large16"
                     android:textColorHint="@color/color_hint_text_170"/>
             </LinearLayout>
             <EditText
-                android:id="@+id/edtMail"
+                android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55dp"
                 android:layout_marginTop="@dimen/_20dp"
-                android:hint="@string/txt_login_mail"
+                android:hint="@string/txt_login_app_id"
                 android:layout_gravity="center"
                 android:lines="1"
                 android:singleLine="true"
                 android:background="@drawable/bg_edittext_login2"
-                android:textColor="@color/color_hint_text_170"
+                android:textColor="@color/color_textview_84"
                 android:textSize="@dimen/text_size_large16"
                 android:textColorHint="@color/color_hint_text_170"/>
             <TextView
@@ -93,16 +93,19 @@
                 android:visibility="gone"
                 android:layout_marginLeft="@dimen/_20dp"
                 android:layout_marginRight="@dimen/_20dp"/>
+
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_textview_84"
-                android:lineSpacingExtra="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_30dp"
                 android:layout_marginLeft="@dimen/_20dp"
                 android:layout_marginRight="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_30dp"
-                android:layout_marginBottom="@dimen/_30dp"
-                android:text="@string/txt_note_login" />
+                android:lineSpacingExtra="@dimen/_5dp"
+                android:text="@string/txt_note_login"
+                android:textColor="@color/color_textview_84" />
+
             <TextView
                 android:id="@+id/link_webview_not_login"
                 android:layout_width="match_parent"
