@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -28,8 +29,10 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -45,6 +48,21 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK&&event.getAction() == KeyEvent.ACTION_UP){
+                    getActivity().finish();
+                    return true;
+
+                }
+                return false;
+            }
+        });
+
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
@@ -78,8 +96,17 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mWebView!=null &&  mWebView.getUrl()!=null)
-                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
+                if(mWebView!=null &&  mWebView.getUrl()!=null){
+                    Utils.showDialogLIB(getActivity(), R.string.title_browser, R.string.content_browser,
+                            R.string.btn_browser, new iUpdateIU() {
+                                @Override
+                                public void updateError(int txt) {
+                                    if(txt == 0){
+                                        getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
+                                    }
+                                }
+                            });
+                }
             }
         });
 
@@ -87,7 +114,6 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-                 //mWebView.reload();
 
             }
         });

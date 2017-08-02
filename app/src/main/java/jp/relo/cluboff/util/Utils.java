@@ -215,6 +215,36 @@ public class Utils {
                 .show();
     }
 
+    public static void showDialogLIB(Context context, int title, int messagee, int btn, final iUpdateIU miUpdateIU){
+        new SweetAlertDialog(context)
+                .setTitleText(context.getResources().getString(title))
+                .setContentText(context.getResources().getString(messagee))
+                .setConfirmText(context.getResources().getString(btn ))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        if(miUpdateIU!=null){
+                            miUpdateIU.updateError(0);
+                        }
+                    }
+                })
+                .show();
+    }
+    public static void showDialogLIB(Context context, final int messagee){
+        new SweetAlertDialog(context)
+                .setTitleText("")
+                .setContentText(context.getResources().getString(messagee))
+                .setConfirmText(context.getResources().getString(R.string.popup_ok))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }
+
     public static String convertDate(String dateString){
         if(dateString==null){
             return "";

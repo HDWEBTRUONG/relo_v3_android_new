@@ -59,6 +59,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_NOT_NETWORK = 3;
     public static final int MSG_ENABLE_LOGIN = 4;
     public static final int MSG_GOTO_MAIN = 5;
+    public static final int MSG_ERROR_MAIL_EMPTY = 6;
+    public static final int MSG_ERROR_ID_EMPTY = 7;
+    public static final int MSG_ERROR_ID_BRAND_EMPTY = 8;
+    public static final int MSG_ERROR_ID_LOGIN_EMPTY = 9;
+    public static final int MSG_ERROR_ALL_EMPTY = 10;
     iUpdateIU miUpdateIU;
 
 
@@ -72,19 +77,19 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what){
                     case MSG_ERROR_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password,null);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_FAILURE:
-                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api,null);
+                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_ELSE:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password, null);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_NOT_NETWORK:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network, null);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ENABLE_LOGIN:
@@ -92,6 +97,21 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         break;
                     case MSG_GOTO_MAIN:
                         gotoMain();
+                        break;
+                    case MSG_ERROR_MAIL_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_mail_empty);
+                        break;
+                    case MSG_ERROR_ID_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_empty);
+                        break;
+                    case MSG_ERROR_ID_BRAND_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_brand_empty);
+                        break;
+                    case MSG_ERROR_ID_LOGIN_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_login_empty);
+                        break;
+                    case MSG_ERROR_ALL_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_all_empty);
                         break;
                 }
             }
@@ -147,19 +167,20 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         if(isNetworkAvailable) {
             final String username=edtLoginUsername.getText().toString().trim();
             final String userMail = edtMail.getText().toString().trim();
-            final String password = edtPassword.getText().toString().trim();
-            if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(password)&& !StringUtil.isEmpty(userMail)) {
+            final String brand = edtPassword.getText().toString().trim();
+            if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(brand)&& !StringUtil.isEmpty(userMail)) {
                 String usernameEN = "";
                 String userMailEN = "";
                 String passwordEN = "";
                 try {
                     usernameEN = new String(BackAES.encrypt(username,AESHelper.password, AESHelper.type));
                     userMailEN = new String(BackAES.encrypt(userMail,AESHelper.password, AESHelper.type));
-                    passwordEN = new String(BackAES.encrypt(password,AESHelper.password, AESHelper.type));
+                    passwordEN = new String(BackAES.encrypt(brand,AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 showLoading(this);
+                btnLogin.setEnabled(false);
                 addSubscription(apiInterfaceJP.logon(usernameEN,userMailEN,passwordEN), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
@@ -175,7 +196,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
-                                        new LoginRequest(username,userMail,password));
+                                        new LoginRequest(username,userMail,brand));
                                 setGoogleAnalytic(brandid);
                                 //save user and password encrypt KeyStore
                                 mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
@@ -198,8 +219,16 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     }
                 });
 
-            }else{
-                mhandler.sendEmptyMessage(MSG_ERROR_EMPTY);
+            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(brand)&& StringUtil.isEmpty(userMail)){
+                mhandler.sendEmptyMessage(MSG_ERROR_ALL_EMPTY);
+            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(brand)){
+                mhandler.sendEmptyMessage(MSG_ERROR_ID_EMPTY);
+            }else if(StringUtil.isEmpty(username)){
+                mhandler.sendEmptyMessage(MSG_ERROR_ID_LOGIN_EMPTY);
+            }else if(StringUtil.isEmpty(userMail)){
+                mhandler.sendEmptyMessage(MSG_ERROR_MAIL_EMPTY);
+            }else if(StringUtil.isEmpty(brand)){
+                mhandler.sendEmptyMessage(MSG_ERROR_ID_BRAND_EMPTY);
             }
 
         }else{
@@ -266,7 +295,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bt_login:
-                btnLogin.setEnabled(false);
                 clickLogin();
                 break;
             case R.id.link_webview_not_login:

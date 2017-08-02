@@ -54,6 +54,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     public static final int INDEX_TOP=1;
     public static final int INDEX_MEMBER=2;
     public static final int UPDATE_COUNT=4;
+    int indexTab = 0;
 
     @Override
     protected void onStart() {
@@ -117,7 +118,10 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_TOP);
             }
         }else{
-            selectPage(INDEX_TOP);
+            if(indexTab < -1 || indexTab > 1){
+                indexTab = 0;
+            }
+            selectPage(indexTab+1);
         }
     }
     void selectPage(int pageIndex){
@@ -254,6 +258,23 @@ public class MainTabActivity extends BaseActivityToolbar {
         PostMemberWebViewFragment membershipFragment = new PostMemberWebViewFragment();
         membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON));
         adapter.addFragment(membershipFragment, getString(R.string.title_membership));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                indexTab = position - 1;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         viewPager.setAdapter(adapter);
     }
