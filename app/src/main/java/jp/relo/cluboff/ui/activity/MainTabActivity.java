@@ -307,5 +307,4 @@ public class MainTabActivity extends BaseActivityToolbar {
         //process for PushIntent owner
         setIntent(intent);
     }
-
 }

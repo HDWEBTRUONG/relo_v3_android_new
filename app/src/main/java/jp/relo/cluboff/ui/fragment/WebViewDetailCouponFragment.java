@@ -77,11 +77,11 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         url = bundle.getString(Constant.KEY_LOGIN_URL);
         urlType = bundle.getString(Constant.KEY_URL_TYPE);
         if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
-            userid = bundle.getString(Constant.TAG_USER_ID);
             senicode = bundle.getString(Constant.TAG_SENICODE);
         }else{
             brndid = bundle.getString(Constant.TAG_BRNDID);
         }
+        userid = bundle.getString(Constant.TAG_USER_ID);
         requestno = bundle.getString(Constant.TAG_REQUESTNO);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
@@ -229,5 +229,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             }
 
     }
+
+
 
 }

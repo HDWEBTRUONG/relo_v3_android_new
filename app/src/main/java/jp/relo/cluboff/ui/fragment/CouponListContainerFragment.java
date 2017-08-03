@@ -128,5 +128,10 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         EventBus.getDefault().post(new DetailCouponDetailVisible(isVisibleToUser));
+        if(isAdded()&&isVisibleToUser){
+            if (getActivity().getSupportFragmentManager().findFragmentById(R.id.flContainerCouponList) == null) {
+                switchFragmentCoupon(false,null);
+            }
+        }
     }
 }
