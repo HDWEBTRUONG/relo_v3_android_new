@@ -2,6 +2,9 @@ package framework.phvtUtils;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import jp.relo.cluboff.BuildConfig;
 
 
@@ -49,4 +52,49 @@ public class AppLog {
             Log.i("", "--------------------------------------");
         }
     }
+
+
+    // Show log Webview HOST - APARAMS
+    synchronized public static void showLogWebview(String _host , String _param ){
+        String _pra[];
+
+        if (BuildConfig.DEBUG) {
+
+            _pra = _param.split("&");
+            //
+            log("---------------------------------------------");
+            //host data
+            log(_host);
+
+            // org params data
+            log("ORG PARAMS :   " + _param);
+
+            // params elements anystic
+            String s = "";
+            if (_pra.length > 0) {
+                for (int i = 0; i < _pra.length; i++) {
+                    s = s + _pra[i] + "\n";
+                }
+            }
+            log(s);
+            log("---------------------------------------------");
+        }
+    }
+
+
+    //Log JSON
+    synchronized  public static void logJson(String tag,String title,String data){
+        if (BuildConfig.DEBUG) {
+            try {
+                Log.i(tag, title);
+                JSONObject obj = new JSONObject(data);
+                Log.d(tag, obj.toString(4));
+            } catch (JSONException e) {
+                Log.d(TAG, "Data: "+data);
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
