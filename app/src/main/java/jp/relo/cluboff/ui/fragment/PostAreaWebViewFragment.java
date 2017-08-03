@@ -68,6 +68,8 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             }
         });
 
+
+
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
 
@@ -77,6 +79,8 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             loadUrl();
         }
     }
+
+
     @Override
     public void setupBottombar() {
         lnBottom.setVisibility(View.VISIBLE);
@@ -250,14 +254,13 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE,Info.class);
         if(info!=null){
             String url = "";
+            String brandid = "";
             try {
                 url = new String(BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+                brandid = new String(BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type));
+                //arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url,brandid), "utf-8");
+                arg = MessageFormat.format(Constant.TEMPLATE_ARG,url,brandid);
             } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url), "utf-8");
-            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
