@@ -28,6 +28,7 @@ public class Common {
             try{
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setMessage("ssl証明書が正しくないページですが開いてもいいですか");
+                builder.setCancelable(false);
                 builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
