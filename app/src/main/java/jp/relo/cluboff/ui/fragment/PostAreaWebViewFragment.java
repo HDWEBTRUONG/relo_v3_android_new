@@ -259,7 +259,8 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                 url = new String(BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
                 brandid = new String(BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type));
                 //arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url,brandid), "utf-8");
-                arg = MessageFormat.format(Constant.TEMPLATE_ARG,url,brandid);
+                //arg = MessageFormat.format(Constant.TEMPLATE_ARG,url,brandid);
+                arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url), "utf-8");
             } catch (Exception e) {
                 e.printStackTrace();
             }
