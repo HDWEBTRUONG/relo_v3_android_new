@@ -18,6 +18,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 
 import framework.phvtUtils.AppLog;
@@ -247,10 +249,21 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         String arg = "";
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE,Info.class);
         if(info!=null){
-            arg = MessageFormat.format(Constant.TEMPLATE_ARG,info.getUrl());
+            String url = "";
+            try {
+                url = new String(BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         areaCouponPost.setArg(arg);
-        strPost = areaCouponPost.toString();
+
+        strPost =areaCouponPost.toString();
         AppLog.log(strPost);
         mWebView.postUrl( url, strPost.getBytes());
     }

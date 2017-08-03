@@ -164,6 +164,10 @@ public class SweetAlertDialog  extends Dialog implements View.OnClickListener {
         mProgressHelper.setProgressWheel((ProgressWheel)findViewById(cn.pedant.SweetAlert.R.id.progressWheel));
         mConfirmButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
+        mTitleTextView.setTextSize(13);
+        mTitleTextView.setSingleLine(false);
+        mTitleTextView.setMaxLines(2);
+        mTitleTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         setTitleText(mTitleText);
         setContentText(mContentText);
