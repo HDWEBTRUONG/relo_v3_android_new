@@ -23,6 +23,7 @@ import java.util.List;
 
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.CouponListAdapter;
 import jp.relo.cluboff.api.MyCallBack;
@@ -70,7 +71,9 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ArrayList<CouponDTO> listResult = new ArrayList<>();
 
     MyDatabaseHelper sqLiteOpenHelper;
-    int position = 0;
+    int positionView = 0;
+
+    String brandID = "";
 
 
     @Override
@@ -112,6 +115,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
             @Override
             public void onItemSelected(MyMaterialSpinner view, int position, long id, CatagoryDTO item) {
+                positionView = 0;
                 getListDataCategoryID(item.getCatagoryID());
                 tvCategory.setText(item.getGetCatagoryName());
             }
@@ -184,7 +188,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void getListDataCategoryID(String categoryID) {
         listCoupon.clear();
-        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID).observeOn(AndroidSchedulers.mainThread())
+        if(StringUtil.isEmpty(brandID)&&isAdded()){
+            LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
+            brandID = loginRequest.getBrandid();
+        }
+        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID,brandID).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CouponDTO>>() {
                     @Override
                     public void call(List<CouponDTO> couponDTOs) {
@@ -202,7 +210,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             adapter.setDataChange(listCoupon);
             if(isReload){
                 lvCoupon.setAdapter(adapter);
-                lvCoupon.setSelection(position);
+                lvCoupon.setSelection(positionView);
             }
         }
         hideLoading();
@@ -285,7 +293,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void positionClick(int position) {
-        this.position = position;
+        this.positionView = position;
     }
 
     interface switchFragment{

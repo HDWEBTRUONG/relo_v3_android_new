@@ -1,5 +1,7 @@
 package jp.relo.cluboff.util;
 
+import java.util.ArrayList;
+
 import jp.relo.cluboff.BuildConfig;
 
 /**
@@ -87,4 +89,6 @@ public class Constant {
     public static final String TARGET_PUSH_SCREEN_COUPON = "coupon";
     public static final String TARGET_PUSH_SCREEN_SITE= "site";
     public static final String TARGET_PUSH_SCREEN_LIST = "list";
+
+    public static final String[] listCategory = {"25","27","32","126"};
 }

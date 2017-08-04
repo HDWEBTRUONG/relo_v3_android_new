@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.adapter.MenuListAdapter;
 import jp.relo.cluboff.adapter.ViewPagerAdapter;

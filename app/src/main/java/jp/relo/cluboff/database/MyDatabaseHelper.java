@@ -50,7 +50,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TableCoupon.COLUMN_LINK_PATH + " TEXT,"
                 + TableCoupon.COLUMN_EXPIRATION_FROM + " TEXT,"
                 + TableCoupon.COLUMN_EXPIRATION_TO + " TEXT,"
-                + TableCoupon.COLUMN_PRIORITY + " TEXT,"
+                + TableCoupon.COLUMN_PRIORITY + " INTEGER,"
                 + TableCoupon.COLUMN_MEMO + " TEXT,"
                 + TableCoupon.COLUMN_ADD_BLAND + " TEXT)";
         // Execute script.
@@ -163,8 +163,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return makeObservable(TableCategory.getCategory(this))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
-    public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID) {
-        return makeObservable(TableCoupon.getCouponWithDateCategoryID(this,categoryID))
+    public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID,String brandID) {
+        return makeObservable(TableCoupon.getCouponWithDateCategoryID(this,categoryID, brandID))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 

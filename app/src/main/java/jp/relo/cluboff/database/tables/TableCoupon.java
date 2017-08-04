@@ -12,6 +12,7 @@ import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
+import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
 
 /**
@@ -34,7 +35,7 @@ public class TableCoupon {
     public static final String COLUMN_MEMO = "memo";
     public static final String COLUMN_ADD_BLAND = "add_bland";
 
-    public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper,final String categoryID) {
+    public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper, final String categoryID, final String brandID) {
         return new Callable<List<CouponDTO>>() {
             @Override
             public List<CouponDTO> call() {
@@ -45,19 +46,19 @@ public class TableCoupon {
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now;
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
                 }else if(ConstansDB.COUPON_FAV.equals(categoryID)) {
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID
                             +" WHERE B."+TableFav.COLUMN_LIKE+" = '"+1+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")";
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")" + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
                 }
                 else{
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "+TableCoupon.COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")";
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"  + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
                 }
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
@@ -78,6 +79,12 @@ public class TableCoupon {
                         note.setMemo(cursor.getString(10));
                         note.setAdd_bland(cursor.getString(11));
                         note.setLiked(cursor.getInt(12));
+                        if(!java.util.Arrays.asList(Constant.listCategory).contains(note.getCategory_id())){
+                            if(!note.getAdd_bland().equalsIgnoreCase(brandID)){
+                                continue;
+                            }
+                        }
+
                         datas.add(note);
                     } while (cursor.moveToNext());
                 }
