@@ -42,7 +42,7 @@
     <string name="btn_title_like">お気に入り</string>
     <string name="btn_title_ticket_free">画面提示クーポン</string>
     <string name="title_history_push">お知らせ</string>
-    <string name="catalogy">カテゴル絞り込み</string>
+    <string name="catalogy">すべて</string>
     <string name="catalogy_fav">お気に入り</string>
     <string name="his_link">詳細はこちら</string>
     <string name="cannot_login_title">ログインできません。</string>
@@ -71,7 +71,7 @@
     <string name="err_0099">入力内容に誤りがあります。</string>
 
 
-    <string name="title_browser">WEBブラウザでサイトを開きます。deighoe niehoghei90 niehfghe0ig hnieghi90heg90 hniehgi0heg90</string>
+    <string name="title_browser">WEBブラウザでサイトを開きます。</string>
     <string name="content_browser">※WEBブラウザを立ち上げた場合、閲覧していたページは表示されず、サイトのトップにアクセスします。</string>
     <string name="btn_browser">開く</string>
 </resources>

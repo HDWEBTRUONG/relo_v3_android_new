@@ -6,14 +6,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-
-import jp.relo.cluboff.util.LoginSharedPreference;
-
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -27,7 +19,6 @@ public class ReloApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 
     /**
@@ -91,4 +82,5 @@ public class ReloApp extends Application {
     public void trackingAnalytics(String category, String action, String label, long value) {
         trackingAnalytics(false, "", category, action, label, value);
     }
+
 }

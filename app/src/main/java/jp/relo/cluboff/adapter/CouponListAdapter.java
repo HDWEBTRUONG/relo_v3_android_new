@@ -99,11 +99,11 @@ public class CouponListAdapter extends BaseAdapter{
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_32);
         }else if(Constant.VALUE_CATALOGY_126.equalsIgnoreCase(item.getCategory_id())){
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_126);
-        }else if(Constant.VALUE_CATALOGY_999.equalsIgnoreCase(item.getCategory_id()) &&
+        }/*else if(Constant.VALUE_CATALOGY_999.equalsIgnoreCase(item.getCategory_id()) &&
                 !StringUtil.isEmpty(item.getAdd_bland())){
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_999);
-        }else{
-            holder.categoryView.setVisibility(View.GONE);
+        }*/else{
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_999);
         }
 
 
