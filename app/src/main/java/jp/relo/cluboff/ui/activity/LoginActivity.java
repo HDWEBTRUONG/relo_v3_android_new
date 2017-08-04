@@ -188,7 +188,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                             if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
                                 int brandid=0;
                                 try {
-                                    brandid = Utils.convertInt(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type));
+                                    brandid = Utils.convertInt(Utils.removeString(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type)));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
