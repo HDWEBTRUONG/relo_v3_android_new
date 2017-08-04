@@ -70,6 +70,7 @@ public class Constant {
     public static final String TAG_USER_ID= "userid";
     public static final String TAG_REQUESTNO= "requestno";
     public static final String TAG_SENICODE= "senicode";
+    public static final String TAG_KAIINNO= "kaiinno";
     public static final String TAG_BRNDID = "brndid";
         public static final String TAG_IS_FIRST = "isFirst";
 

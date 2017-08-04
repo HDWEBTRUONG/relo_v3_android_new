@@ -32,6 +32,7 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
 
@@ -43,6 +44,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
 
     WebView mWebView;
     private String urlType = "";
+    private String kaiinno = "";
     private String userid = "";
     private String requestno = "";
     private String senicode = "";
@@ -77,11 +79,12 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         url = bundle.getString(Constant.KEY_LOGIN_URL);
         urlType = bundle.getString(Constant.KEY_URL_TYPE);
         if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
+            kaiinno = bundle.getString(Constant.TAG_KAIINNO);
             senicode = bundle.getString(Constant.TAG_SENICODE);
         }else{
+            userid = bundle.getString(Constant.TAG_USER_ID);
             brndid = bundle.getString(Constant.TAG_BRNDID);
         }
-        userid = bundle.getString(Constant.TAG_USER_ID);
         requestno = bundle.getString(Constant.TAG_REQUESTNO);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
@@ -180,7 +183,8 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
         if(loginRequest!=null){
             try {
-                userID = new String(BackAES.encrypt(userid, AESHelper.password, AESHelper.type));
+                userID = Utils.removeString(new String(BackAES.decrypt(userid, AESHelper.password, AESHelper.type)));
+                kaiinno = new String(BackAES.encrypt(kaiinno,AESHelper.password, AESHelper.type));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -194,7 +198,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             AppLog.log(postDetailType1.toString());
         }else{
             PostDetail postDetail = new PostDetail();
-            postDetail.setUserid(userID);
+            postDetail.setUserid(kaiinno);
             postDetail.setRequestno(requestno);
             postDetail.setSenicode(senicode);
             mWebView.postUrl( url, postDetail.toString().getBytes());

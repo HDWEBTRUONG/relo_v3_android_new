@@ -52,6 +52,7 @@ import jp.relo.cluboff.views.SweetAlertDialog;
  */
 
 public class Utils {
+    public static final String TEMP_TOSTRING = "ToString(";
 
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -403,5 +404,13 @@ public class Utils {
                 return 0;
             }
         }
+    }
+
+    public static String removeString(String txt){
+
+        if(txt!=null && txt.startsWith(TEMP_TOSTRING)){
+            return txt.substring(TEMP_TOSTRING.length(),txt.length()-1);
+        }
+        return txt;
     }
 }
