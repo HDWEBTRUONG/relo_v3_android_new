@@ -266,7 +266,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         bundle.putString(Constant.KEY_LOGIN_URL, url);
         bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
 
-        bundle.putString(Constant.TAG_REQUESTNO, data.getShgrid());
+        bundle.putString(Constant.TAG_SHGRID, data.getShgrid());
         iSwitchFragment.callSwitchFragment(bundle);
     }
 
