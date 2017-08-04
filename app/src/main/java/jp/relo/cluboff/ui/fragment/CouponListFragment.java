@@ -222,14 +222,16 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void callback(CouponDTO data) {
         String url="";
+        String kaiinno = "";
         Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
+        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
         Bundle bundle = new Bundle();
         if(data.getCoupon_type().equals(WILL_NET_SERVER)){
             url =data.getLink_path();
             String mBrndid = "";
             if(info!=null) {
                 try {
-                    mBrndid = BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type);
+                    mBrndid = Utils.removeString(BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -237,7 +239,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             bundle.putString(Constant.TAG_BRNDID, mBrndid);
 
         }else{
+            if(loginRequest!=null) {
+                try {
+                    kaiinno = loginRequest.getKaiinno();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             bundle.putString(Constant.TAG_SENICODE, "1");
+            bundle.putString(Constant.TAG_KAIINNO, kaiinno);
             url = "";
             if(info!=null){
                 try {
@@ -249,9 +259,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             }
         }
         String userID = "";
-        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
-        if(loginRequest!=null){
-            userID = loginRequest.getKaiinno();
+        if(info!=null){
+            userID = info.getUserid();
         }
         bundle.putString(Constant.TAG_USER_ID, userID);
         bundle.putString(Constant.KEY_LOGIN_URL, url);

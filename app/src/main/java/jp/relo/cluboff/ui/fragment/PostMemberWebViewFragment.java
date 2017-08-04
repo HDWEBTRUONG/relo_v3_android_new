@@ -197,7 +197,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            String  usernameEn = info.getUserid();
+            String  usernameEn = "";
             String  COA_APPEn = "1";
             try {
                 if(loginRequest!=null){

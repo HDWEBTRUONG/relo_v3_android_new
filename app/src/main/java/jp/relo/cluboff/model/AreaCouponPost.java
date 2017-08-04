@@ -28,7 +28,7 @@ public class AreaCouponPost {
         this.p_s25 = "91";
         this.p_s29 = "1";
         this.p_s34 = "1";
-        this.p_s36 = "025,027,123,124,130,131,32,188,33,46,126,175,177";
+        this.p_s36 = "25,27,123,124,130,131,32,188,33,46,126,175,177";
     }
 
     public String getP_s1() {
