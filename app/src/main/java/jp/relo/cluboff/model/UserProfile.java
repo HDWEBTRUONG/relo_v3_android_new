@@ -1,5 +1,6 @@
 package jp.relo.cluboff.model;
 
+import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
 
@@ -22,7 +23,7 @@ public class UserProfile {
     // RESPONSE none encry
     public static String user_id_responsed_plaintext ;
     public static String brand_id_responsed_plaintext;
-    public static String url_responsed_none_plaintext;
+    public static String url_responsed_plaintext;
 
 
     public static void set_data_first_login(String _user_id, String _email, String _brand_id ){
@@ -41,11 +42,12 @@ public class UserProfile {
             //1. get data from
             user_id_responsed_plaintext = new String(BackAES.decrypt(_user_id, AESHelper.password, AESHelper.type));
             brand_id_responsed_plaintext = new String(BackAES.decrypt(_user_id, AESHelper.password, AESHelper.type));
-            url_responsed_none_plaintext = new String(BackAES.decrypt(_user_id, AESHelper.password, AESHelper.type));
+            url_responsed_plaintext = new String(BackAES.decrypt(_user_id, AESHelper.password, AESHelper.type));
 
             //2. remove ToString text
-            //....
-            //....
+            user_id_responsed_plaintext = Utils.removeString(user_id_responsed_plaintext);
+            brand_id_responsed_plaintext =  Utils.removeString(brand_id_responsed_plaintext);
+            url_responsed_plaintext =  Utils.removeString(url_responsed_plaintext);
 
         } catch (Exception e) {
             e.printStackTrace();
