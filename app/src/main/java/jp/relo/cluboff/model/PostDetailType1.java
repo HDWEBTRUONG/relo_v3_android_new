@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 public class PostDetailType1 {
     private String kid = "";
     private String brndid = "";
-    String requestno = "";
+    String shgrid = "";
 
 
     public PostDetailType1() {
@@ -34,19 +34,19 @@ public class PostDetailType1 {
         this.brndid = brndid;
     }
 
-    public String getRequestno() {
-        return requestno;
+    public String getShgrid() {
+        return shgrid;
     }
 
-    public void setRequestno(String requestno) {
-        this.requestno = requestno;
+    public void setShgrid(String shgrid) {
+        this.shgrid = shgrid;
     }
 
     @Override
     public String toString() {
         try {
             return "kid=" + URLEncoder.encode(kid, "UTF-8") +
-                    "&requestno=" + URLEncoder.encode(requestno, "UTF-8")+
+                    "&shgrid=" + URLEncoder.encode(shgrid, "UTF-8")+
                     "&brndid=" + URLEncoder.encode(brndid, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
