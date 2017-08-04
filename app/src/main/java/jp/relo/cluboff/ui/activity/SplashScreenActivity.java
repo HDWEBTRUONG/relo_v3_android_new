@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -93,19 +94,6 @@ public class SplashScreenActivity extends BaseActivity {
 
         @Override
         public void onPageScrolled(int position, float arg1, int arg2) {
-            int lastIdx = myViewPagerAdapter.getCount() - 1;
-            if(lastPageChange && position == lastIdx) {
-                if(!isDone){
-                    isDone = true;
-                    boolean notFirst = LoginSharedPreference.getInstance(SplashScreenActivity.this).get(Constant.TAG_IS_FIRST, Boolean.class);
-                    if(notFirst){
-                        finish();
-                    }else{
-                        LoginSharedPreference.getInstance(SplashScreenActivity.this).put(Constant.TAG_IS_FIRST, true);
-                        goNextScreen();
-                    }
-                }
-            }
         }
 
         @Override
@@ -125,6 +113,7 @@ public class SplashScreenActivity extends BaseActivity {
      */
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
+        Button btnCloseSplash;
 
         public MyViewPagerAdapter() {
         }
@@ -133,6 +122,23 @@ public class SplashScreenActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(layouts[position], container, false);
+            if(position==layouts.length-1){
+                btnCloseSplash = (Button) view.findViewById(R.id.btnCloseSplash);
+                if(btnCloseSplash!=null){
+                    btnCloseSplash.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean notFirst = LoginSharedPreference.getInstance(SplashScreenActivity.this).get(Constant.TAG_IS_FIRST, Boolean.class);
+                            if(notFirst){
+                                finish();
+                            }else{
+                                LoginSharedPreference.getInstance(SplashScreenActivity.this).put(Constant.TAG_IS_FIRST, true);
+                                goNextScreen();
+                            }
+                        }
+                    });
+                }
+            }
             container.addView(view);
             return view;
         }

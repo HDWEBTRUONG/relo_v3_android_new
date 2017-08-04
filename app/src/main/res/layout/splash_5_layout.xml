@@ -2,9 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/plash5"/>
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/plash5"/>
+        <Button
+            android:id="@+id/btnCloseSplash"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_35dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/button_bg_default"
+            android:paddingLeft="@dimen/_55dp"
+            android:paddingRight="@dimen/_55dp"
+            android:text="はじめる"
+            android:textColor="@color/bg_button_login_pressed"
+            android:layout_marginBottom="@dimen/_10dp"/>
+    </FrameLayout>
 </LinearLayout>

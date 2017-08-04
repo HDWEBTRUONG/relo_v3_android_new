@@ -55,4 +55,7 @@
     <color name="color_category_25">#5E99D5</color>
     <color name="color_category_999">#AFABAB</color>
 
+    <color name="bg_button_login_pressed">#045BAE</color>
+    <color name="bg_button_login">#AAAAAA</color>
+
 </resources>
