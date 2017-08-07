@@ -109,7 +109,7 @@ public class HandlerStartActivity extends BaseActivity {
                                     e.printStackTrace();
                                 }
                                 updateData();
-                                setGoogleAnalytic(brandid);
+                                setGoogleAnalyticLogin(brandid);
 
                             }else{
                                 goNextScreen();
@@ -156,8 +156,8 @@ public class HandlerStartActivity extends BaseActivity {
             }
         });
     }
-    public void setGoogleAnalytic(int brandid){
+    public void setGoogleAnalyticLogin(long brandid){
         ReloApp reloApp = (ReloApp) getApplication();
-        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY,Constant.GA_ACTION,Constant.GA_DIMENSION_VALUE,brandid);
+        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_LOGIN,Constant.GA_ACTION_LOGIN,Constant.GA_LABLE_LOGIN,brandid);
     }
 }

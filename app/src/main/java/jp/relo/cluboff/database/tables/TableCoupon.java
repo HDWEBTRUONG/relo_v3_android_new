@@ -43,22 +43,28 @@ public class TableCoupon {
                 String now= Utils.valueNowTime();
                 String selectQuery = "";
                 if(ConstansDB.COUPON_ALL.equals(categoryID)){
+
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
                 }else if(ConstansDB.COUPON_FAV.equals(categoryID)) {
+
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID
                             +" WHERE B."+TableFav.COLUMN_LIKE+" = '"+1+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")" + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
                 }
                 else{
+
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "+TableCoupon.COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"  + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
                 }
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);

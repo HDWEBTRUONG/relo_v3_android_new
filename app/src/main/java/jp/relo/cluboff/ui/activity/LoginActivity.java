@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         miUpdateIU = this;
-        ((ReloApp)getApplication()).trackingAnalytics(Constant.TEST_GA_LOGIN_ANALYTICS);
+        ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_LOGIN_SCREEN);
         mhandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -184,7 +184,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
                                         new LoginRequest(username,userMail,brand));
-                                setGoogleAnalytic(brandid);
+                                setGoogleAnalyticLogin(brandid);
                                 //save user and password encrypt KeyStore
                                 mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
                             }else{
@@ -223,9 +223,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }
     }
 
-    public void setGoogleAnalytic(int brandid){
+    public void setGoogleAnalyticLogin(long brandid){
         ReloApp reloApp = (ReloApp) getApplication();
-        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY,Constant.GA_ACTION,Constant.GA_DIMENSION_VALUE,brandid);
+        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_LOGIN,Constant.GA_ACTION_LOGIN,Constant.GA_LABLE_LOGIN,brandid);
     }
 
 

@@ -25,6 +25,7 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.CouponListAdapter;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.ConstansDB;
@@ -135,7 +136,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         myDatabaseHelper=new MyDatabaseHelper(getActivity());
-
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {

@@ -164,6 +164,16 @@ public class Utils {
         }
         return 0;
     }
+    public static long convertLong(String value){
+        if(value!=null&&!"".equals(value)){
+            try {
+                return Long.valueOf(value);
+            }catch (Exception ex){
+                return 0;
+            }
+        }
+        return 0;
+    }
     public static int convertIntVersion(String value){
         if(value!=null&&!"".equals(value)){
             try {

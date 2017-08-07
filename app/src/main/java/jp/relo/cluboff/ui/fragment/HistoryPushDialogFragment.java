@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
+import jp.relo.cluboff.util.Constant;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -57,6 +59,8 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar impleme
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_HISTORYPUSH_SCREEN);
+
         mHander = new Handler(){
             @Override
             public void handleMessage(Message msg) {

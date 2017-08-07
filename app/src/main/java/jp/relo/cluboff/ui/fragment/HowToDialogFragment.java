@@ -1,6 +1,8 @@
 package jp.relo.cluboff.ui.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -8,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.ui.BaseDialogFragment;
+import jp.relo.cluboff.util.Constant;
 
 /**
  * Created by tonkhanh on 7/31/17.
@@ -19,6 +23,14 @@ public class HowToDialogFragment extends BaseDialogFragment {
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private int[] layouts;
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_HOWTO_SCREEN);
+        return super.onCreateView(inflater, container, savedInstanceState);
+
+    }
 
     @Override
     protected void init(View view) {
