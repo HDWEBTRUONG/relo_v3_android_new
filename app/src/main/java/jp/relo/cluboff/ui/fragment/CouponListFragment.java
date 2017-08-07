@@ -31,10 +31,8 @@ import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
-import jp.relo.cluboff.model.Info;
-import jp.relo.cluboff.model.LoginRequest;
+import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.model.VersionReponse;
-import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
@@ -189,8 +187,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     private void getListDataCategoryID(String categoryID) {
         listCoupon.clear();
         if(StringUtil.isEmpty(brandID)&&isAdded()){
-            LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
-            brandID = loginRequest.getBrandid();
+            SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
+            brandID = saveLogin.getBrandid();
         }
         myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID,brandID).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CouponDTO>>() {
@@ -231,51 +229,38 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void callback(CouponDTO data) {
         String url="";
         String kaiinno = "";
-        Info info = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class);
-        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
+        SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
         Bundle bundle = new Bundle();
-        if(data.getCoupon_type().equals(WILL_NET_SERVER)){
-            url =data.getLink_path();
-            String mBrndid = "";
-            if(info!=null) {
+        if(saveLogin!=null){
+            if(data.getCoupon_type().equals(WILL_NET_SERVER)){
+                url =data.getLink_path();
+                String mBrndid = "";
                 try {
-                    mBrndid = Utils.removeString(BackAES.decrypt(info.getBrandid(), AESHelper.password, AESHelper.type));
+                    mBrndid = Utils.removeString(BackAES.decrypt(saveLogin.getBrandidEncrypt(), AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            bundle.putString(Constant.TAG_BRNDID, mBrndid);
+                bundle.putString(Constant.TAG_BRNDID, mBrndid);
 
-        }else{
-            if(loginRequest!=null) {
+            }else{
+                url = "";
                 try {
-                    kaiinno = loginRequest.getKaiinno();
+                    kaiinno = saveLogin.getKaiinno();
+                    url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(saveLogin.getUrlEncrypt(), AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            bundle.putString(Constant.TAG_SENICODE, "1");
-            bundle.putString(Constant.TAG_KAIINNO, kaiinno);
-            url = "";
-            if(info!=null){
-                try {
-                    url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(info.getUrl(), AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                bundle.putString(Constant.TAG_SENICODE, "1");
+                bundle.putString(Constant.TAG_KAIINNO, kaiinno);
                 }
+            String userID = saveLogin.getUseridEncrypt();
+            bundle.putString(Constant.TAG_USER_ID, userID);
+            bundle.putString(Constant.KEY_LOGIN_URL, url);
+            bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
 
-            }
+            bundle.putString(Constant.TAG_SHGRID, data.getShgrid());
+            iSwitchFragment.callSwitchFragment(bundle);
         }
-        String userID = "";
-        if(info!=null){
-            userID = info.getUserid();
-        }
-        bundle.putString(Constant.TAG_USER_ID, userID);
-        bundle.putString(Constant.KEY_LOGIN_URL, url);
-        bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
-
-        bundle.putString(Constant.TAG_SHGRID, data.getShgrid());
-        iSwitchFragment.callSwitchFragment(bundle);
     }
 
     @Override

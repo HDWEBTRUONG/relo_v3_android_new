@@ -3,7 +3,6 @@ package jp.relo.cluboff.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -11,28 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.util.List;
-
 import framework.phvtActivity.BaseActivity;
-import framework.phvtUtils.AppLog;
-import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.api.MyCallBack;
-import jp.relo.cluboff.database.MyDatabaseHelper;
-import jp.relo.cluboff.model.CatagoryDTO;
-import jp.relo.cluboff.model.LoginReponse;
-import jp.relo.cluboff.model.LoginRequest;
-import jp.relo.cluboff.model.VersionReponse;
-import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
-import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
-import jp.relo.cluboff.util.Utils;
-import jp.relo.cluboff.util.ase.AESHelper;
-import jp.relo.cluboff.util.ase.BackAES;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by HuyTran on 3/21/17.

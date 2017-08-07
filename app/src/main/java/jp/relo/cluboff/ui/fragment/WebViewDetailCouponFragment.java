@@ -21,14 +21,11 @@ import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.DetailCouponDetailVisible;
-import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.PostDetail;
 import jp.relo.cluboff.model.PostDetailType1;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
-import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
-import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
@@ -177,17 +174,14 @@ public class WebViewDetailCouponFragment extends BaseFragment {
     }
     private void loadDetail(){
         String userID = "";
-        LoginRequest loginRequest = LoginSharedPreference.getInstance(getActivity()).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
-        if(loginRequest!=null){
-            try {
-                if(!StringUtil.isEmpty(userid)){
-                    userID = Utils.removeString(new String(BackAES.decrypt(userid, AESHelper.password, AESHelper.type)));
-                }else{
-                    kaiinno = new String(BackAES.encrypt(kaiinno,AESHelper.password, AESHelper.type));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            if(!StringUtil.isEmpty(userid)){
+                userID = Utils.removeString(new String(BackAES.decrypt(userid, AESHelper.password, AESHelper.type)));
+            }else{
+                kaiinno = new String(BackAES.encrypt(kaiinno,AESHelper.password, AESHelper.type));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         if(CouponListFragment.WILL_NET_SERVER.equals(urlType)){
             PostDetailType1 postDetailType1 = new PostDetailType1();
