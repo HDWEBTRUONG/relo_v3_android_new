@@ -55,19 +55,36 @@ public class Constant {
     public static final String HTTP0023 = "0023";
     public static final String HTTP0099 = "0099";
 
+    //------------------Google Analytic Login----------------//
+    public static final String GA_LOGIN_SCREEN = "LoginSrceen";
+    public static final String GA_CATALOGY_LOGIN = "ログイン";
+    public static final String GA_ACTION_LOGIN = "タップ";
+    public static final String GA_LABLE_LOGIN = "IDPASSチェック";
 
-    //****************TEXT TEMP******************//
-    public static final String GA_CATALOGY = "click";
-    public static final String GA_ACTION = "login";
-    public static final String GA_DIMENSION_VALUE = "success";
-    public static final String TEST_GA_LOGIN_ANALYTICS = "LoginSrceen";
+    //------------------Google Analytic Detail Coupon----------------//
+    public static final String GA_DETAIL_SCREEN = "DetailCouponSrceen";
+    public static final String GA_CATALOGY_DETAIL = "人気クーポン ";
+    public static final String GA_ACTION_DETAIL = "タップ";
+    public static final String GA_LABLE_DETAIL = "<要確認>"; //ToDO Change value
+
+    //------------------Google Analytic Area Coupon----------------//
+    public static final String GA_AREA_SCREEN = "AreaCouponSrceen";
+
+    //------------------Google Analytic List Coupon----------------//
+    public static final String GA_LIST_COUPON_SCREEN = "ListCouponSrceen";
+
+    //------------------Google Analytic Member Coupon----------------//
+    public static final String GA_MEMBER_SCREEN = "MemberSrceen";
+
+    //------------------Google Analytic Member Coupon----------------//
+    public static final String GA_HISTORYPUSH_SCREEN = "HistoryPushScreen";
+
+    //------------------Google Analytic How to----------------//
+    public static final String GA_HOWTO_SCREEN = "HowToScreen";
+
+
     //Push GCM
     public static final String GCM_SENDER_ID = BuildConfig.GCM_SENDER_ID;
-    //Key username
-    public static final String ACC_TEST_ID_LOGIN = "00008440";
-    public static final String ACC_TEST_ID_LOGIN_ENCRY = "f4od/GCIvlp402l4ZOkYzg";
-    public static final String ACC_TEST_URL_LOGIN = "sptest.club-off.com/relo";
-
 
     public static final String TAG_USER_ID= "userid";
     public static final String TAG_SHGRID = "shgrid";

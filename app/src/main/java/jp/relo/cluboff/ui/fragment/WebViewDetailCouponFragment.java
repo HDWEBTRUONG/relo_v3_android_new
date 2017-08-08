@@ -19,6 +19,7 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.DetailCouponDetailVisible;
 import jp.relo.cluboff.model.PostDetail;
@@ -82,8 +83,17 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         shgrid = bundle.getString(Constant.TAG_SHGRID);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_DETAIL_SCREEN);
+        setGoogleAnalyticDetailCoupon(shgrid);
 
     }
+    public void setGoogleAnalyticDetailCoupon(String shgrid){
+        long _shgrid = Utils.convertLong(shgrid);
+        ReloApp reloApp = (ReloApp) getActivity().getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_DETAIL,Constant.GA_ACTION_DETAIL,Constant.GA_LABLE_DETAIL,_shgrid);
+    }
+
+
     public void setControlBottom(IControlBottom iControlBottom){
         this.iControlBottom =iControlBottom;
     }

@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.AreaCouponPost;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
@@ -49,7 +50,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_AREA_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
