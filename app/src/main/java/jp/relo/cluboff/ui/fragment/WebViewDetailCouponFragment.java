@@ -180,6 +180,18 @@ public class WebViewDetailCouponFragment extends BaseFragment {
                 hideLoading();
             }
         });
+        mWebView.setOnKeyListener(new View.OnKeyListener(){
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
+                    getFragmentManager().popBackStack();
+                    return true;
+
+                }
+                return false;
+            }
+        });
         loadDetail();
     }
     private void loadDetail(){

@@ -187,6 +187,18 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                 callback.invoke(origin, true, false);
             }
         });
+        mWebView.setOnKeyListener(new View.OnKeyListener(){
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
+                    getActivity().finish();
+                    return true;
+
+                }
+                return false;
+            }
+        });
     }
 
     @Override
