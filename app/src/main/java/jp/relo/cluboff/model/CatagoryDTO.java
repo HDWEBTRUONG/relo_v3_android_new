@@ -34,6 +34,6 @@ public class CatagoryDTO {
 
     @Override
     public String toString() {
-        return getCatagoryName;
+        return getCatagoryName ;
     }
 }

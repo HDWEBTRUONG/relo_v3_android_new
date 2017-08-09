@@ -14,6 +14,7 @@ import android.webkit.WebView;
 
 import java.text.MessageFormat;
 
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.MemberPost;
@@ -36,6 +37,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     private int checkWebview;
     boolean isLoadding = false;
     boolean isVisibleToUser;
+    String strBrowser = "";
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -94,7 +96,10 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
                                 @Override
                                 public void updateError(int txt) {
                                     if(txt == 0){
-                                        getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
+                                        if(StringUtil.isEmpty(strBrowser)){
+                                            strBrowser = mWebView.getUrl();
+                                        }
+                                        getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(strBrowser)));
                                     }
                                 }
                             });
@@ -157,6 +162,9 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if(StringUtil.isEmpty(strBrowser)){
+                    strBrowser = url;
+                }
                 isLoadding = false;
                 if(isVisible()){
                     hideLoading();
