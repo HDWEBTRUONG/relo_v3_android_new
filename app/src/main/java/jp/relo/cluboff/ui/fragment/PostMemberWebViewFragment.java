@@ -12,12 +12,16 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.MessageFormat;
 
+import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.MemberPost;
+import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -49,7 +53,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK&&event.getAction() == KeyEvent.ACTION_UP){
-                    getActivity().finish();
+                    EventBus.getDefault().post(new MessageEvent(Constant.TOP_COUPON));
                     return true;
 
                 }
@@ -73,21 +77,23 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
                 break;
         }
-        imvBackBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.goBack();
                 imvBackBottomBar.setEnabled(false);
+                llBack.setEnabled(false);
             }
         });
-        imvForwardBottomBar.setOnClickListener(new View.OnClickListener() {
+        llForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.goForward();
                 imvForwardBottomBar.setEnabled(false);
+                llForward.setEnabled(false);
             }
         });
-        imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mWebView!=null &&  mWebView.getUrl()!=null){
@@ -107,7 +113,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             }
         });
 
-        imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
+        llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
@@ -117,6 +123,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
 
         imvBackBottomBar.setEnabled(mWebView.canGoBack());
         imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+        llBack.setEnabled(mWebView.canGoBack());
+        llForward.setEnabled(mWebView.canGoForward());
     }
 
     @Override
@@ -170,6 +178,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
                     hideLoading();
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+                    llBack.setEnabled(mWebView.canGoBack());
+                    llForward.setEnabled(mWebView.canGoForward());
                 }
 
             }
@@ -188,7 +198,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
-                    getActivity().finish();
+                    EventBus.getDefault().post(new MessageEvent(Constant.TOP_COUPON));
                     return true;
 
                 }

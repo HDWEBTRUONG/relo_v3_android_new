@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lnBottom"
     android:orientation="vertical"
-    android:visibility="gone"
+    android:visibility="invisible"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
@@ -13,6 +13,7 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
         <LinearLayout
+            android:id="@+id/llBack"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -23,10 +24,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_back_wv"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/llForward"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -41,6 +43,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/llBrowser"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -51,10 +54,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/btn_browser"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/llReload"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -65,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_reload_wv"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_gravity="center"/>
         </LinearLayout>
     </LinearLayout>

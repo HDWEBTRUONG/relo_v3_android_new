@@ -179,8 +179,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         if(listCoupon.isEmpty()){
             mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
         }else{
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
             showLoading(getActivity());
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
         }
     }
 

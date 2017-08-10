@@ -109,4 +109,6 @@ public class Constant {
 
     public static final String[] listCategory = {"25","27","32","126"};
     public static final String[] listCategoryName = {"グルメ","カラオケ","レジャー","日帰り湯","その他"};
+
+    public static final String TOP_COUPON= "TOP_COUPON";
 }
