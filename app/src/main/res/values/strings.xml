@@ -25,11 +25,11 @@
     <string name="popup_no">No</string>
     <string name="popup_ok">OK</string>
     <string name="popup_error_api">エラーが起きていましたので、もう一度やり直してください。</string>
-    <string name="error_id_empty">ログインID、アプリIDを打ち込んでください。</string>
-    <string name="error_id_brand_empty">アプリIDを打ち込んでください。</string>
-    <string name="error_id_login_empty">ログインID を打ち込んでください。</string>
-    <string name="error_mail_empty">メールアドレスを打ち込んでください</string>
-    <string name="error_all_empty">ログインID、アプリID,メールアドレスを打ち込んでください。</string>
+    <string name="error_id_empty">ログインID、アプリIDを入力してください。</string>
+    <string name="error_id_brand_empty">アプリIDを入力してください。</string>
+    <string name="error_id_login_empty">ログインID を入力してください。</string>
+    <string name="error_mail_empty">メールアドレスを入力してください。</string>
+    <string name="error_all_empty">ログインID、アプリID,メールアドレスを入力してください。</string>
 
     <!-- List Coupon -->
     <string name="txt_title_category_list_coupon">カテゴリを選ぶ</string>

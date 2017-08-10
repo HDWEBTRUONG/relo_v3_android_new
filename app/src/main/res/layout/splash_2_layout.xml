@@ -4,7 +4,14 @@
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:src="@drawable/plash2_head"
+        android:background="#005BB2"
+        android:scaleType="fitStart"/>
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/plash2"/>
+        android:scaleType="centerInside"
+        android:background="@color/white"
+        android:src="@drawable/plash2_body"/>
 </LinearLayout>

@@ -27,6 +27,11 @@ public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar
     protected RelativeLayout rlMenu;
     protected RelativeLayout flInfo;
 
+    protected LinearLayout llBack;
+    protected LinearLayout llForward;
+    protected LinearLayout llBrowser;
+    protected LinearLayout llReload;
+
 
 
     @Override
@@ -40,6 +45,11 @@ public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar
         title_toolbar = (TextView) view.findViewById(R.id.title_toolbar);
         rlMenu = (RelativeLayout) view.findViewById(R.id.rlMenu);
         flInfo = (RelativeLayout) view.findViewById(R.id.flInfo);
+
+        llBack = (LinearLayout) view.findViewById(R.id.llBack);
+        llForward = (LinearLayout) view.findViewById(R.id.llForward);
+        llBrowser = (LinearLayout) view.findViewById(R.id.llBrowser);
+        llReload = (LinearLayout) view.findViewById(R.id.llReload);
     }
 
     @Override

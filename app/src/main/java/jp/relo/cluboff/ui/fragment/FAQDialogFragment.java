@@ -62,28 +62,30 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
         imvBrowserBottomBar.setVisibility(View.VISIBLE);
         imvReloadBottomBar.setVisibility(View.VISIBLE);
 
-        imvBackBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.goBack();
                 imvBackBottomBar.setEnabled(false);
+                llBack.setEnabled(false);
             }
         });
-        imvForwardBottomBar.setOnClickListener(new View.OnClickListener() {
+        llForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.goForward();
                 imvForwardBottomBar.setEnabled(false);
+                llForward.setEnabled(false);
             }
         });
-        imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
             }
         });
 
-        imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
+        llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.reload();
@@ -92,6 +94,8 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
 
         imvBackBottomBar.setEnabled(mWebView.canGoBack());
         imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+        llBack.setEnabled(mWebView.canGoBack());
+        llForward.setEnabled(mWebView.canGoForward());
     }
 
 
@@ -148,6 +152,8 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
                 hideLoading();
                 imvBackBottomBar.setEnabled(mWebView.canGoBack());
                 imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+                llBack.setEnabled(mWebView.canGoBack());
+                llForward.setEnabled(mWebView.canGoForward());
 
             }
             @SuppressWarnings("deprecation")

@@ -73,6 +73,8 @@ public class MainTabActivity extends BaseActivityToolbar {
         if(event.getMessage().equals(MyAppVisorPushIntentService.class.getSimpleName())||
                 event.getMessage().equals(HistoryPushDialogFragment.class.getSimpleName())){
             loadCountPush();
+        }else if(Constant.TOP_COUPON.equals(event.getMessage())){
+            selectPage(INDEX_TOP);
         }
         else{
             loadCountPush();

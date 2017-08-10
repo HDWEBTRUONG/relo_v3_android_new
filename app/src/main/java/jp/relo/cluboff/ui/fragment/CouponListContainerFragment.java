@@ -56,25 +56,26 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
         imvBackBottomBar.setVisibility(View.VISIBLE);
         imvForwardBottomBar.setVisibility(View.VISIBLE);
         imvBrowserBottomBar.setVisibility(View.GONE);
+        llBrowser.setVisibility(View.INVISIBLE);
         imvReloadBottomBar.setVisibility(View.VISIBLE);
         setBottomListener();
         disbleBottom();
     }
 
     private void setBottomListener() {
-        imvBackBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new ControlWebEventBus(true,false,false));
             }
         });
-        imvForwardBottomBar.setOnClickListener(new View.OnClickListener() {
+        llForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new ControlWebEventBus(false,true,false));
             }
         });
-        imvReloadBottomBar.setOnClickListener(new View.OnClickListener() {
+        llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new ControlWebEventBus(false,false,true));
@@ -86,6 +87,9 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
         imvBackBottomBar.setEnabled(false);
         imvForwardBottomBar.setEnabled(false);
         imvReloadBottomBar.setEnabled(false);
+        llBack.setEnabled(false);
+        llForward.setEnabled(false);
+        llReload.setEnabled(false);
     }
     public  void switchFragmentCoupon(boolean isDetail,Bundle bundle){
         if(isDetail){
@@ -108,16 +112,19 @@ public class CouponListContainerFragment extends BaseFragmentBottombar implement
     @Override
     public void canBack(boolean isCanBack) {
         imvBackBottomBar.setEnabled(isCanBack);
+        llBack.setEnabled(isCanBack);
     }
 
     @Override
     public void canForward(boolean isCanForward) {
         imvForwardBottomBar.setEnabled(isCanForward);
+        llForward.setEnabled(isCanForward);
     }
 
     @Override
     public void canReload(boolean isCanReload) {
         imvReloadBottomBar.setEnabled(isCanReload);
+        llReload.setEnabled(isCanReload);
     }
 
     @Override

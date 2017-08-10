@@ -21,6 +21,12 @@ public abstract class BaseDialogFragmentToolbarBottombar extends BaseDialogFragm
     protected ImageView imvForwardBottomBar;
     protected ImageView imvBrowserBottomBar;
     protected ImageView imvReloadBottomBar;
+    protected LinearLayout llBack;
+    protected LinearLayout llForward;
+    protected LinearLayout llBrowser;
+    protected LinearLayout llReload;
+
+
 
     @Nullable
     @Override
@@ -31,6 +37,11 @@ public abstract class BaseDialogFragmentToolbarBottombar extends BaseDialogFragm
         imvForwardBottomBar = (ImageView) view.findViewById(R.id.imvForwardBottomBar);
         imvBrowserBottomBar = (ImageView) view.findViewById(R.id.imvBrowserBottomBar);
         imvReloadBottomBar = (ImageView) view.findViewById(R.id.imvReloadBottomBar);
+
+        llBack = (LinearLayout) view.findViewById(R.id.llBack);
+        llForward = (LinearLayout) view.findViewById(R.id.llForward);
+        llBrowser = (LinearLayout) view.findViewById(R.id.llBrowser);
+        llReload = (LinearLayout) view.findViewById(R.id.llReload);
     }
 
     @Override

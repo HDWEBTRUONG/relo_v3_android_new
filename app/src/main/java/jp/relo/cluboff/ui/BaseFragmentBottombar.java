@@ -21,6 +21,11 @@ public abstract class BaseFragmentBottombar extends BaseFragment {
     protected ImageView imvBrowserBottomBar;
     protected ImageView imvReloadBottomBar;
 
+    protected LinearLayout llBack;
+    protected LinearLayout llForward;
+    protected LinearLayout llBrowser;
+    protected LinearLayout llReload;
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -30,6 +35,11 @@ public abstract class BaseFragmentBottombar extends BaseFragment {
         imvForwardBottomBar = (ImageView) view.findViewById(R.id.imvForwardBottomBar);
         imvBrowserBottomBar = (ImageView) view.findViewById(R.id.imvBrowserBottomBar);
         imvReloadBottomBar = (ImageView) view.findViewById(R.id.imvReloadBottomBar);
+
+        llBack = (LinearLayout) view.findViewById(R.id.llBack);
+        llForward = (LinearLayout) view.findViewById(R.id.llForward);
+        llBrowser = (LinearLayout) view.findViewById(R.id.llBrowser);
+        llReload = (LinearLayout) view.findViewById(R.id.llReload);
     }
 
     @Override
