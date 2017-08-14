@@ -16,7 +16,7 @@
     <string name="txt_login_app_id">アプリID</string>
     <string name="txt_login_mail">メールアドレス</string>
     <string name="txt_link_can_not_login">入力項目がご不明の場合はこちら</string>
-    <string name="txt_note_login">※本アプリを利用するには、事前にクラブオフサイトでの情報登録が必要です。</string>
+    <string name="txt_note_login">※本アプリをご利用いただくには、事前にクラブオフ ホームページでの会員情報登録が必要です。</string>
     <string name="txt_title_login">ログイン</string>
     <string name="error_login_wrong_id_password">ログインですることができませんでした。\n入力内容が間違っているか、大会後の可能性がございます。会員IDもしくはパスワードを再度</string>
     <string name="error_connect_network">通信に失敗しました</string>
@@ -62,11 +62,11 @@
     <string name="err_0001">会員登録がありません。</string>
     <string name="err_0002">入力内容に誤りがあります。</string>
     <string name="err_0005">お客様は現在ご利用いただけません。</string>
-    <string name="err_0006">お客様は現在ご利用いただけません。</string>
-    <string name="err_0007">お客様は現在ご利用いただけません。</string>
-    <string name="err_0010">お客様は現在ご利用いただけません。</string>
-    <string name="err_0021">当クラブホームページより、情報の登録後ご利用ください。</string>
-    <string name="err_0022">当クラブホームページより、情報の登録後ご利用ください。</string>
+    <string name="err_0006">お客様のIDは、既に当クラブを退会されているためご利用いただけません。</string>
+    <string name="err_0007">お客様のIDは、ご利用開始日が到来していないためご利用いただけません。</string>
+    <string name="err_0010">クラブオフアプリご提供対象外のためご利用いただけません。</string>
+    <string name="err_0021">当クラブのホームページより、会員情報をご登録後にご利用いただけます。</string>
+    <string name="err_0022">当クラブのホームページより、会員情報をご登録後にご利用いただけます。</string>
     <string name="err_0023">入力内容に誤りがあります。</string>
     <string name="err_0099">入力内容に誤りがあります。</string>
 
@@ -74,4 +74,6 @@
     <string name="title_browser">WEBブラウザでサイトを開きます。</string>
     <string name="content_browser">※WEBブラウザを立ち上げた場合、閲覧していたページは表示されず、サイトのトップにアクセスします。</string>
     <string name="btn_browser">開く</string>
+    <string name="title_dialog_error">エラー</string>
+    <string name="tutorial_title">はじめる</string>
 </resources>

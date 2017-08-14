@@ -27,10 +27,13 @@ import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
 import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
+import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.Utils;
 import retrofit2.http.Field;
 import rx.Observable;
 import rx.Subscriber;
@@ -410,5 +413,14 @@ public abstract class BaseFragment extends Fragment {
     public void onUnsubscribe() {
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
             mCompositeSubscription.unsubscribe();
+    }
+    public void setGoogleAnalyticDetailCoupon(String category, String action, String lable, String value){
+        long _value = Utils.convertLong(value);
+        ReloApp reloApp = (ReloApp) getActivity().getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(category,action,lable,_value);
+    }
+    public void setGoogleAnalyticDetailCoupon(String category, String action, String lable, long value){
+        ReloApp reloApp = (ReloApp) getActivity().getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(category,action,lable,value);
     }
 }

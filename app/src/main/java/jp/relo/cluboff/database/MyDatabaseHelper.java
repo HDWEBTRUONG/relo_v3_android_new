@@ -128,7 +128,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void savePush(HistoryPushDTO data){
+    public void savePush(HistoryPushDTO data, boolean isURL){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TablePush.COLUMN_PUSH_TITLE, data.getTitlePush());
@@ -142,6 +142,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TablePush.COLUMN_PUSH_READ, 0);
         db.insert(TablePush.TABLE_PUSH, null, values);
         db.close();
+    }
+    public void updateRead(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put(TablePush.COLUMN_PUSH_READ, 1);
+        db.update(TablePush.TABLE_PUSH, newValues, TablePush.COLUMN_PUSH_ID +"="+id, null);
+        db.close();
+    }
+
+    public long countPushUnread(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long cnt  = DatabaseUtils.queryNumEntries(db, TablePush.TABLE_PUSH,TablePush.COLUMN_PUSH_READ+" = 0");
+        db.close();
+        return cnt;
     }
 
 

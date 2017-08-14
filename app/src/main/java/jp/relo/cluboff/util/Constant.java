@@ -41,6 +41,7 @@ public class Constant {
     public static final int MEMBER_COUPON =  AREA_COUPON + 1;
     public static final int DETAIL_COUPON =  MEMBER_COUPON + 1;
     public static final int TUTURIAL_APP =  DETAIL_COUPON + 1;
+    public static final int FAQ =  TUTURIAL_APP + 1;
 
     public static final String HTTPOKJP = "00";
     public static final String HTTP0000 = "0000";
@@ -65,7 +66,14 @@ public class Constant {
     public static final String GA_DETAIL_SCREEN = "DetailCouponSrceen";
     public static final String GA_CATALOGY_DETAIL = "人気クーポン ";
     public static final String GA_ACTION_DETAIL = "タップ";
-    public static final String GA_LABLE_DETAIL = "<要確認>"; //ToDO Change value
+    public static final String GA_VALUE_DETAIL = ""; //ToDO Change value
+
+    //------------------Google Analytic Like Coupon----------------//
+    public static final String GA_LIKE_SCREEN = "LikeCouponSrceen";
+    public static final String GA_LIKE_CATEGORY = "人気クーポン お気に入り";
+    public static final String GA_ACTION_LIKE = "タップ";
+    public static final String GA_VALUE_LIKE = ""; //ToDO Change value
+
 
     //------------------Google Analytic Area Coupon----------------//
     public static final String GA_AREA_SCREEN = "AreaCouponSrceen";
@@ -76,8 +84,11 @@ public class Constant {
     //------------------Google Analytic Member Coupon----------------//
     public static final String GA_MEMBER_SCREEN = "MemberSrceen";
 
-    //------------------Google Analytic Member Coupon----------------//
+    //------------------Google Analytic HistoryPush----------------//
     public static final String GA_HISTORYPUSH_SCREEN = "HistoryPushScreen";
+    public static final String GA_HISTORYPUSH_CATEGORY = "人気クーポン お気に入り";
+    public static final String GA_HISTORYPUSH_ACTION = "タップ";
+    public static final String GA_HISTORYPUSH_VALUE = ""; //ToDO Change value
 
     //------------------Google Analytic How to----------------//
     public static final String GA_HOWTO_SCREEN = "HowToScreen";

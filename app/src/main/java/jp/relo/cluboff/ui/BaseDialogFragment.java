@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.util.Utils;
 
 /**
  * Created by tonkhanh on 6/8/17.
@@ -104,5 +106,14 @@ public abstract class BaseDialogFragment  extends DialogFragment {
         if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
             kProgressHUDloading.dismiss();
         }
+    }
+    public void setGoogleAnalyticDetailCoupon(String category, String action, String lable, String value){
+        long _value = Utils.convertLong(value);
+        ReloApp reloApp = (ReloApp) getActivity().getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(category,action,lable,_value);
+    }
+    public void setGoogleAnalyticDetailCoupon(String category, String action, String lable, long value){
+        ReloApp reloApp = (ReloApp) getActivity().getApplication();
+        reloApp.trackingWithAnalyticGoogleServices(category,action,lable,value);
     }
 }

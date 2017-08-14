@@ -274,6 +274,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 break;
             }
         }
+        setGoogleAnalyticDetailCoupon(Constant.GA_LIKE_CATEGORY,Constant.GA_ACTION_LIKE,id,Constant.GA_VALUE_LIKE);
         mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
     }
 

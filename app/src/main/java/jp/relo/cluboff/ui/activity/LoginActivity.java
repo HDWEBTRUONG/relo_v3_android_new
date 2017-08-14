@@ -36,6 +36,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
     ImageView img_logo;
     TextView link_webview_not_login;
+    TextView link_webview_faq;
     Button btnLogin;
     EditText edtLoginUsername,edtPassword,edtMail;
     TextView txt_show_error;
@@ -109,6 +110,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        link_webview_faq = (TextView) findViewById(R.id.link_webview_faq);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
@@ -117,23 +119,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
+        link_webview_faq.setOnClickListener(this);
 
-
-        //TODO TEST
-        if(BuildConfig.DEBUG)
-        img_logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Info info = new Info();
-                info.setUserid("f4od/GCIvlp402l4ZOkYzg==");
-                info.setBrandid("eQJbP+flwdhcyx2IANy8Cw==");
-                info.setUrl("YYQRiZbhLbVEFIedQfJ/y7Im+nF4UM556ev5E7b0KpU=");
-                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,info);
-                //save value input
-                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
-                        new LoginRequest("00008440","kubo@relo.jp","300590"));
-            }
-        });
     }
 
     @Override
@@ -256,6 +243,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        link_webview_faq.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
         LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
         if(loginRequest!=null){
@@ -287,6 +275,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             case R.id.link_webview_not_login:
                 openTutorial();
                 break;
+            case R.id.link_webview_faq:
+                clickLinkFAQ();
+                break;
         }
     }
     public void openTutorial(){
@@ -300,8 +291,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         startActivity(mainActivity);
                         finish();
     }
-    public void clickLinkNotLogin(){
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
+    public void clickLinkFAQ(){
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FAQ, Constant.FAQ);
     }
 
 

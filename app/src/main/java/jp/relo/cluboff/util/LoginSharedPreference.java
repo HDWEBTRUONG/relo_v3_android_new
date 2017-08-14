@@ -51,15 +51,6 @@ public class LoginSharedPreference {
         return sharedPreferences.getInt(VERSION,0);
     }
 
-    public void setPush(int value){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(COUNT_PUSH, value);
-        editor.apply();
-    }
-    public int getPush(){
-        return sharedPreferences.getInt(COUNT_PUSH,0);
-    }
-
     public <T> void put(String key, T data) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (data instanceof String) {

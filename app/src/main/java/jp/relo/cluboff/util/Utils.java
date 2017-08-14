@@ -211,7 +211,7 @@ public class Utils {
 
     public static void showDialogLIB(Context context, final int messagee, final iUpdateIU miUpdateIU){
         new SweetAlertDialog(context)
-                .setTitleText("")
+                .setTitleText(context.getString(R.string.title_dialog_error))
                 .setContentText(context.getResources().getString(R.string.err_api))
                 .setConfirmText(context.getResources().getString(R.string.popup_ok))
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -244,7 +244,7 @@ public class Utils {
     }
     public static void showDialogLIB(Context context, final int messagee){
         new SweetAlertDialog(context)
-                .setTitleText("")
+                .setTitleText(context.getString(R.string.title_dialog_error))
                 .setContentText(context.getResources().getString(messagee))
                 .setConfirmText(context.getResources().getString(R.string.popup_ok))
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {

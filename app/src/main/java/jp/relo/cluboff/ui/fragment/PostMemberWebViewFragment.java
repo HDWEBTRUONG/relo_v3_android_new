@@ -73,7 +73,11 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
                 lnBottom.setVisibility(View.VISIBLE);
                 imvBackBottomBar.setVisibility(View.VISIBLE);
                 imvForwardBottomBar.setVisibility(View.VISIBLE);
-                imvBrowserBottomBar.setVisibility(View.VISIBLE);
+
+                //Test
+                imvBrowserBottomBar.setVisibility(View.INVISIBLE);
+                llBrowser.setEnabled(false);
+
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
                 break;
         }

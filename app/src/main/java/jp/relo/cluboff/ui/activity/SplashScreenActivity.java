@@ -3,12 +3,17 @@ package jp.relo.cluboff.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import framework.phvtActivity.BaseActivity;
 import jp.relo.cluboff.R;
@@ -23,7 +28,8 @@ public class SplashScreenActivity extends BaseActivity {
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private int[] layouts;
-    boolean isDone = false;
+    private LinearLayout dotsLayout;
+    private TextView[] dots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +52,19 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         layouts = new int[]{
                 R.layout.splash_1_layout,
                 R.layout.splash_2_layout,
                 R.layout.splash_3_layout,
                 R.layout.splash_4_layout,
                 R.layout.splash_5_layout};
+        addBottomDots(0);
         myViewPagerAdapter = new SplashScreenActivity.MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
     }
 
     @Override
@@ -71,6 +81,7 @@ public class SplashScreenActivity extends BaseActivity {
         boolean lastPageChange = false;
         @Override
         public void onPageSelected(int position) {
+            addBottomDots(position);
         }
 
         @Override
@@ -89,13 +100,38 @@ public class SplashScreenActivity extends BaseActivity {
         }
     };
 
+    private void addBottomDots(int currentPage) {
+        dots = new TextView[layouts.length];
+        dotsLayout.removeAllViews();
+        for (int i = 0; i < dots.length; i++) {
+            dots[i] = new TextView(this);
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins((int)getResources().getDimension(R.dimen._2dp),(int)getResources().getDimension(R.dimen._1dp),
+                    (int)getResources().getDimension(R.dimen._2dp),(int)getResources().getDimension(R.dimen._1dp));
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                dots[i].setText(Html.fromHtml("&#8226;", Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                dots[i].setText(Html.fromHtml("&#8226;"));
+            }
+            dots[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._27dp));
+            if(i==currentPage){
+                dots[i].setTextColor(ContextCompat.getColor(this,R.color.dot_seleced));
+            }else{
+                dots[i].setTextColor(ContextCompat.getColor(this,R.color.dot));
+            }
+            dots[i].setLayoutParams(layoutParams);
+            dotsLayout.addView(dots[i]);
+        }
+    }
+
     /**
      * View pager adapter
      */
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
         Button btnCloseSplash;
-
         public MyViewPagerAdapter() {
         }
 

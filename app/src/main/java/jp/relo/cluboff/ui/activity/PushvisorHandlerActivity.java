@@ -33,7 +33,7 @@ public class PushvisorHandlerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pushProcess();
+        //pushProcess();
         setHandler();
     }
 
@@ -46,9 +46,6 @@ public class PushvisorHandlerActivity extends Activity {
                 Bundle mBundle = new Bundle();
                 mBundle.putString(Constant.TARGET_PUSH, screenTarget);
                 intent.putExtras(mBundle);
-                if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(screenTarget)){
-                    LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
-                }
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

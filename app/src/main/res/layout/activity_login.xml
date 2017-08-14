@@ -29,12 +29,12 @@
                 android:background="@color/gray240">
 
                 <EditText
-                    android:id="@+id/edtLoginUsername"
+                    android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_trans"
-                    android:hint="@string/txt_login_username"
+                    android:hint="@string/txt_login_app_id"
                     android:lines="1"
                     android:singleLine="true"
                     android:textColor="@color/color_textview_84"
@@ -47,11 +47,12 @@
                     android:layout_marginLeft="@dimen/_10dp">
                     <include layout="@layout/line_layout"/>
                 </LinearLayout>
+
                 <EditText
-                    android:id="@+id/edtMail"
+                    android:id="@+id/edtLoginUsername"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
-                    android:hint="@string/txt_login_mail"
+                    android:hint="@string/txt_login_username"
                     android:layout_gravity="center"
                     android:lines="1"
                     android:singleLine="true"
@@ -61,11 +62,11 @@
                     android:textColorHint="@color/color_hint_text_170"/>
             </LinearLayout>
             <EditText
-                android:id="@+id/edtPassword"
+                android:id="@+id/edtMail"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55dp"
                 android:layout_marginTop="@dimen/_20dp"
-                android:hint="@string/txt_login_app_id"
+                android:hint="@string/txt_login_mail"
                 android:layout_gravity="center"
                 android:lines="1"
                 android:singleLine="true"
@@ -112,6 +113,16 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/azureTwo"
                 android:text="@string/txt_link_can_not_login"
+                android:layout_marginLeft="@dimen/_20dp"
+                android:layout_marginRight="@dimen/_20dp"/>
+            <TextView
+                android:id="@+id/link_webview_faq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/azureTwo"
+                android:text="@string/menu_FAQ"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_25dp"
                 android:layout_marginLeft="@dimen/_20dp"
                 android:layout_marginRight="@dimen/_20dp"/>
 
