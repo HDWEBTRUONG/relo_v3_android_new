@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import framework.phvtUtils.StringUtil;
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
-import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
@@ -26,13 +24,12 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
-import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener, iUpdateIU {
+public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener {
 
     ImageView img_logo;
     TextView link_webview_not_login;
@@ -52,13 +49,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_ERROR_ID_BRAND_EMPTY = 8;
     public static final int MSG_ERROR_ID_LOGIN_EMPTY = 9;
     public static final int MSG_ERROR_ALL_EMPTY = 10;
-    iUpdateIU miUpdateIU;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        miUpdateIU = this;
         ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_LOGIN_SCREEN);
         mhandler = new Handler(){
             @Override
@@ -182,7 +177,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(int msg) {
-                        Utils.showDialogLIB(LoginActivity.this,msg, miUpdateIU);
+                        Utils.showDialogLIB(LoginActivity.this,msg);
 
                     }
 
@@ -294,15 +289,5 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void clickLinkFAQ(){
         goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FAQ, Constant.FAQ);
     }
-
-
-    @Override
-    public void updateError(int txt) {
-        if(txt_show_error!=null){
-            txt_show_error.setVisibility(View.VISIBLE);
-            txt_show_error.setText(txt);
-        }
-    }
-
 
 }

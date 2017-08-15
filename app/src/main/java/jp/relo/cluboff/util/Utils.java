@@ -209,18 +209,15 @@ public class Utils {
         alertDialog.show();
     }
 
-    public static void showDialogLIB(Context context, final int messagee, final iUpdateIU miUpdateIU){
+    public static void showDialogLIB(Context context, final int messagee){
         new SweetAlertDialog(context)
                 .setTitleText(context.getString(R.string.title_dialog_error))
-                .setContentText(context.getResources().getString(R.string.err_api))
+                .setContentText(context.getResources().getString(R.string.err_api)+context.getResources().getString(messagee))
                 .setConfirmText(context.getResources().getString(R.string.popup_ok))
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
-                        if(miUpdateIU!=null){
-                            miUpdateIU.updateError(messagee);
-                        }
                     }
                 })
                 .show();
@@ -238,19 +235,6 @@ public class Utils {
                         if(miUpdateIU!=null){
                             miUpdateIU.updateError(0);
                         }
-                    }
-                })
-                .show();
-    }
-    public static void showDialogLIB(Context context, final int messagee){
-        new SweetAlertDialog(context)
-                .setTitleText(context.getString(R.string.title_dialog_error))
-                .setContentText(context.getResources().getString(messagee))
-                .setConfirmText(context.getResources().getString(R.string.popup_ok))
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
                     }
                 })
                 .show();
