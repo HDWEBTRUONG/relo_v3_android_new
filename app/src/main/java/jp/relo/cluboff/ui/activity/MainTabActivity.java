@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,10 @@ import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.adapter.MenuListAdapter;
 import jp.relo.cluboff.adapter.ViewPagerAdapter;
+import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.model.ReloadEvent;
+import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
@@ -36,6 +38,7 @@ import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.Utils;
 
 public class MainTabActivity extends BaseActivityToolbar {
     private TabLayout tabLayout;
@@ -56,16 +59,20 @@ public class MainTabActivity extends BaseActivityToolbar {
     public static final int INDEX_MEMBER=2;
     public static final int UPDATE_COUNT=4;
     int indexTab = 0;
+    MyDatabaseHelper myDatabaseHelper;
+    long lateResume;
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        LoginSharedPreference.getInstance(this).setValueStop(Utils.dateTimeValue());
         EventBus.getDefault().unregister(this);
     }
     @Subscribe
@@ -86,6 +93,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        myDatabaseHelper = new MyDatabaseHelper(this);
         handler = new Handler() {
             public void handleMessage(Message msg) {
                 if(msg.what== UPDATE_COUNT){
@@ -106,6 +114,9 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onResume() {
         super.onResume();
+        long valueTime = Utils.dateTimeValue();
+        lateResume = LoginSharedPreference.getInstance(this).getValueStop();
+
         loadCountPush();
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -124,6 +135,11 @@ public class MainTabActivity extends BaseActivityToolbar {
             if(indexTab < -1 || indexTab > 1){
                 indexTab = 0;
             }
+            if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
+                indexTab = 0;
+                EventBus.getDefault().post(new ReloadEvent(true));
+
+            }
             selectPage(indexTab+1);
         }
     }
@@ -134,8 +150,9 @@ public class MainTabActivity extends BaseActivityToolbar {
         }
     }
 
+
     public void loadCountPush(){
-        countPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();
+        countPush = myDatabaseHelper.countPushUnread();
         handler.sendEmptyMessage(UPDATE_COUNT);
     }
     public void openHistoryPush(){
@@ -144,7 +161,9 @@ public class MainTabActivity extends BaseActivityToolbar {
         }
         historyPushDialogFragment.setICallDetailCoupon(new HistoryPushAdapter.iCallDetailCoupon() {
             @Override
-            public void callbackDetail(int tabIndex) {
+            public void callbackDetail(String actionPush, int tabIndex) {
+                ReloApp reloApp = (ReloApp) getApplication();
+                reloApp.trackingWithAnalyticGoogleServices(Constant.GA_HISTORYPUSH_CATEGORY,Constant.GA_HISTORYPUSH_ACTION,actionPush, Utils.convertLong(Constant.GA_HISTORYPUSH_VALUE));
                 selectPage(tabIndex);
             }
         });
@@ -159,14 +178,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         imvInfo.setVisibility(View.VISIBLE);
         tvCount.setVisibility(View.VISIBLE);
 
-        //event
-        flInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginSharedPreference.getInstance(getApplicationContext()).setPush(0);
-                openHistoryPush();
-            }
-        });
+
         rlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +187,12 @@ public class MainTabActivity extends BaseActivityToolbar {
                 } else {
                     mDrawerLayoutMenu.openDrawer(mDrawerListMenu);
                 }
+            }
+        });
+        flInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openHistoryPush();
             }
         });
     }
@@ -292,12 +310,18 @@ public class MainTabActivity extends BaseActivityToolbar {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
+        SaveLogin saveLogin = SaveLogin.getInstance(this);
+
+
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
         this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
+        // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
+        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getBrandid(),AppVisorPush.UserPropertyGroup1);
+        appVisorPush.synchronizeUserProperties();
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
         AppLog.log("###################################");

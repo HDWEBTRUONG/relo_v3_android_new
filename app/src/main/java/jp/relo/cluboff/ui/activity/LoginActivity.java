@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import framework.phvtUtils.StringUtil;
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
-import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
@@ -26,16 +24,16 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
-import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by quynguyen on 3/22/17.
  */
 
-public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener, iUpdateIU {
+public class LoginActivity extends BaseActivityToolbar implements View.OnClickListener {
 
     ImageView img_logo;
     TextView link_webview_not_login;
+    TextView link_webview_faq;
     Button btnLogin;
     EditText edtLoginUsername,edtPassword,edtMail;
     TextView txt_show_error;
@@ -51,13 +49,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_ERROR_ID_BRAND_EMPTY = 8;
     public static final int MSG_ERROR_ID_LOGIN_EMPTY = 9;
     public static final int MSG_ERROR_ALL_EMPTY = 10;
-    iUpdateIU miUpdateIU;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        miUpdateIU = this;
         ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_LOGIN_SCREEN);
         mhandler = new Handler(){
             @Override
@@ -109,6 +105,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
+        link_webview_faq = (TextView) findViewById(R.id.link_webview_faq);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
@@ -117,23 +114,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
+        link_webview_faq.setOnClickListener(this);
 
-
-        //TODO TEST
-        if(BuildConfig.DEBUG)
-        img_logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Info info = new Info();
-                info.setUserid("f4od/GCIvlp402l4ZOkYzg==");
-                info.setBrandid("eQJbP+flwdhcyx2IANy8Cw==");
-                info.setUrl("YYQRiZbhLbVEFIedQfJ/y7Im+nF4UM556ev5E7b0KpU=");
-                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,info);
-                //save value input
-                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
-                        new LoginRequest("00008440","kubo@relo.jp","300590"));
-            }
-        });
     }
 
     @Override
@@ -195,7 +177,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(int msg) {
-                        Utils.showDialogLIB(LoginActivity.this,msg, miUpdateIU);
+                        Utils.showDialogAPI(LoginActivity.this,msg);
 
                     }
 
@@ -256,6 +238,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        link_webview_faq.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
         LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
         if(loginRequest!=null){
@@ -287,6 +270,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             case R.id.link_webview_not_login:
                 openTutorial();
                 break;
+            case R.id.link_webview_faq:
+                clickLinkFAQ();
+                break;
         }
     }
     public void openTutorial(){
@@ -300,18 +286,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         startActivity(mainActivity);
                         finish();
     }
-    public void clickLinkNotLogin(){
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_CAN_NOT_LOGIN, Constant.CAN_NOT_LOGIN);
+    public void clickLinkFAQ(){
+        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FAQ, Constant.FAQ);
     }
-
-
-    @Override
-    public void updateError(int txt) {
-        if(txt_show_error!=null){
-            txt_show_error.setVisibility(View.VISIBLE);
-            txt_show_error.setText(txt);
-        }
-    }
-
 
 }

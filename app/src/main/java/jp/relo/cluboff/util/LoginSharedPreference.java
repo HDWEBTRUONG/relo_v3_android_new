@@ -16,7 +16,7 @@ public class LoginSharedPreference {
     public final String KEY_ID_APP="IDApp";//pass word
     public final String KEY_MAIL="UserMail";
     public final String VERSION = "version";
-    public final String COUNT_PUSH = "countPush";
+    public final String TIME_STOP = "timeStop";
     public static LoginSharedPreference sharedPreference;
 
     private final SharedPreferences sharedPreferences;
@@ -51,13 +51,13 @@ public class LoginSharedPreference {
         return sharedPreferences.getInt(VERSION,0);
     }
 
-    public void setPush(int value){
+    public void setValueStop(long value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(COUNT_PUSH, value);
+        editor.putLong(TIME_STOP, value);
         editor.apply();
     }
-    public int getPush(){
-        return sharedPreferences.getInt(COUNT_PUSH,0);
+    public long getValueStop(){
+        return sharedPreferences.getLong(TIME_STOP,0);
     }
 
     public <T> void put(String key, T data) {

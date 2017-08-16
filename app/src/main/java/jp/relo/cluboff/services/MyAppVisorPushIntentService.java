@@ -63,13 +63,10 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
                 dataPush.setzHis(zString);
                 dataPush.setwHis(wString);
                 dataPush.setUrlHis(wString);
-                myDatabaseHelper.savePush(dataPush);
-                int numPush = LoginSharedPreference.getInstance(getApplicationContext()).getPush();
-                numPush++;
-                LoginSharedPreference.getInstance(getApplicationContext()).setPush(numPush);
+                myDatabaseHelper.savePush(dataPush,!StringUtil.isEmpty(pushIDStr));
+                EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
                 if(isBackgroundRunning()){
                     AppLog.log("In isBackgroundRunning");
-                    EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
                     if(StringUtil.isEmpty(url)){
                         int pushID = Utils.convertInt(pushIDStr);
                         cancelNotification(context,pushID);

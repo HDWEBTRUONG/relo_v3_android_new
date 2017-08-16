@@ -3,11 +3,18 @@ package jp.relo.cluboff.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
@@ -23,6 +30,8 @@ public class HowToDialogFragment extends BaseDialogFragment {
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private int[] layouts;
+    private LinearLayout dotsLayout;
+    private TextView[] dots;
 
     @org.jetbrains.annotations.Nullable
     @Override
@@ -35,11 +44,13 @@ public class HowToDialogFragment extends BaseDialogFragment {
     @Override
     protected void init(View view) {
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        dotsLayout = (LinearLayout) view.findViewById(R.id.layoutDots);
         layouts = new int[]{
                 R.layout.tutorial_1_layout,
                 R.layout.tutorial_2_layout,
                 R.layout.tutorial_3_layout,
                 R.layout.tutorial_4_layout};
+        addBottomDots(0);
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
@@ -59,7 +70,28 @@ public class HowToDialogFragment extends BaseDialogFragment {
     public void bindView(View view) {
 
     }
-
+    private void addBottomDots(int currentPage) {
+        dots = new TextView[layouts.length];
+        dotsLayout.removeAllViews();
+        for (int i = 0; i < dots.length; i++) {
+            dots[i] = new TextView(getActivity());
+            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                dots[i].setText(Html.fromHtml("&#8226;", Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                dots[i].setText(Html.fromHtml("&#8226;"));
+            }
+            dots[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._35dp));
+            if(i==currentPage){
+                dots[i].setTextColor(ContextCompat.getColor(getActivity(),R.color.dot_seleced));
+            }else{
+                dots[i].setTextColor(ContextCompat.getColor(getActivity(),R.color.dot));
+            }
+            dots[i].setLayoutParams(layoutParams);
+            dotsLayout.addView(dots[i]);
+        }
+    }
 
     private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
@@ -71,6 +103,7 @@ public class HowToDialogFragment extends BaseDialogFragment {
         boolean lastPageChange = false;
         @Override
         public void onPageSelected(int position) {
+            addBottomDots(position);
         }
 
         @Override

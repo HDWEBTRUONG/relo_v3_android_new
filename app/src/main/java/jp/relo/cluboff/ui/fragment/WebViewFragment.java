@@ -36,7 +36,7 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         url = bundle.getString(Constant.KEY_LOGIN_URL);
-        checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FORGET_PASSWORD);
+        checkWebview = bundle.getInt(Constant.KEY_CHECK_WEBVIEW, Constant.FAQ);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
 
@@ -48,6 +48,19 @@ public class WebViewFragment extends BaseFragmentToolbarBottombar {
                 lnToolbar.setVisibility(View.VISIBLE);
                 title_toolbar.setVisibility(View.VISIBLE);
                 title_toolbar.setText(R.string.cannot_login_title);
+                imvMenu.setVisibility(View.VISIBLE);
+                imvMenu.setImageResource(R.drawable.icon_close);
+                rlMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
+                break;
+            case Constant.FAQ:
+                lnToolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setVisibility(View.VISIBLE);
+                title_toolbar.setText(R.string.menu_FAQ);
                 imvMenu.setVisibility(View.VISIBLE);
                 imvMenu.setImageResource(R.drawable.icon_close);
                 rlMenu.setOnClickListener(new View.OnClickListener() {

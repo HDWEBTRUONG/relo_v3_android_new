@@ -10,13 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
+import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
@@ -28,9 +33,9 @@ import jp.relo.cluboff.util.Utils;
 public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.HisViewHolder>{
     ArrayList<HistoryPushDTO> listData;
     Context mContext;
-    private MyDatabaseHelper myDatabaseHelper;
     iCallDetailCoupon miCallDetailCoupon;
     iCallDismiss miCallDismiss;
+    MyDatabaseHelper myDatabaseHelper;
 
     public HistoryPushAdapter(Context mContext,ArrayList<HistoryPushDTO> listData, iCallDetailCoupon miCallDetailCoupon, iCallDismiss miCallDismiss) {
         this.listData = listData;
@@ -38,6 +43,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         myDatabaseHelper = new MyDatabaseHelper(mContext);
         this.miCallDetailCoupon = miCallDetailCoupon;
         this.miCallDismiss = miCallDismiss;
+        myDatabaseHelper = new MyDatabaseHelper(mContext);
     }
 
     @Override
@@ -61,19 +67,22 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         holder.tvHistoryLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myDatabaseHelper.updateRead(data.getIdHis());
+                EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
                 String target = data.getwHis();
                 if(miCallDetailCoupon !=null&&!Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
                     if(Constant.TARGET_PUSH_SCREEN_AREA.equalsIgnoreCase(target)){
-                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_AREA);
+                        miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_AREA);
                     }else if(Constant.TARGET_PUSH_SCREEN_SITE.equalsIgnoreCase(target)){
-                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_MEMBER);
+                        miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_MEMBER);
                     }else{
-                        miCallDetailCoupon.callbackDetail(MainTabActivity.INDEX_TOP);
+                        miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_TOP);
                     }
                     if(miCallDismiss!=null){
                         miCallDismiss.callDismiss();
                     }
                 }
+
             }
         });
     }
@@ -99,10 +108,9 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         }
     }
     public interface iCallDetailCoupon{
-        void callbackDetail(int tabIndex);
+        void callbackDetail(String actionPush, int tabIndex);
     }
     public interface iCallDismiss{
         void callDismiss();
     }
-
 }

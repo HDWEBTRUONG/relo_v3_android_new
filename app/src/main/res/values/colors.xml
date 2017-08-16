@@ -58,4 +58,7 @@
     <color name="bg_button_login_pressed">#045BAE</color>
     <color name="bg_button_login">#AAAAAA</color>
 
+    <color name="dot_seleced">#FFBB00</color>
+    <color name="dot">#D8D8D8</color>
+
 </resources>

@@ -84,14 +84,10 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
         setupWebView();
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_DETAIL_SCREEN);
-        setGoogleAnalyticDetailCoupon(shgrid);
+        setGoogleAnalyticDetailCoupon(Constant.GA_CATALOGY_DETAIL,Constant.GA_ACTION_DETAIL,shgrid,Constant.GA_VALUE_DETAIL);
 
     }
-    public void setGoogleAnalyticDetailCoupon(String shgrid){
-        long _shgrid = Utils.convertLong(shgrid);
-        ReloApp reloApp = (ReloApp) getActivity().getApplication();
-        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_DETAIL,Constant.GA_ACTION_DETAIL,Constant.GA_LABLE_DETAIL,_shgrid);
-    }
+
 
 
     public void setControlBottom(IControlBottom iControlBottom){
