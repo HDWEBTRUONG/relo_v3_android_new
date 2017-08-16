@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import jp.relo.cluboff.adapter.MenuListAdapter;
 import jp.relo.cluboff.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
@@ -60,16 +60,19 @@ public class MainTabActivity extends BaseActivityToolbar {
     public static final int UPDATE_COUNT=4;
     int indexTab = 0;
     MyDatabaseHelper myDatabaseHelper;
+    long lateResume;
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        LoginSharedPreference.getInstance(this).setValueStop(Utils.dateTimeValue());
         EventBus.getDefault().unregister(this);
     }
     @Subscribe
@@ -89,6 +92,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         myDatabaseHelper = new MyDatabaseHelper(this);
         handler = new Handler() {
             public void handleMessage(Message msg) {
@@ -110,6 +114,9 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onResume() {
         super.onResume();
+        long valueTime = Utils.dateTimeValue();
+        lateResume = LoginSharedPreference.getInstance(this).getValueStop();
+
         loadCountPush();
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -128,6 +135,11 @@ public class MainTabActivity extends BaseActivityToolbar {
             if(indexTab < -1 || indexTab > 1){
                 indexTab = 0;
             }
+            if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
+                indexTab = 0;
+                EventBus.getDefault().post(new ReloadEvent(true));
+
+            }
             selectPage(indexTab+1);
         }
     }
@@ -137,6 +149,7 @@ public class MainTabActivity extends BaseActivityToolbar {
             viewPager.setCurrentItem(pageIndex);
         }
     }
+
 
     public void loadCountPush(){
         countPush = myDatabaseHelper.countPushUnread();

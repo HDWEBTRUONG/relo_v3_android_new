@@ -177,7 +177,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
                     @Override
                     public void onFailure(int msg) {
-                        Utils.showDialogLIB(LoginActivity.this,msg);
+                        Utils.showDialogAPI(LoginActivity.this,msg);
 
                     }
 

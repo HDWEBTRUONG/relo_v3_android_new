@@ -122,4 +122,6 @@ public class Constant {
     public static final String[] listCategoryName = {"グルメ","カラオケ","レジャー","日帰り湯","その他"};
 
     public static final String TOP_COUPON= "TOP_COUPON";
+    public static final String USERID= "USERID";
+    public static final int LIMIT_ON_BACKGROUND= 3600000;
 }

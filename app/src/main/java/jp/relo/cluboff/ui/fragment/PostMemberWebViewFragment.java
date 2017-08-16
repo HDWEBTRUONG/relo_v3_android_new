@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.MessageFormat;
 
@@ -20,8 +22,10 @@ import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -144,6 +148,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -250,5 +255,20 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(ReloadEvent event) {
+        if(event.isReload()&&!isLoadding){
+            AppLog.log("Ok-------");
+            loadUrl();
+        }
     }
 }

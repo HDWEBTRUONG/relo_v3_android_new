@@ -1,6 +1,7 @@
 package jp.relo.cluboff.util;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -212,6 +213,19 @@ public class Utils {
     public static void showDialogLIB(Context context, final int messagee){
         new SweetAlertDialog(context)
                 .setTitleText(context.getString(R.string.title_dialog_error))
+                .setContentText(context.getResources().getString(messagee))
+                .setConfirmText(context.getResources().getString(R.string.popup_ok))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }
+    public static void showDialogAPI(Context context, final int messagee){
+        new SweetAlertDialog(context)
+                .setTitleText(context.getString(R.string.title_dialog_error))
                 .setContentText(context.getResources().getString(R.string.err_api)+context.getResources().getString(messagee))
                 .setConfirmText(context.getResources().getString(R.string.popup_ok))
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -406,5 +420,17 @@ public class Utils {
             return txt.substring(TEMP_TOSTRING.length(),txt.length()-1);
         }
         return txt;
+    }
+    public static boolean isMyServiceRunning(Class<?> serviceClass, Context mContext) {
+        ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static long getValueDateTime(){
+        return System.currentTimeMillis();
     }
 }
