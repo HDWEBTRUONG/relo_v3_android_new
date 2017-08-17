@@ -26,7 +26,6 @@ public class TablePush {
     public static final String COLUMN_PUSH_Y = "push_y";
     public static final String COLUMN_PUSH_Z= "push_z";
     public static final String COLUMN_PUSH_W = "push_w";
-    public static final String COLUMN_PUSH_URL = "push_url";
     public static final String COLUMN_PUSH_READ = "push_read";
 
     public static Callable<List<HistoryPushDTO>> getPush(final MyDatabaseHelper mMyDatabaseHelper) {
@@ -49,8 +48,7 @@ public class TablePush {
                         item.setyHis(cursor.getString(5));
                         item.setzHis(cursor.getString(6));
                         item.setwHis(cursor.getString(7));
-                        item.setUrlHis(cursor.getString(8));
-                        item.setIsReaded(cursor.getInt(9));
+                        item.setIsReaded(cursor.getInt(8));
 
                         datas.add(item);
                     } while (cursor.moveToNext());

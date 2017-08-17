@@ -65,7 +65,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TablePush.COLUMN_PUSH_Y + " TEXT,"
                 + TablePush.COLUMN_PUSH_Z + " TEXT,"
                 + TablePush.COLUMN_PUSH_W + " TEXT,"
-                + TablePush.COLUMN_PUSH_URL + " TEXT,"
                 + TablePush.COLUMN_PUSH_READ + " INTEGER"
                 + ")";
         // Execute script.
@@ -128,7 +127,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void savePush(HistoryPushDTO data, boolean isURL){
+    public void savePush(HistoryPushDTO data){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TablePush.COLUMN_PUSH_TITLE, data.getTitlePush());
@@ -138,7 +137,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TablePush.COLUMN_PUSH_Y, data.getyHis());
         values.put(TablePush.COLUMN_PUSH_Z, data.getzHis());
         values.put(TablePush.COLUMN_PUSH_W, data.getwHis());
-        values.put(TablePush.COLUMN_PUSH_URL, data.getUrlHis());
         values.put(TablePush.COLUMN_PUSH_READ, 0);
         db.insert(TablePush.TABLE_PUSH, null, values);
         db.close();

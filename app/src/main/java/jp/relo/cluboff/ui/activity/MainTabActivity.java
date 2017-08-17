@@ -58,6 +58,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     public static final int INDEX_TOP=1;
     public static final int INDEX_MEMBER=2;
     public static final int UPDATE_COUNT=4;
+    public static final int EMPTY_W_PUSH=5;
     int indexTab = 0;
     MyDatabaseHelper myDatabaseHelper;
     long lateResume;

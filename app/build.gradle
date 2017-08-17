@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "jp.relo.cluboff.test"
+        applicationId "jp.relo.cluboff"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -24,9 +24,7 @@ android {
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://test2.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
-            buildConfigField "String", "WEBVIEW_URL_CAN_NOT_LOGIN", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
-            buildConfigField "String", "WEBVIEW_URL_TUTORIAL", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.htm"'
             buildConfigField "String", "WEBVIEW_URL_FAQ", '"https://www.club-off.com/contents/files/bra/common/topics/app/faq/index.html"'
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://{0}/index.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
@@ -35,13 +33,11 @@ android {
         }
 
         relo_prod {
-            buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
+            buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://www.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
-            buildConfigField "String", "WEBVIEW_URL_CAN_NOT_LOGIN", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://www.e-map.ne.jp/smt/rclzmap/loc.htm"'
-            buildConfigField "String", "WEBVIEW_URL_TUTORIAL", '"https://sp.fukuri.jp/fkr/contents/files/fukuri/first_times_01_1.htm"'
             buildConfigField "String", "WEBVIEW_URL_FAQ", '"https://www.club-off.com/contents/files/bra/common/topics/app/faq/index.html"'
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://{0}/index.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'

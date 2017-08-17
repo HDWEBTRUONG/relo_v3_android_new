@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
@@ -52,6 +53,7 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_FAQ_SCREEN);
     }
 
     @Override

@@ -16,7 +16,7 @@
     <string name="txt_login_app_id">アプリID</string>
     <string name="txt_login_mail">メールアドレス</string>
     <string name="txt_link_can_not_login">入力項目がご不明の場合はこちら</string>
-    <string name="txt_note_login">※本アプリをご利用いただくには、事前にクラブオフ ホームページでの会員情報登録が必要です。</string>
+    <string name="txt_note_login">※本アプリをご利用いただくには、事前にクラブオフホームページでメールアドレスの登録が必要です。</string>
     <string name="txt_title_login">ログイン</string>
     <string name="error_login_wrong_id_password">ログインですることができませんでした。\n入力内容が間違っているか、大会後の可能性がございます。会員IDもしくはパスワードを再度</string>
     <string name="error_connect_network">通信に失敗しました</string>

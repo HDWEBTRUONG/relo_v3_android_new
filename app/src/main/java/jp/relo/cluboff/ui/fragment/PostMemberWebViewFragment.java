@@ -267,7 +267,6 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     @Subscribe
     public void onEvent(ReloadEvent event) {
         if(event.isReload()&&!isLoadding){
-            AppLog.log("Ok-------");
             loadUrl();
         }
     }

@@ -13,7 +13,6 @@ public class HistoryPushDTO {
     private String xHis;
     private String yHis;
     private String zHis;
-    private String urlHis;
     private int isReaded;
 
     public HistoryPushDTO() {
@@ -41,14 +40,6 @@ public class HistoryPushDTO {
 
     public void setContentHis(String contentHis) {
         this.contentHis = contentHis;
-    }
-
-    public String getUrlHis() {
-        return urlHis;
-    }
-
-    public void setUrlHis(String urlHis) {
-        this.urlHis = urlHis;
     }
 
     public int getIdHis() {
