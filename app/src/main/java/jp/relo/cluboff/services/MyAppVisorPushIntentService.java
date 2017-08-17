@@ -54,27 +54,26 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
                 String zString = bundle.getString("z");
                 String wString = bundle.getString("w");
                 long timtString = bundle.getLong("google.sent_time");
-                HistoryPushDTO dataPush = new HistoryPushDTO();
-                dataPush.setTitlePush(title);
-                dataPush.setTimeHis(timtString);
-                dataPush.setContentHis(message);
-                dataPush.setxHis(xString);
-                dataPush.setyHis(yString);
-                dataPush.setzHis(zString);
-                dataPush.setwHis(wString);
-                dataPush.setUrlHis(wString);
-                myDatabaseHelper.savePush(dataPush,!StringUtil.isEmpty(pushIDStr));
-                EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
-                if(isBackgroundRunning()){
-                    AppLog.log("In isBackgroundRunning");
-                    if(StringUtil.isEmpty(url)){
-                        int pushID = Utils.convertInt(pushIDStr);
-                        cancelNotification(context,pushID);
+                if(!"1".equals(url)){
+                    HistoryPushDTO dataPush = new HistoryPushDTO();
+                    dataPush.setTitlePush(title);
+                    dataPush.setTimeHis(timtString);
+                    dataPush.setContentHis(message);
+                    dataPush.setxHis(xString);
+                    dataPush.setyHis(yString);
+                    dataPush.setzHis(zString);
+                    dataPush.setwHis(wString);
+                    myDatabaseHelper.savePush(dataPush);
+                    EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
+                    if(isBackgroundRunning()){
+                        AppLog.log("In isBackgroundRunning");
+                        if(StringUtil.isEmpty(url)){
+                            int pushID = Utils.convertInt(pushIDStr);
+                            cancelNotification(context,pushID);
+                        }
                     }
-                }else{
-                    AppLog.log("Out isBackgroundRunning");
-                    //sendNotification(getBaseContext(),bundle);
                 }
+
         }
 
     }
@@ -109,29 +108,5 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
             isActivityFound = true;
         }
         return isActivityFound;
-    }
-    public void sendNotification(Context ctx, Bundle mBundle) {
-        String message = mBundle.getString("message");
-        String title = mBundle.getString("title");
-        Intent intent = new Intent(ctx, PushvisorHandlerActivity.class);
-        intent.putExtras(mBundle);
-        PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder b = new NotificationCompat.Builder(ctx);
-
-        b.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setTicker(title)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
-                .setContentIntent(contentIntent)
-                .setContentInfo("Info");
-
-
-        NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, b.build());
     }
 }

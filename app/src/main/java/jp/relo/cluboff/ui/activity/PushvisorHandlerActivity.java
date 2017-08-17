@@ -1,21 +1,14 @@
 package jp.relo.cluboff.ui.activity;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-
-import java.util.List;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.util.Constant;
-import jp.relo.cluboff.util.LoginSharedPreference;
 
 /**
  * Created by tonkhanh on 7/21/17.

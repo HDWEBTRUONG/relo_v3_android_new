@@ -15,9 +15,7 @@ public class Constant {
     public static final String BASE_URL_UPDATE = BuildConfig.BASE_URL_UPDATE;
 
     // Some URL of webview
-    public static final String WEBVIEW_URL_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_URL_CAN_NOT_LOGIN;
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
-    public static final String WEBVIEW_URL_TUTORIAL = BuildConfig.WEBVIEW_URL_TUTORIAL;
     public static final String WEBVIEW_URL_FAQ = BuildConfig.WEBVIEW_URL_FAQ;
 
     //Template url
@@ -57,41 +55,44 @@ public class Constant {
     public static final String HTTP0099 = "0099";
 
     //------------------Google Analytic Login----------------//
-    public static final String GA_LOGIN_SCREEN = "LoginSrceen";
+    public static final String GA_LOGIN_SCREEN = "ログイン画面";
     public static final String GA_CATALOGY_LOGIN = "ログイン";
     public static final String GA_ACTION_LOGIN = "タップ";
     public static final String GA_LABLE_LOGIN = "IDPASSチェック";
 
     //------------------Google Analytic Detail Coupon----------------//
-    public static final String GA_DETAIL_SCREEN = "DetailCouponSrceen";
+    public static final String GA_DETAIL_SCREEN = "画面提示クーポン画面";
     public static final String GA_CATALOGY_DETAIL = "人気クーポン ";
     public static final String GA_ACTION_DETAIL = "タップ";
     public static final String GA_VALUE_DETAIL = ""; //ToDO Change value
 
     //------------------Google Analytic Like Coupon----------------//
-    public static final String GA_LIKE_SCREEN = "LikeCouponSrceen";
     public static final String GA_LIKE_CATEGORY = "人気クーポン お気に入り";
     public static final String GA_ACTION_LIKE = "タップ";
     public static final String GA_VALUE_LIKE = ""; //ToDO Change value
 
 
     //------------------Google Analytic Area Coupon----------------//
-    public static final String GA_AREA_SCREEN = "AreaCouponSrceen";
+    public static final String GA_AREA_SCREEN = "エリアクーポン";
 
     //------------------Google Analytic List Coupon----------------//
-    public static final String GA_LIST_COUPON_SCREEN = "ListCouponSrceen";
+    public static final String GA_LIST_COUPON_SCREEN = "人気クーポン";
 
     //------------------Google Analytic Member Coupon----------------//
-    public static final String GA_MEMBER_SCREEN = "MemberSrceen";
+    public static final String GA_MEMBER_SCREEN = "会員サイト";
 
     //------------------Google Analytic HistoryPush----------------//
-    public static final String GA_HISTORYPUSH_SCREEN = "HistoryPushScreen";
+    public static final String GA_HISTORYPUSH_SCREEN = "お知らせ";
     public static final String GA_HISTORYPUSH_CATEGORY = "人気クーポン お気に入り";
     public static final String GA_HISTORYPUSH_ACTION = "タップ";
     public static final String GA_HISTORYPUSH_VALUE = ""; //ToDO Change value
 
     //------------------Google Analytic How to----------------//
-    public static final String GA_HOWTO_SCREEN = "HowToScreen";
+    public static final String GA_HOWTO_SCREEN = "アプリの使い方";
+
+
+    //------------------Google Analytic FAQ----------------//
+    public static final String GA_FAQ_SCREEN = "FAQ";
 
 
     //Push GCM

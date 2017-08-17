@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,12 +60,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         final HistoryPushDTO data = listData.get(position);
         holder.tvHistoryTime.setText(Utils.long2Time(data.getTimeHis()));
         holder.tvHistoryContent.setText(data.getContentHis());
-        if(StringUtil.isEmpty(data.getwHis())){
-            holder.tvHistoryLink.setVisibility(View.GONE);
-        }else{
-            holder.tvHistoryLink.setVisibility(View.VISIBLE);
-        }
-        holder.tvHistoryLink.setOnClickListener(new View.OnClickListener() {
+        holder.llContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myDatabaseHelper.updateRead(data.getIdHis());
@@ -75,7 +71,7 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
                         miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_AREA);
                     }else if(Constant.TARGET_PUSH_SCREEN_SITE.equalsIgnoreCase(target)){
                         miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_MEMBER);
-                    }else{
+                    }else if(Constant.TARGET_PUSH_SCREEN_COUPON.equalsIgnoreCase(target)){
                         miCallDetailCoupon.callbackDetail(target,MainTabActivity.INDEX_TOP);
                     }
                     if(miCallDismiss!=null){
@@ -98,12 +94,14 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
 
     public class HisViewHolder extends RecyclerView.ViewHolder {
         public TextView tvHistoryTime, tvHistoryContent, tvHistoryLink;
+        public LinearLayout llContainer;
 
         public HisViewHolder(View view) {
             super(view);
             tvHistoryTime = (TextView) view.findViewById(R.id.tvHistoryTime);
             tvHistoryContent = (TextView) view.findViewById(R.id.tvHistoryContent);
             tvHistoryLink = (TextView) view.findViewById(R.id.tvHistoryLink);
+            llContainer = (LinearLayout) view.findViewById(R.id.llContainer);
             tvHistoryLink.setPaintFlags(tvHistoryLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         }
     }
