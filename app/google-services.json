@@ -1,52 +1,74 @@
 {
   "project_info": {
-    "project_number": "373028143595",
-    "firebase_url": "https://relotest-79a37.firebaseio.com",
-    "project_id": "relotest-79a37",
-    "storage_bucket": "relotest-79a37.appspot.com"
+    "project_number": "720485401236",
+    "project_id": "firebase-cluboff"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373028143595:android:2ba1100b5cbbd8e2",
+        "mobilesdk_app_id": "1:720485401236:android:a1be2d9daf0780d4",
+        "android_client_info": {
+          "package_name": "jp.relo.cluboff"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720485401236-87bgk2palc0kcc43qj09oj2eu648hm9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDse-ex1bL7j1r2xFf99DeAG4Hy3e1CPM4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-101896815-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720485401236:android:2ba1100b5cbbd8e2",
         "android_client_info": {
           "package_name": "jp.relo.cluboff.test"
         }
       },
       "oauth_client": [
         {
-          "client_id": "373028143595-uloc7nsulov8lrpbidscn10eosoqijlh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.relo.cluboff.test",
-            "certificate_hash": "7cf92d1c3d687fd2888ed6ece2cc13926cb8dc4e"
-          }
-        },
-        {
-          "client_id": "373028143595-strb0hirkeodr7bmrnpur1q6c069utui.apps.googleusercontent.com",
+          "client_id": "720485401236-87bgk2palc0kcc43qj09oj2eu648hm9o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBYuj9sRJPIUo7uhW2AjoW_wlxBCGnXcGE"
+          "current_key": "AIzaSyDse-ex1bL7j1r2xFf99DeAG4Hy3e1CPM4"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-101896815-1"
+          }
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "373028143595-strb0hirkeodr7bmrnpur1q6c069utui.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 2
+          "status": 1
         }
       }
     }

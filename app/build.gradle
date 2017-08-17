@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "jp.relo.cluboff.test"
+        applicationId "jp.relo.cluboff"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -33,7 +33,7 @@ android {
         }
 
         relo_prod {
-            buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
+            buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://www.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
