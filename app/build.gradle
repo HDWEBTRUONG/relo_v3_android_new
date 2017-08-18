@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -42,7 +42,7 @@ android {
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://{0}/index.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
             buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
-            buildConfigField "String", "APPVISOR_ID", '"sALZBaJwjb"'
+            buildConfigField "String", "APPVISOR_ID", '"whOIQ8QIIc"'
         }
     }
 
