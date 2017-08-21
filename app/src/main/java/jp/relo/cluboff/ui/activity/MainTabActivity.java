@@ -2,8 +2,6 @@ package jp.relo.cluboff.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -20,22 +18,19 @@ import org.greenrobot.eventbus.Subscribe;
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.adapter.MenuListAdapter;
 import jp.relo.cluboff.adapter.ViewPagerAdapter;
-import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
+import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
-import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
@@ -53,14 +48,14 @@ public class MainTabActivity extends BaseActivityToolbar {
     private FAQDialogFragment faqDialogFragment;
     long countPush=0;
 
-    Handler handler;
+    //Handler handler;
     public static final int INDEX_AREA=0;
     public static final int INDEX_TOP=1;
     public static final int INDEX_MEMBER=2;
     public static final int UPDATE_COUNT=4;
     public static final int EMPTY_W_PUSH=5;
     int indexTab = 0;
-    MyDatabaseHelper myDatabaseHelper;
+    //MyDatabaseHelper myDatabaseHelper;
     long lateResume;
 
     @Override
@@ -80,13 +75,13 @@ public class MainTabActivity extends BaseActivityToolbar {
     public void onEvent(MessageEvent event) {
         if(event.getMessage().equals(MyAppVisorPushIntentService.class.getSimpleName())||
                 event.getMessage().equals(HistoryPushDialogFragment.class.getSimpleName())){
-            loadCountPush();
+            //loadCountPush();
         }else if(Constant.TOP_COUPON.equals(event.getMessage())){
             selectPage(INDEX_TOP);
         }
         else{
-            loadCountPush();
-            openHistoryPush();
+            //loadCountPush();
+            //openHistoryPush();
         }
     }
 
@@ -94,8 +89,8 @@ public class MainTabActivity extends BaseActivityToolbar {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        myDatabaseHelper = new MyDatabaseHelper(this);
-        handler = new Handler() {
+        //myDatabaseHelper = new MyDatabaseHelper(this);
+        /*handler = new Handler() {
             public void handleMessage(Message msg) {
                 if(msg.what== UPDATE_COUNT){
                     if(countPush==0){
@@ -107,7 +102,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                 }
 
             }
-        };
+        };*/
         // Generate title
         pushProcess();
     }
@@ -118,7 +113,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         long valueTime = Utils.dateTimeValue();
         lateResume = LoginSharedPreference.getInstance(this).getValueStop();
 
-        loadCountPush();
+        //loadCountPush();
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
             String target = bundle.getString(Constant.TARGET_PUSH);
@@ -128,7 +123,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_MEMBER);
             }else if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
                 selectPage(INDEX_TOP);
-                openHistoryPush();
+                //openHistoryPush();
             }else{
                 selectPage(INDEX_TOP);
             }
@@ -152,11 +147,11 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
 
 
-    public void loadCountPush(){
+    /*public void loadCountPush(){
         countPush = myDatabaseHelper.countPushUnread();
         handler.sendEmptyMessage(UPDATE_COUNT);
-    }
-    public void openHistoryPush(){
+    }*/
+    /*public void openHistoryPush(){
         if(historyPushDialogFragment==null){
             historyPushDialogFragment = new HistoryPushDialogFragment();
         }
@@ -169,15 +164,15 @@ public class MainTabActivity extends BaseActivityToolbar {
             }
         });
         openDialogFragment(historyPushDialogFragment);
-    }
+    }*/
 
     @Override
     public void setupToolbar() {
         lnToolbar.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
         imvMenu.setVisibility(View.VISIBLE);
-        imvInfo.setVisibility(View.VISIBLE);
-        tvCount.setVisibility(View.VISIBLE);
+        //imvInfo.setVisibility(View.VISIBLE);
+        //tvCount.setVisibility(View.VISIBLE);
 
 
         rlMenu.setOnClickListener(new View.OnClickListener() {
@@ -190,12 +185,12 @@ public class MainTabActivity extends BaseActivityToolbar {
                 }
             }
         });
-        flInfo.setOnClickListener(new View.OnClickListener() {
+        /*flInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openHistoryPush();
             }
-        });
+        });*/
     }
 
     @Override
@@ -312,7 +307,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
         SaveLogin saveLogin = SaveLogin.getInstance(this);
-
 
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 

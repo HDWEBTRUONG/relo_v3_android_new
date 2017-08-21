@@ -17,6 +17,7 @@ import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.HistoryPushDTO;
 import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
 import jp.relo.cluboff.util.Constant;
@@ -60,6 +61,9 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar impleme
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_HISTORYPUSH_SCREEN);
+        myDatabaseHelper=new MyDatabaseHelper(getActivity());
+        myDatabaseHelper.updateRead();
+        EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
 
         mHander = new Handler(){
             @Override
@@ -81,7 +85,6 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar impleme
     }
 
     private void loaddata() {
-        myDatabaseHelper=new MyDatabaseHelper(getActivity());
         listData.clear();
         myDatabaseHelper.getPushRX().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<HistoryPushDTO>>() {

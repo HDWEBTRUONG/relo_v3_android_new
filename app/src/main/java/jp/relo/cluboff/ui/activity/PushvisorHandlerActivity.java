@@ -1,9 +1,13 @@
 package jp.relo.cluboff.ui.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import java.util.List;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
@@ -33,16 +37,20 @@ public class PushvisorHandlerActivity extends Activity {
     public void setHandler(){
         if (checkOpenedThisScreen) {
             AppLog.log("------> FoodCoach opening .......... <------ ");
-            Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
-            if(bundle != null) {
-                String screenTarget = bundle.getString("w");
-                Bundle mBundle = new Bundle();
-                mBundle.putString(Constant.TARGET_PUSH, screenTarget);
-                intent.putExtras(mBundle);
+            if(!isBackgroundRunning()){
+                Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
+                if(bundle != null) {
+                    String screenTarget = bundle.getString("w");
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString(Constant.TARGET_PUSH, screenTarget);
+                    intent.putExtras(mBundle);
+                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }else{
+                finish();
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
         }else{
             //If app's not running
             AppLog.log("------>  FoodCoach closed .......... <------- ");
@@ -74,5 +82,17 @@ public class PushvisorHandlerActivity extends Activity {
             bundle = this.appVisorPush.getBundleFromAppVisorPush(this);
 
         }
+    }
+
+    public boolean isBackgroundRunning() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> services = activityManager.getRunningAppProcesses();
+        boolean isActivityFound = false;
+
+        if (services.get(0).processName
+                .equalsIgnoreCase(getPackageName())) {
+            isActivityFound = true;
+        }
+        return isActivityFound;
     }
 }

@@ -53,6 +53,7 @@
                         android:id="@+id/flInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:layout_toLeftOf="@id/rlMenu">
                         <FrameLayout
                             android:layout_width="wrap_content"

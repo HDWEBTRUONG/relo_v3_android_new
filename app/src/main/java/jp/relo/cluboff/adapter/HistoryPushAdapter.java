@@ -44,7 +44,6 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         myDatabaseHelper = new MyDatabaseHelper(mContext);
         this.miCallDetailCoupon = miCallDetailCoupon;
         this.miCallDismiss = miCallDismiss;
-        myDatabaseHelper = new MyDatabaseHelper(mContext);
     }
 
     @Override
@@ -63,8 +62,8 @@ public class HistoryPushAdapter extends RecyclerView.Adapter<HistoryPushAdapter.
         holder.llContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDatabaseHelper.updateRead(data.getIdHis());
-                EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
+                /*myDatabaseHelper.updateRead(data.getIdHis());
+                EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));*/
                 String target = data.getwHis();
                 if(miCallDetailCoupon !=null&&!Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
                     if(Constant.TARGET_PUSH_SCREEN_AREA.equalsIgnoreCase(target)){
