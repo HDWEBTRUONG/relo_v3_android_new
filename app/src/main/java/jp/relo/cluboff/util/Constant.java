@@ -124,5 +124,5 @@ public class Constant {
 
     public static final String TOP_COUPON= "TOP_COUPON";
     public static final String USERID= "USERID";
-    public static final int LIMIT_ON_BACKGROUND= 3600000;
+    public static final int LIMIT_ON_BACKGROUND= 10800000;
 }

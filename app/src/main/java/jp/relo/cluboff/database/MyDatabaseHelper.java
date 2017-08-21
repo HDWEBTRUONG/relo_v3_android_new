@@ -148,6 +148,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.update(TablePush.TABLE_PUSH, newValues, TablePush.COLUMN_PUSH_ID +"="+id, null);
         db.close();
     }
+    public void updateRead(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put(TablePush.COLUMN_PUSH_READ, 1);
+        db.update(TablePush.TABLE_PUSH, newValues, null, null);
+        db.close();
+    }
 
     public long countPushUnread(){
         SQLiteDatabase db = this.getWritableDatabase();
