@@ -12,6 +12,7 @@ import java.util.List;
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.util.Constant;
 
 /**
@@ -30,14 +31,14 @@ public class PushvisorHandlerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //pushProcess();
+        pushProcess();
         setHandler();
     }
 
     public void setHandler(){
         if (checkOpenedThisScreen) {
             AppLog.log("------> FoodCoach opening .......... <------ ");
-            if(!isBackgroundRunning()){
+            if(!isBackgroundRunning(this)){
                 Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
                 if(bundle != null) {
                     String screenTarget = bundle.getString("w");
@@ -63,36 +64,38 @@ public class PushvisorHandlerActivity extends Activity {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
+        SaveLogin saveLogin = SaveLogin.getInstance(this);
+
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
         // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-                PushvisorHandlerActivity.class, getString(R.string.app_name));
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
+        // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
+        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getBrandid(),AppVisorPush.UserPropertyGroup1);
+        appVisorPush.synchronizeUserProperties();
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
         AppLog.log("###################################");
-        AppLog.log("####### [ Appvisor uuid ] = ", mDevice_Token_Pushnotification);
+        AppLog.log("####### [ Appvisor uuid ]=", mDevice_Token_Pushnotification);
         AppLog.log("###################################");
-
-        //Push message & data available data
-        if (this.appVisorPush.checkIfStartByAppVisorPush(this)) {
-            //Configuration PushVisor
-            bundle = this.appVisorPush.getBundleFromAppVisorPush(this);
-
-        }
     }
 
-    public boolean isBackgroundRunning() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> services = activityManager.getRunningAppProcesses();
-        boolean isActivityFound = false;
-
-        if (services.get(0).processName
-                .equalsIgnoreCase(getPackageName())) {
-            isActivityFound = true;
+    public static boolean isBackgroundRunning(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                for (String activeProcess : processInfo.pkgList) {
+                    if (activeProcess.equals(context.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
         }
-        return isActivityFound;
+
+
+        return false;
     }
 }
