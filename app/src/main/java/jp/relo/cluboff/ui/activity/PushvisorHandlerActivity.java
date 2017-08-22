@@ -36,9 +36,30 @@ public class PushvisorHandlerActivity extends Activity {
     }
 
     public void setHandler(){
-        if (checkOpenedThisScreen) {
-            AppLog.log("------> FoodCoach opening .......... <------ ");
-            if(!isBackgroundRunning(this)){
+        Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
+        if(bundle != null) {
+            String screenTarget = bundle.getString("w");
+            Bundle mBundle = new Bundle();
+            mBundle.putString(Constant.TARGET_PUSH, screenTarget);
+            intent.putExtras(mBundle);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+
+        /*if (checkOpenedThisScreen) {
+            Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
+            if(bundle != null) {
+                String screenTarget = bundle.getString("w");
+                Bundle mBundle = new Bundle();
+                mBundle.putString(Constant.TARGET_PUSH, screenTarget);
+                intent.putExtras(mBundle);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+
+            *//*if(!isBackgroundRunning(this)){
                 Intent intent = new Intent(PushvisorHandlerActivity.this, MainTabActivity.class);
                 if(bundle != null) {
                     String screenTarget = bundle.getString("w");
@@ -51,14 +72,13 @@ public class PushvisorHandlerActivity extends Activity {
                 finish();
             }else{
                 finish();
-            }
+            }*//*
         }else{
             //If app's not running
-            AppLog.log("------>  FoodCoach closed .......... <------- ");
             Intent intent = new Intent(PushvisorHandlerActivity.this, SplashScreenActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
     }
 
     //handle message from PushVisor
