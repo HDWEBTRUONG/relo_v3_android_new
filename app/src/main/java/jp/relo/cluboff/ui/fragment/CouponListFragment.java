@@ -179,13 +179,13 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         if(listCoupon.isEmpty()){
             mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
         }else{
-            showLoading(getActivity());
             mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
         }
     }
 
 
     private void getListDataCategoryID(String categoryID) {
+        showLoading(getActivity());
         listCoupon.clear();
         if(StringUtil.isEmpty(brandID)&&isAdded()){
             SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
@@ -307,6 +307,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
             @Override
             public void onFinish() {
+                hideLoading();
             }
         });
     }
@@ -316,6 +317,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            showLoading(getActivity());
         }
 
         protected Void doInBackground(String... arg0) {
