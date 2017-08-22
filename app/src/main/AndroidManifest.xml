@@ -66,17 +66,17 @@
                 <category android:name="jp.relo.cluboff" />
             </intent-filter>
         </receiver>
-        <receiver
+        <!--<receiver
             android:name=".services.MyAppVisorPushBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="jp.relo.cluboff" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />
-        <service android:name=".services.MyAppVisorPushIntentService"/>
+        <!--<service android:name=".services.MyAppVisorPushIntentService"/>-->
         <service
             android:name="biz.appvisor.push.android.sdk.NotificationStartService"
             android:exported="false"></service>

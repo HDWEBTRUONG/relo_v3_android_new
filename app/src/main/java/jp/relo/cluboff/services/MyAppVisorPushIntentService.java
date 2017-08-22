@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -65,12 +66,14 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
                     dataPush.setwHis(wString);
                     myDatabaseHelper.savePush(dataPush);
                     //EventBus.getDefault().post(new MessageEvent(MyAppVisorPushIntentService.class.getSimpleName()));
-                    if(isBackgroundRunning()){
+                    if(isBackgroundRunning(getBaseContext())){
                         AppLog.log("In isBackgroundRunning");
                         if(StringUtil.isEmpty(url)){
                             int pushID = Utils.convertInt(pushIDStr);
-                            cancelNotification(context,pushID);
+                            //cancelNotification(context,pushID);
                         }
+                    }else{
+                        AppLog.log("NOT In isBackgroundRunning");
                     }
 
                 }
@@ -99,15 +102,40 @@ public class MyAppVisorPushIntentService extends GCMBaseIntentService {
     protected void onUnregistered(Context context, String s) {
 
     }
-    public boolean isBackgroundRunning() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> services = activityManager.getRunningAppProcesses();
-        boolean isActivityFound = false;
+    public static boolean isForeground(Context context) {
 
-        if (services.get(0).processName
-                .equalsIgnoreCase(getPackageName())) {
-            isActivityFound = true;
+        // Get the Activity Manager
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        // Get a list of running tasks, we are only interested in the last one,
+        // the top most so we give a 1 as parameter so we only get the topmost.
+        List<ActivityManager.RunningAppProcessInfo> task = manager.getRunningAppProcesses();
+
+        // Get the info we need for comparison.
+        ComponentName componentInfo = task.get(0).importanceReasonComponent;
+
+        // Check if it matches our package name.
+        if(context.getPackageName().equals(componentInfo.getPackageName()))
+            return true;
+
+        // If not then our app is not on the foreground.
+        return false;
+    }
+
+    public static boolean isBackgroundRunning(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                for (String activeProcess : processInfo.pkgList) {
+                    if (activeProcess.equals(context.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
         }
-        return isActivityFound;
+
+
+        return false;
     }
 }
