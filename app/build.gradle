@@ -20,6 +20,7 @@ android {
     productFlavors {
 
         relo_dev {
+            applicationId "jp.relo.cluboff.test"
             buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://test2.club-off.com/"'
@@ -33,6 +34,7 @@ android {
         }
 
         relo_prod {
+            applicationId "jp.relo.cluboff"
             buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://www.club-off.com/"'
