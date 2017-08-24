@@ -1,6 +1,7 @@
 package jp.relo.cluboff.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,24 @@ import jp.relo.cluboff.R;
 
 public class MenuListAdapter extends BaseAdapter {
 
-    // Declare Variables
+    //---------------------------------------------------------------------
+    //base context
     Context context;
+
+    //title menu string arrays
     String[] mTitle;
+
+    //view Inflater
     LayoutInflater inflater;
 
+
+    //---------------------------------------------------------------------
     public MenuListAdapter(Context context, String[] title) {
         this.context = context;
         this.mTitle = title;
     }
 
+    //---------------------------------------------------------------------
     @Override
     public int getCount() {
         return mTitle.length;
@@ -44,11 +53,14 @@ public class MenuListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Declare Variables
+
+        //title
         TextView txtTitle;
-        TextView txtSubTitle;
+
+        //icon
         ImageView imgIcon;
 
+        //inflated view
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.drawer_list_item, parent,
@@ -62,16 +74,12 @@ public class MenuListAdapter extends BaseAdapter {
 
         // Set the results into TextViews
         if(position == mTitle.length-1){
-            String txt = "<b>"+mTitle[position]+"</b>";
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                txtTitle.setText(Html.fromHtml(txt,Html.FROM_HTML_MODE_LEGACY));
-            } else {
-                txtTitle.setText(Html.fromHtml(txt));
-            }
+            txtTitle.setText(mTitle[position]);
+            txtTitle.setTypeface(null, Typeface.BOLD);
+
         }else{
             txtTitle.setText(mTitle[position]);
         }
-
         return itemView;
     }
 
