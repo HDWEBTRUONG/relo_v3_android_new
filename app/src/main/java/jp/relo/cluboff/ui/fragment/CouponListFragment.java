@@ -52,13 +52,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     LinearLayout lnCatalory;
     ListView lvCoupon;
     TextView tvCategory;
+    View svMenu;
     MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
     public static String WILL_NET_SERVER="1";
-    public switchFragment iSwitchFragment;
     private Handler mHandler;
+    private boolean isArea;
 
     public static final int MSG_LOAD_CATEGORY = 0;
     public static final int MSG_LOAD_DATA = 1;
@@ -74,6 +75,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     String brandID = "";
 
+    public static final String TAG = CouponListFragment.class.getSimpleName();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,11 +83,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         sqLiteOpenHelper = new MyDatabaseHelper(getActivity());
     }
 
-    public void setiSwitchFragment(switchFragment iSwitchFragment){
-      this.iSwitchFragment = iSwitchFragment;
-    }
-
     private void init(View view) {
+        svMenu = view.findViewById(R.id.svMenu);
         lnCatalory = (LinearLayout) view.findViewById(R.id.lnCatalory);
         lvCoupon = (ListView) view.findViewById(R.id.list_category_listview);
         tvCategory = (TextView) view.findViewById(R.id.tvCategory);
@@ -100,7 +99,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         categoryList.clear();
                         categoryList.addAll(catagoryDTOs);
                         mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
-                        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+                        if(isArea){
+
+                        }else {
+                            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+                        }
                     }
                 });
 
@@ -130,6 +133,21 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
         init(root);
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
+
+        }
+        if(listCoupon.isEmpty()){
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+        }else{
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        }
     }
 
     @Override
@@ -176,11 +194,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
-        if(listCoupon.isEmpty()){
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
-        }else{
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
-        }
     }
 
 
@@ -189,7 +202,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         listCoupon.clear();
         if(StringUtil.isEmpty(brandID)&&isAdded()){
             SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
-            brandID = saveLogin.getBrandid();
+            brandID = saveLogin.getUserName();
         }
         myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID,brandID).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CouponDTO>>() {
@@ -246,7 +259,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             }else{
                 url = "";
                 try {
-                    kaiinno = saveLogin.getKaiinno();
+                    kaiinno = saveLogin.getUserName();
                     url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(saveLogin.getUrlEncrypt(), AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -260,7 +273,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
 
             bundle.putString(Constant.TAG_SHGRID, data.getShgrid());
-            iSwitchFragment.callSwitchFragment(bundle);
         }
     }
 
@@ -281,10 +293,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void positionClick(int position) {
         this.positionView = position;
-    }
-
-    interface switchFragment{
-        void callSwitchFragment(Bundle bundle);
     }
 
     private void updateData(){

@@ -77,4 +77,9 @@
     <string name="btn_browser">開く</string>
     <string name="title_dialog_error">エラー</string>
     <string name="tutorial_title">はじめる</string>
+    <string name="string_login">Login</string>
+    <string name="title_area">Mobile ID Card</string>
+    <string name="title_popular_coupon">Popular Coupon</string>
+    <string name="title_area_coupon">Area Coupon</string>
+    <string name="member_site_title">Site</string>
 </resources>

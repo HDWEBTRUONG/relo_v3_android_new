@@ -6,6 +6,8 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -117,12 +119,10 @@ public class HistoryPushDialogFragment extends BaseDialogFragmentToolbar impleme
 
     @Override
     public void setupActionBar() {
-        lnToolbar.setVisibility(View.VISIBLE);
-        title_toolbar.setVisibility(View.VISIBLE);
-        title_toolbar.setText(R.string.title_history_push);
-        imvMenu.setVisibility(View.VISIBLE);
-        imvMenu.setImageResource(R.drawable.icon_close);
-        rlMenu.setOnClickListener(new View.OnClickListener() {
+        tvMenuSubTitle.setText(R.string.title_history_push);
+        ivMenuRight.setVisibility(View.VISIBLE);
+        ivMenuRight.setImageResource(R.drawable.icon_close);
+        ivMenuRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

@@ -18,7 +18,7 @@ public interface ApiInterface {
     Observable<VersionReponse> checkVersion();
 
     @FormUrlEncoded
-    @POST("coa/coa_login.cfm")
-    Observable<LoginReponse> logon(@Field("kaiinno") String kaiinno,@Field("emailad") String emailad,@Field("brandid") String brandid);
+    @POST("/fkr/apps/oil/ffoil_main.cfm")
+    Observable<LoginReponse> logon(@Field("LOGINID") String LOGINID,@Field("PASSWORD") String PASSWORD);
 
 }

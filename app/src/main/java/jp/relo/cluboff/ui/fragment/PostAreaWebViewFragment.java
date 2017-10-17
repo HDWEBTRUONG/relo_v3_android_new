@@ -51,6 +51,8 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     boolean isLoadding = false;
     boolean isVisibleToUser;
 
+    public static final String TAG = PostAreaWebViewFragment.class.getSimpleName();
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -264,7 +266,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         String userID = "";
         if(saveLogin!=null){
             try {
-                userID = new String(BackAES.encrypt(saveLogin.getKaiinno(), AESHelper.password, AESHelper.type));
+                userID = new String(BackAES.encrypt(saveLogin.getUserName(), AESHelper.password, AESHelper.type));
             } catch (Exception e) {
                 e.printStackTrace();
             }

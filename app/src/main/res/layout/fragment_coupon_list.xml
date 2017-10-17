@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-
+        <include layout="@layout/coupon_area_menu"/>
         <LinearLayout
             android:id="@+id/lnGroupCategory"
             android:layout_width="match_parent"
@@ -22,9 +22,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_3dp"
-                android:layout_marginTop="@dimen/_3dp">
+                android:layout_height="wrap_content">
 
                 <jp.relo.cluboff.views.MyMaterialSpinner
                     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,7 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_gravity="bottom"
-                    android:layout_margin="@dimen/_5dp"
                     android:visibility="visible"
                     app:ms_background_color="@color/color_background_category"/>
 
@@ -41,7 +38,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40dp"
                     android:layout_gravity="center"
-                    android:layout_margin="@dimen/_5dp"
                     android:background="@drawable/bg_catelogy_coupon"
                     android:clickable="true"
                     android:gravity="center"

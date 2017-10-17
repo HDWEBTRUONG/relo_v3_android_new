@@ -18,14 +18,9 @@ import jp.relo.cluboff.R;
 
 public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar{
 
-    protected LinearLayout lnToolbar;
-    protected Toolbar toolbar;
-    protected ImageView imvMenu;
-    protected ImageView imvInfo;
-    protected TextView tvCount;
-    protected TextView title_toolbar;
-    protected RelativeLayout rlMenu;
-    protected RelativeLayout flInfo;
+    protected ImageView ivMenuRight;
+    protected TextView tvMenuTitle;
+    protected TextView tvMenuSubTitle;
 
     protected LinearLayout llBack;
     protected LinearLayout llForward;
@@ -37,14 +32,9 @@ public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lnToolbar = (LinearLayout) view.findViewById(R.id.lnToolbar);
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        imvMenu = (ImageView) view.findViewById(R.id.imvMenu);
-        imvInfo = (ImageView) view.findViewById(R.id.imvInfo);
-        tvCount = (TextView) view.findViewById(R.id.tvCount);
-        title_toolbar = (TextView) view.findViewById(R.id.title_toolbar);
-        rlMenu = (RelativeLayout) view.findViewById(R.id.rlMenu);
-        flInfo = (RelativeLayout) view.findViewById(R.id.flInfo);
+        ivMenuRight = (ImageView) view.findViewById(R.id.ivMenuRight);
+        tvMenuTitle = (TextView) view.findViewById(R.id.tvMenuTitle);
+        tvMenuSubTitle = (TextView) view.findViewById(R.id.tvMenuSubTitle);
 
         llBack = (LinearLayout) view.findViewById(R.id.llBack);
         llForward = (LinearLayout) view.findViewById(R.id.llForward);

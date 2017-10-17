@@ -2,15 +2,17 @@ package jp.relo.cluboff.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -19,13 +21,13 @@ import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.MenuListAdapter;
-import jp.relo.cluboff.adapter.ViewPagerAdapter;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
-import jp.relo.cluboff.ui.fragment.CouponListContainerFragment;
+import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
+import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
@@ -36,27 +38,23 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 
 public class MainTabActivity extends BaseActivityToolbar {
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     MenuListAdapter mMenuAdapter;
     String[] titleMenu;
     DrawerLayout mDrawerLayoutMenu;
     ListView mDrawerListMenu;
     //main AppVisor processor
     private AppVisorPush appVisorPush;
-    private HistoryPushDialogFragment historyPushDialogFragment;
     private FAQDialogFragment faqDialogFragment;
-    long countPush=0;
 
     //Handler handler;
     public static final int INDEX_AREA=0;
     public static final int INDEX_TOP=1;
     public static final int INDEX_MEMBER=2;
-    public static final int UPDATE_COUNT=4;
-    public static final int EMPTY_W_PUSH=5;
     int indexTab = 0;
     //MyDatabaseHelper myDatabaseHelper;
     long lateResume;
+    FragmentTabHost mTabHost;
+    View llMember;
 
     @Override
     protected void onStart() {
@@ -79,31 +77,11 @@ public class MainTabActivity extends BaseActivityToolbar {
         }else if(Constant.TOP_COUPON.equals(event.getMessage())){
             selectPage(INDEX_TOP);
         }
-        else{
-            //loadCountPush();
-            //openHistoryPush();
-        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //myDatabaseHelper = new MyDatabaseHelper(this);
-        /*handler = new Handler() {
-            public void handleMessage(Message msg) {
-                if(msg.what== UPDATE_COUNT){
-                    if(countPush==0){
-                        tvCount.setVisibility(View.GONE);
-                    }else{
-                        tvCount.setVisibility(View.VISIBLE);
-                        tvCount.setText(""+countPush);
-                    }
-                }
-
-            }
-        };*/
-        // Generate title
         pushProcess();
     }
 
@@ -140,42 +118,13 @@ public class MainTabActivity extends BaseActivityToolbar {
         }
     }
     void selectPage(int pageIndex){
-        if(tabLayout!=null&&viewPager!=null){
-            tabLayout.setScrollPosition(pageIndex,0f,true);
-            viewPager.setCurrentItem(pageIndex);
-        }
+        mTabHost.setCurrentTab(pageIndex);
     }
-
-
-    /*public void loadCountPush(){
-        countPush = myDatabaseHelper.countPushUnread();
-        handler.sendEmptyMessage(UPDATE_COUNT);
-    }*/
-    /*public void openHistoryPush(){
-        if(historyPushDialogFragment==null){
-            historyPushDialogFragment = new HistoryPushDialogFragment();
-        }
-        historyPushDialogFragment.setICallDetailCoupon(new HistoryPushAdapter.iCallDetailCoupon() {
-            @Override
-            public void callbackDetail(String actionPush, int tabIndex) {
-                ReloApp reloApp = (ReloApp) getApplication();
-                reloApp.trackingWithAnalyticGoogleServices(Constant.GA_HISTORYPUSH_CATEGORY,Constant.GA_HISTORYPUSH_ACTION,actionPush, Utils.convertLong(Constant.GA_HISTORYPUSH_VALUE));
-                selectPage(tabIndex);
-            }
-        });
-        openDialogFragment(historyPushDialogFragment);
-    }*/
 
     @Override
     public void setupToolbar() {
-        lnToolbar.setVisibility(View.VISIBLE);
-        toolbar.setVisibility(View.VISIBLE);
-        imvMenu.setVisibility(View.VISIBLE);
-        //imvInfo.setVisibility(View.VISIBLE);
-        //tvCount.setVisibility(View.VISIBLE);
-
-
-        rlMenu.setOnClickListener(new View.OnClickListener() {
+        ivMenuRight.setVisibility(View.VISIBLE);
+        ivMenuRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {
@@ -185,12 +134,6 @@ public class MainTabActivity extends BaseActivityToolbar {
                 }
             }
         });
-        /*flInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openHistoryPush();
-            }
-        });*/
     }
 
     @Override
@@ -200,33 +143,30 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial), getString(R.string.menu_FAQ)};
         // Locate DrawerLayout in drawer_main.xml
+        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
+        mTabHost = (FragmentTabHost) findViewById(R.id.fragment_tab_host);
+        llMember = findViewById(R.id.llMember);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_listview_menu, null, false);
         mDrawerListMenu.addHeaderView(header);
-
-        // Set a custom shadow that overlays the main content when the drawer
+        // Pass results to MenuListAdapter Class
+        mMenuAdapter = new MenuListAdapter(this, titleMenu);
         // opens
         mDrawerLayoutMenu.setDrawerShadow(R.drawable.bg_catelogy_coupon,
                 GravityCompat.START);
 
         mDrawerLayoutMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        // Pass results to MenuListAdapter Class
-        mMenuAdapter = new MenuListAdapter(this, titleMenu);
 
         // Set the MenuListAdapter to the ListView
         mDrawerListMenu.setAdapter(mMenuAdapter);
         mDrawerListMenu.setOnItemClickListener(new DrawerItemClickListener());
+        initTabHost();
     }
     private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
@@ -245,12 +185,6 @@ public class MainTabActivity extends BaseActivityToolbar {
             case 2:
                 openDialogFragment(new HowToDialogFragment());
                 break;
-            case 3:
-                if(faqDialogFragment==null){
-                    faqDialogFragment = new FAQDialogFragment();
-                }
-                openDialogFragment(faqDialogFragment);
-                break;
         }
         mDrawerListMenu.setItemChecked(position, true);
         // Close drawer
@@ -262,38 +196,67 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        viewPager.setOffscreenPageLimit(3);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+    private void initTabHost() {
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.container_fragment);
 
-        PostAreaWebViewFragment couponAreaFragment = new PostAreaWebViewFragment();
-        couponAreaFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
-        adapter.addFragment(couponAreaFragment, getString(R.string.title_coupon_area));
+        mTabHost.addTab(setIndicator(mTabHost.newTabSpec(PostAreaWebViewFragment.class.getSimpleName()),
+                R.drawable.tab_area, getString(R.string.title_coupon_area)), PostAreaWebViewFragment.class, createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
 
-        adapter.addFragment(new CouponListContainerFragment(), getString(R.string.title_coupon_list));
+        Bundle bundlePupolar = new Bundle();
+        bundlePupolar.putBoolean(Constant.DATA_COUPON_URL,false);
+        mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListFragment.class.getSimpleName()),
+                R.drawable.tab_area, getString(R.string.title_membership)), CouponListFragment.class, bundlePupolar);
 
-        PostMemberWebViewFragment membershipFragment = new PostMemberWebViewFragment();
-        membershipFragment.setArguments(createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON));
-        adapter.addFragment(membershipFragment, getString(R.string.title_membership));
+        Bundle bundleArea = new Bundle();
+        bundleArea.putBoolean(Constant.DATA_COUPON_URL,true);
+        mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListAreaFragment.class.getSimpleName()),
+                R.drawable.tab_area, getString(R.string.title_membership)), CouponListAreaFragment.class, bundleArea);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        llMember.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                indexTab = position - 1;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onClick(View v) {
+                PostMemberWebViewFragment postMemberWebViewFragment = PostMemberWebViewFragment.newInstance();
+                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
+                postMemberWebViewFragment.setArguments(bundle);
+                openDialogFragment(postMemberWebViewFragment);
             }
         });
 
-        viewPager.setAdapter(adapter);
+        /*mTabHost.addTab(setIndicator(mTabHost.newTabSpec(PostMemberWebViewFragment.class.getSimpleName()),
+                R.drawable.tab_area, getString(R.string.title_membership)), PostMemberWebViewFragment.class, createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON));*/
+
+
+
+        mTabHost.getTabWidget().setDividerDrawable(null);
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                if(PostAreaWebViewFragment.TAG.equalsIgnoreCase(tabId)){
+                    indexTab =  - 1;
+                    tvMenuTitle.setText(R.string.title_area);
+                    tvMenuSubTitle.setText("ABC");
+                }else if(CouponListFragment.TAG.equalsIgnoreCase(tabId)){
+                    indexTab =  0;
+                    tvMenuTitle.setText(R.string.title_popular_coupon);
+                    tvMenuSubTitle.setText("DEF");
+                }else{
+                    indexTab =   1;
+                    tvMenuTitle.setText(R.string.title_area_coupon);
+                    tvMenuSubTitle.setText("XYZ");
+                }
+            }
+        });
+
+    }
+
+
+    private TabHost.TabSpec setIndicator(TabHost.TabSpec spec, int resourceIcon, String lable) {
+        View v = LayoutInflater.from(this).inflate(R.layout.view_tab_item, null);
+        ImageView imageView = (ImageView) v.findViewById(R.id.image_view);
+        imageView.setImageResource(resourceIcon);
+        TextView tvLable = (TextView) v.findViewById(R.id.tvLableTab);
+        tvLable.setText(lable);
+        return spec.setIndicator(v);
     }
 
     public Bundle createBundleFragment(String key, String url, int keyCheckWebview){
@@ -315,7 +278,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
-        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getBrandid(),AppVisorPush.UserPropertyGroup1);
+        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
         appVisorPush.synchronizeUserProperties();
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();

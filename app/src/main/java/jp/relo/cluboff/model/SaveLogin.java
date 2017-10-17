@@ -45,19 +45,16 @@ public class SaveLogin {
         SaveLogin.loginRequest = loginRequest;
     }
 
-    public String getKaiinno() {
-        return loginRequest.getKaiinno();
+    public String getUserName() {
+        if(loginRequest==null) return "";
+        return loginRequest.getLOGINID();
     }
 
 
-    public String getEmailad() {
-        return loginRequest.getEmailad();
+    public String getPass() {
+        return loginRequest.getPASSWORD();
     }
 
-
-    public String getBrandid() {
-        return loginRequest.getBrandid();
-    }
 
     public String getBrandidEncrypt() {
         return info.getBrandid();
@@ -65,6 +62,7 @@ public class SaveLogin {
 
 
     public String getUseridEncrypt() {
+        if(info==null) return "";
         return info.getUserid();
     }
 

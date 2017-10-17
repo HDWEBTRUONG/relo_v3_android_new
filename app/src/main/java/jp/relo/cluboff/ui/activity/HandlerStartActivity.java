@@ -79,25 +79,22 @@ public class HandlerStartActivity extends BaseActivity {
         if(loginRequest==null){
             goNextScreen();
         }else{
-            String kaiinno = loginRequest.getKaiinno();
-            String emailad = loginRequest.getEmailad();
-            String brandid = loginRequest.getBrandid();
+            String userName = loginRequest.getLOGINID();
+            String password = loginRequest.getPASSWORD();
             boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
-            if(StringUtil.isEmpty(kaiinno)||StringUtil.isEmpty(emailad)||StringUtil.isEmpty(brandid)||!isNetworkAvailable){
+            if(StringUtil.isEmpty(userName)||StringUtil.isEmpty(password)||!isNetworkAvailable){
                 goNextScreen();
             }else{
                 String usernameEN = "";
-                String userMailEN = "";
                 String passwordEN = "";
                 try {
-                    usernameEN = new String(BackAES.encrypt(kaiinno, AESHelper.password, AESHelper.type));
-                    userMailEN = new String(BackAES.encrypt(emailad,AESHelper.password, AESHelper.type));
-                    passwordEN = new String(BackAES.encrypt(brandid,AESHelper.password, AESHelper.type));
+                    usernameEN = new String(BackAES.encrypt(userName, AESHelper.password, AESHelper.type));
+                    passwordEN = new String(BackAES.encrypt(password,AESHelper.password, AESHelper.type));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 showLoading(this);
-                addSubscription(apiInterfaceJP.logon(usernameEN,userMailEN,passwordEN), new MyCallBack<LoginReponse>() {
+                addSubscription(apiInterfaceJP.logon(usernameEN,passwordEN), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
                         if(model!=null){

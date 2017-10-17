@@ -23,7 +23,7 @@ android {
             applicationId "jp.relo.cluboff.test"
             buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
-            buildConfigField "String", "BASE_URL_JP", '"https://test2.club-off.com/"'
+            buildConfigField "String", "BASE_URL_JP", '"https://sptest.fukuri.jp"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
             buildConfigField "String", "WEBVIEW_URL_FAQ", '"https://www.club-off.com/contents/files/bra/common/topics/app/faq/index.html"'

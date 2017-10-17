@@ -29,14 +29,15 @@
                 android:background="@color/gray240">
 
                 <EditText
-                    android:id="@+id/edtPassword"
+                    android:id="@+id/etUser"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_trans"
-                    android:hint="@string/txt_login_app_id"
+                    android:hint="Username"
                     android:lines="1"
                     android:singleLine="true"
+                    android:text="9000072111"
                     android:textColor="@color/color_textview_84"
                     android:textColorHint="@color/color_hint_text_170"
                     android:textSize="@dimen/text_size_large16" />
@@ -49,32 +50,19 @@
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/edtLoginUsername"
+                    android:id="@+id/etPass"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55dp"
-                    android:hint="@string/txt_login_username"
+                    android:hint="Password"
                     android:layout_gravity="center"
                     android:lines="1"
                     android:singleLine="true"
                     android:background="@drawable/bg_trans"
                     android:textColor="@color/color_textview_84"
                     android:textSize="@dimen/text_size_large16"
+                    android:text="Relo9999"
                     android:textColorHint="@color/color_hint_text_170"/>
             </LinearLayout>
-            <EditText
-                android:id="@+id/edtMail"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_55dp"
-                android:layout_marginTop="@dimen/_20dp"
-                android:hint="@string/txt_login_mail"
-                android:layout_gravity="center"
-                android:lines="1"
-                android:singleLine="true"
-                android:background="@drawable/bg_edittext_login2"
-                android:textColor="@color/color_textview_84"
-                android:textSize="@dimen/text_size_large16"
-                android:inputType="textEmailAddress"
-                android:textColorHint="@color/color_hint_text_170"/>
             <TextView
                 android:id="@+id/txt_login_error"
                 android:layout_width="match_parent"

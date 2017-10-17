@@ -16,26 +16,16 @@ import jp.relo.cluboff.R;
  */
 
 public abstract class BaseActivityToolbar extends BaseActivity {
-    protected LinearLayout lnToolbar;
-    protected Toolbar toolbar;
-    protected ImageView imvMenu;
-    protected ImageView imvInfo;
-    protected TextView tvCount;
-    protected TextView title_toolbar;
-    protected RelativeLayout rlMenu;
-    protected RelativeLayout flInfo;
+    protected ImageView ivMenuRight;
+    protected TextView tvMenuTitle;
+    protected TextView tvMenuSubTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lnToolbar = (LinearLayout) findViewById(R.id.lnToolbar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        imvMenu = (ImageView) findViewById(R.id.imvMenu);
-        imvInfo = (ImageView) findViewById(R.id.imvInfo);
-        tvCount = (TextView) findViewById(R.id.tvCount);
-        title_toolbar = (TextView) findViewById(R.id.title_toolbar);
-        rlMenu = (RelativeLayout) findViewById(R.id.rlMenu);
-        flInfo = (RelativeLayout) findViewById(R.id.flInfo);
+        ivMenuRight = (ImageView) findViewById(R.id.ivMenuRight);
+        tvMenuTitle = (TextView) findViewById(R.id.tvMenuTitle);
+        tvMenuSubTitle = (TextView) findViewById(R.id.tvMenuSubTitle);
     }
 
     @Override

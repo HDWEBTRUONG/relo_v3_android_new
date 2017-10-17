@@ -1,6 +1,7 @@
 package jp.relo.cluboff.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import framework.phvtUtils.StringUtil;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.MyCallBack;
@@ -35,7 +37,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     TextView link_webview_not_login;
     TextView link_webview_faq;
     Button btnLogin;
-    EditText edtLoginUsername,edtPassword,edtMail;
+    EditText etUser,etPass;
     TextView txt_show_error;
     Handler mhandler;
     public static final int MSG_ERROR_EMPTY = 0;
@@ -107,14 +109,22 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
         link_webview_faq = (TextView) findViewById(R.id.link_webview_faq);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
-        edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        edtMail = (EditText) findViewById(R.id.edtMail);
+        etUser = (EditText) findViewById(R.id.etUser);
+        etPass = (EditText) findViewById(R.id.etPass);
 
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
         link_webview_not_login.setOnClickListener(this);
         link_webview_faq.setOnClickListener(this);
+
+        if(BuildConfig.DEBUG){
+            img_logo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoMain();
+                }
+            });
+        }
 
     }
 
@@ -134,23 +144,12 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void clickLogin(){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
-            final String username=edtLoginUsername.getText().toString().trim();
-            final String userMail = edtMail.getText().toString().trim();
-            final String brand = edtPassword.getText().toString().trim();
-            if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(brand)&& !StringUtil.isEmpty(userMail)) {
-                String usernameEN = "";
-                String userMailEN = "";
-                String passwordEN = "";
-                try {
-                    usernameEN = new String(BackAES.encrypt(username,AESHelper.password, AESHelper.type));
-                    userMailEN = new String(BackAES.encrypt(userMail,AESHelper.password, AESHelper.type));
-                    passwordEN = new String(BackAES.encrypt(brand,AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            final String username=etUser.getText().toString().trim();
+            final String pass = etPass.getText().toString().trim();
+            if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(pass)) {
                 showLoading(this);
                 btnLogin.setEnabled(false);
-                addSubscription(apiInterfaceJP.logon(usernameEN,userMailEN,passwordEN), new MyCallBack<LoginReponse>() {
+                addSubscription(apiInterfaceJP.logon(username,pass), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
                         if(model!=null){
@@ -165,7 +164,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
                                 //save value input
                                 LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
-                                        new LoginRequest(username,userMail,brand));
+                                        new LoginRequest(username,pass));
                                 setGoogleAnalyticLogin(brandid);
                                 //save user and password encrypt KeyStore
                                 mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
@@ -188,15 +187,13 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     }
                 });
 
-            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(brand)&& StringUtil.isEmpty(userMail)){
+            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ALL_EMPTY);
-            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(brand)){
+            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ID_EMPTY);
             }else if(StringUtil.isEmpty(username)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ID_LOGIN_EMPTY);
-            }else if(StringUtil.isEmpty(userMail)){
-                mhandler.sendEmptyMessage(MSG_ERROR_MAIL_EMPTY);
-            }else if(StringUtil.isEmpty(brand)){
+            }else if(StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ID_BRAND_EMPTY);
             }
 
@@ -242,17 +239,15 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         hideSoftKeyboard();
         LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
         if(loginRequest!=null){
-            edtLoginUsername.setText(loginRequest.getKaiinno());
-            edtPassword.setText(loginRequest.getBrandid());
-            edtMail.setText(loginRequest.getEmailad());
+            etUser.setText(loginRequest.getLOGINID());
+            etPass.setText(loginRequest.getPASSWORD());
         }
     }
 
     @Override
     public void setupToolbar() {
-        lnToolbar.setVisibility(View.VISIBLE);
-        title_toolbar.setVisibility(View.VISIBLE);
-        title_toolbar.setText(getString(R.string.txt_title_login));
+        tvMenuTitle.setText(R.string.string_login);
+        tvMenuSubTitle.setText(R.string.txt_title_login);
     }
 
     @Override

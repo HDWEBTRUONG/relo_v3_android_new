@@ -3,12 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/oceanBlue</item>
+        <item name="colorPrimaryDark">@color/oceanBlue</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:textColor">@color/colorText</item>
-        <item name="actionBarSize">@dimen/_45dp</item>
         <!--<item name="android:popupBackground">@style/popup_menu</item>-->
     </style>
 

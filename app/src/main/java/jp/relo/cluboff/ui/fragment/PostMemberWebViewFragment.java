@@ -27,6 +27,7 @@ import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
+import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
@@ -39,13 +40,17 @@ import jp.relo.cluboff.util.iUpdateIU;
  * Created by tonkhanh on 5/18/17.
  */
 
-public class PostMemberWebViewFragment extends BaseFragmentBottombar {
+public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottombar {
 
     WebView mWebView;
     private int checkWebview;
     boolean isLoadding = false;
     boolean isVisibleToUser;
     String strBrowser = "";
+
+    public static PostMemberWebViewFragment newInstance() {
+        return new PostMemberWebViewFragment();
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -71,7 +76,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     }
 
     @Override
-    public void setupBottombar() {
+    public void setupBottomlbar() {
         switch (checkWebview){
             case Constant.MEMBER_COUPON:
                 lnBottom.setVisibility(View.VISIBLE);
@@ -136,12 +141,26 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     }
 
     @Override
+    public void setupActionBar() {
+        tvMenuTitle.setText(R.string.member_site_title);
+        tvMenuSubTitle.setText(R.string.title_membership);
+        ivMenuRight.setVisibility(View.VISIBLE);
+        ivMenuRight.setImageResource(R.drawable.icon_close);
+        ivMenuRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
+
+    @Override
     public int getRootLayoutId() {
         return R.layout.fragment_webview;
     }
 
     @Override
-    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
+    public void bindView(View view) {
 
     }
 
@@ -150,11 +169,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
         super.onStart();
         EventBus.getDefault().register(this);
     }
-
-    @Override
-    protected void registerEventHandlers() {
-
-    }
+    
 
     private void setupWebView() {
         WebSettings webSettings = mWebView.getSettings();
@@ -230,7 +245,7 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             String  usernameEn = "";
             String  COA_APPEn = "1";
             try {
-                usernameEn = new String(BackAES.encrypt(saveLogin.getKaiinno(), AESHelper.password, AESHelper.type));
+                usernameEn = new String(BackAES.encrypt(saveLogin.getUserName(), AESHelper.password, AESHelper.type));
                 COA_APPEn = new String(BackAES.encrypt("1", AESHelper.password, AESHelper.type));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -238,7 +253,8 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
             memberPost.setU(usernameEn);
             memberPost.setCOA_APP(COA_APPEn);
         }
-        mWebView.postUrl( url, memberPost.toString().getBytes());
+        //mWebView.postUrl( url, memberPost.toString().getBytes());
+        mWebView.loadUrl("https://www.google.com.vn");
     }
 
     @Override
@@ -255,6 +271,16 @@ public class PostMemberWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    protected void init(View view) {
+
+    }
+
+    @Override
+    protected void setEvent(View view) {
+
     }
 
 

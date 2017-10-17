@@ -93,7 +93,7 @@ public class PushvisorHandlerActivity extends Activity {
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
-        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getBrandid(),AppVisorPush.UserPropertyGroup1);
+        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
         appVisorPush.synchronizeUserProperties();
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
