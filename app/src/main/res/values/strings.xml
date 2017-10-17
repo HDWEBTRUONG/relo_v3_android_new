@@ -6,18 +6,21 @@
     <string name="xlistview_header_hint_ready" />
     <string name="xlistview_header_hint_loading" />
     <string name="xlistview_header_last_time" />
-    <string name="title_coupon_area">エリアクーポン</string>
+    <string name="title_coupon_area">携帯会員証</string>
     <string name="title_membership">ホームページ</string>
     <string name="title_coupon_list">人気クーポン</string>
+    <string name="title_coupon_list_area">エリアクーポン</string>
+    <string name="title_member">会員サイト</string>
 
     <!-- Login Fragment-->
     <string name="txt_bt_login">ログインボタン</string>
     <string name="txt_login_username">ログインID</string>
     <string name="txt_login_app_id">アプリID</string>
     <string name="txt_login_mail">メールアドレス</string>
-    <string name="txt_link_can_not_login">入力項目がご不明の場合はこちら</string>
-    <string name="txt_note_login">※本アプリをご利用いただくには、事前にクラブオフホームページでメールアドレスの登録が必要です。</string>
-    <string name="txt_title_login">ログイン</string>
+    <string name="txt_link_can_not_login">会員IDパスワードを忘れた方はこちら＞</string>
+    <string name="txt_note_login">会員IDは数字６桁-４桁（半角）で入力してください。\※入力例：000000-0000（ハイフン含む）</string>
+    <string name="txt_title_login">ログインする</string>
+    <string name="title_login">ログイン</string>
     <string name="error_login_wrong_id_password">ログインですることができませんでした。\n入力内容が間違っているか、大会後の可能性がございます。会員IDもしくはパスワードを再度</string>
     <string name="error_connect_network">通信に失敗しました</string>
     <string name="error_blank_id_password">「RELO CLUB 会員ID」と「パスワード」 を入力してください</string>
@@ -56,7 +59,7 @@
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
     <string name="menu_FAQ">FAQ</string>
-    <string name="title_FAQ">よくあるご質問はこちら</string>
+    <string name="title_FAQ">ログインできない方はこちら＞</string>
 
     <!--error code reponse-->
     <string name="err_api">ログインができませんでした。</string>
@@ -82,4 +85,16 @@
     <string name="title_popular_coupon">Popular Coupon</string>
     <string name="title_area_coupon">Area Coupon</string>
     <string name="member_site_title">Site</string>
+    <string name="login_hint_username">会員ID</string>
+    <string name="login_hint_pass">パスワード</string>
+
+    <string name="area1">北海道</string>
+    <string name="area2">東北</string>
+    <string name="area3">首都圏</string>
+    <string name="area4">新潟</string>
+    <string name="area5">中部</string>
+    <string name="area6">関西</string>
+    <string name="area7">中国・四国</string>
+    <string name="area8">九州</string>
+    <string name="area9">沖縄</string>
 </resources>

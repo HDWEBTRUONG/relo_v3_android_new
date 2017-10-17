@@ -205,12 +205,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         Bundle bundlePupolar = new Bundle();
         bundlePupolar.putBoolean(Constant.DATA_COUPON_URL,false);
         mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListFragment.class.getSimpleName()),
-                R.drawable.tab_area, getString(R.string.title_membership)), CouponListFragment.class, bundlePupolar);
+                R.drawable.tab_area, getString(R.string.title_coupon_list)), CouponListFragment.class, bundlePupolar);
 
         Bundle bundleArea = new Bundle();
         bundleArea.putBoolean(Constant.DATA_COUPON_URL,true);
         mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListAreaFragment.class.getSimpleName()),
-                R.drawable.tab_area, getString(R.string.title_membership)), CouponListAreaFragment.class, bundleArea);
+                R.drawable.tab_area, getString(R.string.title_coupon_list_area)), CouponListAreaFragment.class, bundleArea);
 
         llMember.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,15 +234,15 @@ public class MainTabActivity extends BaseActivityToolbar {
                 if(PostAreaWebViewFragment.TAG.equalsIgnoreCase(tabId)){
                     indexTab =  - 1;
                     tvMenuTitle.setText(R.string.title_area);
-                    tvMenuSubTitle.setText("ABC");
+                    tvMenuSubTitle.setText(R.string.title_coupon_area);
                 }else if(CouponListFragment.TAG.equalsIgnoreCase(tabId)){
                     indexTab =  0;
                     tvMenuTitle.setText(R.string.title_popular_coupon);
-                    tvMenuSubTitle.setText("DEF");
+                    tvMenuSubTitle.setText(R.string.title_coupon_list);
                 }else{
                     indexTab =   1;
                     tvMenuTitle.setText(R.string.title_area_coupon);
-                    tvMenuSubTitle.setText("XYZ");
+                    tvMenuSubTitle.setText(R.string.title_coupon_list_area);
                 }
             }
         });

@@ -26,6 +26,6 @@
             android:textAlignment="center"
             android:textSize="@dimen/text_size_small"
             android:textColor="@color/color_tab_lable"
-            android:text="@string/title_membership"/>
+            android:text="@string/title_member"/>
     </LinearLayout>
 </RelativeLayout>

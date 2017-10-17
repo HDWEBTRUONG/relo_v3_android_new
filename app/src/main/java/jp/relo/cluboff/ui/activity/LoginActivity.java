@@ -247,7 +247,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     @Override
     public void setupToolbar() {
         tvMenuTitle.setText(R.string.string_login);
-        tvMenuSubTitle.setText(R.string.txt_title_login);
+        tvMenuSubTitle.setText(R.string.title_login);
     }
 
     @Override

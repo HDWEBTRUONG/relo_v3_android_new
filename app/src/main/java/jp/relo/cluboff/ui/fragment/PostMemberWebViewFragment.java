@@ -143,7 +143,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     @Override
     public void setupActionBar() {
         tvMenuTitle.setText(R.string.member_site_title);
-        tvMenuSubTitle.setText(R.string.title_membership);
+        tvMenuSubTitle.setText(R.string.title_member);
         ivMenuRight.setVisibility(View.VISIBLE);
         ivMenuRight.setImageResource(R.drawable.icon_close);
         ivMenuRight.setOnClickListener(new View.OnClickListener() {
