@@ -13,8 +13,10 @@ import com.google.gson.JsonSyntaxException;
 
 public class LoginSharedPreference {
     public final String KEY_USER="userID";
-    public final String KEY_ID_APP="IDApp";//pass word
-    public final String KEY_MAIL="UserMail";
+    public final String KEY_PASS="passwodk";
+    public final String KEY_APPU="appU";
+    public final String KEY_APPP="appp";
+
     public final String VERSION = "version";
     public final String TIME_STOP = "timeStop";
     public static LoginSharedPreference sharedPreference;
@@ -34,14 +36,6 @@ public class LoginSharedPreference {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void setLogin(String userID,String appID,String userMail){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_USER, userID);
-        editor.putString(KEY_ID_APP, appID);
-        editor.putString(KEY_MAIL, userMail);
-        editor.apply();
-    }
-
     public void setVersion(int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(VERSION, value);
@@ -55,6 +49,45 @@ public class LoginSharedPreference {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(TIME_STOP, value);
         editor.apply();
+    }
+
+    public void setUserName(String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER, value);
+        editor.apply();
+    }
+
+    public String getUserName(){
+        return sharedPreferences.getString(KEY_USER,"");
+    }
+
+    public void setPass(String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_PASS, value);
+        editor.apply();
+    }
+
+    public String getPass(){
+        return sharedPreferences.getString(KEY_PASS,"");
+    }
+    public void setKEY_APPU(String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_APPU, value);
+        editor.apply();
+    }
+
+    public String getKEY_APPU(){
+        return sharedPreferences.getString(KEY_APPU,"");
+    }
+
+    public void setKEY_APPP(String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_APPP, value);
+        editor.apply();
+    }
+
+    public String getKEY_APPP(){
+        return sharedPreferences.getString(KEY_APPP,"");
     }
     public long getValueStop(){
         return sharedPreferences.getLong(TIME_STOP,0);

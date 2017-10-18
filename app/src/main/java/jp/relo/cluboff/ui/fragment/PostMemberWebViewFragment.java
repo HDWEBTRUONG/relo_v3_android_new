@@ -31,6 +31,7 @@ import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
@@ -84,7 +85,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                 imvForwardBottomBar.setVisibility(View.VISIBLE);
 
                 //Test
-                imvBrowserBottomBar.setVisibility(View.INVISIBLE);
+                imvBrowserBottomBar.setVisibility(View.VISIBLE);
                 llBrowser.setEnabled(false);
 
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
@@ -233,28 +234,17 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     }
 
     private void loadUrl(){
-        String url="";
+        String url = Constant.TEMPLATE_URL_MEMBER;
         MemberPost memberPost = new MemberPost();
         SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
         if(saveLogin!=null){
-            try {
-                url = MessageFormat.format(Constant.TEMPLATE_URL_MEMBER, BackAES.decrypt(saveLogin.getUrlEncrypt(), AESHelper.password, AESHelper.type));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            String  usernameEn = "";
-            String  COA_APPEn = "1";
-            try {
-                usernameEn = new String(BackAES.encrypt(saveLogin.getUserName(), AESHelper.password, AESHelper.type));
-                COA_APPEn = new String(BackAES.encrypt("1", AESHelper.password, AESHelper.type));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            memberPost.setU(usernameEn);
-            memberPost.setCOA_APP(COA_APPEn);
+            LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+            String  userID = loginSharedPreference.getUserName();
+            String  pass = loginSharedPreference.getPass();
+            memberPost.setU(userID);
+            memberPost.setCOA_APP(pass);
         }
-        //mWebView.postUrl( url, memberPost.toString().getBytes());
-        mWebView.loadUrl("https://www.google.com.vn");
+        mWebView.postUrl( url, memberPost.toString().getBytes());
     }
 
     @Override

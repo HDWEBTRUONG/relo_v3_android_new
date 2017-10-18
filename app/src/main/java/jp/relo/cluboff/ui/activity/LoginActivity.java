@@ -12,10 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
+
+import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
@@ -26,6 +34,10 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -149,7 +161,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(pass)) {
                 showLoading(this);
                 btnLogin.setEnabled(false);
-                addSubscription(apiInterfaceJP.logon(username,pass), new MyCallBack<LoginReponse>() {
+                /*addSubscription(apiInterfaceJP.logon(username,pass), new MyCallBack<LoginReponse>() {
                     @Override
                     public void onSuccess(LoginReponse model) {
                         if(model!=null){
@@ -185,7 +197,35 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         hideLoading();
                         mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
                     }
+                });*/
+                ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+                apiInterface.logonHTML(username,pass).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        hideLoading();
+                        try {
+                            Document document = Jsoup.parse(response.body().string());
+                            AppLog.log("document: "+document.title());
+                            if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(document.title())){
+                                mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
+                            }else{
+                                mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            //Utils.showDialogAPI(LoginActivity.this,msg);
+                            mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        AppLog.log("Err: "+t.toString());
+                        hideLoading();
+                        mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                    }
                 });
+
 
             }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ALL_EMPTY);
@@ -277,6 +317,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
 
     private void gotoMain(){
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+        loginSharedPreference.setUserName(etUser.getText().toString().trim());
+        loginSharedPreference.setPass(etPass.getText().toString().trim());
         Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
                         finish();

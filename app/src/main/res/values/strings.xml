@@ -97,4 +97,20 @@
     <string name="area7">中国・四国</string>
     <string name="area8">九州</string>
     <string name="area9">沖縄</string>
+    <string name="member_auth_note_show_page">この画面をご提示ください</string>
+    <string name="member_auth_note_en">Please show this page to the service provider.</string>
+    <string name="member_auth_note_date">有効期限</string>
+    <string name="member_auth_note_only_today">※本日限り有効\t\t {0}</string>
+    <string name="member_auth_note_only_today_en">Valid for the date show only.</string>
+    <string name="member_auth_note_memberid">会員ID/MEMBER ID</string>
+    <string name="member_auth_note_member_account_en">Please refer to how to use for each service prior to usage.</string>
+    <string name="member_auth_note_member_account">※一部施設ではご利用いただけません。商品詳細ページでご確認のうえご利用ください。</string>
+    <string name="member_auth_note_error">退会・休会・端末の環境設定等により、現在ご利用いただけません。 お心あたりのない方はお手数ですが、下記までお問い合わせください。</string>
+    <string name="member_auth_note_error2">-------------------------------------</string>
+    <string name="member_auth_note_error3">福利厚生倶楽部カスタマーセンター</string>
+    <string name="member_auth_note_error4">0120-982291</string>
+    <string name="member_auth_note_error4_tel">
+        TEL:</string>
+    <string name="member_auth_note_error5">平日／10：00～18：00</string>
+    <string name="member_auth_note_error6">土日祝／10：00～17：00※年末年始を除く</string>
 </resources>

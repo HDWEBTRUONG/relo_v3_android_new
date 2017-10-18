@@ -127,5 +127,6 @@ public class Constant {
     public static final int LIMIT_ON_BACKGROUND= 10800000;
 
     public static final String DATA_COUPON_URL= "DATA_COUPON_URL";
+    public static final String REPONSE_SUCCESS= BuildConfig.REPONSE_SUCCESS;
 
 }

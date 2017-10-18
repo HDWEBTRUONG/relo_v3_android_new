@@ -21,6 +21,7 @@ import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.MenuListAdapter;
+import jp.relo.cluboff.model.BlockEvent;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
@@ -31,6 +32,7 @@ import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
 import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
+import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.util.Constant;
@@ -50,11 +52,10 @@ public class MainTabActivity extends BaseActivityToolbar {
     public static final int INDEX_AREA=0;
     public static final int INDEX_TOP=1;
     public static final int INDEX_MEMBER=2;
-    int indexTab = 0;
-    //MyDatabaseHelper myDatabaseHelper;
     long lateResume;
     FragmentTabHost mTabHost;
     View llMember;
+    View llTab;
 
     @Override
     protected void onStart() {
@@ -79,6 +80,13 @@ public class MainTabActivity extends BaseActivityToolbar {
         }
     }
 
+    @Subscribe
+    public void onEvent(BlockEvent event) {
+        ivMenuRight.setEnabled(false);
+        llTab.setVisibility(View.GONE);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +98,8 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onResume();
         long valueTime = Utils.dateTimeValue();
         lateResume = LoginSharedPreference.getInstance(this).getValueStop();
-
+        tvMenuTitle.setText(R.string.title_area);
+        tvMenuSubTitle.setText(R.string.title_coupon_area);
         //loadCountPush();
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -106,15 +115,10 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_TOP);
             }
         }else{
-            if(indexTab < -1 || indexTab > 1){
-                indexTab = 0;
-            }
             if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
-                indexTab = 0;
                 EventBus.getDefault().post(new ReloadEvent(true));
 
             }
-            selectPage(indexTab+1);
         }
     }
     void selectPage(int pageIndex){
@@ -148,6 +152,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
         mTabHost = (FragmentTabHost) findViewById(R.id.fragment_tab_host);
         llMember = findViewById(R.id.llMember);
+        llTab = findViewById(R.id.llTab);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
@@ -199,8 +204,8 @@ public class MainTabActivity extends BaseActivityToolbar {
     private void initTabHost() {
         mTabHost.setup(this, getSupportFragmentManager(), R.id.container_fragment);
 
-        mTabHost.addTab(setIndicator(mTabHost.newTabSpec(PostAreaWebViewFragment.class.getSimpleName()),
-                R.drawable.tab_area, getString(R.string.title_coupon_area)), PostAreaWebViewFragment.class, createBundleFragment(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_AREA_COUPON, Constant.AREA_COUPON));
+        mTabHost.addTab(setIndicator(mTabHost.newTabSpec(MemberAuthFragment.class.getSimpleName()),
+                R.drawable.tab_area, getString(R.string.title_coupon_area)), MemberAuthFragment.class, null);
 
         Bundle bundlePupolar = new Bundle();
         bundlePupolar.putBoolean(Constant.DATA_COUPON_URL,false);
@@ -232,15 +237,12 @@ public class MainTabActivity extends BaseActivityToolbar {
             @Override
             public void onTabChanged(String tabId) {
                 if(PostAreaWebViewFragment.TAG.equalsIgnoreCase(tabId)){
-                    indexTab =  - 1;
                     tvMenuTitle.setText(R.string.title_area);
                     tvMenuSubTitle.setText(R.string.title_coupon_area);
                 }else if(CouponListFragment.TAG.equalsIgnoreCase(tabId)){
-                    indexTab =  0;
                     tvMenuTitle.setText(R.string.title_popular_coupon);
                     tvMenuSubTitle.setText(R.string.title_coupon_list);
                 }else{
-                    indexTab =   1;
                     tvMenuTitle.setText(R.string.title_area_coupon);
                     tvMenuSubTitle.setText(R.string.title_coupon_list_area);
                 }

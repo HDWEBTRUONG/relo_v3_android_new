@@ -22,12 +22,13 @@ android {
         relo_dev {
             applicationId "jp.relo.cluboff.test"
             buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
+            buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://sptest.fukuri.jp"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
             buildConfigField "String", "WEBVIEW_URL_FAQ", '"https://www.club-off.com/contents/files/bra/common/topics/app/faq/index.html"'
-            buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://{0}/index.cfm"'
+            buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://sptest.fukuri.jp/fkr/apps/oil/ffoil_main.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
             buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
             buildConfigField "String", "APPVISOR_ID", '"sALZBaJwjb"'
@@ -36,6 +37,7 @@ android {
         relo_prod {
             applicationId "jp.relo.cluboff"
             buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
+            buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://www.club-off.com/"'
             buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
@@ -82,6 +84,7 @@ dependencies {
         transitive = true
     }
     compile 'cn.pedant.sweetalert:library:1.3'
+    compile 'org.jsoup:jsoup:1.10.2'
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
