@@ -21,9 +21,6 @@
         <item name="android:popupBackground">@color/colorConcrete</item>
         <item name="android:background">@color/colorConcrete</item>
     </style>
-    <style name="AppStyleTabLayout" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/colorPrimaryDark</item>
-    </style>
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:layout_alignParentEnd">true</item>

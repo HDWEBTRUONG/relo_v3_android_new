@@ -56,7 +56,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.MainTabActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
 
         <receiver
             android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"

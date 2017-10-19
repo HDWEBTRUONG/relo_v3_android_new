@@ -32,6 +32,7 @@ android {
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
             buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
             buildConfigField "String", "APPVISOR_ID", '"sALZBaJwjb"'
+            buildConfigField "String", "URL_MEMBER_BROWSER", '"https://sptest.fukuri.jp/fkr/apps/oil/get_login.cfm"'
         }
 
         relo_prod {
@@ -47,6 +48,7 @@ android {
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://{0}/coa_directlink.cfm"'
             buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
             buildConfigField "String", "APPVISOR_ID", '"whOIQ8QIIc"'
+            buildConfigField "String", "URL_MEMBER_BROWSER", '"https://sp.fukuri.jp/fkr/apps/oil/get_login.cfm"'
         }
     }
 

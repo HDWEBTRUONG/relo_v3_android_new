@@ -132,4 +132,9 @@
         android:background="@drawable/bg_trans"
         android:textSize="@dimen/text_size_large"
         />
+    <WebView
+        android:id="@+id/wvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"></WebView>
 </LinearLayout>

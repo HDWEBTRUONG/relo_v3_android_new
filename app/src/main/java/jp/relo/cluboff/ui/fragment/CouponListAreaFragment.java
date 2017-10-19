@@ -3,7 +3,9 @@ package jp.relo.cluboff.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,11 +22,24 @@ public class CouponListAreaFragment extends CouponListFragment {
     HorizontalScrollView svMenu;
     RadioGroup rgArea;
     RadioButton rbArea1;
+    View rlViewAreaMap;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         svMenu = (HorizontalScrollView)view.findViewById(R.id.svMenu);
         svMenu.setVisibility(View.VISIBLE);
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.head_arear_coupon, null, false);
+        lvCoupon.addHeaderView(header, null, false);
+        rlViewAreaMap = header.findViewById(R.id.rlViewAreaMap);
+
+        rlViewAreaMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppLog.log("-----------");
+            }
+        });
 
         rgArea =(RadioGroup) view.findViewById(R.id.rgArea);
         rbArea1 =(RadioButton) view.findViewById(R.id.rbArea1);

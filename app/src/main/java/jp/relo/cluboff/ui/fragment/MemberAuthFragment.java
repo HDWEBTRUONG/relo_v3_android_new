@@ -47,6 +47,7 @@ public class MemberAuthFragment extends BaseFragment {
 
     public static final int UPDATE_LAYOUT=1;
     public static final int UPDATE_LAYOUT_ERROR=2;
+    public static final String TAG = MemberAuthFragment.class.getSimpleName();
 
     @Override
     public int getRootLayoutId() {
@@ -105,13 +106,12 @@ public class MemberAuthFragment extends BaseFragment {
                 hideLoading();
                 try {
                     Document document = Jsoup.parse(response.body().string());
-                    AppLog.log("document: "+document.toString());
                     Element divChildren = document.select("html").first();
                     for (int i = 0; i < divChildren.childNodes().size(); i++) {
                         Node child = divChildren.childNode(i);
                         if (child.nodeName().equals("#comment")) {
                             String valueAuth = child.toString();
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==0){
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==1){
                                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                                 loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                                 loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));

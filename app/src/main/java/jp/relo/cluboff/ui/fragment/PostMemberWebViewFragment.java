@@ -1,10 +1,14 @@
 package jp.relo.cluboff.ui.fragment;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -16,10 +20,13 @@ import android.webkit.WebView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.ControlWebEventBus;
@@ -47,7 +54,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     private int checkWebview;
     boolean isLoadding = false;
     boolean isVisibleToUser;
-    String strBrowser = "";
 
     public static PostMemberWebViewFragment newInstance() {
         return new PostMemberWebViewFragment();
@@ -86,7 +92,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
 
                 //Test
                 imvBrowserBottomBar.setVisibility(View.VISIBLE);
-                llBrowser.setEnabled(false);
+                llBrowser.setEnabled(true);
 
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
                 break;
@@ -110,19 +116,37 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
         llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mWebView!=null &&  mWebView.getUrl()!=null){
+                /*if(mWebView!=null &&  mWebView.getUrl()!=null){
                     Utils.showDialogLIB(getActivity(), R.string.title_browser, R.string.content_browser,
                             R.string.btn_browser, new iUpdateIU() {
                                 @Override
                                 public void updateError(int txt) {
                                     if(txt == 0){
-                                        if(StringUtil.isEmpty(strBrowser)){
-                                            strBrowser = mWebView.getUrl();
+                                        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+                                        if(loginSharedPreference!=null){
+                                            String url = MessageFormat.format(Constant.URL_MEMBER_BROWSER,loginSharedPreference.getKEY_APPU(),
+                                                    loginSharedPreference.getKEY_APPP());
+                                            getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                                         }
-                                        getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(strBrowser)));
                                     }
                                 }
                             });
+                }*/
+                LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+                if(loginSharedPreference!=null){
+                    try {
+                        Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                                .buildUpon()
+                                .appendQueryParameter("LOGINID", loginSharedPreference.getKEY_APPU())
+                                .appendQueryParameter("PASSWORD", loginSharedPreference.getKEY_APPP())
+                                .build();
+                        internetIntent.setData(uri);
+                        getActivity().startActivity(internetIntent);
+                        AppLog.log("URL: "+ uri.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -195,9 +219,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(StringUtil.isEmpty(strBrowser)){
-                    strBrowser = url;
-                }
                 isLoadding = false;
                 if(isVisible()){
                     hideLoading();
@@ -218,7 +239,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
             }
 
         });
-        mWebView.setOnKeyListener(new View.OnKeyListener(){
+        /*mWebView.setOnKeyListener(new View.OnKeyListener(){
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -229,7 +250,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                 }
                 return false;
             }
-        });
+        });*/
         loadUrl();
     }
 

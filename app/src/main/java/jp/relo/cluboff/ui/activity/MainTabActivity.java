@@ -236,7 +236,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                if(PostAreaWebViewFragment.TAG.equalsIgnoreCase(tabId)){
+                if(MemberAuthFragment.TAG.equalsIgnoreCase(tabId)){
                     tvMenuTitle.setText(R.string.title_area);
                     tvMenuSubTitle.setText(R.string.title_coupon_area);
                 }else if(CouponListFragment.TAG.equalsIgnoreCase(tabId)){

@@ -6,12 +6,18 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -27,7 +33,11 @@ import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
+import jp.relo.cluboff.model.MemberPost;
+import jp.relo.cluboff.model.MessageEvent;
+import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
+import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -51,6 +61,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     Button btnLogin;
     EditText etUser,etPass;
     TextView txt_show_error;
+    WebView wvLogin;
     Handler mhandler;
     public static final int MSG_ERROR_EMPTY = 0;
     public static final int MSG_ERROR_FAILURE = 1;
@@ -123,6 +134,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         etUser = (EditText) findViewById(R.id.etUser);
         etPass = (EditText) findViewById(R.id.etPass);
+        wvLogin = (WebView) findViewById(R.id.wvLogin);
 
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
@@ -159,46 +171,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             final String username=etUser.getText().toString().trim();
             final String pass = etPass.getText().toString().trim();
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(pass)) {
-                showLoading(this);
+                //showLoading(this);
                 btnLogin.setEnabled(false);
-                /*addSubscription(apiInterfaceJP.logon(username,pass), new MyCallBack<LoginReponse>() {
-                    @Override
-                    public void onSuccess(LoginReponse model) {
-                        if(model!=null){
-                            if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
-                                int brandid=0;
-                                try {
-                                    brandid = Utils.convertInt(Utils.removeString(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type)));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                //Save reponse value
-                                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_SAVE,model.getInfo());
-                                //save value input
-                                LoginSharedPreference.getInstance(LoginActivity.this).put(ConstansSharedPerence.TAG_LOGIN_INPUT,
-                                        new LoginRequest(username,pass));
-                                setGoogleAnalyticLogin(brandid);
-                                //save user and password encrypt KeyStore
-                                mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
-                            }else{
-                                mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int msg) {
-                        Utils.showDialogAPI(LoginActivity.this,msg);
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        hideLoading();
-                        mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
-                    }
-                });*/
-                ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+                /*ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
                 apiInterface.logonHTML(username,pass).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -224,8 +199,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         hideLoading();
                         mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
                     }
-                });
-
+                });*/
+                loginWebview(username,pass);
 
             }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ALL_EMPTY);
@@ -240,6 +215,53 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }else{
             mhandler.sendEmptyMessage(MSG_NOT_NETWORK);
         }
+    }
+
+    private void loginWebview( String userID, String pass) {
+        WebSettings webSettings = wvLogin.getSettings();
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptEnabled(true);
+        wvLogin.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        //Disable cache Webview
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        wvLogin.setWebViewClient(new MyWebViewClient(this) {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                showLoading(LoginActivity.this);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                hideLoading();
+                if("Now Loading".equalsIgnoreCase(view.getTitle())) return;
+                if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(view.getTitle())){
+                    mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
+                    mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                }else{
+                    mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+                }
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                hideLoading();
+                mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
+                mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+            }
+
+        });
+
+        String url = Constant.TEMPLATE_URL_MEMBER;
+        MemberPost memberPost = new MemberPost();
+        memberPost.setU(userID);
+        memberPost.setCOA_APP(pass);
+        wvLogin.postUrl( url, memberPost.toString().getBytes());
     }
 
     public void setGoogleAnalyticLogin(long brandid){

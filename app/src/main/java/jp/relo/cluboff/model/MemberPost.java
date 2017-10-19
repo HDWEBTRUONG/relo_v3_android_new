@@ -37,8 +37,8 @@ public class MemberPost {
     public String toString() {
         if(u!=null && COA_APP!=null){
             try {
-                return "u=" + URLEncoder.encode(u, "UTF-8") +
-                        "&COA_APP=" + URLEncoder.encode(COA_APP, "UTF-8");
+                return "LOGINID=" + URLEncoder.encode(u, "UTF-8") +
+                        "&PASSWORD=" + URLEncoder.encode(COA_APP, "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
