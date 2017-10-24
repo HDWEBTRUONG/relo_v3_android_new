@@ -49,9 +49,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ui.activity.WebviewActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.PushvisorHandlerActivity"
             android:screenOrientation="portrait" />
         <activity

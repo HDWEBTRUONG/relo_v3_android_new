@@ -17,7 +17,7 @@
     <string name="txt_login_username">ログインID</string>
     <string name="txt_login_app_id">アプリID</string>
     <string name="txt_login_mail">メールアドレス</string>
-    <string name="txt_link_can_not_login">会員IDパスワードを忘れた方はこちら＞</string>
+    <string name="txt_link_forget_id">会員IDパスワードを忘れた方はこちら</string>
     <string name="txt_note_login">会員IDは数字６桁-４桁（半角）で入力してください。\※入力例：000000-0000（ハイフン含む）</string>
     <string name="txt_title_login">ログインする</string>
     <string name="title_login">ログイン</string>
@@ -59,7 +59,7 @@
     <string name="menu_top">TOPへ戻る</string>
     <string name="menu_tutorial">アプリの使い方</string>
     <string name="menu_FAQ">FAQ</string>
-    <string name="title_FAQ">ログインできない方はこちら＞</string>
+    <string name="title_can_not_login">ログインできない方はこちら</string>
 
     <!--error code reponse-->
     <string name="err_api">ログインができませんでした。</string>

@@ -16,6 +16,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +51,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             Manifest.permission.ACCESS_FINE_LOCATION};
     boolean isLoadding = false;
     boolean isVisibleToUser;
+    ProgressBar horizontalProgress;
 
     public static final String TAG = PostAreaWebViewFragment.class.getSimpleName();
 
@@ -74,6 +76,7 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
 
 
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
 
         if (!checkPermissions()) {
@@ -136,7 +139,6 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
 
     @Override
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
-
     }
 
     @Override
@@ -198,6 +200,17 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
+            }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    horizontalProgress.setVisibility(View.GONE);
+                } else {
+                    horizontalProgress.setVisibility(View.VISIBLE);
+                    horizontalProgress.setProgress(newProgress);
+                }
             }
         });
         mWebView.setOnKeyListener(new View.OnKeyListener(){

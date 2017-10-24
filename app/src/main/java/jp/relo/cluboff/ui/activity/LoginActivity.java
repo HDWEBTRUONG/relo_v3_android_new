@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -17,37 +16,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
-
-import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.api.ApiClientJP;
-import jp.relo.cluboff.api.ApiInterface;
-import jp.relo.cluboff.api.MyCallBack;
-import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.MemberPost;
-import jp.relo.cluboff.model.MessageEvent;
-import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
+import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
-import jp.relo.cluboff.util.ase.AESHelper;
-import jp.relo.cluboff.util.ase.BackAES;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -129,8 +110,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
-        link_webview_not_login = (TextView) findViewById(R.id.link_webview_not_login);
-        link_webview_faq = (TextView) findViewById(R.id.link_webview_faq);
+        link_webview_not_login = (TextView) findViewById(R.id.link_webview_forget_id);
+        link_webview_faq = (TextView) findViewById(R.id.link_webview_can_not_login);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
         etUser = (EditText) findViewById(R.id.etUser);
         etPass = (EditText) findViewById(R.id.etPass);
@@ -171,35 +152,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             final String username=etUser.getText().toString().trim();
             final String pass = etPass.getText().toString().trim();
             if (!StringUtil.isEmpty(username)&& !StringUtil.isEmpty(pass)) {
-                //showLoading(this);
                 btnLogin.setEnabled(false);
-                /*ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
-                apiInterface.logonHTML(username,pass).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        hideLoading();
-                        try {
-                            Document document = Jsoup.parse(response.body().string());
-                            AppLog.log("document: "+document.title());
-                            if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(document.title())){
-                                mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
-                            }else{
-                                mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            //Utils.showDialogAPI(LoginActivity.this,msg);
-                            mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        AppLog.log("Err: "+t.toString());
-                        hideLoading();
-                        mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
-                    }
-                });*/
                 loginWebview(username,pass);
 
             }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
@@ -271,25 +224,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
 
 
-    /**
-     *
-     * Show webview with current url
-     * @param key a key of url
-     * @param url a url address
-     * @param keyCheckWebview change title webview
-     * <p>Note:
-     *       <b>1 - Forget ID/Password</b>
-     *       <b>2 - You can not login</b>
-     * </p>
-     */
 
-    private void goNextWebview(String key, String url, int keyCheckWebview) {
-        Bundle bundle = new Bundle();
-        bundle.putString(key,url);
-        bundle.putInt(Constant.KEY_CHECK_WEBVIEW, keyCheckWebview);
-        Intent intent = new Intent(this, WebviewActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+    private void goNextWebview(String url, String title) {
+        WebViewDialogFragment webViewDialogFragment = WebViewDialogFragment.newInstance(url, title);
+        openDialogFragment(webViewDialogFragment);
     }
 
 
@@ -324,17 +263,16 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             case R.id.bt_login:
                 clickLogin();
                 break;
-            case R.id.link_webview_not_login:
-                openTutorial();
+            case R.id.link_webview_forget_id:
+                canNotLogin();
                 break;
-            case R.id.link_webview_faq:
+            case R.id.link_webview_can_not_login:
                 clickLinkFAQ();
                 break;
         }
     }
-    public void openTutorial(){
-        Intent intent = new Intent(this, SplashScreenActivity.class);
-        startActivity(intent);
+    public void canNotLogin(){
+        goNextWebview(Constant.WEBVIEW_FORGET_ID, getString(R.string.txt_link_forget_id));
     }
 
 
@@ -347,7 +285,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         finish();
     }
     public void clickLinkFAQ(){
-        goNextWebview(Constant.KEY_LOGIN_URL, Constant.WEBVIEW_URL_FAQ, Constant.FAQ);
+        goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.title_can_not_login));
     }
 
 }

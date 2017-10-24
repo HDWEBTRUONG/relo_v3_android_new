@@ -10,10 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,12 +39,24 @@ import jp.relo.cluboff.util.Constant;
  * Created by tonkhanh on 6/8/17.
  */
 
-public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
+public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
     WebView mWebView;
+    ProgressBar horizontalProgress;
+
+    public static WebViewDialogFragment newInstance(String url, String title) {
+
+        Bundle args = new Bundle();
+        args.putString(Constant.BUNDER_URL,url);
+        args.putString(Constant.BUNDER_TITLE,title);
+        WebViewDialogFragment fragment = new WebViewDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(View view) {
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
-        setupWebView();
+        horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
     }
 
     @Override
@@ -54,6 +68,16 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_FAQ_SCREEN);
+        String subTitle="";
+        String url="";
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            subTitle = bundle.getString(Constant.BUNDER_TITLE);
+            url = bundle.getString(Constant.BUNDER_URL);
+            tvMenuTitle.setText(R.string.string_login);
+            tvMenuSubTitle.setText(subTitle);
+        }
+        setupWebView(url);
     }
 
     @Override
@@ -113,7 +137,6 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
 
     @Override
     public void setupActionBar() {
-        tvMenuSubTitle.setText(R.string.menu_FAQ);
         ivMenuRight.setVisibility(View.VISIBLE);
         ivMenuRight.setImageResource(R.drawable.icon_close);
         ivMenuRight.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +152,7 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
         super.onDestroyView();
     }
 
-    private void setupWebView() {
+    private void setupWebView(String url) {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
@@ -145,7 +168,6 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoading(getActivity());
             }
 
             @Override
@@ -161,18 +183,25 @@ public class FAQDialogFragment extends BaseDialogFragmentToolbarBottombar {
             @SuppressWarnings("deprecation")
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                //super.onReceivedError(view, request, error);
-                hideLoading();
             }
 
             @Override
             public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
                 super.onReceivedSslError(view, handler, error);
-                hideLoading();
             }
         });
-
-        String url = Constant.WEBVIEW_URL_FAQ;
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    horizontalProgress.setVisibility(View.GONE);
+                } else {
+                    horizontalProgress.setVisibility(View.VISIBLE);
+                    horizontalProgress.setProgress(newProgress);
+                }
+            }
+        });
         mWebView.loadUrl(url);
 
     }

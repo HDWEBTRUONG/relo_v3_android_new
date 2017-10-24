@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +53,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
     public IControlBottom iControlBottom;
     boolean isLoadding = false;
     boolean isVisibleToUser;
+    ProgressBar horizontalProgress;
 
 
     @Override
@@ -82,6 +85,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         }
         shgrid = bundle.getString(Constant.TAG_SHGRID);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_DETAIL_SCREEN);
         setGoogleAnalyticDetailCoupon(Constant.GA_CATALOGY_DETAIL,Constant.GA_ACTION_DETAIL,shgrid,Constant.GA_VALUE_DETAIL);
@@ -186,6 +190,20 @@ public class WebViewDetailCouponFragment extends BaseFragment {
 
                 }
                 return false;
+            }
+        });
+
+
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    horizontalProgress.setVisibility(View.GONE);
+                } else {
+                    horizontalProgress.setVisibility(View.VISIBLE);
+                    horizontalProgress.setProgress(newProgress);
+                }
             }
         });
         loadDetail();

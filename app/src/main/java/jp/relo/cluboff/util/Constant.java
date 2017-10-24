@@ -17,6 +17,8 @@ public class Constant {
     // Some URL of webview
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
     public static final String WEBVIEW_URL_FAQ = BuildConfig.WEBVIEW_URL_FAQ;
+    public static final String WEBVIEW_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_CAN_NOT_LOGIN;
+    public static final String WEBVIEW_FORGET_ID = BuildConfig.WEBVIEW_FORGET_ID;
 
     //Template url
     public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
@@ -40,6 +42,7 @@ public class Constant {
     public static final int DETAIL_COUPON =  MEMBER_COUPON + 1;
     public static final int TUTURIAL_APP =  DETAIL_COUPON + 1;
     public static final int FAQ =  TUTURIAL_APP + 1;
+    public static final int FORGET_ID =  FAQ + 1;
 
     public static final String HTTPOKJP = "00";
     public static final String HTTP0000 = "0000";
@@ -129,5 +132,9 @@ public class Constant {
     public static final String DATA_COUPON_URL= "DATA_COUPON_URL";
     public static final String REPONSE_SUCCESS= BuildConfig.REPONSE_SUCCESS;
     public static final String URL_MEMBER_BROWSER= BuildConfig.URL_MEMBER_BROWSER;
+
+
+    public static final String BUNDER_URL= "BUNDER_URL";
+    public static final String BUNDER_TITLE= "BUNDER_TITLE";
 
 }

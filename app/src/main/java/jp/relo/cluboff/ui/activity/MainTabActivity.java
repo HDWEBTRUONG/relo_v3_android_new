@@ -25,15 +25,11 @@ import jp.relo.cluboff.model.BlockEvent;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
-import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
-import jp.relo.cluboff.ui.fragment.FAQDialogFragment;
-import jp.relo.cluboff.ui.fragment.HistoryPushDialogFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
-import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -46,7 +42,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     ListView mDrawerListMenu;
     //main AppVisor processor
     private AppVisorPush appVisorPush;
-    private FAQDialogFragment faqDialogFragment;
 
     //Handler handler;
     public static final int INDEX_AREA=0;
@@ -72,10 +67,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
     @Subscribe
     public void onEvent(MessageEvent event) {
-        if(event.getMessage().equals(MyAppVisorPushIntentService.class.getSimpleName())||
-                event.getMessage().equals(HistoryPushDialogFragment.class.getSimpleName())){
-            //loadCountPush();
-        }else if(Constant.TOP_COUPON.equals(event.getMessage())){
+        if(Constant.TOP_COUPON.equals(event.getMessage())){
             selectPage(INDEX_TOP);
         }
     }

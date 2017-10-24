@@ -1,48 +1,33 @@
 package jp.relo.cluboff.ui.fragment;
 
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.CookieManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-
 import framework.phvtUtils.AppLog;
-import framework.phvtUtils.StringUtil;
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
-import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
-import jp.relo.cluboff.util.Utils;
-import jp.relo.cluboff.util.ase.AESHelper;
-import jp.relo.cluboff.util.ase.BackAES;
-import jp.relo.cluboff.util.iUpdateIU;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -54,6 +39,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     private int checkWebview;
     boolean isLoadding = false;
     boolean isVisibleToUser;
+    ProgressBar horizontalProgress;
 
     public static PostMemberWebViewFragment newInstance() {
         return new PostMemberWebViewFragment();
@@ -79,6 +65,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
     }
 
@@ -116,22 +103,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
         llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(mWebView!=null &&  mWebView.getUrl()!=null){
-                    Utils.showDialogLIB(getActivity(), R.string.title_browser, R.string.content_browser,
-                            R.string.btn_browser, new iUpdateIU() {
-                                @Override
-                                public void updateError(int txt) {
-                                    if(txt == 0){
-                                        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-                                        if(loginSharedPreference!=null){
-                                            String url = MessageFormat.format(Constant.URL_MEMBER_BROWSER,loginSharedPreference.getKEY_APPU(),
-                                                    loginSharedPreference.getKEY_APPP());
-                                            getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                                        }
-                                    }
-                                }
-                            });
-                }*/
                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                 if(loginSharedPreference!=null){
                     try {
@@ -211,9 +182,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 isLoadding = true;
-                if(isVisibleToUser){
-                    showLoading(getActivity());
-                }
             }
 
             @Override
@@ -221,7 +189,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                 super.onPageFinished(view, url);
                 isLoadding = false;
                 if(isVisible()){
-                    hideLoading();
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                     llBack.setEnabled(mWebView.canGoBack());
@@ -233,24 +200,32 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                if(isVisible()){
-                    hideLoading();
-                }
+
             }
 
         });
-        /*mWebView.setOnKeyListener(new View.OnKeyListener(){
+        mWebView.setOnKeyListener(new View.OnKeyListener(){
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
-                    EventBus.getDefault().post(new MessageEvent(Constant.TOP_COUPON));
-                    return true;
-
+                    dismiss();
                 }
                 return false;
             }
-        });*/
+        });
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    horizontalProgress.setVisibility(View.GONE);
+                } else {
+                    horizontalProgress.setVisibility(View.VISIBLE);
+                    horizontalProgress.setProgress(newProgress);
+                }
+            }
+        });
         loadUrl();
     }
 
