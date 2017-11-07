@@ -8,7 +8,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:720485401236:android:a1be2d9daf0780d4",
         "android_client_info": {
-          "package_name": "jp.relo.cluboff"
+          "package_name": "net.fukuri.memberapp.memberapp"
         }
       },
       "oauth_client": [
@@ -42,7 +42,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:720485401236:android:2ba1100b5cbbd8e2",
         "android_client_info": {
-          "package_name": "jp.relo.cluboff.test"
+          "package_name": "net.fukuri.memberapp.memberapp"
         }
       },
       "oauth_client": [

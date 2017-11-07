@@ -109,8 +109,8 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                         Intent internetIntent = new Intent(Intent.ACTION_VIEW);
                         Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
                                 .buildUpon()
-                                .appendQueryParameter("LOGINID", loginSharedPreference.getKEY_APPU())
-                                .appendQueryParameter("PASSWORD", loginSharedPreference.getKEY_APPP())
+                                .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
+                                .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
                                 .build();
                         internetIntent.setData(uri);
                         getActivity().startActivity(internetIntent);
@@ -274,6 +274,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        mWebView.stopLoading();
     }
 
     @Subscribe

@@ -20,6 +20,7 @@ import framework.phvtUtils.AppLog;
  */
 
 public class Common {
+    static AlertDialog dialog;
     public static void onSslError(Activity activity, WebView view, final SslErrorHandler handler, SslError error) {
         if (activity == null) {
             return;
@@ -52,8 +53,11 @@ public class Common {
                         return false;
                     }
                 });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                dialog = builder.create();
+                if(!dialog.isShowing()){
+                    dialog.show();
+                }
+
             }catch (WindowManager.BadTokenException ex){
                 AppLog.log(ex.toString());
             }

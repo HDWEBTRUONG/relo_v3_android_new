@@ -18,11 +18,11 @@ public class PostDetail {
         this.senicode = "";
     }
 
-    public String getUserid() {
+    public String getKaiinno() {
         return kaiinno;
     }
 
-    public void setUserid(String userid) {
+    public void setKaiinno(String userid) {
         this.kaiinno = userid;
     }
 

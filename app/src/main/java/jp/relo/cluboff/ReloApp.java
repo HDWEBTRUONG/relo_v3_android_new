@@ -13,12 +13,30 @@ import com.google.android.gms.analytics.Tracker;
 
 public class ReloApp extends Application {
     private Tracker mTracker;
+    private static boolean isUpdateData;
+    private static int versionApp;
 
+    public static boolean isUpdateData() {
+        return isUpdateData;
+    }
+
+    public static void setIsUpdateData(boolean isUpdateData) {
+        ReloApp.isUpdateData = isUpdateData;
+    }
+
+    public static int getVersionApp() {
+        return versionApp;
+    }
+
+    public static void setVersionApp(int versionApp) {
+        ReloApp.versionApp = versionApp;
+    }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        isUpdateData = false;
     }
 
     /**

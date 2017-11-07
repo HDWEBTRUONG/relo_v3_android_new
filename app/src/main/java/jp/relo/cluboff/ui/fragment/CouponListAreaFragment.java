@@ -10,9 +10,20 @@ import android.widget.HorizontalScrollView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.List;
+
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.database.ConstansDB;
+import jp.relo.cluboff.model.CatagoryDTO;
+import jp.relo.cluboff.ui.activity.MainTabActivity;
+import jp.relo.cluboff.util.ConstanArea;
+import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.OnSwipeTouchListener;
+import jp.relo.cluboff.views.MyMaterialSpinner;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by tonkhanh on 10/16/17.
@@ -38,6 +49,10 @@ public class CouponListAreaFragment extends CouponListFragment {
             @Override
             public void onClick(View v) {
                 AppLog.log("-----------");
+                if(getActivity() instanceof MainTabActivity){
+                    PostAreaWebViewFragment postAreaWebViewFragment = new PostAreaWebViewFragment();
+                    ((MainTabActivity) getActivity()).openDialogFragment(postAreaWebViewFragment);
+                }
             }
         });
 
@@ -49,69 +64,134 @@ public class CouponListAreaFragment extends CouponListFragment {
                 switch (checkedId){
                     case R.id.rbArea1:
                         AppLog.log("rbArea1");
+                        areaName = ConstanArea.HOKKAIDO;
                         break;
                     case R.id.rbArea2:
                         AppLog.log("rbArea2");
+                        areaName = ConstanArea.TOHOKU;
                         break;
                     case R.id.rbArea3:
                         AppLog.log("rbArea3");
+                        areaName = ConstanArea.KANTO;
                         break;
                     case R.id.rbArea4:
                         AppLog.log("rbArea4");
+                        areaName = ConstanArea.KOUSHINETSU;
                         break;
                     case R.id.rbArea5:
+                        areaName = ConstanArea.HOKURIKUTOKAI;
                         AppLog.log("rbArea5");
                         break;
                     case R.id.rbArea6:
                         AppLog.log("rbArea6");
+                        areaName = ConstanArea.KINKI;
                         break;
                     case R.id.rbArea7:
                         AppLog.log("rbArea7");
+                        areaName = ConstanArea.CYUUGOKUSHIKOKU;
                         break;
                     case R.id.rbArea8:
                         AppLog.log("rbArea8");
+                        areaName = ConstanArea.KYUSHU;
                         break;
                     case R.id.rbArea9:
                         AppLog.log("rbArea9");
+                        areaName = ConstanArea.OKINAWA;
                         break;
                 }
-            }
-        });
-
-        view.setOnTouchListener(new OnSwipeTouchListener(getActivity()){
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                int radioButtonID = rgArea.getCheckedRadioButtonId();
-                View radioButton = rgArea.findViewById(radioButtonID);
-                int idx = rgArea.indexOfChild(radioButton);
-                if(idx<8){
-                    RadioButton temp =((RadioButton)rgArea.getChildAt(idx+1));
-                    temp.setChecked(true);
-                    svMenu.smoothScrollTo(temp.getLeft(),0);
-                }
-            }
-
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                int radioButtonID = rgArea.getCheckedRadioButtonId();
-                View radioButton = rgArea.findViewById(radioButtonID);
-                int idx = rgArea.indexOfChild(radioButton);
-                if(idx>0){
-
-                    RadioButton temp =((RadioButton)rgArea.getChildAt(idx-1));
-                    temp.setChecked(true);
-                    svMenu.smoothScrollTo(temp.getLeft(),0);
-                }
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
             }
         });
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        rbArea1.setChecked(true);
+    protected void setEventCategory() {
+        spinner.setOnItemSelectedListener(new MyMaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
+            @Override
+            public void onItemSelected(MyMaterialSpinner view, int position, long id, CatagoryDTO item) {
+                areaName = getAreaName();
+                positionView = 0;
+                categoryID = item.getCatagoryID();
+                getListDataCategoryID(categoryID);
+                tvCategory.setText(item.getGetCatagoryName());
+            }
+        });
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private String getAreaName(){
+        String result="";
+        switch (rgArea.getCheckedRadioButtonId()){
+            case R.id.rbArea1:
+                AppLog.log("rbArea1");
+                result = ConstanArea.HOKKAIDO;
+                break;
+            case R.id.rbArea2:
+                AppLog.log("rbArea2");
+                result = ConstanArea.TOHOKU;
+                break;
+            case R.id.rbArea3:
+                AppLog.log("rbArea3");
+                result = ConstanArea.KANTO;
+                break;
+            case R.id.rbArea4:
+                AppLog.log("rbArea4");
+                result = ConstanArea.KOUSHINETSU;
+                break;
+            case R.id.rbArea5:
+                result = ConstanArea.HOKURIKUTOKAI;
+                AppLog.log("rbArea5");
+                break;
+            case R.id.rbArea6:
+                AppLog.log("rbArea6");
+                result = ConstanArea.KINKI;
+                break;
+            case R.id.rbArea7:
+                AppLog.log("rbArea7");
+                result = ConstanArea.CYUUGOKUSHIKOKU;
+                break;
+            case R.id.rbArea8:
+                AppLog.log("rbArea8");
+                result = ConstanArea.KYUSHU;
+                break;
+            case R.id.rbArea9:
+                AppLog.log("rbArea9");
+                result = ConstanArea.OKINAWA;
+                break;
+        }
+        return result;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        areaName = getAreaName();
+        if(rgArea.getCheckedRadioButtonId()==-1){
+            rbArea1.setChecked(true);
+            if(categoryList==null || categoryList.isEmpty()){
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+            }else{
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+            }
+        }else{
+            if(listCoupon!= null && listCoupon.size()>0){
+                if(categoryList==null || categoryList.isEmpty()){
+                    mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+                }else{
+                    mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                }
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
+            }else{
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+            }
+        }
+
+
+
+    }
 }

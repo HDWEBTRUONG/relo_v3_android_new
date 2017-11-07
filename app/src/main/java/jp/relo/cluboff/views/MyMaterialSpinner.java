@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.adapter.MaterialSpinnerAdapter;
 import jp.relo.cluboff.adapter.MaterialSpinnerBaseAdapter;
 import jp.relo.cluboff.util.Utils;
@@ -280,7 +281,6 @@ public class MyMaterialSpinner extends android.support.v7.widget.AppCompatTextVi
             if (position >= 0 && position <= adapter.getCount()) {
                 adapter.notifyItemSelected(position);
                 selectedIndex = position;
-                //setText(adapter.get(position).toString());
             } else {
                 throw new IllegalArgumentException("Position must be lower than adapter count!");
             }

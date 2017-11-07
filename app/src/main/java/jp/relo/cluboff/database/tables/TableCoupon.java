@@ -34,8 +34,12 @@ public class TableCoupon {
     public static final String COLUMN_PRIORITY = "priority";
     public static final String COLUMN_MEMO = "memo";
     public static final String COLUMN_ADD_BLAND = "add_bland";
+    public static final String COLUMN_BENEFIT = "benefit";
+    public static final String COLUMN_BENEFIT_NOTES = "benefit_notes";
+    public static final String COLUMN_AREA = "area";
 
-    public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper, final String categoryID, final String brandID) {
+    public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper,
+                                                                        final String categoryID, final String area) {
         return new Callable<List<CouponDTO>>() {
             @Override
             public List<CouponDTO> call() {
@@ -47,7 +51,7 @@ public class TableCoupon {
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+ "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }else if(ConstansDB.COUPON_FAV.equals(categoryID)) {
 
@@ -55,7 +59,7 @@ public class TableCoupon {
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID
                             +" WHERE B."+TableFav.COLUMN_LIKE+" = '"+1+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")" + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")" + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area + "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }
                 else{
@@ -63,13 +67,13 @@ public class TableCoupon {
                     selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
                             + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "+TableCoupon.COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
                             +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
-                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"  + " ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+                            TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"   + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+  "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 
-                if (cursor.moveToFirst()) {
+                if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
                     do {
                         CouponDTO note = new CouponDTO();
                         note.setShgrid(cursor.getString(0));
@@ -85,16 +89,13 @@ public class TableCoupon {
                         note.setMemo(cursor.getString(10));
                         note.setAdd_bland(cursor.getString(11));
                         note.setLiked(cursor.getInt(12));
-                        if(!java.util.Arrays.asList(Constant.listCategory).contains(note.getCategory_id())){
-                            if(!note.getAdd_bland().equalsIgnoreCase(brandID)){
-                                continue;
-                            }
-                        }
-
                         datas.add(note);
                     } while (cursor.moveToNext());
                 }
-                db.close();
+                cursor.close();
+                if( db.isOpen()){
+                    db.close();
+                }
                 return datas;
             }
         };

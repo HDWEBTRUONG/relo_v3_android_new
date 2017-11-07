@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -31,17 +32,33 @@ import rx.schedulers.Schedulers;
  */
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
+    private static MyDatabaseHelper myDatabaseHelper;
+    private Context mContext;
+    SQLiteDatabase sqLiteDatabase;
+
+    public static MyDatabaseHelper getInstance(Context context) {
+
+        if(myDatabaseHelper == null){
+            myDatabaseHelper = new MyDatabaseHelper(context);
+        }
+        return myDatabaseHelper;
+    }
+
     public MyDatabaseHelper(Context context)  {
         super(context, ConstansDB.DATABASE_NAME, null, ConstansDB.DATABASE_VERSION);
+        mContext= context;
     }
     public SQLiteDatabase getSqLiteDatabase(){
+        if(sqLiteDatabase==null){
+            sqLiteDatabase = this.getWritableDatabase();
+        }
         return this.getWritableDatabase();
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Script to create table.
         String scriptCoupon = "CREATE TABLE " + TableCoupon.TABLE_COUPON + "("
-                + TableCoupon.COLUMN_SHGRID + " TEXT PRIMARY KEY,"
+                + TableCoupon.COLUMN_SHGRID + " TEXT,"
                 + TableCoupon.COLUMN_CATEGORY_ID + " TEXT,"
                 + TableCoupon.COLUMN_CATEGORY + " TEXT,"
                 + TableCoupon.COLUMN_COUPON + " TEXT,"
@@ -52,6 +69,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TableCoupon.COLUMN_EXPIRATION_TO + " TEXT,"
                 + TableCoupon.COLUMN_PRIORITY + " INTEGER,"
                 + TableCoupon.COLUMN_MEMO + " TEXT,"
+                + TableCoupon.COLUMN_AREA + " TEXT,"
+                + TableCoupon.COLUMN_BENEFIT + " TEXT,"
+                + TableCoupon.COLUMN_BENEFIT_NOTES + " TEXT,"
                 + TableCoupon.COLUMN_ADD_BLAND + " TEXT)";
         // Execute script.
         db.execSQL(scriptCoupon);
@@ -87,7 +107,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // Recreate
         onCreate(db);
     }
-    public void saveCoupon(CouponDTO data){
+    public void saveCoupon(CouponDTO data, String area){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TableCoupon.COLUMN_SHGRID, data.getShgrid());
@@ -102,14 +122,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TableCoupon.COLUMN_PRIORITY, data.getPriority());
         values.put(TableCoupon.COLUMN_MEMO, data.getMemo());
         values.put(TableCoupon.COLUMN_ADD_BLAND, data.getAdd_bland());
+        values.put(TableCoupon.COLUMN_BENEFIT, data.getBenefit());
+        values.put(TableCoupon.COLUMN_BENEFIT_NOTES, data.getBenefit_notes());
+        values.put(TableCoupon.COLUMN_AREA, area);
 
         db.insert(TableCoupon.TABLE_COUPON, null, values);
         db.close();
     }
-    public void saveCouponList(ArrayList<CouponDTO> datas){
+    public void saveCouponList(ArrayList<CouponDTO> datas, String area){
         SQLiteDatabase db = this.getWritableDatabase();
         for(CouponDTO data:datas){
-            saveCoupon(data);
+            saveCoupon(data, area);
         }
         db.close();
     }
@@ -117,6 +140,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void clearData(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TableCoupon.TABLE_COUPON, null, null);
+        db.close();
     }
     public void likeCoupon(String id, int value){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -141,28 +165,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.insert(TablePush.TABLE_PUSH, null, values);
         db.close();
     }
-    public void updateRead(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues newValues = new ContentValues();
-        newValues.put(TablePush.COLUMN_PUSH_READ, 1);
-        db.update(TablePush.TABLE_PUSH, newValues, TablePush.COLUMN_PUSH_ID +"="+id, null);
-        db.close();
-    }
-    public void updateRead(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues newValues = new ContentValues();
-        newValues.put(TablePush.COLUMN_PUSH_READ, 1);
-        db.update(TablePush.TABLE_PUSH, newValues, null, null);
-        db.close();
-    }
-
-    public long countPushUnread(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        long cnt  = DatabaseUtils.queryNumEntries(db, TablePush.TABLE_PUSH,TablePush.COLUMN_PUSH_READ+" = 0");
-        db.close();
-        return cnt;
-    }
-
 
     private static <T> Observable<T> makeObservable(final Callable<T> func) {
         return Observable.create(
@@ -178,18 +180,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 });
     }
 
-    public Observable<List<CatagoryDTO>> getCatagorysRX(String categoryID) {
-        return makeObservable(TableCategory.getCategory(this))
+    public Observable<List<CatagoryDTO>> getCatagorysRX() {
+        return makeObservable(TableCategory.getCategory(MyDatabaseHelper.getInstance(mContext)))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
-    public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID,String brandID) {
-        return makeObservable(TableCoupon.getCouponWithDateCategoryID(this,categoryID, brandID))
+    public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID, String area) {
+        return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 
 
     public Observable<List<HistoryPushDTO>> getPushRX() {
-        return makeObservable(TablePush.getPush(this))
+        return makeObservable(TablePush.getPush(MyDatabaseHelper.getInstance(mContext)))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 

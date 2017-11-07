@@ -254,6 +254,21 @@ public class Utils {
                 .show();
     }
 
+    public static void showDialogUpdate(Context context, int title, String messagee, final DialogInterface.OnClickListener onClickListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(messagee);
+        builder.setPositiveButton(R.string.btn_update, onClickListener);
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
+            }
+        });
+        builder.show();
+    }
+
     public static String convertDate(String dateString){
         if(dateString==null){
             return "";

@@ -1,6 +1,8 @@
 package jp.relo.cluboff.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +28,8 @@ import jp.relo.cluboff.model.ControlWebEventBus;
 import jp.relo.cluboff.model.DetailCouponDetailVisible;
 import jp.relo.cluboff.model.PostDetail;
 import jp.relo.cluboff.model.PostDetailType1;
+import jp.relo.cluboff.ui.BaseDialogFragment;
+import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.IControlBottom;
@@ -37,22 +41,14 @@ import jp.relo.cluboff.util.ase.BackAES;
  * Created by tonkhanh on 5/18/17.
  */
 
-public class WebViewDetailCouponFragment extends BaseFragment {
+public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottombar {
 
     WebView mWebView;
-    private String urlType = "";
+    private String url;
     private String kaiinno = "";
-    private String userid = "";
     private String shgrid = "";
     private String senicode = "";
-
-
-    private String brndid = "";
-
-    private String url;
-    public IControlBottom iControlBottom;
-    boolean isLoadding = false;
-    boolean isVisibleToUser;
+    private String urlType = "";
     ProgressBar horizontalProgress;
 
 
@@ -79,9 +75,6 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         if(!CouponListFragment.WILL_NET_SERVER.equals(urlType)){
             kaiinno = bundle.getString(Constant.TAG_KAIINNO);
             senicode = bundle.getString(Constant.TAG_SENICODE);
-        }else{
-            userid = bundle.getString(Constant.TAG_USER_ID);
-            brndid = bundle.getString(Constant.TAG_BRNDID);
         }
         shgrid = bundle.getString(Constant.TAG_SHGRID);
         mWebView = (WebView) view.findViewById(R.id.wvCoupon);
@@ -92,47 +85,84 @@ public class WebViewDetailCouponFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void setupBottomlbar() {
+        lnBottom.setVisibility(View.VISIBLE);
+        imvBackBottomBar.setVisibility(View.VISIBLE);
+        imvForwardBottomBar.setVisibility(View.VISIBLE);
+        imvBrowserBottomBar.setVisibility(View.VISIBLE);
+        imvReloadBottomBar.setVisibility(View.VISIBLE);
 
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.goBack();
+                imvBackBottomBar.setEnabled(false);
+                llBack.setEnabled(false);
+            }
+        });
+        llForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.goForward();
+                imvForwardBottomBar.setEnabled(false);
+                llForward.setEnabled(false);
+            }
+        });
+        llBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
+            }
+        });
 
-    public void setControlBottom(IControlBottom iControlBottom){
-        this.iControlBottom =iControlBottom;
+        llReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.loadUrl( "javascript:window.location.reload( true )" );
+            }
+        });
+
+        imvBackBottomBar.setEnabled(mWebView.canGoBack());
+        imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+        llBack.setEnabled(mWebView.canGoBack());
+        llForward.setEnabled(mWebView.canGoForward());
     }
 
+    @Override
+    public void setupActionBar() {
+        ivMenuRight.setVisibility(View.VISIBLE);
+        ivMenuRight.setImageResource(R.drawable.icon_close);
+        ivMenuRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        tvMenuTitle.setVisibility(View.VISIBLE);
+        tvMenuSubTitle.setVisibility(View.VISIBLE);
+        tvMenuSubTitle.setText(R.string.title_detail_coupon);
+    }
     @Override
     public int getRootLayoutId() {
         return R.layout.fragment_webview;
     }
 
     @Override
-    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
+    public void bindView(View view) {
 
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(iControlBottom!=null){
-            iControlBottom.canReload(true);
-        }
     }
 
 
-    @Override
-    protected void registerEventHandlers() {
-
-    }
 
     private void setupWebView() {
         WebSettings webSettings = mWebView.getSettings();
@@ -141,31 +171,24 @@ public class WebViewDetailCouponFragment extends BaseFragment {
         webSettings.setJavaScriptEnabled(true);
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         //Disable cache Webview
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webSettings.setAppCacheEnabled(false);
 
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                isLoadding = true;
                 if(isVisible()){
-                    showLoading(getActivity());
+                    imvBackBottomBar.setEnabled(mWebView.canGoBack());
+                    imvForwardBottomBar.setEnabled(mWebView.canGoForward());
+                    llBack.setEnabled(mWebView.canGoBack());
+                    llForward.setEnabled(mWebView.canGoForward());
                 }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                isLoadding = false;
-                if(isVisible()) {
-                    hideLoading();
-                    if(iControlBottom!=null){
-                        iControlBottom.canBack(mWebView.canGoBack());
-                        iControlBottom.canForward(mWebView.canGoForward());
-                    }
-                }
-
+                view.clearCache(true);
             }
             @SuppressWarnings("deprecation")
             @Override
@@ -185,7 +208,7 @@ public class WebViewDetailCouponFragment extends BaseFragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
-                    getFragmentManager().popBackStack();
+                    dismiss();
                     return true;
 
                 }
@@ -205,33 +228,26 @@ public class WebViewDetailCouponFragment extends BaseFragment {
                     horizontalProgress.setProgress(newProgress);
                 }
             }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                tvMenuTitle.setText(title);
+            }
         });
         loadDetail();
     }
     private void loadDetail(){
-        String userID = "";
-        try {
-            if(!StringUtil.isEmpty(userid)){
-                userID = Utils.removeString(new String(BackAES.decrypt(userid, AESHelper.password, AESHelper.type)));
-            }else{
-                kaiinno = new String(BackAES.encrypt(kaiinno,AESHelper.password, AESHelper.type));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if(CouponListFragment.WILL_NET_SERVER.equals(urlType)){
-            PostDetailType1 postDetailType1 = new PostDetailType1();
-            postDetailType1.setKid(userID);
-            postDetailType1.setShgrid(shgrid);
-            postDetailType1.setBrndid(brndid);
-            mWebView.postUrl( url, postDetailType1.toString().getBytes());
-            AppLog.log(postDetailType1.toString());
+            mWebView.loadUrl(url);
         }else{
             PostDetail postDetail = new PostDetail();
-            postDetail.setUserid(kaiinno);
+            postDetail.setKaiinno("5005265110");
             postDetail.setRequestno(shgrid);
             postDetail.setSenicode(senicode);
+
             mWebView.postUrl( url, postDetail.toString().getBytes());
+            AppLog.log(url);
             AppLog.log(postDetail.toString());
         }
     }
@@ -239,31 +255,15 @@ public class WebViewDetailCouponFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(iControlBottom!=null){
-            iControlBottom.disableAll();
-        }
     }
-    @Subscribe
-    public void onEvent(ControlWebEventBus event) {
-        if(event.isCallBack()){
-            mWebView.goBack();
-        }else if(event.isCallForward()){
-            mWebView.goForward();
-        }else {
-            mWebView.loadUrl( "javascript:window.location.reload( true )" );
-        }
-    }
-    @Subscribe
-    public void onEvent(DetailCouponDetailVisible event) {
-            this.isVisibleToUser = event.isVisible();
-            if(isVisibleToUser){
-                if(isLoadding){
-                    showLoading(getActivity());
-                }
-            }
+
+    @Override
+    protected void init(View view) {
 
     }
 
+    @Override
+    protected void setEvent(View view) {
 
-
+    }
 }

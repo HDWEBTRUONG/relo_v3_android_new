@@ -1,6 +1,8 @@
 package jp.relo.cluboff.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.MessageFormat;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
@@ -14,17 +16,24 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.vansuita.library.CheckNewAppVersion;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.MenuListAdapter;
+import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiInterface;
+import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.model.BlockEvent;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
 import jp.relo.cluboff.model.SaveLogin;
+import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
@@ -51,6 +60,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     FragmentTabHost mTabHost;
     View llMember;
     View llTab;
+    View llMain;
 
     @Override
     protected void onStart() {
@@ -83,6 +93,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pushProcess();
+        setupView();
     }
 
     @Override
@@ -102,16 +113,34 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_MEMBER);
             }else if(Constant.TARGET_PUSH_SCREEN_LIST.equalsIgnoreCase(target)){
                 selectPage(INDEX_TOP);
-                //openHistoryPush();
             }else{
                 selectPage(INDEX_TOP);
             }
         }else{
             if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
                 EventBus.getDefault().post(new ReloadEvent(true));
-
             }
         }
+        /*llMain.setVisibility(View.GONE);
+        new CheckNewAppVersion(this).setOnTaskCompleteListener(new CheckNewAppVersion.ITaskComplete() {
+            @Override
+            public void onTaskComplete(final CheckNewAppVersion.Result result) {
+                //Checks if there is a new version available on Google Play Store.
+                if(result.hasNewVersion()){
+                    Utils.showDialogUpdate(MainTabActivity.this, R.string.title_update,
+                            getString(R.string.message_update).replace("{0}",result.getNewVersionCode()),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    result.openUpdateLink();
+                                }
+                            });
+                }else{
+                    llMain.setVisibility(View.VISIBLE);
+                    setupView();
+                }
+            }
+        }).execute();*/
     }
     void selectPage(int pageIndex){
         mTabHost.setCurrentTab(pageIndex);
@@ -123,10 +152,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         ivMenuRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {
-                    mDrawerLayoutMenu.closeDrawer(mDrawerListMenu);
-                } else {
-                    mDrawerLayoutMenu.openDrawer(mDrawerListMenu);
+                if(mDrawerLayoutMenu!=null){
+                    if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {
+                        mDrawerLayoutMenu.closeDrawer(mDrawerListMenu);
+                    } else {
+                        mDrawerLayoutMenu.openDrawer(mDrawerListMenu);
+                    }
                 }
             }
         });
@@ -139,15 +170,19 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     @Override
     protected void getMandatoryViews(Bundle savedInstanceState) {
-        // Locate DrawerLayout in drawer_main.xml
-        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
         mTabHost = (FragmentTabHost) findViewById(R.id.fragment_tab_host);
         llMember = findViewById(R.id.llMember);
+        llMain = findViewById(R.id.llMain);
         llTab = findViewById(R.id.llTab);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
+    }
+
+    private void setupView(){
+        // Locate DrawerLayout in drawer_main.xml
+        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_listview_menu, null, false);
         mDrawerListMenu.addHeaderView(header);
@@ -158,13 +193,12 @@ public class MainTabActivity extends BaseActivityToolbar {
                 GravityCompat.START);
 
         mDrawerLayoutMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-
         // Set the MenuListAdapter to the ListView
         mDrawerListMenu.setAdapter(mMenuAdapter);
         mDrawerListMenu.setOnItemClickListener(new DrawerItemClickListener());
         initTabHost();
     }
+
     private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override

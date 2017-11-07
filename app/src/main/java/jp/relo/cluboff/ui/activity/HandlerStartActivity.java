@@ -3,6 +3,8 @@ package jp.relo.cluboff.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 
 import framework.phvtActivity.BaseActivity;
@@ -10,7 +12,10 @@ import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.api.MyCallBack;
+import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
@@ -27,20 +32,34 @@ import jp.relo.cluboff.util.ase.BackAES;
  */
 
 public class HandlerStartActivity extends BaseActivity {
+    MyDatabaseHelper sqLiteOpenHelper;
+    Handler handler;
+    public static final int GOTOSCREEN =1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
-        if(notFirst){
-            if(LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class) !=null){
-                goMainScreen();
-            }else{
-                goNextScreen();
+        final boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
+        sqLiteOpenHelper = new MyDatabaseHelper(this);
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what==GOTOSCREEN){
+                    if(notFirst){
+                        if(LoginSharedPreference.getInstance(HandlerStartActivity.this).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class) !=null){
+                            goMainScreen();
+                        }else{
+                            goNextScreen();
+                        }
+                        //autoLogin();
+                    }else{
+                        goSplashScreen();
+                    }
+                }
+                return false;
             }
-            //autoLogin();
-        }else{
-            goSplashScreen();
-        }
+        });
+        checkUpdateData();
     }
 
     @Override
@@ -74,87 +93,29 @@ public class HandlerStartActivity extends BaseActivity {
         startActivity(new Intent(this, MainTabActivity.class));
         finish();
     }
-    private void autoLogin(){
-        LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT,LoginRequest.class);
-        if(loginRequest==null){
-            goNextScreen();
-        }else{
-            String userName = loginRequest.getLOGINID();
-            String password = loginRequest.getPASSWORD();
-            boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
-            if(StringUtil.isEmpty(userName)||StringUtil.isEmpty(password)||!isNetworkAvailable){
-                goNextScreen();
-            }else{
-                String usernameEN = "";
-                String passwordEN = "";
-                try {
-                    usernameEN = new String(BackAES.encrypt(userName, AESHelper.password, AESHelper.type));
-                    passwordEN = new String(BackAES.encrypt(password,AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                showLoading(this);
-                addSubscription(apiInterfaceJP.logon(usernameEN,passwordEN), new MyCallBack<LoginReponse>() {
-                    @Override
-                    public void onSuccess(LoginReponse model) {
-                        if(model!=null){
-                            if(Constant.HTTPOKJP.equals((model.getHeader().getStatus()))){
-                                int brandid=0;
-                                try {
-                                    brandid = Utils.convertInt(Utils.removeString(BackAES.decrypt(model.getInfo().getBrandid(), AESHelper.password, AESHelper.type)));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                updateData();
-                                setGoogleAnalyticLogin(brandid);
 
-                            }else{
-                                goNextScreen();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int msg) {
-                        AppLog.log(""+msg);
-                        goNextScreen();
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        hideLoading();
-                    }
-                });
-            }
-        }
-
-
-    }
-    private void updateData(){
-        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
+    private void checkUpdateData(){
+        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>(){
             @Override
             public void onSuccess(VersionReponse model) {
-                if(Utils.convertIntVersion(model.getVersion())>LoginSharedPreference.getInstance(getApplicationContext()).getVersion()){
-                    goNextScreen();
-                }else{
-                    goMainScreen();
+                boolean isUpdate = Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
+                if(isUpdate){
+                    ReloApp.setVersionApp(Utils.convertIntVersion(model.getVersion()));
+                    ReloApp.setIsUpdateData(isUpdate);
+                    sqLiteOpenHelper.clearData();
                 }
             }
 
             @Override
             public void onFailure(int msg) {
-                AppLog.log(""+msg);
-                goMainScreen();
+                AppLog.log("Error: "+msg);
             }
 
             @Override
             public void onFinish() {
-
+                handler.sendEmptyMessage(GOTOSCREEN);
             }
-        });
-    }
-    public void setGoogleAnalyticLogin(long brandid){
-        ReloApp reloApp = (ReloApp) getApplication();
-        reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_LOGIN,Constant.GA_ACTION_LOGIN,Constant.GA_LABLE_LOGIN,brandid);
+        }
+        );
     }
 }

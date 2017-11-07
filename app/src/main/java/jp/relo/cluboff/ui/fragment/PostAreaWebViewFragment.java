@@ -31,6 +31,7 @@ import jp.relo.cluboff.model.AreaCouponPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.services.MyAppVisorPushIntentService;
+import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
@@ -41,7 +42,7 @@ import jp.relo.cluboff.util.ase.BackAES;
  * Created by tonkhanh on 5/18/17.
  */
 
-public class PostAreaWebViewFragment extends BaseFragmentBottombar {
+public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar {
 
     WebView mWebView;
     private String url;
@@ -86,15 +87,14 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         }
     }
 
-
     @Override
-    public void setupBottombar() {
+    public void setupBottomlbar() {
         lnBottom.setVisibility(View.VISIBLE);
         imvBackBottomBar.setVisibility(View.VISIBLE);
         imvForwardBottomBar.setVisibility(View.VISIBLE);
-        imvBrowserBottomBar.setVisibility(View.GONE);
-        llBrowser.setVisibility(View.INVISIBLE);
+        imvBrowserBottomBar.setVisibility(View.VISIBLE);
         imvReloadBottomBar.setVisibility(View.VISIBLE);
+
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,18 +111,17 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                 llForward.setEnabled(false);
             }
         });
-        imvBrowserBottomBar.setOnClickListener(new View.OnClickListener() {
+        llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl())));
             }
         });
 
-        llBrowser.setOnClickListener(new View.OnClickListener() {
+        llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-                //mWebView.reload();
             }
         });
 
@@ -133,12 +132,30 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     }
 
     @Override
+    public void setupActionBar() {
+        ivMenuRight.setVisibility(View.VISIBLE);
+        ivMenuRight.setImageResource(R.drawable.icon_close);
+        ivMenuRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        tvMenuTitle.setVisibility(View.VISIBLE);
+        tvMenuSubTitle.setVisibility(View.VISIBLE);
+        tvMenuSubTitle.setText("ABC");
+    }
+
+
+
+    @Override
     public int getRootLayoutId() {
         return R.layout.fragment_webview;
     }
 
     @Override
-    protected void getMandatoryViews(View root, Bundle savedInstanceState) {
+    public void bindView(View view) {
+
     }
 
     @Override
@@ -146,11 +163,6 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
         super.onResume();
     }
 
-
-    @Override
-    protected void registerEventHandlers() {
-
-    }
 
     private void setupWebView() {
         WebSettings webSettings = mWebView.getSettings();
@@ -212,6 +224,11 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
                     horizontalProgress.setProgress(newProgress);
                 }
             }
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                tvMenuTitle.setText(title);
+            }
         });
         mWebView.setOnKeyListener(new View.OnKeyListener(){
 
@@ -230,6 +247,16 @@ public class PostAreaWebViewFragment extends BaseFragmentBottombar {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    protected void init(View view) {
+
+    }
+
+    @Override
+    protected void setEvent(View view) {
+
     }
 
     @Override

@@ -79,6 +79,7 @@ public class CouponListAdapter extends BaseAdapter{
             holder.imvDetail = (ImageView) convertView.findViewById(R.id.imvDetail);
             holder.lnBtnLike = (LinearLayout) convertView.findViewById(R.id.lnBtnLike);
             holder.lnBtnDetail = (LinearLayout) convertView.findViewById(R.id.lnBtnDetail);
+            holder.llCoupon = convertView.findViewById(R.id.llCoupon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -125,7 +126,7 @@ public class CouponListAdapter extends BaseAdapter{
             holder.tvLink.setTextColor(ContextCompat.getColor(mContext,R.color.color_text_btn_like));
         }
 
-        holder.lnBtnDetail.setOnClickListener(new View.OnClickListener() {
+        holder.llCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(miClickButton!=null){
@@ -165,6 +166,7 @@ public class CouponListAdapter extends BaseAdapter{
         ImageView imvDetail;
         LinearLayout lnBtnLike;
         LinearLayout lnBtnDetail;
+        View llCoupon;
     }
     public interface iClickButton{
         void callback(CouponDTO data);

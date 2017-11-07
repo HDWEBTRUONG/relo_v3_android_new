@@ -21,6 +21,8 @@ public class CouponDTO{
     public static final String TAG_PRIORITY = "PRIORITY";
     public static final String TAG_ADD_BLAND = "ADD_BLAND";
     public static final String TAG_MEMO = "MEMO";
+    public static final String TAG_BENEFIT = "BENEFIT";
+    public static final String TAG_BENEFIT_NOTES = "BENEFIT_NOTES";
 
 
     @SerializedName("shgrid")
@@ -60,6 +62,14 @@ public class CouponDTO{
     @Expose
     @SerializedName("add_bland")
     private String add_bland;
+
+    @Expose
+    @SerializedName("benefit")
+    private String benefit;
+
+    @Expose
+    @SerializedName("benefit_notes")
+    private String benefit_notes;
 
     private int liked;
 
@@ -165,5 +175,21 @@ public class CouponDTO{
 
     public void setAdd_bland(String add_bland) {
         this.add_bland = add_bland;
+    }
+
+    public String getBenefit() {
+        return benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        this.benefit = benefit;
+    }
+
+    public String getBenefit_notes() {
+        return benefit_notes;
+    }
+
+    public void setBenefit_notes(String benefit_notes) {
+        this.benefit_notes = benefit_notes;
     }
 }

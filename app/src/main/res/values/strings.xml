@@ -84,6 +84,7 @@
     <string name="title_area">Mobile ID Card</string>
     <string name="title_popular_coupon">Popular Coupon</string>
     <string name="title_area_coupon">Area Coupon</string>
+    <string name="title_detail_coupon">Detail Coupon</string>
     <string name="member_site_title">Site</string>
     <string name="login_hint_username">会員ID</string>
     <string name="login_hint_pass">パスワード</string>
@@ -114,4 +115,8 @@
     <string name="member_auth_note_error5">平日／10：00～18：00</string>
     <string name="member_auth_note_error6">土日祝／10：00～17：00※年末年始を除く</string>
     <string name="string_show_area">現在地から探す</string>
+    <string name="btn_update">Update</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="title_update">Title update</string>
+    <string name="message_update">Version {0} is available, please update to use</string>
 </resources>

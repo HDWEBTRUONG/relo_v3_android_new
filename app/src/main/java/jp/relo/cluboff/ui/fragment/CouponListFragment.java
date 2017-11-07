@@ -4,12 +4,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -34,14 +37,20 @@ import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.model.VersionReponse;
+import jp.relo.cluboff.model.XMLUpdate;
+import jp.relo.cluboff.ui.activity.MainTabActivity;
+import jp.relo.cluboff.util.ConstanArea;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
 import jp.relo.cluboff.views.MyMaterialSpinner;
+import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -53,13 +62,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ListView lvCoupon;
     TextView tvCategory;
     View svMenu;
-    MyMaterialSpinner spinner;
+    protected MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
     ArrayList<CouponDTO> listCoupon=new ArrayList<>();
     public static String WILL_NET_SERVER="1";
-    private Handler mHandler;
-    private boolean isArea;
+    public Handler mHandler;
 
     public static final int MSG_LOAD_CATEGORY = 0;
     public static final int MSG_LOAD_DATA = 1;
@@ -68,19 +76,20 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public static final int MSG_SET_CATEGORY = 4;
     public static final int MSG_CHECK_UPDATE = 5;
     ArrayList<CatagoryDTO> categoryList = new ArrayList<>();
-    ArrayList<CouponDTO> listResult = new ArrayList<>();
-
-    MyDatabaseHelper sqLiteOpenHelper;
     int positionView = 0;
 
-    String brandID = "";
+    private boolean isArea;
 
     public static final String TAG = CouponListFragment.class.getSimpleName();
+
+    public String areaName= "";
+    public String categoryID= "";
+
+    public List<XMLUpdate> xmlUpdatesList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sqLiteOpenHelper = new MyDatabaseHelper(getActivity());
     }
 
     private void init(View view) {
@@ -92,37 +101,39 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void loadCategory() {
-        myDatabaseHelper.getCatagorysRX(ConstansDB.COUPON_ALL).observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCatagorysRX().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CatagoryDTO>>() {
                     @Override
                     public void call(List<CatagoryDTO> catagoryDTOs) {
                         categoryList.clear();
                         categoryList.addAll(catagoryDTOs);
+                        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
                         mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
-                        if(isArea){
-
-                        }else {
-                            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
-                        }
+                        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
                     }
                 });
 
 
     }
-    public void setCategory(){
-        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
-        categoryList.add(1,new CatagoryDTO(ConstansDB.COUPON_FAV,getString(R.string.catalogy_fav)));
+    private void setCategory(){
         spinner.setItems(categoryList);
+        setEventCategory();
+        lnCatalory.setOnClickListener(this);
+        tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
+    }
+
+    protected void setEventCategory(){
         spinner.setOnItemSelectedListener(new MyMaterialSpinner.OnItemSelectedListener<CatagoryDTO>() {
 
             @Override
             public void onItemSelected(MyMaterialSpinner view, int position, long id, CatagoryDTO item) {
                 positionView = 0;
-                getListDataCategoryID(item.getCatagoryID());
+                areaName = ConstanArea.WHOLEJAPAN;
+                categoryID = item.getCatagoryID();
+                getListDataCategoryID(categoryID);
                 tvCategory.setText(item.getGetCatagoryName());
             }
         });
-        lnCatalory.setOnClickListener(this);
     }
 
     @Override
@@ -139,21 +150,26 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        if(bundle!=null){
-            isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
-
-        }
-        if(listCoupon.isEmpty()){
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
-        }else{
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
+        if(!isArea){
+            areaName = ConstanArea.WHOLEJAPAN;
+            if(listCoupon!= null && listCoupon.size()>0){
+                if(categoryList==null || categoryList.isEmpty()){
+                    mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+                }else{
+                    mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                }
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
+            }else{
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+            }
         }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        myDatabaseHelper=new MyDatabaseHelper(getActivity());
+        myDatabaseHelper= MyDatabaseHelper.getInstance(getActivity());
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -177,7 +193,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         loadCategory();
                         break;
                     case CouponListFragment.MSG_LOAD_DATA:
-                        getListDataCategoryID(ConstansDB.COUPON_ALL);
+                        if(StringUtil.isEmpty(categoryID)){
+                            getListDataCategoryID(ConstansDB.COUPON_ALL);
+                        }else{
+                            getListDataCategoryID(categoryID);
+                        }
                         break;
                     case CouponListFragment.MSG_CREATE_ADAPTER:
                         setAdapter(true);
@@ -197,19 +217,18 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
 
-    private void getListDataCategoryID(String categoryID) {
+    protected void getListDataCategoryID(String categoryID) {
         showLoading(getActivity());
         listCoupon.clear();
-        if(StringUtil.isEmpty(brandID)&&isAdded()){
-            SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
-            brandID = saveLogin.getUserName();
-        }
-        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID,brandID).observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID, areaName)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CouponDTO>>() {
                     @Override
                     public void call(List<CouponDTO> couponDTOs) {
                         listCoupon.addAll(couponDTOs);
                         mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
+                        hideLoading();
                     }
                 });
 
@@ -220,12 +239,14 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             lvCoupon.setAdapter(adapter);
         }else{
             adapter.setDataChange(listCoupon);
-            if(isReload){
-                lvCoupon.setAdapter(adapter);
+            lvCoupon.setAdapter(adapter);
+            /*if(isReload){
+                if(positionView >= listCoupon.size()){
+                    positionView = listCoupon.size();
+                }
                 lvCoupon.setSelection(positionView);
-            }
+            }*/
         }
-        hideLoading();
     }
 
     @Override
@@ -243,36 +264,29 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void callback(CouponDTO data) {
         String url="";
         String kaiinno = "";
-        SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
+        String requestno = "";
+        LoginSharedPreference saveLogin = LoginSharedPreference.getInstance(getActivity());
         Bundle bundle = new Bundle();
         if(saveLogin!=null){
-            if(data.getCoupon_type().equals(WILL_NET_SERVER)){
+            kaiinno = saveLogin.getUserName();
+            requestno = data.getShgrid();
+            if(WILL_NET_SERVER.equals(data.getCoupon_type())){
                 url =data.getLink_path();
-                String mBrndid = "";
-                try {
-                    mBrndid = Utils.removeString(BackAES.decrypt(saveLogin.getBrandidEncrypt(), AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                bundle.putString(Constant.TAG_BRNDID, mBrndid);
-
             }else{
-                url = "";
-                try {
-                    kaiinno = saveLogin.getUserName();
-                    url = MessageFormat.format(Constant.TEMPLATE_URL_COUPON,BackAES.decrypt(saveLogin.getUrlEncrypt(), AESHelper.password, AESHelper.type));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                bundle.putString(Constant.TAG_SENICODE, "1");
-                bundle.putString(Constant.TAG_KAIINNO, kaiinno);
-                }
-            String userID = saveLogin.getUseridEncrypt();
-            bundle.putString(Constant.TAG_USER_ID, userID);
+                url = Constant.TEMPLATE_URL_COUPON;
+            }
             bundle.putString(Constant.KEY_LOGIN_URL, url);
+            bundle.putString(Constant.TAG_KAIINNO, kaiinno);
             bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
+            bundle.putString(Constant.TAG_SENICODE, "1");
+            bundle.putString(Constant.TAG_SHGRID, requestno);
 
-            bundle.putString(Constant.TAG_SHGRID, data.getShgrid());
+            WebViewDetailCouponFragment webViewFragment = new WebViewDetailCouponFragment();
+            webViewFragment.setArguments(bundle);
+            if(getActivity() instanceof MainTabActivity){
+                ((MainTabActivity) getActivity()).openDialogFragment(webViewFragment);
+            }
+
         }
     }
 
@@ -296,132 +310,43 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void updateData(){
-        showLoading(getActivity());
-        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>() {
-            @Override
-            public void onSuccess(VersionReponse model) {
-                if(Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getActivity().getApplicationContext()).getVersion()){
-                    new CouponListFragment.UpdateTask().execute(model.getVersion());
-                }else{
-                    mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
-                }
-            }
-
-            @Override
-            public void onFailure(int msg) {
-                AppLog.log(""+msg);
-                mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
-            }
-
-            @Override
-            public void onFinish() {
-                hideLoading();
-            }
-        });
-    }
-
-    class UpdateTask extends AsyncTask<String, Void, Void> {
-        URL url;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        if(ReloApp.isUpdateData()) {
+            xmlUpdatesList = new ArrayList<>();
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_WHOLEJAPAN, ConstanArea.WHOLEJAPAN));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_HOKKAIDO, ConstanArea.HOKKAIDO));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_TOHOKU, ConstanArea.TOHOKU));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_KANTO, ConstanArea.KANTO));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_KOUSHINETSU, ConstanArea.KOUSHINETSU));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_HOKURIKUTOKAI, ConstanArea.HOKURIKUTOKAI));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_KINKI, ConstanArea.KINKI));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_CYUUGOKUSHIKOKU, ConstanArea.CYUUGOKUSHIKOKU));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_KYUSHU, ConstanArea.KYUSHU));
+            xmlUpdatesList.add(new XMLUpdate(Constant.XML_OKINAWA, ConstanArea.OKINAWA));
             showLoading(getActivity());
-        }
-
-        protected Void doInBackground(String... arg0) {
-            CouponDTO item= new CouponDTO();
-            boolean isOpened= false;
-            try {
-                url = new URL(Constant.BASE_URL_UPDATE);
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                if ( factory == null){
-                    hideLoading();
-                    LoginSharedPreference.getInstance(getActivity()).setVersion(0);
+            Observable.from(xmlUpdatesList)
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribe(new Subscriber<XMLUpdate>() {
+                @Override
+                public void onCompleted() {
+                    LoginSharedPreference.getInstance(getActivity()).setVersion(ReloApp.getVersionApp());
                     mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
-                    return null;
+                    hideLoading();
+                    ReloApp.setIsUpdateData(false);
+                    AppLog.log("onCompleted");
                 }
 
-                factory.setNamespaceAware(false);
-                XmlPullParser xpp = factory.newPullParser();
-
-                // We will get the XML from an input stream
-                xpp.setInput(getInputStream(url), "UTF_8");
-
-                // Returns the type of current event: START_TAG, END_TAG, etc..
-                int eventType = xpp.getEventType();
-                while (eventType != XmlPullParser.END_DOCUMENT){
-                    String name = "";
-                    switch (eventType) {
-                        case XmlPullParser.START_DOCUMENT:
-                            break;
-                        case XmlPullParser.START_TAG:
-                            name = xpp.getName().toUpperCase();
-                            switch (name){
-                                case CouponDTO.TAG_COUPON:
-                                    listResult = new ArrayList<>();
-                                    break;
-                                case CouponDTO.TAG_ITEM:
-                                    isOpened = true;
-                                    item = new CouponDTO();
-                                    break;
-                                case CouponDTO.TAG_SHGRID:
-                                    item.setShgrid(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_CATEGORY_ID:
-                                    item.setCategory_id(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_CATEGORY_NAME:
-                                    item.setCategory_name(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_NAME:
-                                    item.setCoupon_name(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_IMAGE_PATH:
-                                    item.setCoupon_image_path(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_COUPON_TYPE:
-                                    item.setCoupon_type(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_LINK_PATH:
-                                    item.setLink_path(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_EXPIRATION_FROM:
-                                    item.setExpiration_from(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_EXPIRATION_TO:
-                                    item.setExpiration_to(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_PRIORITY:
-                                    item.setPriority(Utils.parserInt(xpp.nextText()));
-                                    break;
-                                case CouponDTO.TAG_ADD_BLAND:
-                                    item.setAdd_bland(xpp.nextText());
-                                    break;
-                                case CouponDTO.TAG_MEMO:
-                                    item.setMemo(xpp.nextText());
-                                    break;
-                            }
-                        case XmlPullParser.END_TAG:
-                            name = xpp.getName().toUpperCase();
-                            if (name.equalsIgnoreCase(CouponDTO.TAG_ITEM) && item != null && isOpened){
-                                listResult.add(item);
-                                isOpened = false;
-                            }
-                    }
-                    eventType = xpp.next();
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(getActivity(), "Update data error", Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e){
 
-            }
-            saveData(listResult);
-            // save version number get from api
-            if(arg0[0]!=null)
-                LoginSharedPreference.getInstance(getActivity()).setVersion(Utils.convertIntVersion(arg0[0]));
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            hideLoading();
+                @Override
+                public void onNext(XMLUpdate xmlUpdates) {
+                    //new CouponListFragment.UpdateTask().execute(xmlUpdates.getUrl(), xmlUpdates.getArea());
+                    loadDataXML(xmlUpdates.getUrl(), xmlUpdates.getArea());
+                }
+            });
+        }else{
             mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
         }
     }
@@ -433,10 +358,103 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             return null;
         }
     }
-    public void saveData(ArrayList<CouponDTO> datas){
+    public void saveData(ArrayList<CouponDTO> datas, String area){
         if(datas!=null){
-            sqLiteOpenHelper.clearData();
-            sqLiteOpenHelper.saveCouponList(datas);
+            myDatabaseHelper.saveCouponList(datas,area);
         }
+    }
+
+    public void loadDataXML(String url, String area){
+        ArrayList<CouponDTO> listResult = new ArrayList<>();
+        CouponDTO item= new CouponDTO();
+        boolean isOpened= false;
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            if ( factory == null){
+                hideLoading();
+                LoginSharedPreference.getInstance(getActivity()).setVersion(0);
+                mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
+                return;
+            }
+
+            factory.setNamespaceAware(false);
+            XmlPullParser xpp = factory.newPullParser();
+
+            // We will get the XML from an input stream
+            xpp.setInput(getInputStream(new URL(url)), "UTF_8");
+
+            // Returns the type of current event: START_TAG, END_TAG, etc..
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT){
+                String name = "";
+                switch (eventType) {
+                    case XmlPullParser.START_DOCUMENT:
+                        break;
+                    case XmlPullParser.START_TAG:
+                        name = xpp.getName().toUpperCase();
+                        switch (name){
+                            case CouponDTO.TAG_COUPON:
+                                listResult = new ArrayList<>();
+                                break;
+                            case CouponDTO.TAG_ITEM:
+                                isOpened = true;
+                                item = new CouponDTO();
+                                break;
+                            case CouponDTO.TAG_SHGRID:
+                                item.setShgrid(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_CATEGORY_ID:
+                                item.setCategory_id(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_CATEGORY_NAME:
+                                item.setCategory_name(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_COUPON_NAME:
+                                item.setCoupon_name(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_COUPON_IMAGE_PATH:
+                                item.setCoupon_image_path(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_COUPON_TYPE:
+                                item.setCoupon_type(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_LINK_PATH:
+                                item.setLink_path(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_EXPIRATION_FROM:
+                                item.setExpiration_from(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_EXPIRATION_TO:
+                                item.setExpiration_to(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_PRIORITY:
+                                item.setPriority(Utils.parserInt(xpp.nextText()));
+                                break;
+                            case CouponDTO.TAG_ADD_BLAND:
+                                item.setAdd_bland(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_MEMO:
+                                item.setMemo(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_BENEFIT:
+                                item.setBenefit(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_BENEFIT_NOTES:
+                                item.setBenefit_notes(xpp.nextText());
+                                break;
+                        }
+                    case XmlPullParser.END_TAG:
+                        name = xpp.getName().toUpperCase();
+                        if (name.equalsIgnoreCase(CouponDTO.TAG_ITEM) && item != null && isOpened){
+                            listResult.add(item);
+                            isOpened = false;
+                        }
+                }
+                eventType = xpp.next();
+            }
+        } catch (Exception e){
+
+        }
+        saveData(listResult,area);
     }
 }

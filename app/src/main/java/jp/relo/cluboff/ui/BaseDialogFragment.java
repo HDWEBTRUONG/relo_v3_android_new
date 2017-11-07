@@ -116,4 +116,5 @@ public abstract class BaseDialogFragment  extends DialogFragment {
         ReloApp reloApp = (ReloApp) getActivity().getApplication();
         reloApp.trackingWithAnalyticGoogleServices(category,action,lable,value);
     }
+
 }

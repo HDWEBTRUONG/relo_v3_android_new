@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -190,14 +191,14 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                hideLoading();
+                /*hideLoading();
                 if("Now Loading".equalsIgnoreCase(view.getTitle())) return;
                 if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(view.getTitle())){
                     mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
                     mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
                 }else{
                     mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
-                }
+                }*/
             }
 
             @Override
@@ -207,7 +208,26 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
                 mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
             }
-
+        });
+        wvLogin.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                hideLoading();
+                if("Now Loading".equalsIgnoreCase(view.getTitle())){
+                    wvLogin.stopLoading();
+                    mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+                }else{
+                    mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
+                    mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                }
+                /*if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(view.getTitle())){
+                    mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
+                    mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                }else{
+                    mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+                }*/
+            }
         });
 
         String url = Constant.TEMPLATE_URL_MEMBER;

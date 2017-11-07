@@ -41,6 +41,7 @@
                     android:background="@drawable/bg_catelogy_coupon"
                     android:clickable="true"
                     android:gravity="center"
+                    android:visibility="visible"
                     android:orientation="horizontal">
 
                     <TextView

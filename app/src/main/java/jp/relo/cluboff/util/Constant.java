@@ -16,7 +16,6 @@ public class Constant {
 
     // Some URL of webview
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
-    public static final String WEBVIEW_URL_FAQ = BuildConfig.WEBVIEW_URL_FAQ;
     public static final String WEBVIEW_CAN_NOT_LOGIN = BuildConfig.WEBVIEW_CAN_NOT_LOGIN;
     public static final String WEBVIEW_FORGET_ID = BuildConfig.WEBVIEW_FORGET_ID;
 
@@ -136,5 +135,16 @@ public class Constant {
 
     public static final String BUNDER_URL= "BUNDER_URL";
     public static final String BUNDER_TITLE= "BUNDER_TITLE";
+
+    public static final String XML_WHOLEJAPAN = BuildConfig.XML_WHOLEJAPAN;
+    public static final String XML_HOKKAIDO = BuildConfig.XML_HOKKAIDO;
+    public static final String XML_TOHOKU = BuildConfig.XML_TOHOKU;
+    public static final String XML_KANTO = BuildConfig.XML_KANTO;
+    public static final String XML_KOUSHINETSU = BuildConfig.XML_KOUSHINETSU;
+    public static final String XML_HOKURIKUTOKAI = BuildConfig.XML_HOKURIKUTOKAI;
+    public static final String XML_KINKI = BuildConfig.XML_KINKI;
+    public static final String XML_CYUUGOKUSHIKOKU = BuildConfig.XML_CYUUGOKUSHIKOKU;
+    public static final String XML_KYUSHU = BuildConfig.XML_KYUSHU;
+    public static final String XML_OKINAWA = BuildConfig.XML_OKINAWA;
 
 }

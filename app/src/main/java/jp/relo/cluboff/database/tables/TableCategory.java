@@ -28,7 +28,7 @@ public class TableCategory {
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 
-                if (cursor.moveToFirst()) {
+                if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
                     do {
                         CatagoryDTO catagoryDTO = new CatagoryDTO();
                         catagoryDTO.setCatagoryID(cursor.getString(0));
@@ -37,8 +37,6 @@ public class TableCategory {
                     } while (cursor.moveToNext());
                 }
                 db.close();
-
-
                 return sortBSJ(datas);
             }
         };
