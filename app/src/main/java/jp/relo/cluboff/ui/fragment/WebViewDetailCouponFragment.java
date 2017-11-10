@@ -242,7 +242,7 @@ public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottom
             mWebView.loadUrl(url);
         }else{
             PostDetail postDetail = new PostDetail();
-            postDetail.setKaiinno("5005265110");
+            postDetail.setKaiinno(kaiinno);
             postDetail.setRequestno(shgrid);
             postDetail.setSenicode(senicode);
 
