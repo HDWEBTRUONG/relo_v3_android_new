@@ -48,7 +48,6 @@ public class CouponListAreaFragment extends CouponListFragment {
         rlViewAreaMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppLog.log("-----------");
                 if(getActivity() instanceof MainTabActivity){
                     PostAreaWebViewFragment postAreaWebViewFragment = new PostAreaWebViewFragment();
                     ((MainTabActivity) getActivity()).openDialogFragment(postAreaWebViewFragment);
@@ -58,50 +57,7 @@ public class CouponListAreaFragment extends CouponListFragment {
 
         rgArea =(RadioGroup) view.findViewById(R.id.rgArea);
         rbArea1 =(RadioButton) view.findViewById(R.id.rbArea1);
-        rgArea.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId){
-                    case R.id.rbArea1:
-                        AppLog.log("rbArea1");
-                        areaName = ConstanArea.HOKKAIDO;
-                        break;
-                    case R.id.rbArea2:
-                        AppLog.log("rbArea2");
-                        areaName = ConstanArea.TOHOKU;
-                        break;
-                    case R.id.rbArea3:
-                        AppLog.log("rbArea3");
-                        areaName = ConstanArea.KANTO;
-                        break;
-                    case R.id.rbArea4:
-                        AppLog.log("rbArea4");
-                        areaName = ConstanArea.KOUSHINETSU;
-                        break;
-                    case R.id.rbArea5:
-                        areaName = ConstanArea.HOKURIKUTOKAI;
-                        AppLog.log("rbArea5");
-                        break;
-                    case R.id.rbArea6:
-                        AppLog.log("rbArea6");
-                        areaName = ConstanArea.KINKI;
-                        break;
-                    case R.id.rbArea7:
-                        AppLog.log("rbArea7");
-                        areaName = ConstanArea.CYUUGOKUSHIKOKU;
-                        break;
-                    case R.id.rbArea8:
-                        AppLog.log("rbArea8");
-                        areaName = ConstanArea.KYUSHU;
-                        break;
-                    case R.id.rbArea9:
-                        AppLog.log("rbArea9");
-                        areaName = ConstanArea.OKINAWA;
-                        break;
-                }
-                mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
-            }
-        });
+
     }
 
     @Override
@@ -121,11 +77,11 @@ public class CouponListAreaFragment extends CouponListFragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+       super.onActivityCreated(savedInstanceState);
     }
 
     private String getAreaName(){
-        String result="";
+        String result=ConstanArea.HOKKAIDO;
         switch (rgArea.getCheckedRadioButtonId()){
             case R.id.rbArea1:
                 AppLog.log("rbArea1");
@@ -172,7 +128,6 @@ public class CouponListAreaFragment extends CouponListFragment {
         super.onResume();
         areaName = getAreaName();
         if(rgArea.getCheckedRadioButtonId()==-1){
-            rbArea1.setChecked(true);
             if(categoryList==null || categoryList.isEmpty()){
                 mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
             }else{
@@ -190,8 +145,56 @@ public class CouponListAreaFragment extends CouponListFragment {
                 mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
             }
         }
+        rbArea1.setChecked(true);
+        setChangeSelectArea();
 
+    }
 
-
+    private void setChangeSelectArea(){
+        rgArea.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.rbArea1:
+                        AppLog.log("rbArea1");
+                        areaName = ConstanArea.HOKKAIDO;
+                        break;
+                    case R.id.rbArea2:
+                        AppLog.log("rbArea2");
+                        areaName = ConstanArea.TOHOKU;
+                        break;
+                    case R.id.rbArea3:
+                        AppLog.log("rbArea3");
+                        areaName = ConstanArea.KANTO;
+                        break;
+                    case R.id.rbArea4:
+                        AppLog.log("rbArea4");
+                        areaName = ConstanArea.KOUSHINETSU;
+                        break;
+                    case R.id.rbArea5:
+                        areaName = ConstanArea.HOKURIKUTOKAI;
+                        AppLog.log("rbArea5");
+                        break;
+                    case R.id.rbArea6:
+                        AppLog.log("rbArea6");
+                        areaName = ConstanArea.KINKI;
+                        break;
+                    case R.id.rbArea7:
+                        AppLog.log("rbArea7");
+                        areaName = ConstanArea.CYUUGOKUSHIKOKU;
+                        break;
+                    case R.id.rbArea8:
+                        AppLog.log("rbArea8");
+                        areaName = ConstanArea.KYUSHU;
+                        break;
+                    case R.id.rbArea9:
+                        AppLog.log("rbArea9");
+                        areaName = ConstanArea.OKINAWA;
+                        break;
+                }
+                //mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+                mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+            }
+        });
     }
 }

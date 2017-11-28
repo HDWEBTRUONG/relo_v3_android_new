@@ -22,66 +22,67 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:paddingBottom="@dimen/_10dp"
-        android:paddingTop="@dimen/_10dp">
+        android:paddingBottom="@dimen/_5dp"
+        android:paddingTop="@dimen/_5dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5dp"
-            android:layout_marginRight="@dimen/_5dp">
+            android:layout_marginRight="@dimen/_5dp"
+            android:orientation="vertical">
             <ImageView
                 android:layout_width="@dimen/_70dp"
                 android:layout_height="@dimen/_70dp"
                 android:src="@drawable/img_item_coupon"
                 android:id="@+id/img_item_coupon" />
+            <TextView
+                android:id="@+id/tvCategoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/_1dp"
+                android:textAlignment="center"
+                android:text="@string/item_coupon_category_name"
+                android:textSize="@dimen/text_size_11sp"
+                android:background="@drawable/bg_catelogy_27"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingRight="@dimen/_5dp"
             android:orientation="vertical">
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tvArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:id="@+id/tvCategoryName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="@string/item_coupon_category_name"
-                    android:textSize="@dimen/text_size_11sp"
-                    android:background="@drawable/bg_catelogy_27"
-                    android:layout_alignBaseline="@+id/tvDurationCoupon"
-                    android:layout_alignBottom="@+id/tvDurationCoupon"
-                    android:layout_alignParentStart="true" />
-                <TextView
-                    android:id="@+id/tvDurationCoupon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3dp"
-                    android:layout_marginBottom="@dimen/_3dp"
-                    android:layout_marginRight="@dimen/_5dp"
-                    android:textSize="@dimen/text_size_12sp"
-                    android:text="@string/limit_time"
-                    android:layout_alignParentRight="true"
-                    android:textAlignment="textEnd"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/warmGrey"/>
-            </RelativeLayout>
+                android:layout_marginTop="@dimen/_1dp"
+                android:layout_marginRight="@dimen/_5dp"
+                android:textSize="@dimen/text_size_12sp"
+                android:text="Area"
+                android:textAlignment="textStart"
+                android:textColor="@color/warmGrey"/>
             <TextView
                 android:id="@+id/tvCompanyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:layout_marginTop="@dimen/_3dp"
-                android:layout_marginBottom="@dimen/_3dp"
+                android:layout_marginRight="@dimen/_5dp"
+                android:gravity="center_vertical"
                 android:textSize="@dimen/text_size_large16"
                 android:textColor="@color/black"
                 android:ellipsize="end"
                 android:text="@string/item_coupon_company_name"
                 android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvDurationCoupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3dp"
+                android:layout_marginBottom="@dimen/_1dp"
+                android:layout_marginRight="@dimen/_5dp"
+                android:textSize="@dimen/text_size_12sp"
+                android:text="@string/limit_time"
+                android:textAlignment="textStart"
+                android:textColor="@color/warmGrey"/>
         </LinearLayout>
     </LinearLayout>
     <include layout="@layout/line_layout" android:visibility="gone"/>

@@ -71,8 +71,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TableCoupon.COLUMN_MEMO + " TEXT,"
                 + TableCoupon.COLUMN_AREA + " TEXT,"
                 + TableCoupon.COLUMN_BENEFIT + " TEXT,"
-                + TableCoupon.COLUMN_BENEFIT_NOTES + " TEXT,"
-                + TableCoupon.COLUMN_ADD_BLAND + " TEXT)";
+                + TableCoupon.COLUMN_BENEFIT_NOTES + " TEXT)";
         // Execute script.
         db.execSQL(scriptCoupon);
 
@@ -121,10 +120,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TableCoupon.COLUMN_EXPIRATION_TO, data.getExpiration_to());
         values.put(TableCoupon.COLUMN_PRIORITY, data.getPriority());
         values.put(TableCoupon.COLUMN_MEMO, data.getMemo());
-        values.put(TableCoupon.COLUMN_ADD_BLAND, data.getAdd_bland());
+        values.put(TableCoupon.COLUMN_AREA, area);
         values.put(TableCoupon.COLUMN_BENEFIT, data.getBenefit());
         values.put(TableCoupon.COLUMN_BENEFIT_NOTES, data.getBenefit_notes());
-        values.put(TableCoupon.COLUMN_AREA, area);
 
         db.insert(TableCoupon.TABLE_COUPON, null, values);
         db.close();
@@ -180,21 +178,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 });
     }
 
-    public Observable<List<CatagoryDTO>> getCatagorysRX() {
-        return makeObservable(TableCategory.getCategory(MyDatabaseHelper.getInstance(mContext)))
+    public Observable<List<CatagoryDTO>> getCatagorysRX(String area) {
+        return makeObservable(TableCategory.getCategory(MyDatabaseHelper.getInstance(mContext),area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
     public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID, String area) {
         return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
-
-
-    public Observable<List<HistoryPushDTO>> getPushRX() {
-        return makeObservable(TablePush.getPush(MyDatabaseHelper.getInstance(mContext)))
-                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
-    }
-
 
 
 }

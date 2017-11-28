@@ -33,10 +33,9 @@ public class TableCoupon {
     public static final String COLUMN_EXPIRATION_TO = "expiration_to";
     public static final String COLUMN_PRIORITY = "priority";
     public static final String COLUMN_MEMO = "memo";
-    public static final String COLUMN_ADD_BLAND = "add_bland";
+    public static final String COLUMN_AREA = "area";
     public static final String COLUMN_BENEFIT = "benefit";
     public static final String COLUMN_BENEFIT_NOTES = "benefit_notes";
-    public static final String COLUMN_AREA = "area";
 
     public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper,
                                                                         final String categoryID, final String area) {
@@ -70,25 +69,28 @@ public class TableCoupon {
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"   + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+  "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }
+                AppLog.log("++++++: "+selectQuery);
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 
                 if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
                     do {
                         CouponDTO note = new CouponDTO();
-                        note.setShgrid(cursor.getString(0));
-                        note.setCategory_id(cursor.getString(1));
-                        note.setCategory_name(cursor.getString(2));
-                        note.setCoupon_name(cursor.getString(3));
-                        note.setCoupon_image_path(cursor.getString(4));
-                        note.setCoupon_type(cursor.getString(5));
-                        note.setLink_path(cursor.getString(6));
-                        note.setExpiration_from(cursor.getString(7));
-                        note.setExpiration_to(cursor.getString(8));
-                        note.setPriority(cursor.getInt(9));
-                        note.setMemo(cursor.getString(10));
-                        note.setAdd_bland(cursor.getString(11));
-                        note.setLiked(cursor.getInt(12));
+                        note.setShgrid(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_SHGRID)));
+                        note.setCategory_id(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY_ID)));
+                        note.setCategory_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY)));
+                        note.setCoupon_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON)));
+                        note.setCoupon_image_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_IAMGE_PATH)));
+                        note.setCoupon_type(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_TYPE)));
+                        note.setLink_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_LINK_PATH)));
+                        note.setExpiration_from(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_FROM)));
+                        note.setExpiration_to(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_TO)));
+                        note.setPriority(cursor.getInt(cursor.getColumnIndex(TableCoupon.COLUMN_PRIORITY)));
+                        note.setMemo(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_MEMO)));
+                        note.setArea(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_AREA)));
+                        note.setBenefit(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT)));
+                        note.setBenefit_notes(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT_NOTES)));
+
                         datas.add(note);
                     } while (cursor.moveToNext());
                 }

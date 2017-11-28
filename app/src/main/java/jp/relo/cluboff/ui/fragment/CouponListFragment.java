@@ -82,7 +82,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     public static final String TAG = CouponListFragment.class.getSimpleName();
 
-    public String areaName= "";
+    public String areaName= ConstanArea.WHOLEJAPAN;
     public String categoryID= "";
 
     public List<XMLUpdate> xmlUpdatesList = new ArrayList<>();
@@ -101,7 +101,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void loadCategory() {
-        myDatabaseHelper.getCatagorysRX().observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCatagorysRX(areaName).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<CatagoryDTO>>() {
                     @Override
                     public void call(List<CatagoryDTO> catagoryDTOs) {
@@ -116,8 +116,21 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     }
     private void setCategory(){
-        spinner.setItems(categoryList);
         setEventCategory();
+        spinner.setItems(categoryList);
+        if(categoryList!=null && categoryList.size()>0){
+            boolean isAvalibleCategory = false;
+            for(int i=0; i<categoryList.size();i++){
+                if(categoryList.get(i).getGetCatagoryName().equals(tvCategory.getText().toString())){
+                    isAvalibleCategory =true;
+                    break;
+                }
+            }
+            if(!isAvalibleCategory){
+                spinner.setSelectedIndex(0);
+                categoryID = categoryList.get(spinner.getSelectedIndex()).getCatagoryID();
+            }
+        }
         lnCatalory.setOnClickListener(this);
         tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
     }
@@ -200,10 +213,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         }
                         break;
                     case CouponListFragment.MSG_CREATE_ADAPTER:
-                        setAdapter(true);
+                        setAdapter();
                         break;
                     case CouponListFragment.MSG_UPDATE_ADAPTER:
-                        setAdapter(false);
+                        setAdapter();
                         break;
                     case CouponListFragment.MSG_SET_CATEGORY:
                         setCategory();
@@ -233,19 +246,13 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 });
 
     }
-    private void setAdapter(boolean isReload){
+    private void setAdapter(){
         if(adapter==null){
             adapter =new CouponListAdapter(getContext(), listCoupon,this);
             lvCoupon.setAdapter(adapter);
         }else{
             adapter.setDataChange(listCoupon);
             lvCoupon.setAdapter(adapter);
-            /*if(isReload){
-                if(positionView >= listCoupon.size()){
-                    positionView = listCoupon.size();
-                }
-                lvCoupon.setSelection(positionView);
-            }*/
         }
     }
 
@@ -429,9 +436,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 break;
                             case CouponDTO.TAG_PRIORITY:
                                 item.setPriority(Utils.parserInt(xpp.nextText()));
-                                break;
-                            case CouponDTO.TAG_ADD_BLAND:
-                                item.setAdd_bland(xpp.nextText());
                                 break;
                             case CouponDTO.TAG_MEMO:
                                 item.setMemo(xpp.nextText());

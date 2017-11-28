@@ -19,7 +19,6 @@ public class CouponDTO{
     public static final String TAG_EXPIRATION_FROM = "EXPIRATION_FROM";
     public static final String TAG_EXPIRATION_TO = "EXPIRATION_TO";
     public static final String TAG_PRIORITY = "PRIORITY";
-    public static final String TAG_ADD_BLAND = "ADD_BLAND";
     public static final String TAG_MEMO = "MEMO";
     public static final String TAG_BENEFIT = "BENEFIT";
     public static final String TAG_BENEFIT_NOTES = "BENEFIT_NOTES";
@@ -60,16 +59,15 @@ public class CouponDTO{
     private String memo;
 
     @Expose
-    @SerializedName("add_bland")
-    private String add_bland;
-
-    @Expose
     @SerializedName("benefit")
     private String benefit;
 
     @Expose
     @SerializedName("benefit_notes")
     private String benefit_notes;
+    @Expose
+    @SerializedName("area")
+    private String area;
 
     private int liked;
 
@@ -117,9 +115,6 @@ public class CouponDTO{
         return memo;
     }
 
-    public String getAdd_bland() {
-        return add_bland;
-    }
 
     public int getLiked() {
         return liked;
@@ -173,10 +168,6 @@ public class CouponDTO{
         this.memo = memo;
     }
 
-    public void setAdd_bland(String add_bland) {
-        this.add_bland = add_bland;
-    }
-
     public String getBenefit() {
         return benefit;
     }
@@ -191,5 +182,13 @@ public class CouponDTO{
 
     public void setBenefit_notes(String benefit_notes) {
         this.benefit_notes = benefit_notes;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

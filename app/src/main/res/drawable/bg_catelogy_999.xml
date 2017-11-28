@@ -7,7 +7,7 @@
                 android:bottom="@dimen/_2dp"
                 android:left="@dimen/_5dp"
                 android:right="@dimen/_5dp"/>
-            <corners android:radius="@dimen/_2dp"/>
+            <corners android:radius="0dp"/>
         </shape>
     </item>
 </selector>
