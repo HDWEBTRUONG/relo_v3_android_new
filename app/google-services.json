@@ -1,66 +1,32 @@
 {
   "project_info": {
-    "project_number": "720485401236",
-    "project_id": "firebase-cluboff"
+    "project_number": "175576994746",
+    "project_id": "influential-kit-160306"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:720485401236:android:a1be2d9daf0780d4",
+        "mobilesdk_app_id": "1:175576994746:android:015350fc114016e6",
         "android_client_info": {
           "package_name": "net.fukuri.memberapp.memberapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "720485401236-87bgk2palc0kcc43qj09oj2eu648hm9o.apps.googleusercontent.com",
+          "client_id": "175576994746-98d5ic9g5kfd3t725omep8jqp96le9st.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDse-ex1bL7j1r2xFf99DeAG4Hy3e1CPM4"
+          "current_key": "AIzaSyDZz2_oKdkH0SHFBN95mk34SkOBtGLc6RQ"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": "UA-101896815-1"
-          }
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 1
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:720485401236:android:2ba1100b5cbbd8e2",
-        "android_client_info": {
-          "package_name": "net.fukuri.memberapp.memberapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "720485401236-87bgk2palc0kcc43qj09oj2eu648hm9o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDse-ex1bL7j1r2xFf99DeAG4Hy3e1CPM4"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-101896815-1"
+            "tracking_id": "UA-109273903-1"
           }
         },
         "appinvite_service": {

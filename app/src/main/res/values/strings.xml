@@ -119,4 +119,9 @@
     <string name="btn_cancel">Cancel</string>
     <string name="title_update">Title update</string>
     <string name="message_update">Version {0} is available, please update to use</string>
+    <string name="detail_offline_title_page1">画面提示クーポン（携帯会員証） </string>
+    <string name="detail_offline_title_page2">Coupon</string>
+    <string name="detail_offline_note">この画面をご提示ください。\nPlease show page to the service provider</string>
+    <string name="detail_offline_copyright">Copyright (C) 2017 Relo Club,Ltd.\nAll Rights Reserved.</string>
+    <string name="detail_offline_date">※本日限り有効　{0}</string>
 </resources>

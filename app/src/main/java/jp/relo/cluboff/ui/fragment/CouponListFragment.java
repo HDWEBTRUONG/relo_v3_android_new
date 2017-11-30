@@ -277,7 +277,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         if(saveLogin!=null){
             kaiinno = saveLogin.getUserName();
             requestno = data.getShgrid();
-            if(WILL_NET_SERVER.equals(data.getCoupon_type())){
+            /*if(WILL_NET_SERVER.equals(data.getCoupon_type())){
                 url =data.getLink_path();
             }else{
                 url = Constant.TEMPLATE_URL_COUPON;
@@ -292,6 +292,29 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             webViewFragment.setArguments(bundle);
             if(getActivity() instanceof MainTabActivity){
                 ((MainTabActivity) getActivity()).openDialogFragment(webViewFragment);
+            }*/
+
+            //version 2
+            if(WILL_NET_SERVER.equals(data.getCoupon_type())){
+                url =data.getLink_path();
+                bundle.putString(Constant.KEY_LOGIN_URL, url);
+                bundle.putString(Constant.TAG_KAIINNO, kaiinno);
+                bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
+                bundle.putString(Constant.TAG_SENICODE, "1");
+                bundle.putString(Constant.TAG_SHGRID, requestno);
+
+                WebViewDetailCouponFragment webViewFragment = new WebViewDetailCouponFragment();
+                webViewFragment.setArguments(bundle);
+                if(getActivity() instanceof MainTabActivity){
+                    ((MainTabActivity) getActivity()).openDialogFragment(webViewFragment);
+                }
+            }else{
+                //type 0
+                if(getActivity() instanceof MainTabActivity){
+                    DetailCouponOfflineDialogFragment detailCouponOfflineDialogFragment = DetailCouponOfflineDialogFragment.newInstance();
+                    ((MainTabActivity) getActivity()).openDialogFragment(detailCouponOfflineDialogFragment);
+                }
+
             }
 
         }

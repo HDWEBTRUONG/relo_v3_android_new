@@ -74,7 +74,6 @@ public class CouponListAdapter extends BaseAdapter{
             holder.durationCoupon = (TextView) convertView.findViewById(R.id.tvDurationCoupon);
             holder.tvLike = (TextView) convertView.findViewById(R.id.tvLike);
             holder.tvLink = (TextView) convertView.findViewById(R.id.tvLink);
-            holder.tvArea = (TextView)convertView.findViewById(R.id.tvArea);
             holder.img_item_coupon = (ImageView) convertView.findViewById(R.id.img_item_coupon);
             holder.imvLike = (ImageView) convertView.findViewById(R.id.imvLike);
             holder.imvDetail = (ImageView) convertView.findViewById(R.id.imvDetail);
@@ -89,7 +88,6 @@ public class CouponListAdapter extends BaseAdapter{
         holder.companyView.setText(item.getCoupon_name());
         holder.durationCoupon.setText(MessageFormat.format(mContext.getString(R.string.limit_time), Utils.convertDateShort(item.getExpiration_to())));
 
-        holder.tvArea.setText(item.getArea());
         holder.categoryView.setText(item.getCategory_name());
         holder.categoryView.setVisibility(View.VISIBLE);
 
@@ -161,7 +159,6 @@ public class CouponListAdapter extends BaseAdapter{
         TextView categoryView;
         TextView companyView;
         TextView durationCoupon;
-        TextView tvArea;
         TextView tvLike;
         TextView tvLink;
         ImageView img_item_coupon;

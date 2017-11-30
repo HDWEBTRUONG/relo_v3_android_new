@@ -60,5 +60,6 @@
 
     <color name="dot_seleced">#FFBB00</color>
     <color name="dot">#D8D8D8</color>
+    <color name="bg_detail_off">#FFD0BA</color>
 
 </resources>
