@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
-        <bitmap android:src="@drawable/icon_pass_on" />
+        <bitmap android:src="@drawable/icon_pin_on" />
     </item>
     <item>
-        <bitmap android:src="@drawable/icon_pass_off" />
+        <bitmap android:src="@drawable/icon_pin_off" />
     </item>
 </selector>

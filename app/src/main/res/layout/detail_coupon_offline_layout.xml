@@ -24,9 +24,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_3dp"
                     android:paddingBottom="@dimen/_10dp"
-                    android:background="@color/oceanBlue"
+                    android:background="@color/bg_detail_off_header"
                     android:orientation="vertical">
 
                     <TextView
@@ -65,11 +64,15 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_hint_text_170"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_150dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_80dp"
                     android:layout_marginRight="@dimen/_80dp"
-                    android:src="@drawable/iv_demo_card"/>
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/card"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,10 +88,10 @@
                     android:id="@+id/tvBenefit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3dp"
                     android:layout_marginLeft="@dimen/_5dp"
                     android:layout_marginRight="@dimen/_5dp"
-                    android:layout_marginBottom="@dimen/_10dp"
-                    android:text="html tag"/>
+                    android:layout_marginBottom="@dimen/_10dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -102,8 +105,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_medium"
                     android:layout_marginLeft="@dimen/_5dp"
-                    android:layout_marginRight="@dimen/_5dp"
-                    android:text="html tag"/>
+                    android:layout_marginRight="@dimen/_5dp"/>
             </LinearLayout>
 
 

@@ -12,9 +12,10 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/iv_demo_card"/>
+                android:adjustViewBounds="true"
+                android:layout_margin="@dimen/_5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,9 +111,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:visibility="invisible"
-                android:src="@drawable/iv_demo_card"/>
+                android:src="@drawable/card"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
