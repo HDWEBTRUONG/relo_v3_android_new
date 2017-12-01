@@ -124,4 +124,5 @@
     <string name="detail_offline_note">この画面をご提示ください。\nPlease show page to the service provider</string>
     <string name="detail_offline_copyright">Copyright (C) 2017 Relo Club,Ltd.\nAll Rights Reserved.</string>
     <string name="detail_offline_date">※本日限り有効　{0}</string>
+    <string name="detail_offline_coupon_name_template">{0}/{1}</string>
 </resources>

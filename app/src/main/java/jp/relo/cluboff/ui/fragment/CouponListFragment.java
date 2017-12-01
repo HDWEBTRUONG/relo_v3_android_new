@@ -311,7 +311,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             }else{
                 //type 0
                 if(getActivity() instanceof MainTabActivity){
-                    DetailCouponOfflineDialogFragment detailCouponOfflineDialogFragment = DetailCouponOfflineDialogFragment.newInstance();
+                    DetailCouponOfflineDialogFragment detailCouponOfflineDialogFragment = DetailCouponOfflineDialogFragment.newInstance(requestno);
                     ((MainTabActivity) getActivity()).openDialogFragment(detailCouponOfflineDialogFragment);
                 }
 
@@ -441,6 +441,9 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 break;
                             case CouponDTO.TAG_COUPON_NAME:
                                 item.setCoupon_name(xpp.nextText());
+                                break;
+                            case CouponDTO.TAG_COUPON_NAME_EN:
+                                item.setCoupon_name_en(xpp.nextText());
                                 break;
                             case CouponDTO.TAG_COUPON_IMAGE_PATH:
                                 item.setCoupon_image_path(xpp.nextText());

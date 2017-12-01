@@ -62,6 +62,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TableCoupon.COLUMN_CATEGORY_ID + " TEXT,"
                 + TableCoupon.COLUMN_CATEGORY + " TEXT,"
                 + TableCoupon.COLUMN_COUPON + " TEXT,"
+                + TableCoupon.COLUMN_COUPON_EN + " TEXT,"
                 + TableCoupon.COLUMN_COUPON_IAMGE_PATH + " TEXT,"
                 + TableCoupon.COLUMN_COUPON_TYPE + " TEXT,"
                 + TableCoupon.COLUMN_LINK_PATH + " TEXT,"
@@ -113,6 +114,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TableCoupon.COLUMN_CATEGORY_ID, data.getCategory_id());
         values.put(TableCoupon.COLUMN_CATEGORY, data.getCategory_name());
         values.put(TableCoupon.COLUMN_COUPON, data.getCoupon_name());
+        values.put(TableCoupon.COLUMN_COUPON_EN, data.getCoupon_name_en());
         values.put(TableCoupon.COLUMN_COUPON_IAMGE_PATH, data.getCoupon_image_path());
         values.put(TableCoupon.COLUMN_COUPON_TYPE, data.getCoupon_type());
         values.put(TableCoupon.COLUMN_LINK_PATH, data.getLink_path());
@@ -184,6 +186,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
     public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID, String area) {
         return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area))
+                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
+    }
+    public Observable <CouponDTO> getCouponDetail(String couponID) {
+        return makeObservable(TableCoupon.getCouponDetail(MyDatabaseHelper.getInstance(mContext),couponID))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 

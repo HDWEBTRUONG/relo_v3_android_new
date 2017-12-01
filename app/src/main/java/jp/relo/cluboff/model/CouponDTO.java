@@ -13,6 +13,7 @@ public class CouponDTO{
     public static final String TAG_CATEGORY_ID = "CATEGORY_ID";
     public static final String TAG_CATEGORY_NAME = "CATEGORY_NAME";
     public static final String TAG_COUPON_NAME = "COUPON_NAME";
+    public static final String TAG_COUPON_NAME_EN = "COUPON_NAME_EN";
     public static final String TAG_COUPON_IMAGE_PATH = "COUPON_IMAGE_PATH";
     public static final String TAG_COUPON_TYPE = "COUPON_TYPE";
     public static final String TAG_LINK_PATH = "LINK_PATH";
@@ -35,6 +36,9 @@ public class CouponDTO{
 
     @SerializedName("coupon_name")
     private String coupon_name;
+
+    @SerializedName("coupon_name_en")
+    private String coupon_name_en;
 
     @SerializedName("coupon_image_path")
     private String coupon_image_path;
@@ -190,5 +194,13 @@ public class CouponDTO{
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getCoupon_name_en() {
+        return coupon_name_en;
+    }
+
+    public void setCoupon_name_en(String coupon_name_en) {
+        this.coupon_name_en = coupon_name_en;
     }
 }

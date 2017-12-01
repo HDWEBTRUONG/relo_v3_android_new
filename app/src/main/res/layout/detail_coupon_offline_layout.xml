@@ -10,99 +10,115 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:layout_height="match_parent">
             <LinearLayout
+                android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10dp"
-                android:paddingBottom="@dimen/_10dp"
-                android:background="@color/oceanBlue"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10dp"
+                    android:layout_marginTop="@dimen/_3dp"
+                    android:paddingBottom="@dimen/_10dp"
+                    android:background="@color/oceanBlue"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_offline_title_page1"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_xxlarge"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_offline_title_page2"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_xxlarge" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_offline_date"
+                    android:layout_margin="@dimen/_5dp"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/color_hint_text_170"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/detail_offline_title_page1"
+                    android:text="@string/detail_offline_note"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_xxlarge"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_hint_text_170"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_150dp"
+                    android:layout_marginLeft="@dimen/_80dp"
+                    android:layout_marginRight="@dimen/_80dp"
+                    android:src="@drawable/iv_demo_card"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bg_detail_off"
+                    android:padding="@dimen/_5dp">
+                    <TextView
+                        android:id="@+id/tvCouponName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvBenefit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5dp"
+                    android:layout_marginRight="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:text="html tag"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/detail_offline_title_page2"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_xxlarge" />
-            </LinearLayout>
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/detail_offline_date"
-                android:layout_margin="@dimen/_5dp"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                android:textAlignment="textEnd"
-                android:textColor="@color/color_hint_text_170"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/detail_offline_note"
-                android:layout_marginTop="@dimen/_10dp"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/color_hint_text_170"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_150dp"
-                android:layout_marginLeft="@dimen/_80dp"
-                android:layout_marginRight="@dimen/_80dp"
-                android:src="@drawable/iv_demo_card"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/bg_detail_off"
-                android:padding="@dimen/_5dp">
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginLeft="@dimen/_5dp"
+                    android:layout_marginRight="@dimen/_5dp"
+                    android:text="[注意事項]"/>
                 <TextView
+                    android:id="@+id/tvBenefitNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Coupon name/ en"/>
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginLeft="@dimen/_5dp"
+                    android:layout_marginRight="@dimen/_5dp"
+                    android:text="html tag"/>
             </LinearLayout>
+
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5dp"
-                android:layout_marginRight="@dimen/_5dp"
-                android:layout_marginBottom="@dimen/_10dp"
-                android:text="html tag"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5dp"
-                android:layout_marginRight="@dimen/_5dp"
-                android:text="[注意事項]"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5dp"
-                android:layout_marginRight="@dimen/_5dp"
-                android:text="html tag"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/header"
                 android:text="@string/detail_offline_copyright"
                 android:layout_marginTop="@dimen/_10dp"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColor="@color/color_hint_text_170"/>
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 
 </LinearLayout>
