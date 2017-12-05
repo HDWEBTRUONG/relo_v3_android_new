@@ -11,12 +11,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
+import jp.relo.cluboff.util.LoginSharedPreference;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -29,13 +36,17 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
     MyDatabaseHelper myDatabaseHelper;
 
     public  String couponID="";
+    public  String areaID="";
+    public  String userID="";
 
     public static final String BUNDLE_DATA ="BUNDLE_DATA";
+    public static final String BUNDLE_DATA_AREA ="BUNDLE_DATA_AREA";
 
-    public static DetailCouponOfflineDialogFragment newInstance(String couponID) {
+    public static DetailCouponOfflineDialogFragment newInstance(String couponID, String area) {
 
         Bundle args = new Bundle();
         args.putString(BUNDLE_DATA, couponID);
+        args.putString(BUNDLE_DATA_AREA, area);
         DetailCouponOfflineDialogFragment fragment = new DetailCouponOfflineDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -91,6 +102,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         Bundle bundle = getArguments();
         if(bundle!=null){
             couponID = bundle.getString(BUNDLE_DATA);
+            areaID = bundle.getString(BUNDLE_DATA_AREA);
         }
     }
 
@@ -98,26 +110,54 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
     public void onResume() {
         super.onResume();
         loadData();
+        writeLog();
+    }
+
+    private void writeLog() {
+        if(StringUtil.isEmpty(userID)){
+            LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+            userID = loginSharedPreference.getUserName();
+        }
+        apiInterfaceLog.writeLog(couponID,userID).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(!response.isSuccessful()){
+                    AppLog.log(""+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log(""+t.getMessage());
+            }
+        });
     }
 
     public  void loadData(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         String currentDateandTime = sdf.format(new Date());
         tvDate.setText(MessageFormat.format(getString(R.string.detail_offline_date),currentDateandTime));
-
-        myDatabaseHelper.getCouponDetail(couponID).observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCouponDetail(couponID, areaID).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<CouponDTO>() {
                     @Override
                     public void call(CouponDTO couponDTO) {
                         tvCouponName.setText(MessageFormat.format(getString(R.string.detail_offline_coupon_name_template),
                                 couponDTO.getCoupon_name(), couponDTO.getCoupon_name_en()));
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                            tvBenefit.setText(Html.fromHtml(couponDTO.getBenefit(),Html.FROM_HTML_MODE_LEGACY));
-                            tvBenefitNote.setText(Html.fromHtml(couponDTO.getBenefit_notes(),Html.FROM_HTML_MODE_LEGACY));
-                        } else {
-                            tvBenefit.setText(Html.fromHtml(couponDTO.getBenefit()));
-                            tvBenefitNote.setText(Html.fromHtml(couponDTO.getBenefit_notes()));
+                        if(couponDTO.getBenefit()!=null){
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                tvBenefit.setText(Html.fromHtml(couponDTO.getBenefit().replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
+                            } else {
+                                tvBenefit.setText(Html.fromHtml(couponDTO.getBenefit().replaceAll("\\\\n", "<br>")));
+                            }
                         }
+                        if(couponDTO.getBenefit_notes()!=null){
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                tvBenefitNote.setText(Html.fromHtml(couponDTO.getBenefit_notes().replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
+                            } else {
+                                tvBenefitNote.setText(Html.fromHtml(couponDTO.getBenefit_notes().replaceAll("\\\\n", "<br>")));
+                            }
+                        }
+
                     }
                 });
     }

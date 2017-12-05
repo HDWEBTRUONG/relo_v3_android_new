@@ -18,36 +18,7 @@ android {
         }
     }
     productFlavors {
-
         relo_dev {
-            applicationId "net.fukuri.memberapp.memberapp"
-            buildConfigField "String", "GCM_SENDER_ID", '"373028143595"'
-            buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
-            buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
-            buildConfigField "String", "BASE_URL_JP", '"https://sptest.fukuri.jp"'
-            buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
-            buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
-            buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://sptest.fukuri.jp/fkr/apps/oil/ffoil_main.cfm"'
-            buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://sptest.fukuri.jp/fkr/fkr_directlink.cfm"'
-            buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
-            buildConfigField "String", "APPVISOR_ID", '"KxWC2gRwtc"'
-            buildConfigField "String", "URL_MEMBER_BROWSER", '"https://sptest.fukuri.jp/fkr/apps/oil/get_login.cfm"'
-            buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
-            buildConfigField "String", "WEBVIEW_FORGET_ID", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
-            buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
-            buildConfigField "String", "XML_WHOLEJAPAN", '"https://api.club-off.com/prefukuri/wholeJapan.xml"'
-            buildConfigField "String", "XML_HOKKAIDO", '"https://api.club-off.com/prefukuri/hokkaido.xml"'
-            buildConfigField "String", "XML_TOHOKU", '"https://api.club-off.com/prefukuri/tohoku.xml"'
-            buildConfigField "String", "XML_KANTO", '"https://api.club-off.com/prefukuri/kanto.xml"'
-            buildConfigField "String", "XML_KOUSHINETSU", '"https://api.club-off.com/prefukuri/koushinetsu.xml"'
-            buildConfigField "String", "XML_HOKURIKUTOKAI", '"https://api.club-off.com/prefukuri/hokurikuTokai.xml"'
-            buildConfigField "String", "XML_KINKI", '"https://api.club-off.com/prefukuri/kinki.xml"'
-            buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.club-off.com/prefukuri/cyuugokuShikoku.xml"'
-            buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
-            buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
-        }
-
-        relo_prod {
             applicationId "net.fukuri.memberapp.memberapp"
             buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
             buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
@@ -73,6 +44,7 @@ android {
             buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.club-off.com/prefukuri/cyuugokuShikoku.xml"'
             buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
             buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
+            buildConfigField "String", "BASE_URL_LOG", '"http://relo.lilula.dev.bravesoft.vn"'
         }
     }
 
@@ -112,6 +84,7 @@ dependencies {
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.github.jrvansuita:CheckNewAppVersionAvailable:v1.0.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

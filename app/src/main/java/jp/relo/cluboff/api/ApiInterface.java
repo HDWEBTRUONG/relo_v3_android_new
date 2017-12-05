@@ -31,4 +31,10 @@ public interface ApiInterface {
     @POST("/reloclub/re_post_app.cfm")
     Call<ResponseBody> memberAuthHTML(@Field("APPU") String LOGINID, @Field("APPP") String PASSWORD);
 
+
+    @FormUrlEncoded
+    @POST("/api/v1/log")
+    Call<ResponseBody> writeLog(@Field("request_no") String request_no, @Field("member_id") String member_id);
+
+
 }

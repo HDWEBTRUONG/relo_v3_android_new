@@ -12,8 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import framework.phvtActivity.BaseActivity;
 import jp.relo.cluboff.R;
@@ -58,7 +62,6 @@ public class SplashScreenActivity extends BaseActivity {
                 R.layout.splash_1_layout,
                 R.layout.splash_2_layout,
                 R.layout.splash_3_layout,
-                R.layout.splash_4_layout,
                 R.layout.splash_5_layout};
         addBottomDots(0);
         myViewPagerAdapter = new SplashScreenActivity.MyViewPagerAdapter();
@@ -132,6 +135,7 @@ public class SplashScreenActivity extends BaseActivity {
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
         Button btnCloseSplash;
+        ImageView ivSpash;
         public MyViewPagerAdapter() {
         }
 
@@ -139,6 +143,22 @@ public class SplashScreenActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(layouts[position], container, false);
+            ivSpash = (ImageView) view.findViewById(R.id.ivSpash);
+            switch (position){
+                case 0:
+                    Glide.with(SplashScreenActivity.this).load(R.drawable.wt_1).into(ivSpash);
+                    break;
+                case 1:
+                    Glide.with(SplashScreenActivity.this).load(R.drawable.wt_2).into(ivSpash);
+                    break;
+                case 2:
+                    Glide.with(SplashScreenActivity.this).load(R.drawable.wt_3).into(ivSpash);
+                    break;
+                case 3:
+                    Glide.with(SplashScreenActivity.this).load(R.drawable.wt_4).into(ivSpash);
+                    break;
+            }
+
             if(position==layouts.length-1){
                 btnCloseSplash = (Button) view.findViewById(R.id.btnCloseSplash);
                 if(btnCloseSplash!=null){

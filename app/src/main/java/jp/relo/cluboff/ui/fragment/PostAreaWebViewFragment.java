@@ -143,7 +143,8 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
         });
         tvMenuTitle.setVisibility(View.VISIBLE);
         tvMenuSubTitle.setVisibility(View.VISIBLE);
-        tvMenuSubTitle.setText("ABC");
+        tvMenuTitle.setText(R.string.show_guide);
+        tvMenuSubTitle.setText(R.string.sub_show_guide);
     }
 
 
@@ -227,7 +228,6 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                tvMenuTitle.setText(title);
             }
         });
         mWebView.setOnKeyListener(new View.OnKeyListener(){

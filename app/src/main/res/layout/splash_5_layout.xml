@@ -6,20 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
+            android:id="@+id/ivSpash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/plash5"/>
+            android:scaleType="centerCrop"/>
         <Button
             android:id="@+id/btnCloseSplash"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_35dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="@drawable/button_bg_default"
-            android:paddingLeft="@dimen/_55dp"
-            android:paddingRight="@dimen/_55dp"
-            android:text="@string/tutorial_title"
-            android:textColor="@color/bg_button_login_pressed"
-            android:layout_marginBottom="@dimen/_10dp"/>
+            android:background="@drawable/button_bg"
+            android:textStyle="bold"
+            android:padding="@dimen/_15dp"
+            android:textColor="@color/text_color_tutorial"
+            android:text="@string/tutorial_title"/>
     </FrameLayout>
 </LinearLayout>

@@ -127,7 +127,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             img_logo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    gotoMain();
+                    //gotoMain();
                 }
             });
         }

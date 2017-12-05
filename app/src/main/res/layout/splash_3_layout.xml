@@ -3,15 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:src="@drawable/plash3_head"
-        android:background="#005BB2"
-        android:scaleType="fitStart"/>
-    <ImageView
+        android:id="@+id/ivSpash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:background="@color/white"
-        android:src="@drawable/plash3_body"/>
+        android:scaleType="centerCrop"
+        android:background="@color/white"/>
 </LinearLayout>

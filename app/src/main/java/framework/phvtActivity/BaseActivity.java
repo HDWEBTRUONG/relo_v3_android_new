@@ -25,6 +25,7 @@ import framework.phvtFragment.FragmentHelper;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
 import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiClientLog;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.util.Utils;
 import rx.Observable;

@@ -311,7 +311,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             }else{
                 //type 0
                 if(getActivity() instanceof MainTabActivity){
-                    DetailCouponOfflineDialogFragment detailCouponOfflineDialogFragment = DetailCouponOfflineDialogFragment.newInstance(requestno);
+                    DetailCouponOfflineDialogFragment detailCouponOfflineDialogFragment = DetailCouponOfflineDialogFragment.newInstance(requestno,areaName);
                     ((MainTabActivity) getActivity()).openDialogFragment(detailCouponOfflineDialogFragment);
                 }
 

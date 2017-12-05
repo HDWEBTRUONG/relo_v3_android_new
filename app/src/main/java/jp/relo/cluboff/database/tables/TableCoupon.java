@@ -106,17 +106,16 @@ public class TableCoupon {
 
     //detail
     public static Callable<CouponDTO> getCouponDetail(final MyDatabaseHelper mMyDatabaseHelper,
-                                                                        final String couponID ) {
+                                                                        final String couponID, final String area ) {
         return new Callable<CouponDTO>() {
             @Override
             public CouponDTO call() {
                 CouponDTO note = new CouponDTO();
-                String selectQuery = "select * from TB_COUPON where shgrid = "+couponID;
+                String selectQuery = "select * from TB_COUPON where shgrid = '"+couponID+"' and area = '"+area+"'";
+                AppLog.log("++++++: "+selectQuery);
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
-
                 if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
-                    do {
                         note.setShgrid(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_SHGRID)));
                         note.setCategory_id(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY_ID)));
                         note.setCategory_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY)));
@@ -132,8 +131,6 @@ public class TableCoupon {
                         note.setArea(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_AREA)));
                         note.setBenefit(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT)));
                         note.setBenefit_notes(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT_NOTES)));
-
-                    } while (cursor.moveToNext());
                 }
                 cursor.close();
                 if( db.isOpen()){

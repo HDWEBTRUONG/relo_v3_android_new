@@ -79,7 +79,7 @@
     <string name="content_browser">※WEBブラウザを立ち上げた場合、閲覧していたページは表示されず、サイトのトップにアクセスします。</string>
     <string name="btn_browser">開く</string>
     <string name="title_dialog_error">エラー</string>
-    <string name="tutorial_title">はじめる</string>
+    <string name="tutorial_title">ログインして始めよう</string>
     <string name="string_login">Login</string>
     <string name="title_area">Mobile ID Card</string>
     <string name="title_popular_coupon">Popular Coupon</string>
@@ -125,4 +125,6 @@
     <string name="detail_offline_copyright">Copyright (C) 2017 Relo Club,Ltd.\nAll Rights Reserved.</string>
     <string name="detail_offline_date">※本日限り有効　{0}</string>
     <string name="detail_offline_coupon_name_template">{0}/{1}</string>
+    <string name="show_guide">Map</string>
+    <string name="sub_show_guide">地図</string>
 </resources>

@@ -50,19 +50,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/detail_offline_date"
                     android:layout_margin="@dimen/_5dp"
-                    android:textSize="@dimen/text_size_medium"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/color_hint_text_170"/>
+                    android:textColor="@color/color_textview_84"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/detail_offline_note"
                     android:layout_marginTop="@dimen/_10dp"
-                    android:textSize="@dimen/text_size_medium"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     android:textAlignment="center"
-                    android:textColor="@color/color_hint_text_170"/>
+                    android:textColor="@color/color_textview_84"/>
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -82,7 +82,8 @@
                         android:id="@+id/tvCouponName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=""/>
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tvBenefit"
@@ -116,10 +117,10 @@
                 android:layout_below="@id/header"
                 android:text="@string/detail_offline_copyright"
                 android:layout_marginTop="@dimen/_10dp"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_xsmall"
                 android:textStyle="bold"
                 android:textAlignment="center"
-                android:textColor="@color/color_hint_text_170"/>
+                android:textColor="@color/color_textview_84"/>
         </RelativeLayout>
     </ScrollView>
 

@@ -188,8 +188,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
-    public Observable <CouponDTO> getCouponDetail(String couponID) {
-        return makeObservable(TableCoupon.getCouponDetail(MyDatabaseHelper.getInstance(mContext),couponID))
+    public Observable <CouponDTO> getCouponDetail(String couponID, String area) {
+        return makeObservable(TableCoupon.getCouponDetail(MyDatabaseHelper.getInstance(mContext),couponID, area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 
