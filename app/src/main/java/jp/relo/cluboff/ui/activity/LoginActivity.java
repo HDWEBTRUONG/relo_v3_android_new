@@ -246,8 +246,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
 
 
-    private void goNextWebview(String url, String title) {
-        WebViewDialogFragment webViewDialogFragment = WebViewDialogFragment.newInstance(url, title);
+    private void goNextWebview(String url,String title, String subtitle) {
+        WebViewDialogFragment webViewDialogFragment = WebViewDialogFragment.newInstance(url, title, subtitle);
         openDialogFragment(webViewDialogFragment);
     }
 
@@ -292,7 +292,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }
     }
     public void canNotLogin(){
-        goNextWebview(Constant.WEBVIEW_FORGET_ID, getString(R.string.txt_link_forget_id));
+        goNextWebview(Constant.WEBVIEW_FORGET_ID, getString(R.string.string_login),getString(R.string.txt_link_forget_id));
     }
 
 
@@ -305,7 +305,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         finish();
     }
     public void clickLinkFAQ(){
-        goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.title_can_not_login));
+        goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.string_login), getString(R.string.title_can_not_login));
     }
 
 }

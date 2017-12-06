@@ -127,4 +127,5 @@
     <string name="detail_offline_coupon_name_template">{0}/{1}</string>
     <string name="show_guide">Map</string>
     <string name="sub_show_guide">地図</string>
+    <string name="string_note">【注意事項】</string>
 </resources>

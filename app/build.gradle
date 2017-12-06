@@ -24,7 +24,6 @@ android {
             buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
             buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
             buildConfigField "String", "BASE_URL_JP", '"https://sp.fukuri.jp"'
-            buildConfigField "String", "BASE_URL_UPDATE", '"https://api.club-off.com/coa/syohin.xml"'
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://www.e-map.ne.jp/smt/rclzmap/loc.htm"'
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://sp.fukuri.jp/fkr/apps/oil/ffoil_main.cfm"'
             buildConfigField "String", "TEMPLATE_URL_COUPON", '"https://sp.fukuri.jp/fkr/fkr_directlink.cfm"'
@@ -45,6 +44,7 @@ android {
             buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
             buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
             buildConfigField "String", "BASE_URL_LOG", '"http://relo.lilula.dev.bravesoft.vn"'
+            buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
         }
     }
 

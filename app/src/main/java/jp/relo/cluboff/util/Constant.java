@@ -12,7 +12,6 @@ public class Constant {
     //link server coupon
     public static final String BASE_URL = BuildConfig.BASE_URL;
     public static final String BASE_URL_JP = BuildConfig.BASE_URL_JP;
-    public static final String BASE_URL_UPDATE = BuildConfig.BASE_URL_UPDATE;
     public static final String BASE_URL_LOG = BuildConfig.BASE_URL_LOG;
 
     // Some URL of webview
@@ -24,6 +23,8 @@ public class Constant {
     public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
     public static final String TEMPLATE_URL_COUPON = BuildConfig.TEMPLATE_URL_COUPON;
     public static final String TEMPLATE_ARG = BuildConfig.TEMPLATE_ARG;
+
+    public static final String URL_FAQ = BuildConfig.URL_FAQ;
 
     //Appvisor id
     public static final String APPVISOR_ID = BuildConfig.APPVISOR_ID;
@@ -136,6 +137,7 @@ public class Constant {
 
     public static final String BUNDER_URL= "BUNDER_URL";
     public static final String BUNDER_TITLE= "BUNDER_TITLE";
+    public static final String BUNDER_SUBTITLE= "BUNDER_SUBTITLE";
 
     public static final String XML_WHOLEJAPAN = BuildConfig.XML_WHOLEJAPAN;
     public static final String XML_HOKKAIDO = BuildConfig.XML_HOKKAIDO;

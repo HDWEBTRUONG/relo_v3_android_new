@@ -40,6 +40,7 @@ import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
+import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
@@ -182,7 +183,7 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     private void setupView(){
         // Locate DrawerLayout in drawer_main.xml
-        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_tutorial)};
+        titleMenu = new String[] { getString(R.string.menu_top), getString(R.string.menu_FAQ)};
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_listview_menu, null, false);
         mDrawerListMenu.addHeaderView(header);
@@ -214,7 +215,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_TOP);
                 break;
             case 2:
-                openDialogFragment(new HowToDialogFragment());
+                openDialogFragment(WebViewDialogFragment.newInstance(Constant.URL_FAQ,getString(R.string.menu_FAQ),""));
                 break;
         }
         mDrawerListMenu.setItemChecked(position, true);

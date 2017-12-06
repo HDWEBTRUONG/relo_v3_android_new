@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.HistoryPushAdapter;
@@ -42,12 +43,14 @@ import jp.relo.cluboff.util.Constant;
 public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
     WebView mWebView;
     ProgressBar horizontalProgress;
+    String subTitle="";
 
-    public static WebViewDialogFragment newInstance(String url, String title) {
+    public static WebViewDialogFragment newInstance(String url, String title, String subtitle) {
 
         Bundle args = new Bundle();
         args.putString(Constant.BUNDER_URL,url);
         args.putString(Constant.BUNDER_TITLE,title);
+        args.putString(Constant.BUNDER_SUBTITLE,subtitle);
         WebViewDialogFragment fragment = new WebViewDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -68,13 +71,14 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_FAQ_SCREEN);
-        String subTitle="";
+        String title="";
         String url="";
         Bundle bundle = getArguments();
         if(bundle!=null){
-            subTitle = bundle.getString(Constant.BUNDER_TITLE);
+            title = bundle.getString(Constant.BUNDER_TITLE);
+            subTitle = bundle.getString(Constant.BUNDER_SUBTITLE);
             url = bundle.getString(Constant.BUNDER_URL);
-            tvMenuTitle.setText(R.string.string_login);
+            tvMenuTitle.setText(title);
             tvMenuSubTitle.setText(subTitle);
         }
         setupWebView(url);
@@ -199,6 +203,14 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
                 } else {
                     horizontalProgress.setVisibility(View.VISIBLE);
                     horizontalProgress.setProgress(newProgress);
+                }
+            }
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                if(StringUtil.isEmpty(subTitle)){
+                    subTitle = title;
+                    tvMenuSubTitle.setText(subTitle);
                 }
             }
         });

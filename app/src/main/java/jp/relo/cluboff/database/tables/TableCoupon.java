@@ -70,6 +70,7 @@ public class TableCoupon {
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"   + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+  "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }
+                AppLog.log("selectQuery: "+ selectQuery);
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 

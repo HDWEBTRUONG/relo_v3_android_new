@@ -32,7 +32,7 @@ import rx.functions.Action1;
  */
 
 public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar{
-    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote;
+    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote, tvNote;
     MyDatabaseHelper myDatabaseHelper;
 
     public  String couponID="";
@@ -72,6 +72,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         tvCouponName = (TextView) view.findViewById(R.id.tvCouponName);
         tvBenefit = (TextView) view.findViewById(R.id.tvBenefit);
         tvBenefitNote = (TextView) view.findViewById(R.id.tvBenefitNote);
+        tvNote = (TextView) view.findViewById(R.id.tvNote);
     }
 
     @Override
@@ -156,6 +157,11 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
                             } else {
                                 tvBenefitNote.setText(Html.fromHtml(couponDTO.getBenefit_notes().replaceAll("\\\\n", "<br>")));
                             }
+                        }
+                        if(StringUtil.isEmpty(couponDTO.getBenefit_notes())){
+                            tvNote.setVisibility(View.GONE);
+                        }else{
+                            tvNote.setVisibility(View.VISIBLE);
                         }
 
                     }
