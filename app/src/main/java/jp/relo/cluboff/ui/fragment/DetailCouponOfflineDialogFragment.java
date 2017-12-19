@@ -20,6 +20,7 @@ import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.Utils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +33,7 @@ import rx.functions.Action1;
  */
 
 public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar{
-    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote, tvNote;
+    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote, tvNote, tvCopyRight;
     MyDatabaseHelper myDatabaseHelper;
 
     public  String couponID="";
@@ -73,6 +74,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         tvBenefit = (TextView) view.findViewById(R.id.tvBenefit);
         tvBenefitNote = (TextView) view.findViewById(R.id.tvBenefitNote);
         tvNote = (TextView) view.findViewById(R.id.tvNote);
+        tvCopyRight = (TextView) view.findViewById(R.id.tvCopyRight);
     }
 
     @Override
@@ -110,6 +112,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
     @Override
     public void onResume() {
         super.onResume();
+        tvCopyRight.setText(MessageFormat.format(getString(R.string.detail_offline_copyright_template), Utils.getYear()));
         loadData();
         writeLog();
     }

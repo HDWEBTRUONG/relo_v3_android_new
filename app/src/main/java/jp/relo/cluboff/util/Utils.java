@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -17,6 +18,8 @@ import android.text.Spanned;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -54,6 +57,18 @@ import jp.relo.cluboff.views.SweetAlertDialog;
 
 public class Utils {
     public static final String TEMP_TOSTRING = "ToString(";
+
+    public static void setupWebView(WebView mWebView) {
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptEnabled(true);
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        //Disable cache Webview
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+    }
+
 
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -284,6 +299,13 @@ public class Utils {
         }
         return "";
     }
+
+    public static String getYear(){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        return ""+ year;
+    }
+
     public static String convertDateShort(String dateString){
         if(dateString==null){
             return "";

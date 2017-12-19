@@ -16,6 +16,7 @@ public class LoginSharedPreference {
     public final String KEY_PASS="passwodk";
     public final String KEY_APPU="appU";
     public final String KEY_APPP="appp";
+    public final String KEY_TAB="tab";
 
     public final String VERSION = "version";
     public final String TIME_STOP = "timeStop";
@@ -70,6 +71,17 @@ public class LoginSharedPreference {
     public String getPass(){
         return sharedPreferences.getString(KEY_PASS,"");
     }
+
+    public void setTabSave(int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_TAB, value);
+        editor.apply();
+    }
+
+    public int getTabSave(){
+        return sharedPreferences.getInt(KEY_TAB,0);
+    }
+
     public void setKEY_APPU(String value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_APPU, value);

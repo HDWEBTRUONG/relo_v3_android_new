@@ -86,6 +86,9 @@ public class MemberAuthFragment extends BaseFragment {
                 switch (msg.what){
                     case UPDATE_LAYOUT:
                         tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today),new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
+                        if(!userID.contains("-")){
+                            userID =new StringBuffer(userID).insert(userID.length()-4, "-").toString();
+                        }
                         tvMemberID.setText(userID);
                         break;
                     case UPDATE_LAYOUT_ERROR:
@@ -112,7 +115,7 @@ public class MemberAuthFragment extends BaseFragment {
                         Node child = divChildren.childNode(i);
                         if (child.nodeName().equals("#comment")) {
                             String valueAuth = child.toString();
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==1){
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==0){
                                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                                 loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                                 loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));

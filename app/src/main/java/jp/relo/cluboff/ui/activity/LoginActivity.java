@@ -51,10 +51,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_NOT_NETWORK = 3;
     public static final int MSG_ENABLE_LOGIN = 4;
     public static final int MSG_GOTO_MAIN = 5;
-    public static final int MSG_ERROR_MAIL_EMPTY = 6;
     public static final int MSG_ERROR_ID_EMPTY = 7;
-    public static final int MSG_ERROR_ID_BRAND_EMPTY = 8;
-    public static final int MSG_ERROR_ID_LOGIN_EMPTY = 9;
+    public static final int MSG_ERROR_PASS_EMPTY = 8;
     public static final int MSG_ERROR_ALL_EMPTY = 10;
 
 
@@ -88,17 +86,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     case MSG_GOTO_MAIN:
                         gotoMain();
                         break;
-                    case MSG_ERROR_MAIL_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_mail_empty);
-                        break;
                     case MSG_ERROR_ID_EMPTY:
                         Utils.showDialogLIB(LoginActivity.this,R.string.error_id_empty);
                         break;
-                    case MSG_ERROR_ID_BRAND_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_brand_empty);
-                        break;
-                    case MSG_ERROR_ID_LOGIN_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_login_empty);
+                    case MSG_ERROR_PASS_EMPTY:
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_pass_empty);
                         break;
                     case MSG_ERROR_ALL_EMPTY:
                         Utils.showDialogLIB(LoginActivity.this,R.string.error_all_empty);
@@ -158,12 +150,10 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
 
             }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
                 mhandler.sendEmptyMessage(MSG_ERROR_ALL_EMPTY);
-            }else if(StringUtil.isEmpty(username) && StringUtil.isEmpty(pass)){
-                mhandler.sendEmptyMessage(MSG_ERROR_ID_EMPTY);
             }else if(StringUtil.isEmpty(username)){
-                mhandler.sendEmptyMessage(MSG_ERROR_ID_LOGIN_EMPTY);
+                mhandler.sendEmptyMessage(MSG_ERROR_ID_EMPTY);
             }else if(StringUtil.isEmpty(pass)){
-                mhandler.sendEmptyMessage(MSG_ERROR_ID_BRAND_EMPTY);
+                mhandler.sendEmptyMessage(MSG_ERROR_PASS_EMPTY);
             }
 
         }else{
