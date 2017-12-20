@@ -21,7 +21,6 @@ public class Constant {
 
     //Template url
     public static final String TEMPLATE_URL_MEMBER = BuildConfig.TEMPLATE_URL_MEMBER;
-    public static final String TEMPLATE_URL_COUPON = BuildConfig.TEMPLATE_URL_COUPON;
     public static final String TEMPLATE_ARG = BuildConfig.TEMPLATE_ARG;
 
     public static final String URL_FAQ = BuildConfig.URL_FAQ;
@@ -85,12 +84,6 @@ public class Constant {
     //------------------Google Analytic Member Coupon----------------//
     public static final String GA_MEMBER_SCREEN = "会員サイト";
 
-    //------------------Google Analytic HistoryPush----------------//
-    public static final String GA_HISTORYPUSH_SCREEN = "お知らせ";
-    public static final String GA_HISTORYPUSH_CATEGORY = "人気クーポン お気に入り";
-    public static final String GA_HISTORYPUSH_ACTION = "タップ";
-    public static final String GA_HISTORYPUSH_VALUE = ""; //ToDO Change value
-
     //------------------Google Analytic How to----------------//
     public static final String GA_HOWTO_SCREEN = "アプリの使い方";
 
@@ -102,18 +95,17 @@ public class Constant {
     //Push GCM
     public static final String GCM_SENDER_ID = BuildConfig.GCM_SENDER_ID;
 
-    public static final String TAG_USER_ID= "userid";
     public static final String TAG_SHGRID = "shgrid";
     public static final String TAG_SENICODE= "senicode";
     public static final String TAG_KAIINNO= "kaiinno";
-    public static final String TAG_BRNDID = "brndid";
         public static final String TAG_IS_FIRST = "isFirst";
 
         //****************CATEGORY ID******************//
-    public static final String VALUE_CATALOGY_25 = "25";
-    public static final String VALUE_CATALOGY_27 = "27";
-    public static final String VALUE_CATALOGY_32 = "32";
-    public static final String VALUE_CATALOGY_126 = "126";
+    public static final String VALUE_CATALOGY_12 = "012";
+    public static final String VALUE_CATALOGY_09 = "009";
+    public static final String VALUE_CATALOGY_15 = "015";
+    public static final String VALUE_CATALOGY_21 = "021";
+    public static final String VALUE_CATALOGY_18 = "018";
     public static final String VALUE_CATALOGY_999 = "999";
 
     //****************TARGET PUSH******************//
@@ -123,15 +115,13 @@ public class Constant {
     public static final String TARGET_PUSH_SCREEN_SITE= "site";
     public static final String TARGET_PUSH_SCREEN_LIST = "list";
 
-    public static final String[] listCategory = {"25","27","32","126"};
-    public static final String[] listCategoryName = {"グルメ","カラオケ","レジャー","日帰り湯","その他"};
+    public static final String[] listCategoryName = {"グルメ","カラオケ","スーツ・メガネ","その他"};
+    public static final String[] listCategoryNameArea = {"レジャー","日帰り湯","グルメ","スーツ・メガネ","その他"};
 
     public static final String TOP_COUPON= "TOP_COUPON";
-    public static final String USERID= "USERID";
     public static final int LIMIT_ON_BACKGROUND= 10800000;
 
     public static final String DATA_COUPON_URL= "DATA_COUPON_URL";
-    public static final String REPONSE_SUCCESS= BuildConfig.REPONSE_SUCCESS;
     public static final String URL_MEMBER_BROWSER= BuildConfig.URL_MEMBER_BROWSER;
 
 

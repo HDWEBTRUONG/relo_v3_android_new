@@ -91,19 +91,18 @@ public class CouponListAdapter extends BaseAdapter{
         holder.categoryView.setText(item.getCategory_name());
         holder.categoryView.setVisibility(View.VISIBLE);
 
-        if(Constant.VALUE_CATALOGY_25.equalsIgnoreCase(item.getCategory_id())){
-            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_25);
-        }else if(Constant.VALUE_CATALOGY_27.equalsIgnoreCase(item.getCategory_id())){
+        if(Constant.VALUE_CATALOGY_12.equalsIgnoreCase(item.getCategory_id())){
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_27);
-            ;
-        }else if(Constant.VALUE_CATALOGY_32.equalsIgnoreCase(item.getCategory_id())){
-            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_32);
-        }else if(Constant.VALUE_CATALOGY_126.equalsIgnoreCase(item.getCategory_id())){
+        }else if(Constant.VALUE_CATALOGY_09.equalsIgnoreCase(item.getCategory_id())){
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_126);
-        }/*else if(Constant.VALUE_CATALOGY_999.equalsIgnoreCase(item.getCategory_id()) &&
-                !StringUtil.isEmpty(item.getAdd_bland())){
-            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_999);
-        }*/else{
+            ;
+        }else if(Constant.VALUE_CATALOGY_15.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_25);
+        }else if(Constant.VALUE_CATALOGY_21.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_ping);
+        }else if(Constant.VALUE_CATALOGY_18.equalsIgnoreCase(item.getCategory_id())){
+            holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_32);
+        }else{
             holder.categoryView.setBackgroundResource(R.drawable.bg_catelogy_999);
         }
 

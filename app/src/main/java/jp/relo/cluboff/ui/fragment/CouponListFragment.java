@@ -239,6 +239,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 .subscribe(new Action1<List<CouponDTO>>() {
                     @Override
                     public void call(List<CouponDTO> couponDTOs) {
+                        listCoupon.clear();
                         listCoupon.addAll(couponDTOs);
                         mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
                         hideLoading();

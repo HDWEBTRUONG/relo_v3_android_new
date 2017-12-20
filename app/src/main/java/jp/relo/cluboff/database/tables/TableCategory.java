@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
+import jp.relo.cluboff.util.ConstanArea;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
 
@@ -42,13 +43,37 @@ public class TableCategory {
                     } while (cursor.moveToNext());
                 }
                 db.close();
-                return sortBSJ(datas);
+                AppLog.log("Area: "+ area);
+                if(ConstanArea.WHOLEJAPAN.equalsIgnoreCase(area)){
+                    return sortBSJ(datas);
+                }else{
+                    return sortBSJArea(datas);
+                }
             }
         };
     }
     private static List<CatagoryDTO> sortBSJ(List<CatagoryDTO> list){
         List<CatagoryDTO> datas= new ArrayList<>();
         List<String> temp = java.util.Arrays.asList(Constant.listCategoryName);
+        for(String item : temp){
+            for(int i = 0; i < list.size(); i++){
+                if(item.equalsIgnoreCase(list.get(i).getGetCatagoryName())){
+                    datas.add(list.get(i));
+                    list.remove(i);
+                    break;
+                }
+            }
+        }
+
+        //add item orther
+        for(int i = 0; i < list.size(); i++){
+            datas.add(list.get(i));
+        }
+        return datas;
+    }
+    private static List<CatagoryDTO> sortBSJArea(List<CatagoryDTO> list){
+        List<CatagoryDTO> datas= new ArrayList<>();
+        List<String> temp = java.util.Arrays.asList(Constant.listCategoryNameArea);
         for(String item : temp){
             for(int i = 0; i < list.size(); i++){
                 if(item.equalsIgnoreCase(list.get(i).getGetCatagoryName())){
