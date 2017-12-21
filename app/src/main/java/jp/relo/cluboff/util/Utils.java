@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -40,6 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -51,11 +55,51 @@ import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.views.SweetAlertDialog;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by quynguyen on 3/22/17.
  */
 
 public class Utils {
+
+    public static String loadSharedPrefs(Context context, String ... prefs) {
+        String result ="";
+
+        // Define default return values. These should not display, but are needed
+        final String STRING_ERROR = "error!";
+        final Integer INT_ERROR = -1;
+        // ...
+        final Set<String> SET_ERROR = new HashSet<>(1);
+
+        // Add an item to the set
+        SET_ERROR.add("Set Error!");
+        for (String pref_name: prefs) {
+
+            SharedPreferences preference = context.getSharedPreferences(pref_name, MODE_PRIVATE);
+            Map<String, ?> prefMap = preference.getAll();
+
+            Object prefObj;
+            Object prefValue = null;
+
+            for (String key : prefMap.keySet()) {
+
+                prefObj = prefMap.get(key);
+
+                if (prefObj instanceof String) prefValue = preference.getString(key, STRING_ERROR);
+                if (prefObj instanceof Integer) prefValue = preference.getInt(key, INT_ERROR);
+                // ...
+                if (prefObj instanceof Set) prefValue = preference.getStringSet(key, SET_ERROR);
+                if(key!=null && prefObj.toString().contains("member_id")){
+                    Log.i(String.format("Shared Preference : %s - %s", pref_name, key),
+                            result =String.valueOf(prefValue));
+                }
+
+            }
+        }
+        return result;
+    }
+
     public static final String TEMP_TOSTRING = "ToString(";
 
     public static void setupWebView(WebView mWebView) {

@@ -1,0 +1,60 @@
+package jp.relo.cluboff.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by tonkhanh on 12/21/17.
+ */
+
+public class ValueLoginOld {
+    @SerializedName("member_id")
+    String member_id;
+    @SerializedName("password")
+    String password;
+    @SerializedName("logined_year")
+    int logined_year;
+    @SerializedName("logined_month")
+    int logined_month;
+    @SerializedName("id")
+    String id;
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getLogined_year() {
+        return logined_year;
+    }
+
+    public void setLogined_year(int logined_year) {
+        this.logined_year = logined_year;
+    }
+
+    public int getLogined_month() {
+        return logined_month;
+    }
+
+    public void setLogined_month(int logined_month) {
+        this.logined_month = logined_month;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}

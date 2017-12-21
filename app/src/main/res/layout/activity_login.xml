@@ -38,7 +38,6 @@
                     android:hint="@string/login_hint_username"
                     android:lines="1"
                     android:singleLine="true"
-                    android:text="500526-5110"
                     android:textColor="@color/color_textview_84"
                     android:textColorHint="@color/color_hint_text_170"
                     android:textSize="@dimen/text_size_large16" />
@@ -62,7 +61,6 @@
                     android:inputType="textPassword"
                     android:textColor="@color/color_textview_84"
                     android:textSize="@dimen/text_size_large16"
-                    android:text="Relo9999"
                     android:textColorHint="@color/color_hint_text_170"/>
             </LinearLayout>
             <TextView

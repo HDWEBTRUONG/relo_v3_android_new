@@ -1,11 +1,16 @@
 package jp.relo.cluboff.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -16,13 +21,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.MemberPost;
+import jp.relo.cluboff.model.ValueLoginOld;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
@@ -30,6 +40,12 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import static jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment.MULTIPLE_PERMISSIONS;
 
 /**
  * Created by quynguyen on 3/22/17.
@@ -54,6 +70,8 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_ERROR_ID_EMPTY = 7;
     public static final int MSG_ERROR_PASS_EMPTY = 8;
     public static final int MSG_ERROR_ALL_EMPTY = 10;
+
+    String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 
 
     @Override
@@ -100,6 +118,16 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         };
         init();
     }
+    private boolean checkPermissions() {
+        int findLoca = ContextCompat.checkSelfPermission(this, permissions[0]);
+        return findLoca == PackageManager.PERMISSION_GRANTED;
+
+    }
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, MULTIPLE_PERMISSIONS);
+        }
+    }
 
     private void init() {
         img_logo = (ImageView) findViewById(R.id.img_logo);
@@ -139,6 +167,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     protected void registerEventHandlers() {
 
     }
+
     public void clickLogin(){
         boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
         if(isNetworkAvailable) {
@@ -241,10 +270,20 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         openDialogFragment(webViewDialogFragment);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        /*if (!checkPermissions()) {
+            requestPermission();
+        }else{
+            new LoadValueLoginTask().execute("titanium");
+        }*/
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
+        new LoadValueLoginTask().execute("titanium");
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         link_webview_faq.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
@@ -259,6 +298,25 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public void setupToolbar() {
         tvMenuTitle.setText(R.string.string_login);
         tvMenuSubTitle.setText(R.string.title_login);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:
+                if (grantResults.length > 0) {
+                    boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (location) {
+                        new LoadValueLoginTask().execute("titanium");
+                    }else{
+                        Toast.makeText(this, R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.premission_error, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
     }
 
     @Override
@@ -296,6 +354,33 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
     public void clickLinkFAQ(){
         goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.string_login), getString(R.string.title_can_not_login));
+    }
+
+    private class LoadValueLoginTask extends AsyncTask<String, Void, String>
+    {
+        @Override
+        protected String doInBackground(String... params) {
+            return Utils.loadSharedPrefs(LoginActivity.this, params[0]);
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            AppLog.log("KQ: "+result);
+            String valueID="";
+            String valuePass="";
+
+            if(StringUtil.isEmpty(LoginSharedPreference.getInstance(LoginActivity.this).getUserName())){
+                ValueLoginOld loginOld = new Gson().fromJson(result, ValueLoginOld.class);
+                if(loginOld!=null){
+                    valueID = loginOld.getMember_id();
+                    valuePass = loginOld.getPassword();
+                }
+            }else{
+                valueID = LoginSharedPreference.getInstance(LoginActivity.this).getUserName();
+                valuePass= LoginSharedPreference.getInstance(LoginActivity.this).getPass();
+            }
+            etUser.setText(valueID);
+            etPass.setText(valuePass);
+        }
     }
 
 }
