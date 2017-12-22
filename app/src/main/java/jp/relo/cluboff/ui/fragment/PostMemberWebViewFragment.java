@@ -172,6 +172,9 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         //Disable cache Webview
         webSettings.setAppCacheEnabled(true);

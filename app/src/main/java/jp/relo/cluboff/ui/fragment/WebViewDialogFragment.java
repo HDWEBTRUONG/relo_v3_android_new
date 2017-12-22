@@ -161,6 +161,9 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
@@ -184,7 +187,7 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
                 llForward.setEnabled(mWebView.canGoForward());
 
             }
-            @SuppressWarnings("deprecation")
+            /*@SuppressWarnings("deprecation")
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             }
@@ -192,7 +195,7 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
             @Override
             public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
                 super.onReceivedSslError(view, handler, error);
-            }
+            }*/
         });
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override
