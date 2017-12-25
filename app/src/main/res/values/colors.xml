@@ -64,5 +64,6 @@
     <color name="bg_detail_off">#FFD0BA</color>
     <color name="bg_detail_off_header">#0090E4</color>
     <color name="text_color_tutorial">#8C431D</color>
+    <color name="red">#FF0000</color>
 
 </resources>

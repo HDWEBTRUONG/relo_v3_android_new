@@ -72,6 +72,14 @@ public class LoginSharedPreference {
         return sharedPreferences.getString(KEY_PASS,"");
     }
 
+    public void forceLogout(){
+        setPass("");
+    }
+    public void logout(){
+        setUserName("");
+        setPass("");
+    }
+
     public void setTabSave(int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_TAB, value);

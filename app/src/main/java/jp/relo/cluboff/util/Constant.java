@@ -140,4 +140,6 @@ public class Constant {
     public static final String XML_KYUSHU = BuildConfig.XML_KYUSHU;
     public static final String XML_OKINAWA = BuildConfig.XML_OKINAWA;
 
+    public static final String TITLE_LOGOUT = "認証エラー";
+
 }

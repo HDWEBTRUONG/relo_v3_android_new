@@ -56,6 +56,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     ImageView img_logo;
     TextView link_webview_not_login;
     TextView link_webview_faq;
+    TextView txt_login_error;
     Button btnLogin;
     EditText etUser,etPass;
     TextView txt_show_error;
@@ -72,6 +73,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     public static final int MSG_ERROR_ALL_EMPTY = 10;
 
     String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+    String error_text="";
 
 
     @Override
@@ -91,7 +93,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_ERROR_ELSE:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_login_wrong_id_password);
+                        Utils.showDialogLIB(LoginActivity.this,R.string.error_one_fileld_empty);
                         btnLogin.setEnabled(true);
                         break;
                     case MSG_NOT_NETWORK:
@@ -116,7 +118,16 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 }
             }
         };
-        init();
+
+        LoginSharedPreference  loginSharedPreference = LoginSharedPreference.getInstance(this);
+        if(loginSharedPreference!=null && !StringUtil.isEmpty(loginSharedPreference.getUserName()) && !StringUtil.isEmpty(loginSharedPreference.getPass())){
+            autoGotoMain();
+        }else{
+            if(loginSharedPreference!=null && !StringUtil.isEmpty(loginSharedPreference.getUserName())){
+                error_text = getString(R.string.string_error_login);
+            }
+            init();
+        }
     }
     private boolean checkPermissions() {
         int findLoca = ContextCompat.checkSelfPermission(this, permissions[0]);
@@ -134,9 +145,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         link_webview_not_login = (TextView) findViewById(R.id.link_webview_forget_id);
         link_webview_faq = (TextView) findViewById(R.id.link_webview_can_not_login);
         txt_show_error = (TextView) findViewById(R.id.txt_show_error);
+        txt_login_error = (TextView) findViewById(R.id.txt_login_error);
         etUser = (EditText) findViewById(R.id.etUser);
         etPass = (EditText) findViewById(R.id.etPass);
         wvLogin = (WebView) findViewById(R.id.wvLogin);
+        txt_login_error.setText(error_text);
 
         btnLogin = (Button) findViewById(R.id.bt_login);
         btnLogin.setOnClickListener(this);
@@ -287,11 +300,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         link_webview_not_login.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         link_webview_faq.setPaintFlags(link_webview_not_login.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         hideSoftKeyboard();
-        LoginRequest loginRequest = LoginSharedPreference.getInstance(this).get(ConstansSharedPerence.TAG_LOGIN_INPUT, LoginRequest.class);
-        if(loginRequest!=null){
-            etUser.setText(loginRequest.getLOGINID());
-            etPass.setText(loginRequest.getPASSWORD());
-        }
     }
 
     @Override
@@ -351,6 +359,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         Intent mainActivity = new Intent(this, MainTabActivity.class);
                         startActivity(mainActivity);
                         finish();
+    }
+    private void autoGotoMain(){
+        Intent mainActivity = new Intent(this, MainTabActivity.class);
+        startActivity(mainActivity);
+        finish();
     }
     public void clickLinkFAQ(){
         goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.string_login), getString(R.string.title_can_not_login));

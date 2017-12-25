@@ -1,5 +1,6 @@
 package jp.relo.cluboff.ui.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,7 +18,6 @@ import android.widget.ProgressBar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.MemberPost;
@@ -28,6 +28,7 @@ import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
+import jp.relo.cluboff.util.Utils;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -103,18 +104,24 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
         llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+                final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                 if(loginSharedPreference!=null){
                     try {
-                        Intent internetIntent = new Intent(Intent.ACTION_VIEW);
-                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
-                                .buildUpon()
-                                .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
-                                .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
-                                .build();
-                        internetIntent.setData(uri);
-                        getActivity().startActivity(internetIntent);
-                        AppLog.log("URL: "+ uri.toString());
+                        Utils.showDialogBrowser(getActivity(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+                                Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                                        .buildUpon()
+                                        .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
+                                        .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
+                                        .build();
+                                internetIntent.setData(uri);
+                                getActivity().startActivity(internetIntent);
+                                dismiss();
+                            }
+                        });
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -226,6 +233,14 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                 } else {
                     horizontalProgress.setVisibility(View.VISIBLE);
                     horizontalProgress.setProgress(newProgress);
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                if(Constant.TITLE_LOGOUT.equalsIgnoreCase(title)){
+                    Utils.forceLogout(getActivity());
                 }
             }
         });

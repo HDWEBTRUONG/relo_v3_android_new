@@ -5,17 +5,14 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +50,7 @@ import javax.security.auth.x500.X500Principal;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ui.activity.LoginActivity;
 import jp.relo.cluboff.views.SweetAlertDialog;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -62,6 +60,20 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Utils {
+
+    public static String addTagRedBenefit(String txt){
+        if(txt!=null){
+            return txt.replaceAll("<strong>","<font color='red'>").replaceAll("</strong>","</font>");
+        }else{
+            return "";
+        }
+    }
+
+    public static void forceLogout(Activity context){
+        LoginSharedPreference.getInstance(context).forceLogout();
+        context.startActivity(new Intent(context, LoginActivity.class));
+        context.finish();
+    }
 
     public static String loadSharedPrefs(Context context, String ... prefs) {
         String result ="";
@@ -323,6 +335,20 @@ public class Utils {
             public void onClick(DialogInterface dialog, int which) {
                 android.os.Process.killProcess(android.os.Process.myPid());
                 System.exit(1);
+            }
+        });
+        builder.show();
+    }
+
+    public static void showDialogBrowser(Context context, final DialogInterface.OnClickListener onClickListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.title_browser);
+        builder.setMessage(R.string.content_browser);
+        builder.setPositiveButton(R.string.btn_browser, onClickListener);
+        builder.setNegativeButton(R.string.btn_browser_cacel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
         builder.show();

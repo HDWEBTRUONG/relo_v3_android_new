@@ -85,15 +85,40 @@ public class MemberAuthFragment extends BaseFragment {
             public boolean handleMessage(Message msg) {
                 switch (msg.what){
                     case UPDATE_LAYOUT:
-                        tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today),new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
-                        if(!userID.contains("-")){
-                            userID =new StringBuffer(userID).insert(userID.length()-4, "-").toString();
+                        try {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today),new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
+                                        if(!userID.contains("-")){
+                                            userID =new StringBuffer(userID).insert(userID.length()-4, "-").toString();
+                                        }
+                                        tvMemberID.setText(userID);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            });
+                        } catch (Exception e) {
+                            //e.printStackTrace();
                         }
-                        tvMemberID.setText(userID);
+
                         break;
                     case UPDATE_LAYOUT_ERROR:
-                        svError.setVisibility(View.VISIBLE);
-                        EventBus.getDefault().post(new BlockEvent());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    svError.setVisibility(View.VISIBLE);
+                                    EventBus.getDefault().post(new BlockEvent());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
                         break;
                 }
                 return false;
@@ -115,7 +140,7 @@ public class MemberAuthFragment extends BaseFragment {
                         Node child = divChildren.childNode(i);
                         if (child.nodeName().equals("#comment")) {
                             String valueAuth = child.toString();
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==1){
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==0){
                                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                                 loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                                 loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));

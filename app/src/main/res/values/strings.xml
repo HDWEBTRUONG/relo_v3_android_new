@@ -32,6 +32,7 @@
     <string name="error_pass_empty">パスワードを入力してください</string>
     <string name="error_id_login_empty">ログインID を入力してください。</string>
     <string name="error_mail_empty">メールアドレスを入力してください。</string>
+    <string name="error_one_fileld_empty">ログインに失敗しました。会員IDか、パスワードにあやまりがあります。</string>
     <string name="error_all_empty">会員ID、パスワードを入力してください</string>
 
     <!-- List Coupon -->
@@ -78,6 +79,7 @@
     <string name="title_browser">WEBブラウザでサイトを開きます。</string>
     <string name="content_browser">※WEBブラウザを立ち上げた場合、閲覧していたページは表示されず、サイトのトップにアクセスします。</string>
     <string name="btn_browser">開く</string>
+    <string name="btn_browser_cacel">キャンセル</string>
     <string name="title_dialog_error">エラー</string>
     <string name="tutorial_title">ログインして始めよう</string>
     <string name="string_login">Login</string>
@@ -129,4 +131,5 @@
     <string name="show_guide">Map</string>
     <string name="sub_show_guide">地図</string>
     <string name="string_note">【注意事項】</string>
+    <string name="string_error_login">会員サイトでパスワードを変更した場合、再度ログインが必要です。\n恐れ入りますが、新しいパスワードを入力し、もう一度ログインをお願いいたします。</string>
 </resources>

@@ -72,6 +72,7 @@
                 android:layout_marginRight="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_2dp"
                 android:layout_marginBottom="@dimen/_2dp"
+                android:textColor="@color/red"
                 android:visibility="visible"
                 android:textSize="@dimen/text_size_medium"/>
             <TextView
