@@ -35,6 +35,7 @@ import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
 
@@ -305,28 +306,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
     private void loadUrl() {
         url = Constant.WEBVIEW_URL_AREA_COUPON;
         AreaCouponPost areaCouponPost = new AreaCouponPost();
-        SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
-        String userID = "";
-        if(saveLogin!=null){
-            try {
-                userID = new String(BackAES.encrypt(saveLogin.getUserName(), AESHelper.password, AESHelper.type));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        areaCouponPost.setP_s7(userID);
-        String arg = "";
-        if(saveLogin!=null){
-            String url = "";
-            try {
-                url = new String(BackAES.decrypt(saveLogin.getUrlEncrypt(), AESHelper.password, AESHelper.type));
-                arg = URLEncoder.encode(MessageFormat.format(Constant.TEMPLATE_ARG,url), "utf-8");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        areaCouponPost.setArg(arg);
-
+        areaCouponPost.setP_s7(LoginSharedPreference.getInstance(getActivity()).getUserName().replaceAll("-",""));
         strPost =areaCouponPost.toString();
         AppLog.log(strPost);
         mWebView.postUrl( url, strPost.getBytes());

@@ -140,7 +140,7 @@ public class MemberAuthFragment extends BaseFragment {
                         Node child = divChildren.childNode(i);
                         if (child.nodeName().equals("#comment")) {
                             String valueAuth = child.toString();
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==0){
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==1){
                                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                                 loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                                 loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));

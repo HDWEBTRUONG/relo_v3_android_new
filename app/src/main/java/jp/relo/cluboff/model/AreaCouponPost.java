@@ -10,7 +10,6 @@ import jp.relo.cluboff.util.Constant;
  */
 
 public class AreaCouponPost {
-    private String arg;
     private String p_s1;
     private String p_s6;
     private String p_s7;
@@ -95,19 +94,10 @@ public class AreaCouponPost {
         this.p_s36 = p_s36;
     }
 
-    public String getArg() {
-        return arg;
-    }
-
-    public void setArg(String arg) {
-        this.arg = arg;
-    }
-
     @Override
     public String toString() {
         try {
-            return "arg="+arg+
-                    "&p_s1=" + p_s1 +
+            return "p_s1=" + p_s1 +
                     "&p_s6=" + p_s6 +
                     "&p_s7=" + p_s7+
                     "&p_s22=" + p_s22 +
