@@ -16,5 +16,6 @@
     <dimen name="line_width">@dimen/_0.3dp</dimen>
     <dimen name="row_height">@dimen/_25dp</dimen>
     <dimen name="padding">@dimen/_4dp</dimen>
-    <dimen name="padding_tab">@dimen/_20dp</dimen>
+    <dimen name="padding_tab_v">@dimen/_12dp</dimen>
+    <dimen name="padding_tab_h">@dimen/_18dp</dimen>
 </resources>

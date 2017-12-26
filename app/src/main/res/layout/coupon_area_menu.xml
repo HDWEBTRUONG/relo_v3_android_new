@@ -3,18 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/oceanBlue"
     android:layout_height="wrap_content">
-    <View android:layout_height="1dp" android:layout_width="match_parent" android:background="@color/colorPrimary"/>
+    <View android:layout_height="1dp" android:layout_width="match_parent" android:background="@color/colorFriarGray"/>
     <HorizontalScrollView
         android:id="@+id/svMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:visibility="gone"
-        android:padding="@dimen/_15dp">
+        android:visibility="gone">
         <RadioGroup
             android:id="@+id/rgArea"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:button="@android:color/transparent"
             android:visibility="visible"
             android:orientation="horizontal">
@@ -24,70 +23,116 @@
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
                 android:textColor="@color/color_tab_coupon"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
+                android:textStyle="bold"
                 android:text="@string/area1"/>
             <RadioButton
                 android:id="@+id/rbArea2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/padding_tab"
                 android:button="@android:color/transparent"
                 android:textColor="@color/color_tab_coupon"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
+                android:textStyle="bold"
                 android:text="@string/area2"/>
             <RadioButton
                 android:id="@+id/rbArea3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/color_tab_coupon"
                 android:button="@android:color/transparent"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:textStyle="bold"
+                android:textColor="@color/color_tab_coupon"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area3"/>
             <RadioButton
                 android:id="@+id/rbArea4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area4"/>
             <RadioButton
                 android:id="@+id/rbArea5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area5"/>
             <RadioButton
                 android:id="@+id/rbArea6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area6"/>
             <RadioButton
                 android:id="@+id/rbArea7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area7"/>
             <RadioButton
                 android:id="@+id/rbArea8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area8"/>
             <RadioButton
                 android:id="@+id/rbArea9"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@android:color/transparent"
+                android:textStyle="bold"
                 android:textColor="@color/color_tab_coupon"
-                android:layout_marginLeft="@dimen/padding_tab"
+                android:paddingLeft="@dimen/padding_tab_h"
+                android:paddingRight="@dimen/padding_tab_h"
+                android:paddingTop="@dimen/padding_tab_v"
+                android:paddingBottom="@dimen/padding_tab_v"
+                android:background="@drawable/color_bg_tab_coupon"
                 android:text="@string/area9"/>
         </RadioGroup>
 

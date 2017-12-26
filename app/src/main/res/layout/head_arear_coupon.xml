@@ -3,30 +3,38 @@
     android:id="@+id/rlViewAreaMap"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/_10dp"
+    android:background="@color/bg_list"
     android:orientation="vertical">
-   <ImageView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentLeft="true"
-       android:layout_centerVertical="true"
-       android:scaleType="fitCenter"
-       android:src="@drawable/tag_osusume"/>
-    <ImageView
-        android:id="@+id/ivRight"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/_10dp"
-        android:src="@drawable/btn_next_on"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/ivRight"
-        android:layout_marginRight="@dimen/_10dp"
-        android:textSize="@dimen/text_size_large"
-        android:textColor="@color/azureTwo"
-        android:text="@string/string_show_area"/>
+        android:layout_marginTop="@dimen/_15dp"
+        android:layout_marginBottom="@dimen/_5dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/tag_osusume"/>
+        <ImageView
+            android:id="@+id/ivRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_5dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/btn_next_on"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ivRight"
+            android:layout_marginRight="@dimen/_5dp"
+            android:textSize="@dimen/text_size_medium14"
+            android:textStyle="bold"
+            android:textColor="@color/azureTwo"
+            android:text="@string/string_show_area"/>
+    </RelativeLayout>
 </RelativeLayout>

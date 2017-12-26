@@ -34,7 +34,7 @@ public class TableCategory {
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 
-                if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
+                if (cursor!=null && !cursor.isClosed() && cursor.getCount()>0 && cursor.moveToFirst()) {
                     do {
                         CatagoryDTO catagoryDTO = new CatagoryDTO();
                         catagoryDTO.setCatagoryID(cursor.getString(0));
@@ -42,6 +42,7 @@ public class TableCategory {
                         datas.add(catagoryDTO);
                     } while (cursor.moveToNext());
                 }
+                cursor.close();
                 db.close();
                 AppLog.log("Area: "+ area);
                 if(ConstanArea.WHOLEJAPAN.equalsIgnoreCase(area)){

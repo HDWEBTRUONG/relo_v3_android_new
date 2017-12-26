@@ -46,7 +46,7 @@
     <color name="pinkishGrey">#BEBEBE</color>
     <color name="peacockBlueTwo">#0044BA</color>
     <color name="pinkishGreyTwo">#CCCCCC</color>
-    <color name="color_background_category">#EBEBF1</color>
+    <color name="color_background_category">#E5F7FE</color>
 
     <!--color category-->
     <color name="color_category_32">#FEC108</color>
@@ -65,5 +65,6 @@
     <color name="bg_detail_off_header">#0090E4</color>
     <color name="text_color_tutorial">#8C431D</color>
     <color name="red">#FF0000</color>
+    <color name="bg_list">#F1F1F1</color>
 
 </resources>
