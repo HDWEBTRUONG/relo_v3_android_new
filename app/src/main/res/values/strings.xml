@@ -102,7 +102,7 @@
     <string name="area9">沖縄</string>
     <string name="member_auth_note_show_page">この画面をご提示ください</string>
     <string name="member_auth_note_en">Please show this page to the service provider.</string>
-    <string name="member_auth_note_date">有効期限／Varidity</string>
+    <string name="member_auth_note_date">有効期限／Validity</string>
     <string name="member_auth_note_only_today">※本日限り有効\t\t {0}</string>
     <string name="member_auth_note_only_today_en">valid for the date shown only</string>
     <string name="member_auth_note_memberid">会員ID/MEMBER ID</string>
@@ -132,4 +132,5 @@
     <string name="sub_show_guide">地図</string>
     <string name="string_note">【注意事項】</string>
     <string name="string_error_login">会員サイトでパスワードを変更した場合、再度ログインが必要です。\n恐れ入りますが、新しいパスワードを入力し、もう一度ログインをお願いいたします。</string>
+    <string name="detail_coupon_member_lable">会員特典 / Member\'s Privilege</string>
 </resources>

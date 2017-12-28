@@ -33,7 +33,7 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("/api/v1/log")
+    @POST("/log/create-logs.php")
     Call<ResponseBody> writeLog(@Field("request_no") String request_no, @Field("member_id") String member_id);
 
 

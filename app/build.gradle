@@ -42,7 +42,7 @@ android {
             buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.club-off.com/prefukuri/cyuugokuShikoku.xml"'
             buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
             buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
-            buildConfigField "String", "BASE_URL_LOG", '"http://relo.lilula.dev.bravesoft.vn"'
+            buildConfigField "String", "BASE_URL_LOG", '"http://lilula.dev.bravesoft.vn"'
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
         }
         relo_prod {
@@ -69,7 +69,7 @@ android {
             buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.club-off.com/prefukuri/cyuugokuShikoku.xml"'
             buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
             buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
-            buildConfigField "String", "BASE_URL_LOG", '"http://relo.lilula.dev.bravesoft.vn"'
+            buildConfigField "String", "BASE_URL_LOG", '"http://lilula.dev.bravesoft.vn"'
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
         }
     }

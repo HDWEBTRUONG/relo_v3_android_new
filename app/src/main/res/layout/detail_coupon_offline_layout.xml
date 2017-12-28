@@ -76,15 +76,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/bg_detail_off"
-                    android:paddingTop="@dimen/_10dp"
-                    android:paddingBottom="@dimen/_10dp"
-                    android:paddingLeft="@dimen/_5dp"
-                    android:paddingRight="@dimen/_5dp">
+                    android:padding="@dimen/_5dp">
                     <TextView
                         android:id="@+id/tvCouponName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="@dimen/text_size_medium14"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bg_detail_off_member"
+                    android:layout_margin="@dimen/_5dp"
+                    android:padding="@dimen/_5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_medium14"
+                        android:textColor="@color/white"
+                        android:text="@string/detail_coupon_member_lable"
                         android:textStyle="bold"/>
                 </LinearLayout>
                 <TextView
@@ -95,7 +106,7 @@
                     android:layout_marginLeft="@dimen/_5dp"
                     android:layout_marginRight="@dimen/_5dp"
                     android:layout_marginBottom="@dimen/_10dp"
-                    android:textSize="@dimen/text_size_small"/>
+                    android:textSize="@dimen/text_size_medium14"/>
                 <TextView
                     android:id="@+id/tvNote"
                     android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/oceanBlue"
     android:layout_height="wrap_content">
-    <View android:layout_height="1dp" android:layout_width="match_parent" android:background="@color/colorFriarGray"/>
+    <View android:layout_height="1dp" android:layout_width="match_parent" android:background="@color/line"/>
     <HorizontalScrollView
         android:id="@+id/svMenu"
         android:layout_width="match_parent"

@@ -122,26 +122,6 @@ public class MainTabActivity extends BaseActivityToolbar {
                 EventBus.getDefault().post(new ReloadEvent(true));
             }
         }
-        /*llMain.setVisibility(View.GONE);
-        new CheckNewAppVersion(this).setOnTaskCompleteListener(new CheckNewAppVersion.ITaskComplete() {
-            @Override
-            public void onTaskComplete(final CheckNewAppVersion.Result result) {
-                //Checks if there is a new version available on Google Play Store.
-                if(result.hasNewVersion()){
-                    Utils.showDialogUpdate(MainTabActivity.this, R.string.title_update,
-                            getString(R.string.message_update).replace("{0}",result.getNewVersionCode()),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    result.openUpdateLink();
-                                }
-                            });
-                }else{
-                    llMain.setVisibility(View.VISIBLE);
-                    setupView();
-                }
-            }
-        }).execute();*/
     }
     void selectPage(int pageIndex){
         mTabHost.setCurrentTab(pageIndex);
@@ -251,13 +231,9 @@ public class MainTabActivity extends BaseActivityToolbar {
                 Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
                 postMemberWebViewFragment.setArguments(bundle);
                 openDialogFragment(postMemberWebViewFragment);
+
             }
         });
-
-        /*mTabHost.addTab(setIndicator(mTabHost.newTabSpec(PostMemberWebViewFragment.class.getSimpleName()),
-                R.drawable.tab_area, getString(R.string.title_membership)), PostMemberWebViewFragment.class, createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON));*/
-
-
 
         mTabHost.getTabWidget().setDividerDrawable(null);
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {

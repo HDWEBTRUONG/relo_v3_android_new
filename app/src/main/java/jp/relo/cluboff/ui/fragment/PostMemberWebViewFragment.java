@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.MemberPost;
@@ -39,11 +40,14 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     WebView mWebView;
     private int checkWebview;
     boolean isLoadding = false;
-    boolean isVisibleToUser;
     ProgressBar horizontalProgress;
+    private static PostMemberWebViewFragment postMemberWebViewFragment;
 
     public static PostMemberWebViewFragment newInstance() {
-        return new PostMemberWebViewFragment();
+        if(postMemberWebViewFragment==null){
+            postMemberWebViewFragment = new PostMemberWebViewFragment();
+        }
+        return postMemberWebViewFragment;
     }
 
     @Override
@@ -250,27 +254,15 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     private void loadUrl(){
         String url = Constant.TEMPLATE_URL_MEMBER;
         MemberPost memberPost = new MemberPost();
-        SaveLogin saveLogin = SaveLogin.getInstance(getActivity());
-        if(saveLogin!=null){
-            LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-            String  userID = loginSharedPreference.getUserName();
-            String  pass = loginSharedPreference.getPass();
-            memberPost.setU(userID);
-            memberPost.setCOA_APP(pass);
-        }
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        String  userID = loginSharedPreference.getUserName();
+        String  pass = loginSharedPreference.getPass();
+        memberPost.setU(userID);
+        memberPost.setCOA_APP(pass);
         mWebView.postUrl( url, memberPost.toString().getBytes());
+
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        this.isVisibleToUser = isVisibleToUser;
-        if(isVisibleToUser){
-            if(isLoadding){
-                showLoading(getActivity());
-            }
-        }
-    }
 
     @Override
     public void onDestroyView() {
