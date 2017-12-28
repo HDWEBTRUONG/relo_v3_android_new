@@ -54,11 +54,17 @@
             android:divider="@color/colorIron"
             android:dividerHeight="@dimen/_0.5dp" />
     </android.support.v4.widget.DrawerLayout>
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container_member_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <!--<LinearLayout
         android:id="@+id/rlMemberWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical"
         android:background="@color/red">
         <include layout="@layout/toolbar"/>
@@ -77,6 +83,6 @@
             android:layout_weight="1">
         </WebView>
         <include layout="@layout/bottombar"/>
-    </LinearLayout>
+    </LinearLayout>-->
 </FrameLayout>
 

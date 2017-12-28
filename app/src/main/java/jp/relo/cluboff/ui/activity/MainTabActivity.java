@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
+import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
@@ -39,8 +41,10 @@ import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
+import jp.relo.cluboff.ui.fragment.PostMemberFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
+import jp.relo.cluboff.util.AnimationUtil;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
@@ -52,6 +56,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     ListView mDrawerListMenu;
     //main AppVisor processor
     private AppVisorPush appVisorPush;
+    private FrameLayout memberSiteFragmentContainer;
 
     //Handler handler;
     public static final int INDEX_AREA=0;
@@ -95,6 +100,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onCreate(savedInstanceState);
         pushProcess();
         setupView();
+        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
     }
 
     @Override
@@ -156,6 +162,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         llMember = findViewById(R.id.llMember);
         llMain = findViewById(R.id.llMain);
         llTab = findViewById(R.id.llTab);
+        memberSiteFragmentContainer = (FrameLayout) findViewById(R.id.container_member_fragment);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
@@ -227,10 +234,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         llMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostMemberWebViewFragment postMemberWebViewFragment = PostMemberWebViewFragment.newInstance();
-                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
-                postMemberWebViewFragment.setArguments(bundle);
-                openDialogFragment(postMemberWebViewFragment);
+//                PostMemberWebViewFragment postMemberWebViewFragment = PostMemberWebViewFragment.newInstance();
+//                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
+//                postMemberWebViewFragment.setArguments(bundle);
+//                openDialogFragment(postMemberWebViewFragment);
+                memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+//                AnimationUtil.slideToTop(memberSiteFragmentContainer);
 
             }
         });
@@ -296,5 +305,8 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onNewIntent(intent);
         //process for PushIntent owner
         setIntent(intent);
+    }
+    public void showFragmentMemberSite(){
+        memberSiteFragmentContainer.setVisibility(View.VISIBLE);
     }
 }
