@@ -51,7 +51,7 @@ public class CouponListAreaFragment extends CouponListFragment {
             public void onClick(View v) {
                 if(getActivity() instanceof MainTabActivity){
 //                    PostAreaWebViewFragment postAreaWebViewFragment = new PostAreaWebViewFragment();
-                    ((MainTabActivity) getActivity()).showFragmentMemberSite();
+                    ((MainTabActivity) getActivity()).showFragmentMapSite();
                 }
             }
         });

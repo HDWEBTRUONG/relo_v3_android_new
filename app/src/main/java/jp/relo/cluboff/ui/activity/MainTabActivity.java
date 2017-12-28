@@ -41,6 +41,8 @@ import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
 import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
+import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
+import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment2;
 import jp.relo.cluboff.ui.fragment.PostMemberFragment;
 import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
@@ -57,6 +59,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     //main AppVisor processor
     private AppVisorPush appVisorPush;
     private FrameLayout memberSiteFragmentContainer;
+    private FrameLayout mapSiteFragmentContainer;
 
     //Handler handler;
     public static final int INDEX_AREA=0;
@@ -101,6 +104,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         pushProcess();
         setupView();
         replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
+        replaceFragment(PostAreaWebViewFragment2.newInstance(),R.id.container_map_fragment,"MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
     @Override
@@ -163,6 +167,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         llMain = findViewById(R.id.llMain);
         llTab = findViewById(R.id.llTab);
         memberSiteFragmentContainer = (FrameLayout) findViewById(R.id.container_member_fragment);
+        mapSiteFragmentContainer = (FrameLayout) findViewById(R.id.container_map_fragment);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
@@ -306,7 +311,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         //process for PushIntent owner
         setIntent(intent);
     }
-    public void showFragmentMemberSite(){
-        memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+    public void showFragmentMapSite(){
+        mapSiteFragmentContainer.setVisibility(View.VISIBLE);
     }
 }

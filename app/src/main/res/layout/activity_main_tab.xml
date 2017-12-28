@@ -54,6 +54,13 @@
             android:divider="@color/colorIron"
             android:dividerHeight="@dimen/_0.5dp" />
     </android.support.v4.widget.DrawerLayout>
+
+    <FrameLayout
+        android:id="@+id/container_map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/container_member_fragment"
         android:layout_width="match_parent"
@@ -64,7 +71,7 @@
         android:id="@+id/rlMemberWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="visible"map
         android:orientation="vertical"
         android:background="@color/red">
         <include layout="@layout/toolbar"/>
