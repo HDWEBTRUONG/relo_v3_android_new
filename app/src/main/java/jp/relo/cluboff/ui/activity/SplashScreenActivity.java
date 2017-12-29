@@ -62,7 +62,8 @@ public class SplashScreenActivity extends BaseActivity {
                 R.layout.splash_1_layout,
                 R.layout.splash_2_layout,
                 R.layout.splash_3_layout,
-                R.layout.splash_5_layout};
+                R.layout.splash_5_layout,
+                R.layout.splash_1_layout};
         addBottomDots(0);
         myViewPagerAdapter = new SplashScreenActivity.MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
@@ -95,10 +96,14 @@ public class SplashScreenActivity extends BaseActivity {
         public void onPageScrollStateChanged(int state) {
             int lastIdx = myViewPagerAdapter.getCount() - 1;
             int curItem = viewPager.getCurrentItem();
-            if(curItem==lastIdx  && state==1){
+            /*if(curItem==lastIdx  && state==1){
                 lastPageChange = true;
             }else  {
                 lastPageChange = false;
+            }*/
+
+            if (curItem == lastIdx){
+                goNextScreen();
             }
         }
     };
@@ -106,7 +111,7 @@ public class SplashScreenActivity extends BaseActivity {
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
         dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
+        for (int i = 0; i < dots.length - 1; i++) {
             dots[i] = new TextView(this);
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -157,9 +162,12 @@ public class SplashScreenActivity extends BaseActivity {
                 case 3:
                     Glide.with(SplashScreenActivity.this).load(R.drawable.wt_4).into(ivSpash);
                     break;
+                case 4 :
+                    Glide.with(SplashScreenActivity.this).load(R.color.white).into(ivSpash);
+                    break;
             }
 
-            if(position==layouts.length-1){
+            if(position==layouts.length-2){
                 btnCloseSplash = (Button) view.findViewById(R.id.btnCloseSplash);
                 if(btnCloseSplash!=null){
                     btnCloseSplash.setOnClickListener(new View.OnClickListener() {
