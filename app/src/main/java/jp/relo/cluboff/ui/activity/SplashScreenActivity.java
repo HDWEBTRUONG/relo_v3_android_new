@@ -103,6 +103,7 @@ public class SplashScreenActivity extends BaseActivity {
             }*/
 
             if (curItem == lastIdx){
+                LoginSharedPreference.getInstance(SplashScreenActivity.this).put(Constant.TAG_IS_FIRST, true);
                 goNextScreen();
             }
         }
