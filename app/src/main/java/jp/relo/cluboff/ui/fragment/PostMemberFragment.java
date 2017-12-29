@@ -105,6 +105,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 imvBackBottomBar.setVisibility(View.VISIBLE);
                 imvForwardBottomBar.setVisibility(View.VISIBLE);
 
+
                 //Test
                 imvBrowserBottomBar.setVisibility(View.VISIBLE);
                 llBrowser.setEnabled(true);
