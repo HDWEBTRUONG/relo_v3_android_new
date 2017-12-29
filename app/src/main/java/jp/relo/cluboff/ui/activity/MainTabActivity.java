@@ -311,7 +311,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         //process for PushIntent owner
         setIntent(intent);
     }
-    public void showFragmentMapSite(){
-        mapSiteFragmentContainer.setVisibility(View.VISIBLE);
+    public void resetCurrentTab(){
+        mTabHost.setCurrentTab(0);
     }
 }
