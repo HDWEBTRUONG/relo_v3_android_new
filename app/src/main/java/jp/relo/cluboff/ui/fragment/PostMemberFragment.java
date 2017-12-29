@@ -39,7 +39,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private int checkWebview;
     private FrameLayout fragmentContainer;
     private ProgressBar horizontalProgress;
-    private boolean isReloadUrl;
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -146,7 +145,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                                 internetIntent.setData(uri);
                                 getActivity().startActivity(internetIntent);
 //                                dismiss();
-                                isReloadUrl = true;
                                 fragmentContainer.setVisibility(View.GONE);
                             }
                         });
@@ -281,9 +279,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onResume() {
         super.onResume();
-        if (isReloadUrl){
-            loadUrl();
-            isReloadUrl = false;
-        }
+        loadUrl();
     }
 }
