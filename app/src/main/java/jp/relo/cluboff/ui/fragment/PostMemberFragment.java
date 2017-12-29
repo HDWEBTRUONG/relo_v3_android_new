@@ -24,6 +24,7 @@ import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.BaseFragmentToolbarBottombar;
+import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
@@ -280,5 +281,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     public void onResume() {
         super.onResume();
         loadUrl();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (fragmentContainer.getVisibility() == View.VISIBLE){
+            fragmentContainer.setVisibility(View.GONE);
+            ((MainTabActivity)getActivity()).resetCurrentTab();
+        }
     }
 }
