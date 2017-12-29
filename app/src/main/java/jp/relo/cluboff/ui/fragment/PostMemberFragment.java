@@ -37,9 +37,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
     private WebView mWebView;
     private int checkWebview;
-    private boolean isLoadding = false;
     private FrameLayout fragmentContainer;
-    ProgressBar horizontalProgress;
+    private ProgressBar horizontalProgress;
+    private boolean isReloadUrl;
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -146,6 +146,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                                 internetIntent.setData(uri);
                                 getActivity().startActivity(internetIntent);
 //                                dismiss();
+                                isReloadUrl = true;
                                 fragmentContainer.setVisibility(View.GONE);
                             }
                         });
@@ -204,13 +205,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                isLoadding = true;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                isLoadding = false;
                 if(isVisible()){
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
@@ -277,5 +276,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         super.onStop();
 //        EventBus.getDefault().unregister(this);
         mWebView.stopLoading();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isReloadUrl){
+            loadUrl();
+            isReloadUrl = false;
+        }
     }
 }
