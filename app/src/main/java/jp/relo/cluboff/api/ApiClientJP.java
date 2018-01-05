@@ -16,6 +16,7 @@ import javax.net.ssl.X509TrustManager;
 
 import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -83,7 +84,7 @@ public class ApiClientJP {
             });
 
             OkHttpClient okHttpClient = builder
-                    //.addNetworkInterceptor(new HeaderInterceptor())
+                    .addNetworkInterceptor(new UserAgentInterceptor(Utils.getDefaultUserAgent()))
                     .addInterceptor(interceptor)
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)

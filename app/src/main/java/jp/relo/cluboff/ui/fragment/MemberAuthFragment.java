@@ -2,6 +2,7 @@ package jp.relo.cluboff.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,10 +24,12 @@ import java.util.Calendar;
 
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.model.BlockEvent;
+import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import okhttp3.ResponseBody;
@@ -44,10 +47,11 @@ public class MemberAuthFragment extends BaseFragment {
     TextView tvPhone;
     View svError;
     String userID;
+    String pass;
     Handler handler;
 
-    public static final int UPDATE_LAYOUT=1;
-    public static final int UPDATE_LAYOUT_ERROR=2;
+    public static final int UPDATE_LAYOUT = 1;
+    public static final int UPDATE_LAYOUT_ERROR = 2;
     public static final String TAG = MemberAuthFragment.class.getSimpleName();
 
     @Override
@@ -60,7 +64,7 @@ public class MemberAuthFragment extends BaseFragment {
         tvValid = (TextView) root.findViewById(R.id.tvValid);
         tvMemberID = (TextView) root.findViewById(R.id.tvMemberID);
         tvPhone = (TextView) root.findViewById(R.id.tvPhone);
-        svError =  root.findViewById(R.id.svError);
+        svError = root.findViewById(R.id.svError);
 
     }
 
@@ -75,7 +79,7 @@ public class MemberAuthFragment extends BaseFragment {
         tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+tvPhone.getText().toString()));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tvPhone.getText().toString()));
                 startActivity(intent);
             }
         });
@@ -83,16 +87,16 @@ public class MemberAuthFragment extends BaseFragment {
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                switch (msg.what){
+                switch (msg.what) {
                     case UPDATE_LAYOUT:
                         try {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today),new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
-                                        if(!userID.contains("-")){
-                                            userID =new StringBuffer(userID).insert(userID.length()-4, "-").toString();
+                                        tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today), new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
+                                        if (!userID.contains("-")) {
+                                            userID = new StringBuffer(userID).insert(userID.length() - 4, "-").toString();
                                         }
                                         tvMemberID.setText(userID);
                                     } catch (Exception e) {
@@ -128,7 +132,7 @@ public class MemberAuthFragment extends BaseFragment {
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
         LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
         userID = loginSharedPreference.getUserName();
-        String pass = loginSharedPreference.getPass();
+        pass = loginSharedPreference.getPass();
         apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -140,7 +144,8 @@ public class MemberAuthFragment extends BaseFragment {
                         Node child = divChildren.childNode(i);
                         if (child.nodeName().equals("#comment")) {
                             String valueAuth = child.toString();
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==0){
+                            int valueHandleLogin = BuildConfig.DEBUG? 0:1;
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==valueHandleLogin){
                                 LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
                                 loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                                 loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
@@ -166,5 +171,6 @@ public class MemberAuthFragment extends BaseFragment {
                 handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
             }
         });
+
     }
 }

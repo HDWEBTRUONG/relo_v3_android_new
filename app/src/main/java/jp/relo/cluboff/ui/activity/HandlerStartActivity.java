@@ -35,6 +35,7 @@ public class HandlerStartActivity extends BaseActivity {
     MyDatabaseHelper sqLiteOpenHelper;
     Handler handler;
     public static final int GOTOSCREEN =1;
+    public static final int SPLASH_TIME_OUT = 2000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +60,16 @@ public class HandlerStartActivity extends BaseActivity {
                 return false;
             }
         });
-        checkUpdateData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(Utils.isNetworkAvailable(HandlerStartActivity.this)){
+                    checkUpdateData();
+                }else{
+                    handler.sendEmptyMessage(GOTOSCREEN);
+                }
+            }
+        }, SPLASH_TIME_OUT);
     }
 
     @Override
