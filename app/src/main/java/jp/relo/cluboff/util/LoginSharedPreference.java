@@ -31,7 +31,6 @@ public class LoginSharedPreference {
         }
         return sharedPreference;
     }
-
     public LoginSharedPreference(Context context) {
         this.context = context;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

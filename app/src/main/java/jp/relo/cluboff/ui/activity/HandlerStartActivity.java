@@ -2,10 +2,13 @@ package jp.relo.cluboff.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+
+import com.google.gson.Gson;
 
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
@@ -19,6 +22,7 @@ import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.Info;
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.LoginRequest;
+import jp.relo.cluboff.model.ValueLoginOld;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
@@ -38,24 +42,26 @@ public class HandlerStartActivity extends BaseActivity {
     public static final int SPLASH_TIME_OUT = 2000;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onResume() {
+        super.onResume();
         final boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what==GOTOSCREEN){
-                    if(notFirst){
-                        if(LoginSharedPreference.getInstance(HandlerStartActivity.this).get(ConstansSharedPerence.TAG_LOGIN_SAVE, Info.class) !=null){
-                            goMainScreen();
-                        }else{
-                            goNextScreen();
-                        }
-                        //autoLogin();
+                    if(!StringUtil.isEmpty(LoginSharedPreference.getInstance(HandlerStartActivity.this).getUserName())&&
+                            !StringUtil.isEmpty(LoginSharedPreference.getInstance(HandlerStartActivity.this).getPass())){
+                        goMainScreen();
                     }else{
-                        goSplashScreen();
+                        if(notFirst){
+                            goNextScreen();
+                            //autoLogin();
+                        }else{
+                            goSplashScreen();
+                        }
                     }
+
                 }
                 return false;
             }
@@ -66,7 +72,8 @@ public class HandlerStartActivity extends BaseActivity {
                 if(Utils.isNetworkAvailable(HandlerStartActivity.this)){
                     checkUpdateData();
                 }else{
-                    handler.sendEmptyMessage(GOTOSCREEN);
+                    //handler.sendEmptyMessage(GOTOSCREEN);
+                    new LoadValueLoginTask().execute("titanium");
                 }
             }
         }, SPLASH_TIME_OUT);
@@ -123,9 +130,31 @@ public class HandlerStartActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                handler.sendEmptyMessage(GOTOSCREEN);
+                //handler.sendEmptyMessage(GOTOSCREEN);
+                new LoadValueLoginTask().execute("titanium");
             }
         }
         );
+    }
+
+    private class LoadValueLoginTask extends AsyncTask<String, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(String... params) {
+            String result =  Utils.loadSharedPrefs(HandlerStartActivity.this, params[0]);
+            if(StringUtil.isEmpty(LoginSharedPreference.getInstance(HandlerStartActivity.this).getUserName())){
+                ValueLoginOld loginOld = new Gson().fromJson(result, ValueLoginOld.class);
+                if(loginOld!=null && !StringUtil.isEmpty(loginOld.getPassword()) && !StringUtil.isEmpty(loginOld.getMember_id())){
+                    LoginSharedPreference.getInstance(HandlerStartActivity.this).setUserName(loginOld.getMember_id());
+                    LoginSharedPreference.getInstance(HandlerStartActivity.this).setPass(loginOld.getPassword());
+                }
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            handler.sendEmptyMessage(GOTOSCREEN);
+
+        }
     }
 }
