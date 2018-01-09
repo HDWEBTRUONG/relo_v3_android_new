@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -297,8 +298,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
-        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
-        appVisorPush.synchronizeUserProperties();
+        try{
+            this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
+            appVisorPush.synchronizeUserProperties();
+        }catch (Exception ex){
+            Log.e("BSV", ex.toString());
+        }
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
         AppLog.log("###################################");
