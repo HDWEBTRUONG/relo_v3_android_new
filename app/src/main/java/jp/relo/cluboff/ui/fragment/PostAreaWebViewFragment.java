@@ -14,30 +14,22 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.AreaCouponPost;
 import jp.relo.cluboff.model.MessageEvent;
-import jp.relo.cluboff.model.SaveLogin;
-import jp.relo.cluboff.services.MyAppVisorPushIntentService;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
-import jp.relo.cluboff.ui.BaseFragmentBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
-import jp.relo.cluboff.util.ase.AESHelper;
-import jp.relo.cluboff.util.ase.BackAES;
+import jp.relo.cluboff.views.MyWebview;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -45,7 +37,7 @@ import jp.relo.cluboff.util.ase.BackAES;
 
 public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar {
 
-    WebView mWebView;
+    MyWebview mWebView;
     private String url;
     private String strPost;
     public static final int MULTIPLE_PERMISSIONS = 10;
@@ -77,7 +69,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
 
 
 
-        mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
 
@@ -171,18 +163,6 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
 
 
     private void setupWebView() {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        //Disable cache Webview
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

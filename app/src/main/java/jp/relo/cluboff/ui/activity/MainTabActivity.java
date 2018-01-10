@@ -1,8 +1,6 @@
 package jp.relo.cluboff.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.MessageFormat;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.vansuita.library.CheckNewAppVersion;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -27,27 +23,17 @@ import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.MenuListAdapter;
-import jp.relo.cluboff.api.ApiClient;
-import jp.relo.cluboff.api.ApiInterface;
-import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.model.BlockEvent;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
-import jp.relo.cluboff.model.SaveLogin;
-import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.ui.BaseActivityToolbar;
 import jp.relo.cluboff.ui.fragment.CouponListAreaFragment;
 import jp.relo.cluboff.ui.fragment.CouponListFragment;
-import jp.relo.cluboff.ui.fragment.HowToDialogFragment;
 import jp.relo.cluboff.ui.fragment.MemberAuthFragment;
-import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment;
 import jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment2;
 import jp.relo.cluboff.ui.fragment.PostMemberFragment;
-import jp.relo.cluboff.ui.fragment.PostMemberWebViewFragment;
 import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
-import jp.relo.cluboff.util.AnimationUtil;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
@@ -289,7 +275,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
-        SaveLogin saveLogin = SaveLogin.getInstance(this);
 
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
@@ -299,7 +284,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         this.appVisorPush.trackPushWithActivity(this);
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
         try{
-            this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
+            this.appVisorPush.setUserPropertyWithGroup(LoginSharedPreference.getInstance(this).getUserName(),AppVisorPush.UserPropertyGroup1);
             appVisorPush.synchronizeUserProperties();
         }catch (Exception ex){
             Log.e("BSV", ex.toString());

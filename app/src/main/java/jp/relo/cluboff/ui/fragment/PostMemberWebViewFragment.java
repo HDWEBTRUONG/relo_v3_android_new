@@ -11,25 +11,23 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
-import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.views.MyWebview;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -37,7 +35,7 @@ import jp.relo.cluboff.util.Utils;
 
 public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottombar {
 
-    WebView mWebView;
+    MyWebview mWebView;
     private int checkWebview;
     boolean isLoadding = false;
     ProgressBar horizontalProgress;
@@ -69,7 +67,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
         });
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
-        mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
     }
@@ -179,18 +177,6 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
     
 
     private void setupWebView() {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        //Disable cache Webview
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

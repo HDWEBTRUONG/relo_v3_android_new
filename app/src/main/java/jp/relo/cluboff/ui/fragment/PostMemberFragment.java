@@ -29,6 +29,7 @@ import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.views.MyWebview;
 
 /**
  * Created by tqk666 on 12/28/17.
@@ -36,7 +37,7 @@ import jp.relo.cluboff.util.Utils;
 
 public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
-    private WebView mWebView;
+    private MyWebview mWebView;
     private int checkWebview;
     private FrameLayout fragmentContainer;
     private ProgressBar horizontalProgress;
@@ -69,7 +70,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         });
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
-        mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         fragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_member_fragment);
         setupWebView();
@@ -189,18 +190,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     }
 
     private void setupWebView() {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        //Disable cache Webview
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

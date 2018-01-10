@@ -35,13 +35,14 @@ import jp.relo.cluboff.ui.BaseDialogFragmentToolbar;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.views.MyWebview;
 
 /**
  * Created by tonkhanh on 6/8/17.
  */
 
 public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
-    WebView mWebView;
+    MyWebview mWebView;
     ProgressBar horizontalProgress;
     String subTitle="";
 
@@ -58,7 +59,7 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
 
     @Override
     protected void init(View view) {
-        mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
     }
 
@@ -157,20 +158,6 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
     }
 
     private void setupWebView(String url) {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-        mWebView.clearHistory();
-        mWebView.clearCache(true);
-        mWebView.clearFormData();
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -187,15 +174,6 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
                 llForward.setEnabled(mWebView.canGoForward());
 
             }
-            /*@SuppressWarnings("deprecation")
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            }
-
-            @Override
-            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-                super.onReceivedSslError(view, handler, error);
-            }*/
         });
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override

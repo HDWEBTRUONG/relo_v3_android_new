@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        myconfig {
+            keyAlias 'memberapp-key'
+            keyPassword 'design0011design0011'
+            storeFile file('/Users/admin/Documents/RELO/Doc/KeyStore/memberapp-key.keystore')
+            storePassword 'design0011design0011'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -15,6 +23,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myconfig
         }
     }
     productFlavors {
@@ -73,7 +82,6 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
         }
     }
-
     lintOptions {
         disable 'InvalidPackage'
     }

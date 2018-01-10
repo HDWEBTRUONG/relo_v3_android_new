@@ -6,14 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.List;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.model.SaveLogin;
 import jp.relo.cluboff.util.Constant;
+import jp.relo.cluboff.util.LoginSharedPreference;
 
 /**
  * Created by tonkhanh on 7/21/17.
@@ -84,7 +85,6 @@ public class PushvisorHandlerActivity extends Activity {
     //handle message from PushVisor
     public void pushProcess() {
         this.appVisorPush = AppVisorPush.sharedInstance();
-        SaveLogin saveLogin = SaveLogin.getInstance(this);
 
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
@@ -93,8 +93,12 @@ public class PushvisorHandlerActivity extends Activity {
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
-        this.appVisorPush.setUserPropertyWithGroup(saveLogin.getUserName(),AppVisorPush.UserPropertyGroup1);
-        appVisorPush.synchronizeUserProperties();
+        try{
+            this.appVisorPush.setUserPropertyWithGroup(LoginSharedPreference.getInstance(this).getUserName(),AppVisorPush.UserPropertyGroup1);
+            appVisorPush.synchronizeUserProperties();
+        }catch (Exception ex){
+            Log.e("BSV", ex.toString());
+        }
 
         String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
         AppLog.log("###################################");

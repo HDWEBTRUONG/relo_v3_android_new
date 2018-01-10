@@ -36,6 +36,7 @@ import jp.relo.cluboff.util.IControlBottom;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import jp.relo.cluboff.views.MyWebview;
 
 /**
  * Created by tonkhanh on 5/18/17.
@@ -43,7 +44,7 @@ import jp.relo.cluboff.util.ase.BackAES;
 
 public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottombar {
 
-    WebView mWebView;
+    MyWebview mWebView;
     private String url;
     private String kaiinno = "";
     private String shgrid = "";
@@ -77,7 +78,7 @@ public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottom
             senicode = bundle.getString(Constant.TAG_SENICODE);
         }
         shgrid = bundle.getString(Constant.TAG_SHGRID);
-        mWebView = (WebView) view.findViewById(R.id.wvCoupon);
+        mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         setupWebView();
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_DETAIL_SCREEN);
@@ -165,17 +166,6 @@ public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottom
 
 
     private void setupWebView() {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        //Disable cache Webview
-        webSettings.setAppCacheEnabled(false);
-
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
