@@ -26,11 +26,14 @@ import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.CouponListAdapter;
+import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.database.MyDatabaseHelper;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
+import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.model.XMLUpdate;
+import jp.relo.cluboff.ui.activity.HandlerStartActivity;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.ConstanArea;
 import jp.relo.cluboff.util.Constant;
@@ -157,16 +160,40 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
         if(!isArea){
             areaName = ConstanArea.WHOLEJAPAN;
-            if(listCoupon!= null && listCoupon.size()>0){
-                if(categoryList==null || categoryList.isEmpty()){
-                    mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
-                }else{
-                    mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
-                }
-                mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
-            }else{
-                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
-            }
+
+            //check update xml data
+            addSubscription(apiInterfaceLog.checkVersion(),new MyCallBack<VersionReponse>(){
+                        @Override
+                        public void onSuccess(VersionReponse model) {
+                            boolean isUpdate = Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getActivity()).getVersion();
+                            if(isUpdate){
+                                ReloApp.setVersionApp(Utils.convertIntVersion(model.getVersion()));
+                                ReloApp.setIsUpdateData(isUpdate);
+                                myDatabaseHelper.clearData();
+                                listCoupon.clear();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int msg) {
+                            AppLog.log("Error: "+msg);
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            if(listCoupon!= null && listCoupon.size()>0){
+                                if(categoryList==null || categoryList.isEmpty()){
+                                    mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+                                }else{
+                                    mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                                }
+                                mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
+                            }else{
+                                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+                            }
+                        }
+                    }
+            );
         }
     }
 

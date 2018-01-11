@@ -16,7 +16,7 @@ import rx.Observable;
  */
 
 public interface ApiInterface {
-    @GET("coa/xml_version.json")
+    @GET("/xml/xml_version.json")
     Observable<VersionReponse> checkVersion();
 
     @FormUrlEncoded

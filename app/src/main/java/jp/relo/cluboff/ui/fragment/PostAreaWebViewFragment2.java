@@ -148,8 +148,6 @@ public class PostAreaWebViewFragment2 extends BaseFragmentToolbarBottombar {
             }
         });
 
-
-
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         mapFragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_map_fragment);

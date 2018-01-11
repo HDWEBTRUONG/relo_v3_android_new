@@ -112,7 +112,7 @@ public class HandlerStartActivity extends BaseActivity {
     }
 
     private void checkUpdateData(){
-        addSubscription(apiInterface.checkVersion(),new MyCallBack<VersionReponse>(){
+        addSubscription(apiInterfaceLog.checkVersion(),new MyCallBack<VersionReponse>(){
             @Override
             public void onSuccess(VersionReponse model) {
                 boolean isUpdate = Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getApplicationContext()).getVersion();

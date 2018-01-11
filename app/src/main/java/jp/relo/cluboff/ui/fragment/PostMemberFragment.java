@@ -17,9 +17,20 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+
+import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.ui.BaseFragmentBottombar;
@@ -30,6 +41,10 @@ import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.views.MyWebview;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by tqk666 on 12/28/17.
@@ -246,18 +261,60 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 }
             }
         });
-        loadUrl();
+        //loadGetUrl();
     }
 
-    private void loadUrl(){
-        String url = Constant.TEMPLATE_URL_MEMBER;
-        MemberPost memberPost = new MemberPost();
+    private void loadGetUrl(){
+        showLoading(getActivity());
+        String  userID = "";
+        String  pass = "";
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
         LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-        String  userID = loginSharedPreference.getUserName();
-        String  pass = loginSharedPreference.getPass();
-        memberPost.setU(userID);
-        memberPost.setCOA_APP(pass);
-        mWebView.postUrl( url, memberPost.toString().getBytes());
+        userID = loginSharedPreference.getUserName();
+        pass = loginSharedPreference.getPass();
+        apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                hideLoading();
+                try {
+                    Document document = Jsoup.parse(response.body().string());
+                    Element divChildren = document.select("html").first();
+                    for (int i = 0; i < divChildren.childNodes().size(); i++) {
+                        Node child = divChildren.childNode(i);
+                        if (child.nodeName().equals("#comment")) {
+                            String valueAuth = child.toString();
+                            int valueHandleLogin = BuildConfig.DEBUG? 0:1;
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==valueHandleLogin){
+                                LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+                                loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
+                                loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
+                            }
+                        }
+                    }
+
+                    loadUrlWeb();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    loadUrlWeb();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log("Err: "+t.toString());
+                hideLoading();
+                loadUrlWeb();
+            }
+        });
+
+    }
+    public void loadUrlWeb(){
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        StringBuffer url=new StringBuffer(Constant.URL_MEMBER_BROWSER);
+        url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
+        url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
+        mWebView.loadUrl(url.toString());
     }
 
     @Override
@@ -270,7 +327,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onResume() {
         super.onResume();
-        loadUrl();
+        loadGetUrl();
     }
 
     @Override

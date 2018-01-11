@@ -15,7 +15,7 @@ android {
         applicationId "net.fukuri.memberapp.memberapp"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1422
+        versionCode 1423
         versionName "1.4.2.2"
         vectorDrawables.useSupportLibrary = true
     }
@@ -68,16 +68,16 @@ android {
             buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
             buildConfigField "String", "WEBVIEW_FORGET_ID", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
             buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
-            buildConfigField "String", "XML_WHOLEJAPAN", '"https://api.club-off.com/prefukuri/wholeJapan.xml"'
-            buildConfigField "String", "XML_HOKKAIDO", '"https://api.club-off.com/prefukuri/hokkaido.xml"'
-            buildConfigField "String", "XML_TOHOKU", '"https://api.club-off.com/prefukuri/tohoku.xml"'
-            buildConfigField "String", "XML_KANTO", '"https://api.club-off.com/prefukuri/kanto.xml"'
-            buildConfigField "String", "XML_KOUSHINETSU", '"https://api.club-off.com/prefukuri/koushinetsu.xml"'
-            buildConfigField "String", "XML_HOKURIKUTOKAI", '"https://api.club-off.com/prefukuri/hokurikuTokai.xml"'
-            buildConfigField "String", "XML_KINKI", '"https://api.club-off.com/prefukuri/kinki.xml"'
-            buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.club-off.com/prefukuri/cyuugokuShikoku.xml"'
-            buildConfigField "String", "XML_KYUSHU", '"https://api.club-off.com/prefukuri/kyushu.xml"'
-            buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
+            buildConfigField "String", "XML_WHOLEJAPAN", '"https://api.fukuri.jp/xml/wholeJapan.xml"'
+            buildConfigField "String", "XML_HOKKAIDO", '"https://api.fukuri.jp/xml/hokkaido.xml"'
+            buildConfigField "String", "XML_TOHOKU", '"https://api.fukuri.jp/xml/tohoku.xml"'
+            buildConfigField "String", "XML_KANTO", '"https://api.fukuri.jp/xml/kanto.xml"'
+            buildConfigField "String", "XML_KOUSHINETSU", '"https://api.fukuri.jp/xml/koushinetsu.xml"'
+            buildConfigField "String", "XML_HOKURIKUTOKAI", '"https://api.fukuri.jp/xml/hokurikuTokai.xml"'
+            buildConfigField "String", "XML_KINKI", '"https://api.fukuri.jp/xml/kinki.xml"'
+            buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.fukuri.jp/xml/cyuugokuShikoku.xml"'
+            buildConfigField "String", "XML_KYUSHU", '"https://api.fukuri.jp/xml/kyushu.xml"'
+            buildConfigField "String", "XML_OKINAWA", '"https://api.fukuri.jp/xml/okinawa.xml"'
             buildConfigField "String", "BASE_URL_LOG", '"https://api.fukuri.jp"'
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
         }
