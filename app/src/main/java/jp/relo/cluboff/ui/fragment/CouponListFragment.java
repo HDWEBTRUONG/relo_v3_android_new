@@ -474,10 +474,18 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 item.setLink_path(xpp.nextText());
                                 break;
                             case CouponDTO.TAG_EXPIRATION_FROM:
-                                item.setExpiration_from(xpp.nextText());
+                                String value = xpp.nextText();
+                                if(value!=null && value.length()>8){
+                                    value = value.substring(0,8);
+                                }
+                                item.setExpiration_from(value);
                                 break;
                             case CouponDTO.TAG_EXPIRATION_TO:
-                                item.setExpiration_to(xpp.nextText());
+                                String valueTo = xpp.nextText();
+                                if(valueTo!=null && valueTo.length()>8){
+                                    valueTo = valueTo.substring(0,8);
+                                }
+                                item.setExpiration_to(valueTo);
                                 break;
                             case CouponDTO.TAG_PRIORITY:
                                 item.setPriority(Utils.parserInt(xpp.nextText()));

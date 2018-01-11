@@ -379,23 +379,6 @@ public class Utils {
         });
         builder.show();
     }
-
-    public static String convertDate(String dateString){
-        if(dateString==null){
-            return "";
-        }
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
-        Date date = null;
-        try {
-            date = format.parse(dateString);
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-            return formatter.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     public static String getYear(){
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -405,8 +388,12 @@ public class Utils {
     public static String convertDateShort(String dateString){
         if(dateString==null){
             return "";
+        }else{
+            if(dateString.length()>8){
+                dateString = dateString.substring(8) ;
+            }
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         Date date = null;
         try {
             date = format.parse(dateString);
@@ -417,23 +404,8 @@ public class Utils {
         }
         return "";
     }
-    public static String convertDateSQL(String dateString){
-        if(dateString==null){
-            return "";
-        }
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
-        Date date = null;
-        try {
-            date = format.parse(dateString);
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            return formatter.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
     public static String valueNowTime(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         String fomatDate = dateFormat.format(date);
         return fomatDate;

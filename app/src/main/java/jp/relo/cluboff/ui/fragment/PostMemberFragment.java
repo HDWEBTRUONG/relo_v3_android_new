@@ -314,6 +314,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         StringBuffer url=new StringBuffer(Constant.URL_MEMBER_BROWSER);
         url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
         url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
+        AppLog.log("ABC: "+ url.toString());
         mWebView.loadUrl(url.toString());
     }
 

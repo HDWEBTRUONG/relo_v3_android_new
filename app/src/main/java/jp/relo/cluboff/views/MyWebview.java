@@ -34,8 +34,8 @@ public class MyWebview extends WebView {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        /*webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);*/
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         this.clearHistory();
