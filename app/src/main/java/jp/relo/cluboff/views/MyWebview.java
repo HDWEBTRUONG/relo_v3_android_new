@@ -36,8 +36,8 @@ public class MyWebview extends WebView {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
+        webSettings.setSupportMultipleWindows(true);
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
         this.clearHistory();
         this.clearCache(true);
         this.clearFormData();

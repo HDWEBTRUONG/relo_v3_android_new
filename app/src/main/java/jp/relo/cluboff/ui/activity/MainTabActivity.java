@@ -1,6 +1,8 @@
 package jp.relo.cluboff.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
@@ -18,12 +20,21 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
+import java.io.IOException;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.adapter.MenuListAdapter;
+import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.model.BlockEvent;
 import jp.relo.cluboff.model.MessageEvent;
 import jp.relo.cluboff.model.ReloadEvent;
@@ -37,6 +48,10 @@ import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainTabActivity extends BaseActivityToolbar {
     MenuListAdapter mMenuAdapter;
@@ -90,7 +105,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onCreate(savedInstanceState);
         pushProcess();
         setupView();
-        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
+        //replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
         replaceFragment(PostAreaWebViewFragment2.newInstance(),R.id.container_map_fragment,"MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
@@ -230,8 +245,11 @@ public class MainTabActivity extends BaseActivityToolbar {
 //                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
 //                postMemberWebViewFragment.setArguments(bundle);
 //                openDialogFragment(postMemberWebViewFragment);
-                memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+                //memberSiteFragmentContainer.setVisibility(View.VISIBLE);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
+                updateAuth();
+
+
 
             }
         });
@@ -253,6 +271,70 @@ public class MainTabActivity extends BaseActivityToolbar {
             }
         });
 
+    }
+
+    public void updateAuth(){
+        showLoading(this);
+        String  userID = "";
+        String  pass = "";
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+        userID = loginSharedPreference.getUserName();
+        pass = loginSharedPreference.getPass();
+        apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                hideLoading();
+                try {
+                    Document document = Jsoup.parse(response.body().string());
+                    Element divChildren = document.select("html").first();
+                    for (int i = 0; i < divChildren.childNodes().size(); i++) {
+                        Node child = divChildren.childNode(i);
+                        if (child.nodeName().equals("#comment")) {
+                            String valueAuth = child.toString();
+                            int valueHandleLogin = BuildConfig.DEBUG? 0:1;
+                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==valueHandleLogin){
+                                LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(MainTabActivity.this);
+                                loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
+                                loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
+                            }
+                        }
+                    }
+
+                    openMenberSiteBrowser();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    openMenberSiteBrowser();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log("Err: "+t.toString());
+                hideLoading();
+                openMenberSiteBrowser();
+            }
+        });
+    }
+
+    public void openMenberSiteBrowser(){
+        final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+        if(loginSharedPreference!=null){
+            try {
+                Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                        .buildUpon()
+                        .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
+                        .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
+                        .build();
+                internetIntent.setData(uri);
+                startActivity(internetIntent);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
