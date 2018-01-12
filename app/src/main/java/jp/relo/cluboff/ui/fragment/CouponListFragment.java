@@ -23,6 +23,7 @@ import java.util.List;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.CouponListAdapter;
@@ -73,6 +74,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     int positionView = 0;
 
     private boolean isArea;
+
+    private int count =0;
 
     public static final String TAG = CouponListFragment.class.getSimpleName();
 
@@ -160,17 +163,18 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
         if(!isArea){
             areaName = ConstanArea.WHOLEJAPAN;
-
+            if(BuildConfig.DEBUG && ++count >4){
+                LoginSharedPreference.getInstance(getActivity()).setVersion(LoginSharedPreference.getInstance(getActivity()).getVersion()-count);
+                ReloApp.setVersionApp(Utils.convertIntVersion(String.valueOf(LoginSharedPreference.getInstance(getActivity()).getVersion())));
+            }
             //check update xml data
-            addSubscription(apiInterfaceLog.checkVersion(),new MyCallBack<VersionReponse>(){
+            addSubscription(apiInterfaceForceUpdate.checkVersion(),new MyCallBack<VersionReponse>(){
                         @Override
                         public void onSuccess(VersionReponse model) {
                             boolean isUpdate = Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getActivity()).getVersion();
                             if(isUpdate){
                                 ReloApp.setVersionApp(Utils.convertIntVersion(model.getVersion()));
                                 ReloApp.setIsUpdateData(isUpdate);
-                                myDatabaseHelper.clearData();
-                                listCoupon.clear();
                             }
                         }
 
@@ -181,15 +185,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
                         @Override
                         public void onFinish() {
-                            if(listCoupon!= null && listCoupon.size()>0){
+                            if(ReloApp.isUpdateData()){
+                                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
+                            }else{
                                 if(categoryList==null || categoryList.isEmpty()){
                                     mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
                                 }else{
                                     mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
                                 }
                                 mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
-                            }else{
-                                mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
                             }
                         }
                     }
@@ -360,6 +364,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void updateData(){
         if(ReloApp.isUpdateData()) {
+            myDatabaseHelper.clearData();
+            listCoupon.clear();
             xmlUpdatesList = new ArrayList<>();
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_WHOLEJAPAN, ConstanArea.WHOLEJAPAN));
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_HOKKAIDO, ConstanArea.HOKKAIDO));

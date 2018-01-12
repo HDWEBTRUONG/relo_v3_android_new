@@ -69,12 +69,7 @@ public class HandlerStartActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(Utils.isNetworkAvailable(HandlerStartActivity.this)){
-                    checkUpdateData();
-                }else{
-                    //handler.sendEmptyMessage(GOTOSCREEN);
-                    new LoadValueLoginTask().execute("titanium");
-                }
+                new LoadValueLoginTask().execute("titanium");
             }
         }, SPLASH_TIME_OUT);
     }
@@ -109,32 +104,6 @@ public class HandlerStartActivity extends BaseActivity {
         PushvisorHandlerActivity.checkOpenedThisScreen = true;
         startActivity(new Intent(this, MainTabActivity.class));
         finish();
-    }
-
-    private void checkUpdateData(){
-        addSubscription(apiInterfaceLog.checkVersion(),new MyCallBack<VersionReponse>(){
-            @Override
-            public void onSuccess(VersionReponse model) {
-                boolean isUpdate = Utils.convertIntVersion(model.getVersion())> LoginSharedPreference.getInstance(getApplicationContext()).getVersion();
-                if(isUpdate){
-                    ReloApp.setVersionApp(Utils.convertIntVersion(model.getVersion()));
-                    ReloApp.setIsUpdateData(isUpdate);
-                    sqLiteOpenHelper.clearData();
-                }
-            }
-
-            @Override
-            public void onFailure(int msg) {
-                AppLog.log("Error: "+msg);
-            }
-
-            @Override
-            public void onFinish() {
-                //handler.sendEmptyMessage(GOTOSCREEN);
-                new LoadValueLoginTask().execute("titanium");
-            }
-        }
-        );
     }
 
     private class LoadValueLoginTask extends AsyncTask<String, Void, Void>

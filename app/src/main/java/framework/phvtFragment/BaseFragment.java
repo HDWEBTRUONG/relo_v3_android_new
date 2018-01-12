@@ -30,6 +30,7 @@ import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiClientForceUpdate;
 import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiClientLog;
 import jp.relo.cluboff.api.ApiInterface;
@@ -56,6 +57,7 @@ public abstract class BaseFragment extends Fragment {
     protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceJP = ApiClientJP.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceLog = ApiClientLog.getClient().create(ApiInterface.class);
+    protected ApiInterface apiInterfaceForceUpdate = ApiClientForceUpdate.getClient().create(ApiInterface.class);
     //----------------------------------------------------------------------------------------------------
     /**
      * Root layout view

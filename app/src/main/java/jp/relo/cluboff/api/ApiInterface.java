@@ -3,6 +3,7 @@ package jp.relo.cluboff.api;
 
 import jp.relo.cluboff.model.LoginReponse;
 import jp.relo.cluboff.model.VersionReponse;
+import jp.relo.cluboff.util.Constant;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -16,7 +17,7 @@ import rx.Observable;
  */
 
 public interface ApiInterface {
-    @GET("/xml/xml_version.json")
+    @GET(Constant.URL_FORCEUPDATE_FULL)
     Observable<VersionReponse> checkVersion();
 
     @FormUrlEncoded

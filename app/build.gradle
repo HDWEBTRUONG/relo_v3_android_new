@@ -53,6 +53,8 @@ android {
             buildConfigField "String", "XML_OKINAWA", '"https://api.club-off.com/prefukuri/okinawa.xml"'
             buildConfigField "String", "BASE_URL_LOG", '"http://lilula.dev.bravesoft.vn"'
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
+            buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc/cluboff"'
+            buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/xml/xml_version.json"'
         }
         relo_prod {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -80,6 +82,37 @@ android {
             buildConfigField "String", "XML_OKINAWA", '"https://api.fukuri.jp/xml/okinawa.xml"'
             buildConfigField "String", "BASE_URL_LOG", '"https://api.fukuri.jp"'
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
+            buildConfigField "String", "URL_FORCEUPDATE", '"https://api.fukuri.jp"'
+            buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/xml/xml_version.json"'
+        }
+        relo_test {
+            applicationId "net.fukuri.memberapp.memberapp"
+            buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
+            buildConfigField "String", "REPONSE_SUCCESS", '"認証エラー"'
+            buildConfigField "String", "BASE_URL", '"https://api.club-off.com/"'
+            buildConfigField "String", "BASE_URL_JP", '"https://sp.fukuri.jp"'
+            buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://www.e-map.ne.jp/smt/rclzmap/loc.htm"'
+            buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://sp.fukuri.jp/fkr/apps/oil/ffoil_main.cfm"'
+            buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
+            buildConfigField "String", "APPVISOR_ID", '"KxWC2gRwtc"'
+            buildConfigField "String", "URL_MEMBER_BROWSER", '"https://sp.fukuri.jp/fkr/apps/oil/get_login.cfm"'
+            buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
+            buildConfigField "String", "WEBVIEW_FORGET_ID", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
+            buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/contents/files/fukuri/no_login_app.html"'
+            buildConfigField "String", "XML_WHOLEJAPAN", '"http://ota.dev.vc/cluboff/xml/wholeJapan.xml"'
+            buildConfigField "String", "XML_HOKKAIDO", '"https://api.fukuri.jp/xml/hokkaido.xml"'
+            buildConfigField "String", "XML_TOHOKU", '"https://api.fukuri.jp/xml/tohoku.xml"'
+            buildConfigField "String", "XML_KANTO", '"https://api.fukuri.jp/xml/kanto.xml"'
+            buildConfigField "String", "XML_KOUSHINETSU", '"https://api.fukuri.jp/xml/koushinetsu.xml"'
+            buildConfigField "String", "XML_HOKURIKUTOKAI", '"https://api.fukuri.jp/xml/hokurikuTokai.xml"'
+            buildConfigField "String", "XML_KINKI", '"https://api.fukuri.jp/xml/kinki.xml"'
+            buildConfigField "String", "XML_CYUUGOKUSHIKOKU", '"https://api.fukuri.jp/xml/cyuugokuShikoku.xml"'
+            buildConfigField "String", "XML_KYUSHU", '"https://api.fukuri.jp/xml/kyushu.xml"'
+            buildConfigField "String", "XML_OKINAWA", '"https://api.fukuri.jp/xml/okinawa.xml"'
+            buildConfigField "String", "BASE_URL_LOG", '"https://api.fukuri.jp"'
+            buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
+            buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc"'
+            buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/cluboff/xml/xml_version.json"'
         }
     }
     lintOptions {

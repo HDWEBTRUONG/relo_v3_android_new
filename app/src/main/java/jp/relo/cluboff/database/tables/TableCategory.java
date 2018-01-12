@@ -33,17 +33,20 @@ public class TableCategory {
                         TableCoupon.COLUMN_EXPIRATION_TO +" > "+now +" group by "+TableCoupon.COLUMN_CATEGORY_ID+" having count("+TableCoupon.COLUMN_SHGRID+") > 0";
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
+                try{
+                    if (cursor!=null && !cursor.isClosed() && cursor.getCount()>0 && cursor.moveToFirst()) {
+                        do {
+                            CatagoryDTO catagoryDTO = new CatagoryDTO();
+                            catagoryDTO.setCatagoryID(cursor.getString(0));
+                            catagoryDTO.setGetCatagoryName(cursor.getString(1));
+                            datas.add(catagoryDTO);
+                        } while (cursor.moveToNext());
+                    }
+                    cursor.close();
+                    db.close();
+                }catch (Exception ex){
 
-                if (cursor!=null && !cursor.isClosed() && cursor.getCount()>0 && cursor.moveToFirst()) {
-                    do {
-                        CatagoryDTO catagoryDTO = new CatagoryDTO();
-                        catagoryDTO.setCatagoryID(cursor.getString(0));
-                        catagoryDTO.setGetCatagoryName(cursor.getString(1));
-                        datas.add(catagoryDTO);
-                    } while (cursor.moveToNext());
                 }
-                cursor.close();
-                db.close();
                 AppLog.log("Area: "+ area);
                 if(ConstanArea.WHOLEJAPAN.equalsIgnoreCase(area)){
                     return sortBSJ(datas);

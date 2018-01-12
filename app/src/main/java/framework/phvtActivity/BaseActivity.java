@@ -24,6 +24,7 @@ import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiClientForceUpdate;
 import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiClientLog;
 import jp.relo.cluboff.api.ApiInterface;
@@ -54,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected BaseFragment mMainActiveFragment;
     protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceLog = ApiClientLog.getClient().create(ApiInterface.class);
+    protected ApiInterface apiInterfaceForceUpdate = ApiClientForceUpdate.getClient().create(ApiInterface.class);
 
     //----------------------------------------------------------------------------------------------------
 

@@ -13,6 +13,8 @@ public class Constant {
     public static final String BASE_URL = BuildConfig.BASE_URL;
     public static final String BASE_URL_JP = BuildConfig.BASE_URL_JP;
     public static final String BASE_URL_LOG = BuildConfig.BASE_URL_LOG;
+    public static final String BASE_URL_FORCE_UPDATE = BuildConfig.URL_FORCEUPDATE;
+    public static final String URL_FORCEUPDATE_FULL = BuildConfig.URL_FORCEUPDATE_FULL;
 
     // Some URL of webview
     public static final String WEBVIEW_URL_AREA_COUPON = BuildConfig.WEBVIEW_URL_AREA_COUPON;
