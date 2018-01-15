@@ -33,7 +33,7 @@ import rx.functions.Action1;
  */
 
 public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar{
-    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote, tvNote, tvCopyRight;
+    TextView tvDate, tvCouponName, tvBenefit, tvBenefitNote, tvNote, tvCopyRight,tvUserLogin;
     MyDatabaseHelper myDatabaseHelper;
 
     public  String couponID="";
@@ -75,6 +75,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         tvBenefitNote = (TextView) view.findViewById(R.id.tvBenefitNote);
         tvNote = (TextView) view.findViewById(R.id.tvNote);
         tvCopyRight = (TextView) view.findViewById(R.id.tvCopyRight);
+        tvUserLogin = (TextView) view.findViewById(R.id.tvUserLogin);
     }
 
     @Override
@@ -113,6 +114,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
     public void onResume() {
         super.onResume();
         tvCopyRight.setText(MessageFormat.format(getString(R.string.detail_offline_copyright_template), Utils.getYear()));
+        tvUserLogin.setText(LoginSharedPreference.getInstance(getActivity()).getUserName()+"");
         loadData();
         writeLog();
     }
