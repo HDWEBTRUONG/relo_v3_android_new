@@ -397,4 +397,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        btnLogin.setEnabled(true);
+        super.onBackPressed();
+    }
 }

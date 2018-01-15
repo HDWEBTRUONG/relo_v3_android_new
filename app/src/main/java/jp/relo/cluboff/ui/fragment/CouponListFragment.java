@@ -163,10 +163,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
         if(!isArea){
             areaName = ConstanArea.WHOLEJAPAN;
-            if(BuildConfig.DEBUG && ++count >4){
+            /*if(BuildConfig.DEBUG && ++count >4){
                 LoginSharedPreference.getInstance(getActivity()).setVersion(LoginSharedPreference.getInstance(getActivity()).getVersion()-count);
                 ReloApp.setVersionApp(Utils.convertIntVersion(String.valueOf(LoginSharedPreference.getInstance(getActivity()).getVersion())));
-            }
+            }*/
             //check update xml data
             addSubscription(apiInterfaceForceUpdate.checkVersion(),new MyCallBack<VersionReponse>(){
                         @Override
