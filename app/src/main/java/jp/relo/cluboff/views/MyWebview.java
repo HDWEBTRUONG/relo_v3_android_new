@@ -43,7 +43,8 @@ public class MyWebview extends WebView {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
-        AppLog.log("USer: "+Utils.getDefaultUserAgent());
+        webSettings.setUserAgentString(Utils.getDefaultUserAgent());
+
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         this.clearHistory();
         this.clearCache(true);
