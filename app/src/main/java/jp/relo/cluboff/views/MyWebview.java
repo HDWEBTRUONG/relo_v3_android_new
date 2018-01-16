@@ -43,7 +43,7 @@ public class MyWebview extends WebView {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
-        webSettings.setUserAgentString(Utils.getDefaultUserAgent());
+        webSettings.setUserAgentString(webSettings.getUserAgentString()+"ReloClub");
 
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         this.clearHistory();
