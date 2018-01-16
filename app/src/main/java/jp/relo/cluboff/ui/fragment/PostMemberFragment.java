@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -228,7 +229,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 super.onReceivedError(view, request, error);
 
             }
-
         });
         mWebView.setOnKeyListener(new View.OnKeyListener(){
 
@@ -259,6 +259,12 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 if(Constant.TITLE_LOGOUT.equalsIgnoreCase(title)){
                     Utils.forceLogout(getActivity());
                 }
+            }
+
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                mWebView.loadUrl(view.getUrl());
+                return true;
             }
         });
         //loadGetUrl();
@@ -314,7 +320,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         StringBuffer url=new StringBuffer(Constant.URL_MEMBER_BROWSER);
         url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
         url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
-        AppLog.log("ABC: "+ url.toString());
         mWebView.loadUrl(url.toString());
     }
 

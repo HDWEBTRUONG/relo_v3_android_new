@@ -105,7 +105,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onCreate(savedInstanceState);
         pushProcess();
         setupView();
-        //replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
+        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
         replaceFragment(PostAreaWebViewFragment2.newInstance(),R.id.container_map_fragment,"MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
@@ -245,9 +245,9 @@ public class MainTabActivity extends BaseActivityToolbar {
 //                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
 //                postMemberWebViewFragment.setArguments(bundle);
 //                openDialogFragment(postMemberWebViewFragment);
-                //memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+                memberSiteFragmentContainer.setVisibility(View.VISIBLE);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
-                updateAuth();
+               // updateAuth();
 
 
 
