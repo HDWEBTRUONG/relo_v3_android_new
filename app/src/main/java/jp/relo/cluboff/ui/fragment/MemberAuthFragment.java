@@ -173,4 +173,10 @@ public class MemberAuthFragment extends BaseFragment {
         });
 
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacksAndMessages(null);
+    }
 }
