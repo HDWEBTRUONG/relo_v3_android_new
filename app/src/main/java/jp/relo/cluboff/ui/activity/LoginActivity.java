@@ -247,7 +247,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 hideLoading();
-                if("Now Loading".equalsIgnoreCase(view.getTitle())){
+                if(Constant.TITLE_LOGOUT.equalsIgnoreCase(view.getTitle())){
                     wvLogin.stopLoading();
                     mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
                 }else{
