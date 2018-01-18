@@ -118,6 +118,21 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    // RENAME APK CONFIG
+    applicationVariants.all { variant ->
+
+        if (variant.getName().contains("relo_dev")) {
+            renameAPK(variant,'reloclub','stag','1')
+        }
+        if (variant.getName().contains("relo_prod")) {
+            renameAPK(variant,'reloclub','prod','1')
+        }
+        if (variant.getName().contains("relo_test")) {
+            renameAPK(variant,'reloclub','debug_xml','1')
+        }
+    }
+
 }
 
 dependencies {
@@ -155,3 +170,16 @@ dependencies {
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
+
+//FUNCTION BUID
+// create by Phatvan
+def renameAPK(variant,app_name,env,version) {
+    variant.outputs.each { output ->
+        def formattedDate = new Date().format('yyyyMMdd')
+
+        def file = output.packageApplication.outputFile
+        def fileName = app_name + "_" + env + "_" + formattedDate + "_v" + version + ".apk"
+        output.packageApplication.outputFile = new File(file.parent, fileName)
+    }
+}
+
