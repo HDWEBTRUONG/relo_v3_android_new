@@ -20,7 +20,7 @@ import jp.relo.cluboff.util.Utils;
  */
 
 public class TableCategory {
-
+    public static Cursor cursor;
     public static Callable<List<CatagoryDTO>> getCategory(final MyDatabaseHelper mMyDatabaseHelper, final String area) {
         return new Callable<List<CatagoryDTO>>() {
             @Override
@@ -32,7 +32,9 @@ public class TableCategory {
                         "%' AND "+ TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                         TableCoupon.COLUMN_EXPIRATION_TO +" > "+now +" group by "+TableCoupon.COLUMN_CATEGORY_ID+" having count("+TableCoupon.COLUMN_SHGRID+") > 0";
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
-                Cursor cursor = db.rawQuery(selectQuery, null);
+                if(cursor ==null){
+                    cursor = db.rawQuery(selectQuery, null);
+                }
                 try{
                     if (cursor!=null && !cursor.isClosed() && cursor.getCount()>0 && cursor.moveToFirst()) {
                         do {

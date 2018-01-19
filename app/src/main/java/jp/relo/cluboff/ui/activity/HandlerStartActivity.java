@@ -10,12 +10,18 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
+
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
+import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.api.MyCallBack;
 import jp.relo.cluboff.database.MyDatabaseHelper;
@@ -30,6 +36,10 @@ import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.AESHelper;
 import jp.relo.cluboff.util.ase.BackAES;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by tonkhanh on 8/1/17.
@@ -39,6 +49,7 @@ public class HandlerStartActivity extends BaseActivity {
     MyDatabaseHelper sqLiteOpenHelper;
     Handler handler;
     public static final int GOTOSCREEN =1;
+    public static final int CHECKAUTH =2;
     public static final int SPLASH_TIME_OUT = 2000;
 
     @Override
@@ -62,6 +73,8 @@ public class HandlerStartActivity extends BaseActivity {
                         }
                     }
 
+                }else if(msg.what == CHECKAUTH){
+                    checkAuthMember();
                 }
                 return false;
             }
@@ -106,6 +119,40 @@ public class HandlerStartActivity extends BaseActivity {
         finish();
     }
 
+    private void checkAuthMember(){
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+        if(StringUtil.isEmpty(loginSharedPreference.getUserName())){
+            handler.sendEmptyMessage(GOTOSCREEN);
+        }else{
+            apiInterface.memberAuthHTML(loginSharedPreference.getUserName(), loginSharedPreference.getPass()).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    hideLoading();
+                    try {
+                        if(response!= null && response.body()!=null){
+                            Document document = Jsoup.parse(response.body().string());
+                            Utils.isAuthSuccess(HandlerStartActivity.this, document);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }finally {
+                        handler.sendEmptyMessage(GOTOSCREEN);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    AppLog.log("Err: "+t.toString());
+                    hideLoading();
+                    handler.sendEmptyMessage(GOTOSCREEN);
+                }
+            });
+        }
+
+    }
+
     private class LoadValueLoginTask extends AsyncTask<String, Void, Void>
     {
         @Override
@@ -122,7 +169,7 @@ public class HandlerStartActivity extends BaseActivity {
         }
         @Override
         protected void onPostExecute(Void result) {
-            handler.sendEmptyMessage(GOTOSCREEN);
+            handler.sendEmptyMessage(CHECKAUTH);
 
         }
     }

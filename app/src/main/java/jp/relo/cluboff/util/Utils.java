@@ -22,6 +22,10 @@ import android.webkit.WebView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +53,9 @@ import javax.security.auth.x500.X500Principal;
 
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
+import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
+import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.ui.activity.LoginActivity;
 import jp.relo.cluboff.views.SweetAlertDialog;
 
@@ -60,6 +66,26 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Utils {
+
+    public static  boolean isAuthSuccess(Context context, Document document){
+        boolean isSuccess = false;
+        Element divChildren = document.select("html").first();
+        for (int i = 0; i < divChildren.childNodes().size(); i++) {
+            Node child = divChildren.childNode(i);
+            if (child.nodeName().equals("#comment")) {
+                String valueAuth = child.toString();
+                int valueHandleLogin = BuildConfig.DEBUG? 0:0;
+                if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))!=valueHandleLogin){
+                    LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(context);
+                    loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
+                    loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
+                    isSuccess = true;
+                }
+            }
+        }
+        ReloApp.setBlockAuth(!isSuccess);
+        return  isSuccess;
+    }
 
     public static String getDefaultUserAgent() {
         StringBuilder result = new StringBuilder(64);

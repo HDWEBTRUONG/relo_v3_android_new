@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -18,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -41,6 +43,7 @@ import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.util.ase.EvenBusLoadWebMembersite;
 import jp.relo.cluboff.views.MyWebview;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -57,6 +60,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private int checkWebview;
     private FrameLayout fragmentContainer;
     private ProgressBar horizontalProgress;
+    Handler handler;
+    public static final int LOAD_URL_WEB =1;
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -85,6 +90,16 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             }
         });
 
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what==LOAD_URL_WEB) {
+                    loadUrlWeb();
+                }
+                return false;
+            }
+        });
+
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
@@ -96,7 +111,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onStart() {
         super.onStart();
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -257,6 +272,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 if(Constant.TITLE_LOGOUT.equalsIgnoreCase(title)){
+                    AppLog.log("Force logout: "+title);
                     Utils.forceLogout(getActivity());
                 }
             }
@@ -271,7 +287,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     }
 
     private void loadGetUrl(){
-        showLoading(getActivity());
         String  userID = "";
         String  pass = "";
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
@@ -281,7 +296,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                hideLoading();
                 try {
                     Document document = Jsoup.parse(response.body().string());
                     Element divChildren = document.select("html").first();
@@ -309,7 +323,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 AppLog.log("Err: "+t.toString());
-                hideLoading();
                 loadUrlWeb();
             }
         });
@@ -326,7 +339,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onStop() {
         super.onStop();
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
         mWebView.stopLoading();
     }
 
@@ -341,7 +354,13 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         super.onPause();
         if (fragmentContainer.getVisibility() == View.VISIBLE){
             fragmentContainer.setVisibility(View.GONE);
-            ((MainTabActivity)getActivity()).resetCurrentTab();
+            //((MainTabActivity)getActivity()).resetCurrentTab();
         }
+    }
+
+    @Subscribe
+    public void onEvent(EvenBusLoadWebMembersite event) {
+        handler.sendEmptyMessage(LOAD_URL_WEB);
+        AppLog.log("Web loaded");
     }
 }

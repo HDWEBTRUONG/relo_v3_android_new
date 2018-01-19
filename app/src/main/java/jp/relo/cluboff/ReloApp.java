@@ -6,6 +6,23 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import framework.phvtCommon.AppState;
+import framework.phvtUtils.AppLog;
+import jp.relo.cluboff.util.ase.EventBusTimeReload;
+import rx.Notification;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.schedulers.TimeInterval;
+
 
 /**
  * Created by HuyTran on 3/21/17.
@@ -15,6 +32,7 @@ public class ReloApp extends Application {
     private Tracker mTracker;
     private static boolean isUpdateData;
     private static int versionApp;
+    public static boolean blockAuth = false;
 
     public static boolean isUpdateData() {
         return isUpdateData;
@@ -32,13 +50,19 @@ public class ReloApp extends Application {
         ReloApp.versionApp = versionApp;
     }
 
+    public static boolean isBlockAuth() {
+        return blockAuth;
+    }
+
+    public static void setBlockAuth(boolean blockAuth) {
+        ReloApp.blockAuth = blockAuth;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         isUpdateData = false;
     }
-
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
      * @return tracker

@@ -12,30 +12,16 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
-import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.model.ControlWebEventBus;
-import jp.relo.cluboff.model.DetailCouponDetailVisible;
 import jp.relo.cluboff.model.PostDetail;
-import jp.relo.cluboff.model.PostDetailType1;
-import jp.relo.cluboff.ui.BaseDialogFragment;
 import jp.relo.cluboff.ui.BaseDialogFragmentToolbarBottombar;
 import jp.relo.cluboff.ui.webview.MyWebViewClient;
 import jp.relo.cluboff.util.Constant;
-import jp.relo.cluboff.util.IControlBottom;
-import jp.relo.cluboff.util.Utils;
-import jp.relo.cluboff.util.ase.AESHelper;
-import jp.relo.cluboff.util.ase.BackAES;
 import jp.relo.cluboff.views.MyWebview;
 
 /**

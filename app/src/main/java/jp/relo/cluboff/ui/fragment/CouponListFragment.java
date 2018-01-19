@@ -74,9 +74,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     int positionView = 0;
 
     private boolean isArea;
-
-    private int count =0;
-
     public static final String TAG = CouponListFragment.class.getSimpleName();
 
     public String areaName= ConstanArea.WHOLEJAPAN;

@@ -55,8 +55,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/icon_menu"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/_10dp"
-            android:layout_marginLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_10dp"
+            android:paddingLeft="@dimen/_10dp"
             android:visibility="invisible"/>
     </LinearLayout>
 </LinearLayout>

@@ -26,11 +26,20 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
+import java.io.IOException;
+
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
+import jp.relo.cluboff.api.ApiClientJP;
+import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.model.LoginRequest;
 import jp.relo.cluboff.model.MemberPost;
 import jp.relo.cluboff.model.ValueLoginOld;
@@ -41,6 +50,10 @@ import jp.relo.cluboff.util.ConstansSharedPerence;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -248,11 +261,11 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                 super.onReceivedTitle(view, title);
                 hideLoading();
                 if(Constant.TITLE_LOGOUT.equalsIgnoreCase(view.getTitle())){
-                    wvLogin.stopLoading();
-                    mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
-                }else{
                     mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
                     mhandler.sendEmptyMessage(MSG_ENABLE_LOGIN);
+                }else{
+                    wvLogin.stopLoading();
+                    checkAuthMember();
                 }
                 /*if(Constant.REPONSE_SUCCESS.equalsIgnoreCase(view.getTitle())){
                     mhandler.sendEmptyMessage(MSG_ERROR_ELSE);
@@ -275,7 +288,32 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         reloApp.trackingWithAnalyticGoogleServices(Constant.GA_CATALOGY_LOGIN,Constant.GA_ACTION_LOGIN,Constant.GA_LABLE_LOGIN,brandid);
     }
 
+    private void checkAuthMember(){
+        showLoading(this);
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        apiInterface.memberAuthHTML(etUser.getText().toString().trim(), etPass.getText().toString().trim()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                hideLoading();
+                try {
+                    Document document = Jsoup.parse(response.body().string());
+                    Utils.isAuthSuccess(LoginActivity.this, document);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log("Err: "+t.toString());
+                hideLoading();
+                mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
+            }
+        });
+    }
 
 
 
@@ -378,7 +416,6 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         }
         @Override
         protected void onPostExecute(String result) {
-            AppLog.log("KQ: "+result);
             String valueID="";
             String valuePass="";
 

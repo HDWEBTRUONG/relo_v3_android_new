@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
@@ -48,10 +50,14 @@ import jp.relo.cluboff.ui.fragment.WebViewDialogFragment;
 import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
+import jp.relo.cluboff.util.ase.EvenBusLoadWebMembersite;
+import jp.relo.cluboff.util.ase.EventBusTimeReload;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.functions.Action0;
 
 public class MainTabActivity extends BaseActivityToolbar {
     MenuListAdapter mMenuAdapter;
@@ -72,7 +78,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     View llMember;
     View llTab;
     View llMain;
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -98,6 +103,18 @@ public class MainTabActivity extends BaseActivityToolbar {
         ivMenuRight.setEnabled(false);
         llTab.setVisibility(View.GONE);
 
+    }
+
+    @Subscribe
+    public void onEvent(EventBusTimeReload event) {
+        AppLog.log("Time "+event.getTime());
+        EventBus.getDefault().post(new EvenBusLoadWebMembersite());
+        /*if(memberSiteFragmentContainer.getVisibility() != View.VISIBLE){
+            webMemberReload = false;
+            EventBus.getDefault().post(new EvenBusLoadWebMembersite());
+        }else{
+            webMemberReload = true;
+        }*/
     }
 
     @Override
@@ -173,6 +190,18 @@ public class MainTabActivity extends BaseActivityToolbar {
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
+
+        /*memberSiteFragmentContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if(memberSiteFragmentContainer.getVisibility() == View.GONE){
+                    if(webMemberReload){
+                        webMemberReload = false;
+                        EventBus.getDefault().post(new EvenBusLoadWebMembersite());
+                    }
+                }
+            }
+        });*/
     }
 
     private void setupView(){
@@ -245,12 +274,9 @@ public class MainTabActivity extends BaseActivityToolbar {
 //                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
 //                postMemberWebViewFragment.setArguments(bundle);
 //                openDialogFragment(postMemberWebViewFragment);
-                memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+                  memberSiteFragmentContainer.setVisibility(View.VISIBLE);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
                // updateAuth();
-
-
-
             }
         });
 
