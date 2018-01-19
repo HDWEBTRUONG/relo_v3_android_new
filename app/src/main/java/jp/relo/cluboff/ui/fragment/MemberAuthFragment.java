@@ -148,7 +148,7 @@ public class MemberAuthFragment extends BaseFragment {
                 try {
                     Document document = Jsoup.parse(response.body().string());
                     if(Utils.isAuthSuccess(getActivity(),document)){
-                            if(subscription!=null){
+                           /* if(subscription!=null){
                                 subscription.unsubscribe();
                             }
                             observable = Observable.interval(30, TimeUnit.MINUTES)
@@ -159,7 +159,7 @@ public class MemberAuthFragment extends BaseFragment {
                                         public void call(TimeInterval<Long> longTimeInterval) {
                                             EventBus.getDefault().post(new EventBusTimeReload(longTimeInterval.getValue()));
                                         }
-                                    });
+                                    });*/
 
                     }else{
                         handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);

@@ -134,7 +134,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         tvMenuTitle.setText(R.string.title_area);
         tvMenuSubTitle.setText(R.string.title_coupon_area);
         //loadCountPush();
-        Bundle bundle = this.getIntent().getExtras();
+        /*Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
             String target = bundle.getString(Constant.TARGET_PUSH);
             if(Constant.TARGET_PUSH_SCREEN_AREA.equalsIgnoreCase(target)){
@@ -147,9 +147,20 @@ public class MainTabActivity extends BaseActivityToolbar {
                 selectPage(INDEX_TOP);
             }
         }else{
+            AppLog.log("value time: "+(valueTime - lateResume));
             if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
                 EventBus.getDefault().post(new ReloadEvent(true));
             }
+            if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE){
+                EventBus.getDefault().post(new EvenBusLoadWebMembersite());
+            }
+        }*/
+        AppLog.log("value time: "+(valueTime - lateResume));
+        if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
+            EventBus.getDefault().post(new ReloadEvent(true));
+        }
+        if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE){
+            EventBus.getDefault().post(new EvenBusLoadWebMembersite());
         }
     }
     void selectPage(int pageIndex){

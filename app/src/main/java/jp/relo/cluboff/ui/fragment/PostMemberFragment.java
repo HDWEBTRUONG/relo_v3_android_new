@@ -94,7 +94,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what==LOAD_URL_WEB) {
-                    loadUrlWeb();
+                    loadGetUrl();
                 }
                 return false;
             }
@@ -352,10 +352,10 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onPause() {
         super.onPause();
-        if (fragmentContainer.getVisibility() == View.VISIBLE){
+        /*if (fragmentContainer.getVisibility() == View.VISIBLE){
             fragmentContainer.setVisibility(View.GONE);
             //((MainTabActivity)getActivity()).resetCurrentTab();
-        }
+        }*/
     }
 
     @Subscribe

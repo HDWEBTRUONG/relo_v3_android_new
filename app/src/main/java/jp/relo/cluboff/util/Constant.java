@@ -122,6 +122,7 @@ public class Constant {
 
     public static final String TOP_COUPON= "TOP_COUPON";
     public static final int LIMIT_ON_BACKGROUND= 10800000;
+    public static final int LIMIT_ON_BACKGROUND_MEMBERSITE= 180000;
 
     public static final String DATA_COUPON_URL= "DATA_COUPON_URL";
     public static final String URL_MEMBER_BROWSER= BuildConfig.URL_MEMBER_BROWSER;
