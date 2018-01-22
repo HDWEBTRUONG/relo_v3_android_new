@@ -79,8 +79,18 @@ public class WebViewDialogFragment extends BaseDialogFragmentToolbarBottombar {
             title = bundle.getString(Constant.BUNDER_TITLE);
             subTitle = bundle.getString(Constant.BUNDER_SUBTITLE);
             url = bundle.getString(Constant.BUNDER_URL);
-            tvMenuTitle.setText(title);
-            tvMenuSubTitle.setText(subTitle);
+            if(title.equalsIgnoreCase(getString(R.string.menu_FAQ))){
+                tvTitleCenter.setVisibility(View.VISIBLE);
+                llHeader.setVisibility(View.INVISIBLE);
+                viewPaddingHeader.setVisibility(View.GONE);
+            }else{
+                viewPaddingHeader.setVisibility(View.INVISIBLE);
+                tvTitleCenter.setVisibility(View.INVISIBLE);
+                llHeader.setVisibility(View.VISIBLE);
+                tvMenuTitle.setText(title);
+                tvMenuSubTitle.setText(subTitle);
+            }
+
         }
         setupWebView(url);
     }

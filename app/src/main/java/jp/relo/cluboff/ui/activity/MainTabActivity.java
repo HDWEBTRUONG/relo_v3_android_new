@@ -1,6 +1,5 @@
 package jp.relo.cluboff.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
@@ -51,13 +48,10 @@ import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.util.ase.EvenBusLoadWebMembersite;
-import jp.relo.cluboff.util.ase.EventBusTimeReload;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.Observable;
-import rx.functions.Action0;
 
 public class MainTabActivity extends BaseActivityToolbar {
     MenuListAdapter mMenuAdapter;
@@ -78,6 +72,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     View llMember;
     View llTab;
     View llMain;
+    protected static boolean isVisible = false;
     @Override
     protected void onStart() {
         super.onStart();
@@ -88,6 +83,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onStop() {
         super.onStop();
+        setIsVisible(false);
         LoginSharedPreference.getInstance(this).setValueStop(Utils.dateTimeValue());
         EventBus.getDefault().unregister(this);
     }
@@ -105,16 +101,12 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     }
 
-    @Subscribe
-    public void onEvent(EventBusTimeReload event) {
-        AppLog.log("Time "+event.getTime());
-        EventBus.getDefault().post(new EvenBusLoadWebMembersite());
-        /*if(memberSiteFragmentContainer.getVisibility() != View.VISIBLE){
-            webMemberReload = false;
-            EventBus.getDefault().post(new EvenBusLoadWebMembersite());
-        }else{
-            webMemberReload = true;
-        }*/
+    public static boolean isIsVisible() {
+        return isVisible;
+    }
+
+    public static void setIsVisible(boolean isVisible) {
+        MainTabActivity.isVisible = isVisible;
     }
 
     @Override
@@ -129,10 +121,21 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onResume() {
         super.onResume();
+        setIsVisible(true);
         long valueTime = Utils.dateTimeValue();
         lateResume = LoginSharedPreference.getInstance(this).getValueStop();
-        tvMenuTitle.setText(R.string.title_area);
-        tvMenuSubTitle.setText(R.string.title_coupon_area);
+
+
+        if(mTabHost.getCurrentTab()==0){
+            tvMenuTitle.setText(R.string.title_area);
+            tvMenuSubTitle.setText(R.string.title_coupon_area);
+        }else if(mTabHost.getCurrentTab()==1){
+            tvMenuTitle.setText(R.string.title_popular_coupon);
+            tvMenuSubTitle.setText(R.string.title_coupon_list);
+        }else{
+            tvMenuTitle.setText(R.string.title_area_coupon);
+            tvMenuSubTitle.setText(R.string.title_coupon_list_area);
+        }
         //loadCountPush();
         /*Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -160,6 +163,7 @@ public class MainTabActivity extends BaseActivityToolbar {
             EventBus.getDefault().post(new ReloadEvent(true));
         }
         if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE){
+            AppLog.log_url(" start reload member_site ............. after timer minutes ");
             EventBus.getDefault().post(new EvenBusLoadWebMembersite());
         }
     }
@@ -295,6 +299,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
+                hideLoading();
                 if(MemberAuthFragment.TAG.equalsIgnoreCase(tabId)){
                     tvMenuTitle.setText(R.string.title_area);
                     tvMenuSubTitle.setText(R.string.title_coupon_area);
@@ -311,7 +316,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
 
     public void updateAuth(){
-        showLoading(this);
+        showLoading();
         String  userID = "";
         String  pass = "";
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);

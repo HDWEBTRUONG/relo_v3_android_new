@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -23,7 +22,6 @@ import java.util.List;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.adapter.CouponListAdapter;
@@ -34,7 +32,6 @@ import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.VersionReponse;
 import jp.relo.cluboff.model.XMLUpdate;
-import jp.relo.cluboff.ui.activity.HandlerStartActivity;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.ConstanArea;
 import jp.relo.cluboff.util.Constant;
@@ -43,8 +40,6 @@ import jp.relo.cluboff.util.Utils;
 import jp.relo.cluboff.views.MyMaterialSpinner;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -72,18 +67,21 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public static final int MSG_CHECK_UPDATE = 5;
     ArrayList<CatagoryDTO> categoryList = new ArrayList<>();
     int positionView = 0;
+    int countDownloaded =0;
 
     private boolean isArea;
     public static final String TAG = CouponListFragment.class.getSimpleName();
 
     public String areaName= ConstanArea.WHOLEJAPAN;
     public String categoryID= "";
+    public boolean isSelected;
 
     public List<XMLUpdate> xmlUpdatesList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myDatabaseHelper= MyDatabaseHelper.getInstance(getActivity());
     }
 
     private void init(View view) {
@@ -95,17 +93,27 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void loadCategory() {
-        myDatabaseHelper.getCatagorysRX(areaName).observeOn(AndroidSchedulers.mainThread())
+        /*myDatabaseHelper.getCatagory(areaName).observeOn(Schedulers.newThread())
                 .subscribe(new Action1<List<CatagoryDTO>>() {
                     @Override
                     public void call(List<CatagoryDTO> catagoryDTOs) {
-                        categoryList.clear();
-                        categoryList.addAll(catagoryDTOs);
-                        categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
-                        mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
-                        mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+                        if(MainTabActivity.isIsVisible()){
+                            categoryList.clear();
+                            categoryList.addAll(catagoryDTOs);
+                            categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
+                            mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+                            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+                        }
+
                     }
-                });
+                });*/
+        if(MainTabActivity.isIsVisible()){
+            categoryList.clear();
+            categoryList.addAll(myDatabaseHelper.getCatagorys(areaName));
+            categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
+        }
 
 
     }
@@ -113,20 +121,20 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         setEventCategory();
         spinner.setItems(categoryList);
         if(categoryList!=null && categoryList.size()>0){
-            boolean isAvalibleCategory = false;
-            for(int i=0; i<categoryList.size();i++){
-                if(categoryList.get(i).getGetCatagoryName().equals(tvCategory.getText().toString())){
-                    isAvalibleCategory =true;
-                    break;
-                }
-            }
-            if(!isAvalibleCategory){
+            if(spinner.getSelectedIndex()>0){
+                tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
+            }else{
                 spinner.setSelectedIndex(0);
                 categoryID = categoryList.get(spinner.getSelectedIndex()).getCatagoryID();
+                if(isSelected){
+                    tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
+                }else{
+                    tvCategory.setText(getString(R.string.catalogy_selecte));
+                }
             }
         }
         lnCatalory.setOnClickListener(this);
-        tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
+        //tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
     }
 
     protected void setEventCategory(){
@@ -137,6 +145,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 positionView = 0;
                 areaName = ConstanArea.WHOLEJAPAN;
                 categoryID = item.getCatagoryID();
+                isSelected =true;
                 getListDataCategoryID(categoryID);
                 tvCategory.setText(item.getGetCatagoryName());
             }
@@ -154,6 +163,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        hideLoading();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
@@ -165,6 +180,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 ReloApp.setVersionApp(Utils.convertIntVersion(String.valueOf(LoginSharedPreference.getInstance(getActivity()).getVersion())));
             }*/
             //check update xml data
+            if(!LoginSharedPreference.getInstance(getActivity()).checkDownloadDone()){
+                myDatabaseHelper.clearData();
+            }
+            mainTabActivity.showLoading();
             addSubscription(apiInterfaceForceUpdate.checkVersion(),new MyCallBack<VersionReponse>(){
                         @Override
                         public void onSuccess(VersionReponse model) {
@@ -192,6 +211,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 }
                                 mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
                             }
+                            mainTabActivity.hideLoading();
                         }
                     }
             );
@@ -201,21 +221,26 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        myDatabaseHelper= MyDatabaseHelper.getInstance(getActivity());
-        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK&&event.getAction() == KeyEvent.ACTION_UP){
-                        getActivity().finish();
-                        return true;
+                    getActivity().finish();
+                    return true;
 
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
+
 
         mHandler = new Handler(){
             @Override
@@ -238,7 +263,9 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         setAdapter();
                         break;
                     case CouponListFragment.MSG_SET_CATEGORY:
+                        if(MainTabActivity.isIsVisible()){
                         setCategory();
+                    }
                         break;
                     case CouponListFragment.MSG_CHECK_UPDATE:
                         updateData();
@@ -248,13 +275,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         };
     }
 
-
     protected void getListDataCategoryID(String categoryID) {
-        showLoading(getActivity());
+        mainTabActivity.showLoading();
         listCoupon.clear();
-        myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID, areaName)
+        /*myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID, areaName)
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.newThread())
                 .subscribe(new Action1<List<CouponDTO>>() {
                     @Override
                     public void call(List<CouponDTO> couponDTOs) {
@@ -264,6 +290,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         hideLoading();
                     }
                 });
+        */
+        listCoupon.clear();
+        listCoupon.addAll(myDatabaseHelper.getCouponWithDateCategoryIDs(categoryID, areaName));
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
+        mainTabActivity.hideLoading();
 
     }
     private void setAdapter(){
@@ -361,6 +392,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void updateData(){
         if(ReloApp.isUpdateData()) {
+            LoginSharedPreference.getInstance(getActivity()).setDownloadDone(false);
+            countDownloaded =0;
             myDatabaseHelper.clearData();
             listCoupon.clear();
             xmlUpdatesList = new ArrayList<>();
@@ -374,22 +407,24 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_CYUUGOKUSHIKOKU, ConstanArea.CYUUGOKUSHIKOKU));
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_KYUSHU, ConstanArea.KYUSHU));
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_OKINAWA, ConstanArea.OKINAWA));
-            showLoading(getActivity());
+            mainTabActivity.showLoading();
             Observable.from(xmlUpdatesList)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe(new Subscriber<XMLUpdate>() {
                 @Override
                 public void onCompleted() {
-                    LoginSharedPreference.getInstance(getActivity()).setVersion(ReloApp.getVersionApp());
-                    mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
-                    hideLoading();
-                    ReloApp.setIsUpdateData(false);
-                    AppLog.log("onCompleted");
+                    if(countDownloaded ==xmlUpdatesList.size()){
+                        LoginSharedPreference.getInstance(getActivity()).setVersion(ReloApp.getVersionApp());
+                        mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
+                        mainTabActivity.hideLoading();
+                        ReloApp.setIsUpdateData(false);
+                        LoginSharedPreference.getInstance(getActivity()).setDownloadDone(true);
+                    }
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    Toast.makeText(getActivity(), "Update data error", Toast.LENGTH_SHORT).show();
+                    LoginSharedPreference.getInstance(getActivity()).setDownloadDone(false);
                 }
 
                 @Override
@@ -413,6 +448,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     public void saveData(ArrayList<CouponDTO> datas, String area){
         if(datas!=null){
             myDatabaseHelper.saveCouponList(datas,area);
+            countDownloaded++;
         }
     }
 

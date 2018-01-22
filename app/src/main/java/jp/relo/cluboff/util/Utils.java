@@ -68,18 +68,19 @@ import static android.content.Context.MODE_PRIVATE;
 public class Utils {
 
     public static  boolean isAuthSuccess(Context context, Document document){
-        boolean isSuccess = false;
+        boolean isSuccess = true;
         Element divChildren = document.select("html").first();
         for (int i = 0; i < divChildren.childNodes().size(); i++) {
             Node child = divChildren.childNode(i);
             if (child.nodeName().equals("#comment")) {
                 String valueAuth = child.toString();
-                int valueHandleLogin = BuildConfig.DEBUG? 0:0;
+                int valueHandleLogin = 0;
                 if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))!=valueHandleLogin){
                     LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(context);
                     loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
                     loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
-                    isSuccess = true;
+                }else{
+                    isSuccess = false;
                 }
             }
         }

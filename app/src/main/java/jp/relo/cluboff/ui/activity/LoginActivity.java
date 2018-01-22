@@ -56,7 +56,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static jp.relo.cluboff.ui.fragment.PostAreaWebViewFragment.MULTIPLE_PERMISSIONS;
@@ -231,7 +230,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoading(LoginActivity.this);
+                showLoading();
             }
 
             @Override
@@ -289,7 +288,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
 
     private void checkAuthMember(){
-        showLoading(this);
+        showLoading();
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
         apiInterface.memberAuthHTML(etUser.getText().toString().trim(), etPass.getText().toString().trim()).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -300,6 +299,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     Utils.isAuthSuccess(LoginActivity.this, document);
 
                 } catch (IOException e) {
+                    ReloApp.setBlockAuth(false);
                     e.printStackTrace();
                 }finally {
                     mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
@@ -309,6 +309,7 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 AppLog.log("Err: "+t.toString());
+                ReloApp.setBlockAuth(false);
                 hideLoading();
                 mhandler.sendEmptyMessage(MSG_GOTO_MAIN);
             }

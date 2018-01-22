@@ -20,6 +20,7 @@ public abstract class BaseFragmentToolbar extends BaseFragment{
     protected ImageView ivMenuRight;
     protected TextView tvMenuTitle;
     protected TextView tvMenuSubTitle;
+    protected TextView tvTitleCenter;
 
 
 
@@ -29,6 +30,7 @@ public abstract class BaseFragmentToolbar extends BaseFragment{
         ivMenuRight = (ImageView) view.findViewById(R.id.ivMenuRight);
         tvMenuTitle = (TextView) view.findViewById(R.id.tvMenuTitle);
         tvMenuSubTitle = (TextView) view.findViewById(R.id.tvMenuSubTitle);
+        tvTitleCenter = (TextView) view.findViewById(R.id.tvTitleCenter);
     }
 
     @Override

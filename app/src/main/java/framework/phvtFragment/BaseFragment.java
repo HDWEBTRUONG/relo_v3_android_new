@@ -1,7 +1,6 @@
 package framework.phvtFragment;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import framework.phvtActivity.BaseActivity;
@@ -27,6 +24,7 @@ import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtRest.HttpRequestClient;
 import framework.phvtUtils.AppLog;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClient;
@@ -35,13 +33,10 @@ import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiClientLog;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
-import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.Utils;
-import retrofit2.http.Field;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -58,6 +53,8 @@ public abstract class BaseFragment extends Fragment {
     protected ApiInterface apiInterfaceJP = ApiClientJP.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceLog = ApiClientLog.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceForceUpdate = ApiClientForceUpdate.getClient().create(ApiInterface.class);
+
+    public MainTabActivity mainTabActivity;
     //----------------------------------------------------------------------------------------------------
     /**
      * Root layout view
@@ -109,6 +106,9 @@ public abstract class BaseFragment extends Fragment {
         mRootLayout =  inflater.inflate(getRootLayoutId(), container, false);
         getMandatoryViews(mRootLayout, savedInstanceState);
         registerEventHandlers();
+        if(getActivity() instanceof MainTabActivity){
+            mainTabActivity = (MainTabActivity) getActivity();
+        }
         return mRootLayout;
     }
 
@@ -374,6 +374,7 @@ public abstract class BaseFragment extends Fragment {
 
     }
     public void showLoading(Context context){
+        if(context==null) return;
         if(isVisible()){
             if(kProgressHUDloading==null){
                 kProgressHUDloading=KProgressHUD.create(context)
@@ -383,15 +384,24 @@ public abstract class BaseFragment extends Fragment {
                         .setDimAmount(0.5f);
             }
             if(!kProgressHUDloading.isShowing()){
-                kProgressHUDloading.show();
+                try{
+                    kProgressHUDloading.show();
+                }catch (Exception ex){
+                    AppLog.log(ex.toString());
+                }
             }
         }
 
     }
+
     public void hideLoading(){
         if(isVisible()){
             if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
-                kProgressHUDloading.dismiss();
+                try{
+                    kProgressHUDloading.dismiss();
+                }catch (Exception ex){
+                    AppLog.log(ex.toString());
+                }
             }
         }
 
@@ -402,7 +412,7 @@ public abstract class BaseFragment extends Fragment {
         }
         mCompositeSubscription.add(observable
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.newThread())
                 .subscribe(subscriber));
 
 

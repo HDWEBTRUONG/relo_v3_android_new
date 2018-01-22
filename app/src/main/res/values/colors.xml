@@ -36,6 +36,8 @@
     <color name="peacockBlue">#0055A6</color>
     <color name="azureTwo">#009CFF</color>
     <color name="oceanBlue">#0461B9</color>
+    <color name="bg_toolbar">#1E8CC9</color>
+    <color name="bg_category">#E7F6FF</color>
     <color name="azure">#008AFF</color>
     <color name="paleGrey">#DADEE6</color>
     <color name="orangeish">#FF8E48</color>
@@ -69,5 +71,6 @@
     <color name="bg_list">#F1F1F1</color>
     <color name="line">#2670AD</color>
     <color name="color_bg_user_login_lable">#E6F2FF</color>
+    <color name="color_text_category">#1155A7</color>
 
 </resources>

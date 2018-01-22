@@ -50,8 +50,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
-                        android:text="@string/catalogy"
-                        android:textColor="@color/peacockBlueTwo"
+                        android:textColor="@color/color_text_category"
+                        android:textStyle="bold"
                         android:textSize="@dimen/text_size_large" />
 
                     <ImageView

@@ -2,11 +2,8 @@ package jp.relo.cluboff.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ import jp.relo.cluboff.database.tables.TablePush;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.model.CouponDTO;
 import jp.relo.cluboff.model.HistoryPushDTO;
-import jp.relo.cluboff.util.Utils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -37,7 +33,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
 
     public static MyDatabaseHelper getInstance(Context context) {
-
         if(myDatabaseHelper == null){
             myDatabaseHelper = new MyDatabaseHelper(context);
         }
@@ -52,7 +47,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         if(sqLiteDatabase==null){
             sqLiteDatabase = this.getWritableDatabase();
         }
-        return this.getWritableDatabase();
+        return this.getReadableDatabase();
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -125,9 +120,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         values.put(TableCoupon.COLUMN_AREA, area);
         values.put(TableCoupon.COLUMN_BENEFIT, data.getBenefit());
         values.put(TableCoupon.COLUMN_BENEFIT_NOTES, data.getBenefit_notes());
+        try {
+            db.insert(TableCoupon.TABLE_COUPON, null, values);
+        }catch (Exception ex){
+            AppLog.log(ex.toString());
+        }finally {
+            db.close();
+        }
 
-        db.insert(TableCoupon.TABLE_COUPON, null, values);
-        db.close();
     }
     public void saveCouponList(ArrayList<CouponDTO> datas, String area){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -175,22 +175,35 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                             subscriber.onNext(func.call());
                         } catch(Exception ex) {
                             Log.e("s", "Error reading from the database", ex);
+                            subscriber.onError(new Throwable());
                         }
                     }
-                });
+                }).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
+                ;
     }
+
+    public List<CatagoryDTO> getCatagorys(String area) {
+        return TableCategory.getCategorys(MyDatabaseHelper.getInstance(mContext),area);
+
+    }
+
+    public List<CouponDTO> getCouponWithDateCategoryIDs(String categoryID, String area) {
+        return TableCoupon.getCouponWithDateCategoryIDs(MyDatabaseHelper.getInstance(mContext),categoryID, area);
+    }
+
 
     public Observable<List<CatagoryDTO>> getCatagorysRX(String area) {
         return makeObservable(TableCategory.getCategory(MyDatabaseHelper.getInstance(mContext),area))
                 .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
     public Observable<List<CouponDTO>> getCouponWithDateCategoryIDRX(String categoryID, String area) {
-        return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area))
-                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
+        return makeObservable(TableCoupon.getCouponWithDateCategoryID(MyDatabaseHelper.getInstance(mContext),categoryID, area));
+                //.subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
     public Observable <CouponDTO> getCouponDetail(String couponID, String area) {
-        return makeObservable(TableCoupon.getCouponDetail(MyDatabaseHelper.getInstance(mContext),couponID, area))
-                .subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
+        return makeObservable(TableCoupon.getCouponDetail(MyDatabaseHelper.getInstance(mContext),couponID, area));
+                //.subscribeOn(Schedulers.computation()); // note: do not use Schedulers.io()
     }
 
 

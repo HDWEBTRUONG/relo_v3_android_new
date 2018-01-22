@@ -2,49 +2,36 @@ package jp.relo.cluboff.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import framework.phvtFragment.BaseFragment;
-import framework.phvtUtils.AppLog;
-import jp.relo.cluboff.BuildConfig;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.model.BlockEvent;
-import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
 import jp.relo.cluboff.util.Utils;
-import jp.relo.cluboff.util.ase.EventBusTimeReload;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.TimeInterval;
 
 /**
  * Created by tonkhanh on 10/18/17.
@@ -166,14 +153,14 @@ public class MemberAuthFragment extends BaseFragment {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                    //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 hideLoading();
-                handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
             }
         });
     }

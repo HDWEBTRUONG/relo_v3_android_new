@@ -32,7 +32,6 @@ import jp.relo.cluboff.util.Utils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -376,7 +375,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mCompositeSubscription.add(observable
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.newThread())
                 .subscribe(subscriber));
 
 
@@ -408,9 +407,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
     }
-    public void showLoading(Context context){
+    public void showLoading(){
         if(kProgressHUDloading==null){
-            kProgressHUDloading=KProgressHUD.create(context)
+            kProgressHUDloading=KProgressHUD.create(this)
                     .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                     .setCancellable(true)
                     .setAnimationSpeed(2)

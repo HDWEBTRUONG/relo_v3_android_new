@@ -20,16 +20,9 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.api.ApiClientJP;
 import jp.relo.cluboff.api.ApiClientLog;
 import jp.relo.cluboff.api.ApiInterface;
 import jp.relo.cluboff.util.Utils;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by tonkhanh on 6/8/17.

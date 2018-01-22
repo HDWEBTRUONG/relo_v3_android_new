@@ -20,6 +20,7 @@ public class LoginSharedPreference {
 
     public final String VERSION = "version";
     public final String TIME_STOP = "timeStop";
+    public final String FLAG_DOWNLOAD_DONE = "FLAG_DOWNLOAD_DONE";
     public static LoginSharedPreference sharedPreference;
 
     private final SharedPreferences sharedPreferences;
@@ -43,6 +44,15 @@ public class LoginSharedPreference {
     }
     public int getVersion(){
         return sharedPreferences.getInt(VERSION,0);
+    }
+
+    public void setDownloadDone(boolean value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FLAG_DOWNLOAD_DONE, value);
+        editor.apply();
+    }
+    public boolean checkDownloadDone(){
+        return sharedPreferences.getBoolean(FLAG_DOWNLOAD_DONE,false);
     }
 
     public void setValueStop(long value){

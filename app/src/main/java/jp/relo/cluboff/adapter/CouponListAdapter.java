@@ -29,7 +29,6 @@ import jp.relo.cluboff.util.Utils;
 
 public class CouponListAdapter extends BaseAdapter{
     private ArrayList<CouponDTO> listData;
-    private LayoutInflater layoutInflater;
     private Context mContext;
     iClickButton miClickButton;
     public static int ISLIKED =0;
@@ -38,7 +37,6 @@ public class CouponListAdapter extends BaseAdapter{
 
     public CouponListAdapter(Context mContext, ArrayList<CouponDTO> listData,iClickButton miClickButton) {
         this.listData = listData;
-        layoutInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.miClickButton = miClickButton;
         matrix = new ColorMatrix();
@@ -67,7 +65,8 @@ public class CouponListAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.item_list_coupon, null);
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            convertView = inflater.inflate(R.layout.item_list_coupon,parent, false);
             holder = new ViewHolder();
             holder.categoryView = (TextView) convertView.findViewById(R.id.tvCategoryName);
             holder.companyView = (TextView) convertView.findViewById(R.id.tvCompanyName);

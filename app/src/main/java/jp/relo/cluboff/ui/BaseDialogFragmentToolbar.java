@@ -19,6 +19,9 @@ public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
     protected ImageView ivMenuRight;
     protected TextView tvMenuTitle;
     protected TextView tvMenuSubTitle;
+    protected TextView tvTitleCenter;
+    protected View llHeader;
+    protected View viewPaddingHeader;
 
     @Nullable
     @Override
@@ -26,6 +29,9 @@ public abstract class BaseDialogFragmentToolbar extends BaseDialogFragment{
         ivMenuRight = (ImageView) view.findViewById(R.id.ivMenuRight);
         tvMenuTitle = (TextView) view.findViewById(R.id.tvMenuTitle);
         tvMenuSubTitle = (TextView) view.findViewById(R.id.tvMenuSubTitle);
+        tvTitleCenter = (TextView) view.findViewById(R.id.tvTitleCenter);
+        llHeader = view.findViewById(R.id.llHeader);
+        viewPaddingHeader = view.findViewById(R.id.viewPaddingHeader);
         setupActionBar();
     }
 

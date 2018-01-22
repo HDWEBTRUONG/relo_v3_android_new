@@ -38,6 +38,66 @@ public class TableCoupon {
     public static final String COLUMN_BENEFIT = "benefit";
     public static final String COLUMN_BENEFIT_NOTES = "benefit_notes";
 
+    public static List<CouponDTO> getCouponWithDateCategoryIDs(final MyDatabaseHelper mMyDatabaseHelper,
+                                                                        final String categoryID, final String area) {
+        ArrayList<CouponDTO> datas= new ArrayList<>();
+        String now= Utils.valueNowTime();
+        String selectQuery = "";
+        if(ConstansDB.COUPON_ALL.equals(categoryID)){
+
+            selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
+                    + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "
+                    +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    TableCoupon.COLUMN_EXPIRATION_TO +" > "+now + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+ "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
+        }else if(ConstansDB.COUPON_FAV.equals(categoryID)) {
+
+            selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
+                    + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID
+                    +" WHERE B."+TableFav.COLUMN_LIKE+" = '"+1+"' AND ("
+                    +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")" + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area + "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
+        }
+        else{
+
+            selectQuery = "SELECT  A.* , B."+TableFav.COLUMN_LIKE+" FROM " + TableCoupon.TABLE_COUPON + " AS A LEFT JOIN "+TableFav.TABLE_FAV
+                    + " AS B ON A."+TableCoupon.COLUMN_SHGRID+ " = B."+TableFav.COLUMN_SHGRID +" WHERE "+TableCoupon.COLUMN_CATEGORY_ID+" = '"+categoryID+"' AND ("
+                    +TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
+                    TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"   + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+  "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
+
+        }
+        SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
+            do {
+                CouponDTO note = new CouponDTO();
+                note.setShgrid(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_SHGRID)));
+                note.setCategory_id(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY_ID)));
+                note.setCategory_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY)));
+                note.setCoupon_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON)));
+                note.setCoupon_name_en(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_EN)));
+                note.setCoupon_image_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_IAMGE_PATH)));
+                note.setCoupon_type(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_TYPE)));
+                note.setLink_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_LINK_PATH)));
+                note.setExpiration_from(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_FROM)));
+                note.setExpiration_to(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_TO)));
+                note.setPriority(cursor.getInt(cursor.getColumnIndex(TableCoupon.COLUMN_PRIORITY)));
+                note.setMemo(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_MEMO)));
+                note.setArea(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_AREA)));
+                note.setBenefit(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT)));
+                note.setBenefit_notes(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT_NOTES)));
+
+                datas.add(note);
+            } while (cursor.moveToNext());
+        }
+        if( db.isOpen()){
+            db.close();
+        }
+        return datas;
+    }
+
     public static Callable<List<CouponDTO>> getCouponWithDateCategoryID(final MyDatabaseHelper mMyDatabaseHelper,
                                                                         final String categoryID, final String area) {
         return new Callable<List<CouponDTO>>() {
@@ -70,7 +130,6 @@ public class TableCoupon {
                             TableCoupon.COLUMN_EXPIRATION_TO +" > "+now+")"   + " AND "+TableCoupon.COLUMN_AREA  +" = '"+area+  "' ORDER BY A."+TableCoupon.COLUMN_PRIORITY +" DESC";
 
                 }
-                AppLog.log("selectQuery: "+ selectQuery);
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -96,7 +155,6 @@ public class TableCoupon {
                         datas.add(note);
                     } while (cursor.moveToNext());
                 }
-                cursor.close();
                 if( db.isOpen()){
                     db.close();
                 }

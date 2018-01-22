@@ -25,8 +25,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by tonkhanh on 11/30/17.
@@ -143,7 +143,7 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         String currentDateandTime = sdf.format(new Date());
         tvDate.setText(MessageFormat.format(getString(R.string.detail_offline_date),currentDateandTime));
-        myDatabaseHelper.getCouponDetail(couponID, areaID).observeOn(AndroidSchedulers.mainThread())
+        myDatabaseHelper.getCouponDetail(couponID, areaID).observeOn(Schedulers.newThread())
                 .subscribe(new Action1<CouponDTO>() {
                     @Override
                     public void call(CouponDTO couponDTO) {

@@ -19,6 +19,7 @@ public abstract class BaseActivityToolbar extends BaseActivity {
     protected ImageView ivMenuRight;
     protected TextView tvMenuTitle;
     protected TextView tvMenuSubTitle;
+    protected TextView tvTitleCenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public abstract class BaseActivityToolbar extends BaseActivity {
         ivMenuRight = (ImageView) findViewById(R.id.ivMenuRight);
         tvMenuTitle = (TextView) findViewById(R.id.tvMenuTitle);
         tvMenuSubTitle = (TextView) findViewById(R.id.tvMenuSubTitle);
+        tvTitleCenter = (TextView) findViewById(R.id.tvTitleCenter);
     }
 
     @Override

@@ -10,21 +10,13 @@ import android.widget.HorizontalScrollView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import java.util.List;
-
 import framework.phvtUtils.AppLog;
 import jp.relo.cluboff.R;
-import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.database.ConstansDB;
 import jp.relo.cluboff.model.CatagoryDTO;
 import jp.relo.cluboff.ui.activity.MainTabActivity;
 import jp.relo.cluboff.util.ConstanArea;
-import jp.relo.cluboff.util.Constant;
 import jp.relo.cluboff.util.LoginSharedPreference;
-import jp.relo.cluboff.util.OnSwipeTouchListener;
 import jp.relo.cluboff.views.MyMaterialSpinner;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by tonkhanh on 10/16/17.
@@ -38,6 +30,7 @@ public class CouponListAreaFragment extends CouponListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        hideLoading();
         svMenu = (HorizontalScrollView)view.findViewById(R.id.svMenu);
         svMenu.setVisibility(View.VISIBLE);
 
@@ -136,6 +129,10 @@ public class CouponListAreaFragment extends CouponListFragment {
     public void onResume() {
         super.onResume();
         areaName = getAreaName();
+        if(!LoginSharedPreference.getInstance(getActivity()).checkDownloadDone()){
+            myDatabaseHelper.clearData();
+            return;
+        }
         if(rgArea.getCheckedRadioButtonId()==-1){
             if(categoryList==null || categoryList.isEmpty()){
                 mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
@@ -144,8 +141,8 @@ public class CouponListAreaFragment extends CouponListFragment {
             }
         }else{
             if(listCoupon!= null && listCoupon.size()>0){
-                if(categoryList==null || categoryList.isEmpty()){
-                    //mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+                if(categoryList==null || categoryList.isEmpty() && categoryList.size()<=1){
+                    mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
                 }else{
                     mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
                 }
@@ -154,6 +151,7 @@ public class CouponListAreaFragment extends CouponListFragment {
                 mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
             }
         }
+
         setChangeSelectArea();
         int tabSave = LoginSharedPreference.getInstance(getActivity()).getTabSave();
         switch (tabSave){

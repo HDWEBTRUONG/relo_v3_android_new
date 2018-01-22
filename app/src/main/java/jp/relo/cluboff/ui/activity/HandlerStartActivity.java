@@ -137,6 +137,7 @@ public class HandlerStartActivity extends BaseActivity {
 
                     } catch (IOException e) {
                         e.printStackTrace();
+                        ReloApp.setBlockAuth(false);
                     }finally {
                         handler.sendEmptyMessage(GOTOSCREEN);
                     }
@@ -146,6 +147,7 @@ public class HandlerStartActivity extends BaseActivity {
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     AppLog.log("Err: "+t.toString());
                     hideLoading();
+                    ReloApp.setBlockAuth(false);
                     handler.sendEmptyMessage(GOTOSCREEN);
                 }
             });
@@ -172,5 +174,10 @@ public class HandlerStartActivity extends BaseActivity {
             handler.sendEmptyMessage(CHECKAUTH);
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

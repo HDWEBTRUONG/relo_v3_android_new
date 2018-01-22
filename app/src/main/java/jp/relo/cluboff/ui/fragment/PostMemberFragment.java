@@ -283,7 +283,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 return true;
             }
         });
-        //loadGetUrl();
+        loadGetUrl();
     }
 
     private void loadGetUrl(){
@@ -312,10 +312,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                         }
                     }
 
-                    loadUrlWeb();
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
                     loadUrlWeb();
                 }
             }
@@ -343,11 +344,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         mWebView.stopLoading();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadGetUrl();
-    }
 
     @Override
     public void onPause() {
