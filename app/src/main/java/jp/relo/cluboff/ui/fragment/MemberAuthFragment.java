@@ -133,24 +133,13 @@ public class MemberAuthFragment extends BaseFragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 hideLoading();
                 try {
-                    Document document = Jsoup.parse(response.body().string());
-                    if(Utils.isAuthSuccess(getActivity(),document)){
-                           /* if(subscription!=null){
-                                subscription.unsubscribe();
-                            }
-                            observable = Observable.interval(30, TimeUnit.MINUTES)
-                                    .timeInterval();
-                            observable.observeOn(AndroidSchedulers.mainThread());
-                            subscription = observable.subscribe(new Action1<TimeInterval<Long>>() {
-                                        @Override
-                                        public void call(TimeInterval<Long> longTimeInterval) {
-                                            EventBus.getDefault().post(new EventBusTimeReload(longTimeInterval.getValue()));
-                                        }
-                                    });*/
-
-                    }else{
-                        handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                    if(response!=null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        if(!Utils.isAuthSuccess(getActivity(),document)){
+                            handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                        }
                     }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);

@@ -415,13 +415,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                     .setAnimationSpeed(2)
                     .setDimAmount(0.5f);
         }
-        if(!kProgressHUDloading.isShowing()){
+        if(!kProgressHUDloading.isShowing() && !this.isFinishing()){
             kProgressHUDloading.show();
         }
 
     }
     public void hideLoading(){
-        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing()){
+        if(kProgressHUDloading!=null&&kProgressHUDloading.isShowing() && !this.isFinishing()){
             kProgressHUDloading.dismiss();
         }
     }

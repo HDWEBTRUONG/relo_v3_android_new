@@ -295,8 +295,10 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 hideLoading();
                 try {
-                    Document document = Jsoup.parse(response.body().string());
-                    Utils.isAuthSuccess(LoginActivity.this, document);
+                    if(response!= null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        Utils.isAuthSuccess(LoginActivity.this, document);
+                    }
 
                 } catch (IOException e) {
                     ReloApp.setBlockAuth(false);

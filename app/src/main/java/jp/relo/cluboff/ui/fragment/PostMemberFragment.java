@@ -297,22 +297,22 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    Document document = Jsoup.parse(response.body().string());
-                    Element divChildren = document.select("html").first();
-                    for (int i = 0; i < divChildren.childNodes().size(); i++) {
-                        Node child = divChildren.childNode(i);
-                        if (child.nodeName().equals("#comment")) {
-                            String valueAuth = child.toString();
-                            int valueHandleLogin = BuildConfig.DEBUG? 0:1;
-                            if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==valueHandleLogin){
-                                LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-                                loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
-                                loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
+                    if(response!=null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        Element divChildren = document.select("html").first();
+                        for (int i = 0; i < divChildren.childNodes().size(); i++) {
+                            Node child = divChildren.childNode(i);
+                            if (child.nodeName().equals("#comment")) {
+                                String valueAuth = child.toString();
+                                int valueHandleLogin = BuildConfig.DEBUG? 0:1;
+                                if(Utils.parserInt(valueAuth.substring(valueAuth.indexOf("<STS>")+5,valueAuth.indexOf("</STS>")))==valueHandleLogin){
+                                    LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+                                    loginSharedPreference.setKEY_APPU(valueAuth.substring(valueAuth.indexOf("<APPU>")+6,valueAuth.indexOf("</APPU>")));
+                                    loginSharedPreference.setKEY_APPP(valueAuth.substring(valueAuth.indexOf("<APPP>")+6,valueAuth.indexOf("</APPP>")));
+                                }
                             }
                         }
                     }
-
-
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -20,7 +20,6 @@ import jp.relo.cluboff.util.Utils;
  */
 
 public class TableCategory {
-    public static Cursor cursor;
     public static Callable<List<CatagoryDTO>> getCategory(final MyDatabaseHelper mMyDatabaseHelper, final String area) {
         return new Callable<List<CatagoryDTO>>() {
             @Override
@@ -32,9 +31,7 @@ public class TableCategory {
                         "%' AND "+ TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                         TableCoupon.COLUMN_EXPIRATION_TO +" > "+now +" group by "+TableCoupon.COLUMN_CATEGORY_ID+" having count("+TableCoupon.COLUMN_SHGRID+") > 0";
                 SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
-                if(cursor ==null){
-                    cursor = db.rawQuery(selectQuery, null);
-                }
+                Cursor cursor = db.rawQuery(selectQuery, null);
                 try{
                     if (cursor!=null  && cursor.getCount()>0 && cursor.moveToFirst()) {
                         do {
@@ -65,12 +62,11 @@ public class TableCategory {
                 " FROM "+TableCoupon.TABLE_COUPON+"  where "+TableCoupon.COLUMN_AREA+" like '%"+area+
                 "%' AND "+ TableCoupon.COLUMN_EXPIRATION_FROM+" < "+ now + " AND "+
                 TableCoupon.COLUMN_EXPIRATION_TO +" > "+now +" group by "+TableCoupon.COLUMN_CATEGORY_ID+" having count("+TableCoupon.COLUMN_SHGRID+") > 0";
+        AppLog.log("Category: "+selectQuery);
         SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
-        if(cursor ==null){
-            cursor = db.rawQuery(selectQuery, null);
-        }
+        Cursor cursor = db.rawQuery(selectQuery, null);
         try{
-            if (cursor!=null  && cursor.getCount()>0 && cursor.moveToFirst()) {
+            if (cursor!=null  && !cursor.isClosed() && cursor.getCount()>0 && cursor.moveToFirst()) {
                 do {
                     CatagoryDTO catagoryDTO = new CatagoryDTO();
                     catagoryDTO.setCatagoryID(cursor.getString(0));
@@ -78,7 +74,7 @@ public class TableCategory {
                     datas.add(catagoryDTO);
                 } while (cursor.moveToNext());
             }
-            //cursor.close();
+            cursor.close();
             db.close();
         }catch (Exception ex){
             AppLog.log(ex.toString());

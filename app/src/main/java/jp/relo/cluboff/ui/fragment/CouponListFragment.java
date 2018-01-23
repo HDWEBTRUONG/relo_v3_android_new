@@ -93,24 +93,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void loadCategory() {
-        /*myDatabaseHelper.getCatagory(areaName).observeOn(Schedulers.newThread())
-                .subscribe(new Action1<List<CatagoryDTO>>() {
-                    @Override
-                    public void call(List<CatagoryDTO> catagoryDTOs) {
-                        if(MainTabActivity.isIsVisible()){
-                            categoryList.clear();
-                            categoryList.addAll(catagoryDTOs);
-                            categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
-                            mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
-                            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
-                        }
-
-                    }
-                });*/
         if(MainTabActivity.isIsVisible()){
             categoryList.clear();
             categoryList.addAll(myDatabaseHelper.getCatagorys(areaName));
-            categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,getString(R.string.catalogy)));
+            categoryList.add(0,new CatagoryDTO(ConstansDB.COUPON_ALL,"すべて"));
             mHandler.sendEmptyMessage(CouponListFragment.MSG_SET_CATEGORY);
             mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_DATA);
         }
@@ -129,12 +115,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 if(isSelected){
                     tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
                 }else{
+                    if(isAdded())
                     tvCategory.setText(getString(R.string.catalogy_selecte));
                 }
             }
         }
         lnCatalory.setOnClickListener(this);
-        //tvCategory.setText(categoryList.get(spinner.getSelectedIndex()).getGetCatagoryName());
     }
 
     protected void setEventCategory(){
@@ -175,10 +161,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
         if(!isArea){
             areaName = ConstanArea.WHOLEJAPAN;
-            /*if(BuildConfig.DEBUG && ++count >4){
-                LoginSharedPreference.getInstance(getActivity()).setVersion(LoginSharedPreference.getInstance(getActivity()).getVersion()-count);
-                ReloApp.setVersionApp(Utils.convertIntVersion(String.valueOf(LoginSharedPreference.getInstance(getActivity()).getVersion())));
-            }*/
             //check update xml data
             if(!LoginSharedPreference.getInstance(getActivity()).checkDownloadDone()){
                 myDatabaseHelper.clearData();
@@ -241,7 +223,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         super.onResume();
         ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
 
-
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -273,24 +254,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
+
+        if(LoginSharedPreference.getInstance(getActivity()).checkDownloadDone() && (categoryList==null || categoryList.isEmpty())){
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        }
     }
 
     protected void getListDataCategoryID(String categoryID) {
         mainTabActivity.showLoading();
         listCoupon.clear();
-        /*myDatabaseHelper.getCouponWithDateCategoryIDRX(categoryID, areaName)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.newThread())
-                .subscribe(new Action1<List<CouponDTO>>() {
-                    @Override
-                    public void call(List<CouponDTO> couponDTOs) {
-                        listCoupon.clear();
-                        listCoupon.addAll(couponDTOs);
-                        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
-                        hideLoading();
-                    }
-                });
-        */
         listCoupon.addAll(myDatabaseHelper.getCouponWithDateCategoryIDs(categoryID, areaName));
         mainTabActivity.hideLoading();
         mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
@@ -327,22 +299,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         if(saveLogin!=null){
             kaiinno = saveLogin.getUserName();
             requestno = data.getShgrid();
-            /*if(WILL_NET_SERVER.equals(data.getCoupon_type())){
-                url =data.getLink_path();
-            }else{
-                url = Constant.TEMPLATE_URL_COUPON;
-            }
-            bundle.putString(Constant.KEY_LOGIN_URL, url);
-            bundle.putString(Constant.TAG_KAIINNO, kaiinno);
-            bundle.putString(Constant.KEY_URL_TYPE, data.getCoupon_type());
-            bundle.putString(Constant.TAG_SENICODE, "1");
-            bundle.putString(Constant.TAG_SHGRID, requestno);
-
-            WebViewDetailCouponFragment webViewFragment = new WebViewDetailCouponFragment();
-            webViewFragment.setArguments(bundle);
-            if(getActivity() instanceof MainTabActivity){
-                ((MainTabActivity) getActivity()).openDialogFragment(webViewFragment);
-            }*/
 
             //version 2
             if(WILL_NET_SERVER.equals(data.getCoupon_type())){
@@ -415,9 +371,11 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     if(countDownloaded ==xmlUpdatesList.size()){
                         mainTabActivity.hideLoading();
                         LoginSharedPreference.getInstance(getActivity()).setVersion(ReloApp.getVersionApp());
-                        mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
                         ReloApp.setIsUpdateData(false);
                         LoginSharedPreference.getInstance(getActivity()).setDownloadDone(true);
+                        if(MainTabActivity.isIsVisible()){
+                            mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
+                        }
                     }
                 }
 

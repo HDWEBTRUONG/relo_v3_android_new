@@ -23,6 +23,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.AreaCouponPost;
@@ -50,6 +51,8 @@ public class PostAreaWebViewFragment2 extends BaseFragmentToolbarBottombar {
     boolean isVisibleToUser;
     ProgressBar horizontalProgress;
     private FrameLayout mapFragmentContainer;
+
+    String logUrl="";
 
     public static final String TAG = PostAreaWebViewFragment2.class.getSimpleName();
 
@@ -110,7 +113,15 @@ public class PostAreaWebViewFragment2 extends BaseFragmentToolbarBottombar {
         llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                if(StringUtil.isEmpty(logUrl) || logUrl.contains("loc.htm")){
+                    if (!checkPermissions()) {
+                        requestPermission();
+                    }else{
+                        loadUrl();
+                    }
+                }else{
+                    mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                }
             }
         });
 
@@ -187,6 +198,7 @@ public class PostAreaWebViewFragment2 extends BaseFragmentToolbarBottombar {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                logUrl = url;
                 isLoadding = false;
                 if(isVisible()){
                     hideLoading();

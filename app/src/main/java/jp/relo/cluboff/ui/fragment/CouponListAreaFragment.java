@@ -70,6 +70,7 @@ public class CouponListAreaFragment extends CouponListFragment {
                 areaName = getAreaName();
                 positionView = 0;
                 categoryID = item.getCatagoryID();
+                isSelected = true;
                 getListDataCategoryID(categoryID);
                 tvCategory.setText(item.getGetCatagoryName());
             }

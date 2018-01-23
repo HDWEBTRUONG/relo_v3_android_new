@@ -21,6 +21,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 
 import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 import jp.relo.cluboff.R;
 import jp.relo.cluboff.ReloApp;
 import jp.relo.cluboff.model.AreaCouponPost;
@@ -38,7 +39,6 @@ import jp.relo.cluboff.views.MyWebview;
 public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar {
 
     MyWebview mWebView;
-    private String url;
     private String strPost;
     public static final int MULTIPLE_PERMISSIONS = 10;
     String[] permissions = new String[]{
@@ -46,6 +46,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
     boolean isLoadding = false;
     boolean isVisibleToUser;
     ProgressBar horizontalProgress;
+    String logUrl="";
 
     public static final String TAG = PostAreaWebViewFragment.class.getSimpleName();
 
@@ -76,7 +77,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
         if (!checkPermissions()) {
             requestPermission();
         }else{
-            loadUrl();
+            loadUrl("");
         }
     }
 
@@ -118,7 +119,17 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
         llReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                AppLog.log("URL: "+logUrl);
+                if(StringUtil.isEmpty(logUrl) || logUrl.contains("loc.htm")){
+                    if (!checkPermissions()) {
+                        requestPermission();
+                    }else{
+                        loadUrl("");
+                    }
+                }else{
+                   // mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                    loadUrl(logUrl);
+                }
             }
         });
 
@@ -176,6 +187,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                logUrl = url;
                 isLoadding = false;
                 if(isVisible()){
                     hideLoading();
@@ -196,7 +208,6 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
             }
 
         });
-
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
@@ -281,19 +292,20 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
                 } else {
                     Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
                 }
-                loadUrl();
+                loadUrl("");
                 break;
 
         }
     }
 
-    private void loadUrl() {
-        url = Constant.WEBVIEW_URL_AREA_COUPON;
+    private void loadUrl(String mUrl) {
+        if(StringUtil.isEmpty(mUrl)){
+            mUrl = Constant.WEBVIEW_URL_AREA_COUPON;
+        }
         AreaCouponPost areaCouponPost = new AreaCouponPost();
         areaCouponPost.setP_s7(LoginSharedPreference.getInstance(getActivity()).getUserName().replaceAll("-",""));
         strPost =areaCouponPost.toString();
         AppLog.log(strPost);
-        mWebView.postUrl( url, strPost.getBytes());
+        mWebView.postUrl( mUrl, strPost.getBytes());
     }
-
 }
