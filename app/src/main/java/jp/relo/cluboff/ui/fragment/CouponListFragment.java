@@ -165,7 +165,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
-        hideLoading();
+        mainTabActivity.hideLoading();
     }
 
     @Override
@@ -201,6 +201,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
                         @Override
                         public void onFinish() {
+                            mainTabActivity.hideLoading();
                             if(ReloApp.isUpdateData()){
                                 mHandler.sendEmptyMessage(CouponListFragment.MSG_CHECK_UPDATE);
                             }else{
@@ -211,7 +212,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 }
                                 mHandler.sendEmptyMessage(CouponListFragment.MSG_UPDATE_ADAPTER);
                             }
-                            mainTabActivity.hideLoading();
                         }
                     }
             );
@@ -291,10 +291,9 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     }
                 });
         */
-        listCoupon.clear();
         listCoupon.addAll(myDatabaseHelper.getCouponWithDateCategoryIDs(categoryID, areaName));
-        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
         mainTabActivity.hideLoading();
+        mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
 
     }
     private void setAdapter(){
@@ -392,6 +391,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
     private void updateData(){
         if(ReloApp.isUpdateData()) {
+            mainTabActivity.showLoading();
             LoginSharedPreference.getInstance(getActivity()).setDownloadDone(false);
             countDownloaded =0;
             myDatabaseHelper.clearData();
@@ -407,16 +407,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_CYUUGOKUSHIKOKU, ConstanArea.CYUUGOKUSHIKOKU));
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_KYUSHU, ConstanArea.KYUSHU));
             xmlUpdatesList.add(new XMLUpdate(Constant.XML_OKINAWA, ConstanArea.OKINAWA));
-            mainTabActivity.showLoading();
             Observable.from(xmlUpdatesList)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe(new Subscriber<XMLUpdate>() {
                 @Override
                 public void onCompleted() {
                     if(countDownloaded ==xmlUpdatesList.size()){
+                        mainTabActivity.hideLoading();
                         LoginSharedPreference.getInstance(getActivity()).setVersion(ReloApp.getVersionApp());
                         mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
-                        mainTabActivity.hideLoading();
                         ReloApp.setIsUpdateData(false);
                         LoginSharedPreference.getInstance(getActivity()).setDownloadDone(true);
                     }
@@ -459,7 +458,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             if ( factory == null){
-                hideLoading();
                 LoginSharedPreference.getInstance(getActivity()).setVersion(0);
                 mHandler.sendEmptyMessage(MSG_LOAD_CATEGORY);
                 return;

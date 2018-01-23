@@ -164,6 +164,38 @@ public class TableCoupon {
     }
 
     //detail
+    public static CouponDTO getCouponDetails(final MyDatabaseHelper mMyDatabaseHelper,
+                                                      final String couponID, final String area ) {
+        CouponDTO note = new CouponDTO();
+        String selectQuery = "select * from TB_COUPON where shgrid = '"+couponID+"' and area = '"+area+"'";
+        AppLog.log("++++++: "+selectQuery);
+        SQLiteDatabase db = mMyDatabaseHelper.getSqLiteDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor!=null && cursor.getCount()>0 && cursor.moveToFirst()) {
+            note.setShgrid(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_SHGRID)));
+            note.setCategory_id(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY_ID)));
+            note.setCategory_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_CATEGORY)));
+            note.setCoupon_name(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON)));
+            note.setCoupon_name_en(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_EN)));
+            note.setCoupon_image_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_IAMGE_PATH)));
+            note.setCoupon_type(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_COUPON_TYPE)));
+            note.setLink_path(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_LINK_PATH)));
+            note.setExpiration_from(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_FROM)));
+            note.setExpiration_to(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_EXPIRATION_TO)));
+            note.setPriority(cursor.getInt(cursor.getColumnIndex(TableCoupon.COLUMN_PRIORITY)));
+            note.setMemo(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_MEMO)));
+            note.setArea(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_AREA)));
+            note.setBenefit(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT)));
+            note.setBenefit_notes(cursor.getString(cursor.getColumnIndex(TableCoupon.COLUMN_BENEFIT_NOTES)));
+        }
+        cursor.close();
+        if( db.isOpen()){
+            db.close();
+        }
+        return note;
+    }
+
+    //detail
     public static Callable<CouponDTO> getCouponDetail(final MyDatabaseHelper mMyDatabaseHelper,
                                                                         final String couponID, final String area ) {
         return new Callable<CouponDTO>() {

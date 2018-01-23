@@ -192,6 +192,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return TableCoupon.getCouponWithDateCategoryIDs(MyDatabaseHelper.getInstance(mContext),categoryID, area);
     }
 
+    public CouponDTO getCouponDetails(String couponID, String area) {
+        return TableCoupon.getCouponDetails(MyDatabaseHelper.getInstance(mContext),couponID, area);
+    }
+
 
     public Observable<List<CatagoryDTO>> getCatagorysRX(String area) {
         return makeObservable(TableCategory.getCategory(MyDatabaseHelper.getInstance(mContext),area))

@@ -143,34 +143,28 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         String currentDateandTime = sdf.format(new Date());
         tvDate.setText(MessageFormat.format(getString(R.string.detail_offline_date),currentDateandTime));
-        myDatabaseHelper.getCouponDetail(couponID, areaID).observeOn(Schedulers.newThread())
-                .subscribe(new Action1<CouponDTO>() {
-                    @Override
-                    public void call(CouponDTO couponDTO) {
-                        tvCouponName.setText(MessageFormat.format(getString(R.string.detail_offline_coupon_name_template),
-                                couponDTO.getCoupon_name(), couponDTO.getCoupon_name_en()));
-                        if(couponDTO.getBenefit()!=null){
-                            AppLog.log("getBenefit: "+couponDTO.getBenefit());
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                tvBenefit.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit()).replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
-                            } else {
-                                tvBenefit.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit()).replaceAll("\\\\n", "<br>")));
-                            }
-                        }
-                        if(couponDTO.getBenefit_notes()!=null){
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                tvBenefitNote.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit_notes()).replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
-                            } else {
-                                tvBenefitNote.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit_notes()).replaceAll("\\\\n", "<br>")));
-                            }
-                        }
-                        if(StringUtil.isEmpty(couponDTO.getBenefit_notes())){
-                            tvNote.setVisibility(View.GONE);
-                        }else{
-                            tvNote.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                });
+        CouponDTO couponDTO = myDatabaseHelper.getCouponDetails(couponID, areaID);
+        tvCouponName.setText(MessageFormat.format(getString(R.string.detail_offline_coupon_name_template),
+                couponDTO.getCoupon_name(), couponDTO.getCoupon_name_en()));
+        if(couponDTO.getBenefit()!=null){
+            AppLog.log("getBenefit: "+couponDTO.getBenefit());
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                tvBenefit.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit()).replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                tvBenefit.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit()).replaceAll("\\\\n", "<br>")));
+            }
+        }
+        if(couponDTO.getBenefit_notes()!=null){
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                tvBenefitNote.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit_notes()).replaceAll("\\\\n", "<br>"),Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                tvBenefitNote.setText(Html.fromHtml(Utils.addTagRedBenefit(couponDTO.getBenefit_notes()).replaceAll("\\\\n", "<br>")));
+            }
+        }
+        if(StringUtil.isEmpty(couponDTO.getBenefit_notes())){
+            tvNote.setVisibility(View.GONE);
+        }else{
+            tvNote.setVisibility(View.VISIBLE);
+        }
     }
 }
