@@ -5,7 +5,7 @@ android {
         myconfig {
             keyAlias 'memberapp-key'
             keyPassword 'design0011design0011'
-            storeFile file('/Users/admin/Documents/RELO/Doc/KeyStore/memberapp-key.keystore')
+            storeFile file('memberapp-key.keystore')
             storePassword 'design0011design0011'
         }
     }
@@ -119,7 +119,7 @@ android {
         disable 'InvalidPackage'
     }
 
-   /* // RENAME APK CONFIG
+    // RENAME APK CONFIG
     applicationVariants.all { variant ->
 
         if (variant.getName().contains("relo_dev")) {
@@ -131,7 +131,7 @@ android {
         if (variant.getName().contains("relo_test")) {
             renameAPK(variant,'reloclub','debug_xml','1')
         }
-    }*/
+    }
 
 }
 
@@ -171,13 +171,15 @@ apply plugin: 'com.google.gms.google-services'
 
 //FUNCTION BUID
 // create by Phatvan
-/*def renameAPK(variant,app_name,env,version) {
+def renameAPK(variant,app_name,env,version) {
     variant.outputs.each { output ->
         def formattedDate = new Date().format('yyyyMMdd')
 
         def file = output.packageApplication.outputFile
-        def fileName = app_name + "_" + env + "_" + formattedDate + "_v" + version + ".apk"
+        def realtime_build = new Date().format('HHmmss');
+
+        def fileName = app_name + "_" + env + "_" + formattedDate + "_" + variant.buildType.name + "_"+ realtime_build + ".apk"
         output.packageApplication.outputFile = new File(file.parent, fileName)
     }
-}*/
+}
 
