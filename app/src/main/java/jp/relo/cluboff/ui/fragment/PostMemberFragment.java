@@ -1,15 +1,19 @@
 package jp.relo.cluboff.ui.fragment;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -17,6 +21,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,6 +67,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private ProgressBar horizontalProgress;
     Handler handler;
     public static final int LOAD_URL_WEB =1;
+    public static final int MULTIPLE_PERMISSIONS = 10;
+    String[] permissions = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION};
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -94,7 +102,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what==LOAD_URL_WEB) {
-                    loadGetUrl();
+                    if (!checkPermissions()) {
+                        requestPermission();
+                    }else{
+                        loadGetUrl();
+                    }
                 }
                 return false;
             }
@@ -220,6 +232,35 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
     }
 
+    private boolean checkPermissions() {
+        int findLoca = ContextCompat.checkSelfPermission(getActivity(), permissions[0]);
+        return findLoca == PackageManager.PERMISSION_GRANTED;
+
+    }
+    private void requestPermission() {
+        requestPermissions(permissions, MULTIPLE_PERMISSIONS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:
+                if (grantResults.length > 0) {
+                    boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (location) {
+                        Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
+                }
+                loadGetUrl();
+                break;
+
+        }
+    }
+
     private void setupWebView() {
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
@@ -258,6 +299,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         });
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+            }
+
+            @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 if (newProgress == 100) {
@@ -283,7 +329,12 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 return true;
             }
         });
-        loadGetUrl();
+
+        if (!checkPermissions()) {
+            requestPermission();
+        }else{
+            loadGetUrl();
+        }
     }
 
     private void loadGetUrl(){
