@@ -42,9 +42,9 @@ import javax.net.ssl.SSLSocketFactory;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.NetworkUtil;
 import framework.restfulService.parser.IParser;
-import jp.relo.cluboff.R;
-import jp.relo.cluboff.util.DialogFactory;
-import jp.relo.cluboff.util.NoSSLv3SocketFactory;
+import net.fukuri.memberapp.R;
+import net.fukuri.memberapp.util.DialogFactory;
+import net.fukuri.memberapp.util.NoSSLv3SocketFactory;
 
 /**
  * Created by linhphan on 11/17/15.

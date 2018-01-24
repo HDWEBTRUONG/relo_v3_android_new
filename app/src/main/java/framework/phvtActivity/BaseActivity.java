@@ -22,13 +22,12 @@ import framework.phvtCommon.AppState;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
-import jp.relo.cluboff.ReloApp;
-import jp.relo.cluboff.api.ApiClient;
-import jp.relo.cluboff.api.ApiClientForceUpdate;
-import jp.relo.cluboff.api.ApiClientJP;
-import jp.relo.cluboff.api.ApiClientLog;
-import jp.relo.cluboff.api.ApiInterface;
-import jp.relo.cluboff.util.Utils;
+
+import net.fukuri.memberapp.api.ApiClient;
+import net.fukuri.memberapp.api.ApiClientForceUpdate;
+import net.fukuri.memberapp.api.ApiClientLog;
+import net.fukuri.memberapp.api.ApiInterface;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;

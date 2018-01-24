@@ -15,7 +15,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import jp.relo.cluboff.R;
+import net.fukuri.memberapp.R;
 
 
 /**

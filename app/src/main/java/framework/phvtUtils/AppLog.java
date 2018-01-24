@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import jp.relo.cluboff.BuildConfig;
+import net.fukuri.memberapp.BuildConfig;
 
 
 /**
