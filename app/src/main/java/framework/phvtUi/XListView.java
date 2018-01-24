@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import net.fukuri.memberapp.R;
+import net.fukuri.memberapp.memberapp.R;
 
 
 public class XListView extends ListView implements OnScrollListener {

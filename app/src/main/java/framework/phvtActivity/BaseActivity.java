@@ -23,10 +23,10 @@ import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtFragment.BaseFragment;
 import framework.phvtFragment.FragmentHelper;
 
-import net.fukuri.memberapp.api.ApiClient;
-import net.fukuri.memberapp.api.ApiClientForceUpdate;
-import net.fukuri.memberapp.api.ApiClientLog;
-import net.fukuri.memberapp.api.ApiInterface;
+import net.fukuri.memberapp.memberapp.api.ApiClient;
+import net.fukuri.memberapp.memberapp.api.ApiClientForceUpdate;
+import net.fukuri.memberapp.memberapp.api.ApiClientLog;
+import net.fukuri.memberapp.memberapp.api.ApiInterface;
 
 import rx.Observable;
 import rx.Subscriber;

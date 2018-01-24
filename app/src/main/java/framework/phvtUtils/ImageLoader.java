@@ -15,7 +15,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import net.fukuri.memberapp.R;
+import net.fukuri.memberapp.memberapp.R;
 
 
 /**

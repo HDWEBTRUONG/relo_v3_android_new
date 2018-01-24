@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.fukuri.memberapp.BuildConfig;
+import net.fukuri.memberapp.memberapp.BuildConfig;
 
 
 /**

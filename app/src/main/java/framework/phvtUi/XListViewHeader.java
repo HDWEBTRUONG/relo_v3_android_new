@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.fukuri.memberapp.R;
+import net.fukuri.memberapp.memberapp.R;
 
 public class XListViewHeader extends LinearLayout {
 	private LinearLayout mContainer;

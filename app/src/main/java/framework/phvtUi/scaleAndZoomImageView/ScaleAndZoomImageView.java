@@ -50,7 +50,7 @@ import framework.phvtUi.scaleAndZoomImageView.decoder.ImageDecoder;
 import framework.phvtUi.scaleAndZoomImageView.decoder.ImageRegionDecoder;
 import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageDecoder;
 import framework.phvtUi.scaleAndZoomImageView.decoder.SkiaImageRegionDecoder;
-import net.fukuri.memberapp.R;
+import net.fukuri.memberapp.memberapp.R;
 
 /**
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,

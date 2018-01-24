@@ -42,9 +42,9 @@ import javax.net.ssl.SSLSocketFactory;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.NetworkUtil;
 import framework.restfulService.parser.IParser;
-import net.fukuri.memberapp.R;
-import net.fukuri.memberapp.util.DialogFactory;
-import net.fukuri.memberapp.util.NoSSLv3SocketFactory;
+import net.fukuri.memberapp.memberapp.R;
+import net.fukuri.memberapp.memberapp.util.DialogFactory;
+import net.fukuri.memberapp.memberapp.util.NoSSLv3SocketFactory;
 
 /**
  * Created by linhphan on 11/17/15.

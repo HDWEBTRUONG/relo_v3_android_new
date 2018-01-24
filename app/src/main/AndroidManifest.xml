@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    package="net.fukuri.memberapp">
+    package="net.fukuri.memberapp.memberapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,16 +14,16 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <permission
-        android:name="net.fukuri.memberapp.permission.C2D_MESSAGE"
+        android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="net.fukuri.memberapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE" />
     <!-- App receives GCM messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="net.fukuri.memberapp.ReloApp"
+        android:name="net.fukuri.memberapp.memberapp.ReloApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:icon"
@@ -33,7 +33,7 @@
         android:launchMode="singleTop"
         android:theme="@style/AppTheme">
         <activity
-            android:name="net.fukuri.memberapp.ui.activity.HandlerStartActivity"
+            android:name=".ui.activity.HandlerStartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,20 +42,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.fukuri.memberapp.ui.activity.SplashScreenActivity"
+            android:name=".ui.activity.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="net.fukuri.memberapp.ui.activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="net.fukuri.memberapp.ui.activity.PushvisorHandlerActivity"
+            android:name=".ui.activity.PushvisorHandlerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="net.fukuri.memberapp.ui.activity.MainTabActivity"
+            android:name=".ui.activity.MainTabActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
@@ -67,7 +67,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="net.fukuri.memberapp" />
+                <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
         </receiver>
         <!--<receiver
@@ -75,7 +75,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="net.fukuri.memberapp" />
+                <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
         </receiver>-->
 
