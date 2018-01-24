@@ -28,7 +28,6 @@ android {
             versionProps.load(new FileInputStream(versionPropsFile))
 
             def code = versionProps['VERSION_CODE'].toInteger() + 1
-
             versionProps['VERSION_CODE']=code.toString()
             versionProps.store(versionPropsFile.newWriter(), null)
 
@@ -200,9 +199,8 @@ def renameAPK(variant,app_name,env,version) {
         def formattedDate = new Date().format('yyyyMMdd')
 
         def file = output.packageApplication.outputFile
-        def realtime_build = new Date().format('HHmmss');
 
-        def fileName = app_name + "_" + env + "_" + formattedDate + "_" + variant.buildType.name + "_"+ realtime_build + ".apk"
+        def fileName = app_name + "_" + env + "_" + formattedDate + "_" + variant.buildType.name + ".apk"
         output.packageApplication.outputFile = new File(file.parent, fileName)
     }
 }
