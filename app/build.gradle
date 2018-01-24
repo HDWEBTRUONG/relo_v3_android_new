@@ -12,10 +12,13 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
+
         applicationId "net.fukuri.memberapp.memberapp"
         minSdkVersion 19
         targetSdkVersion 25
         versionName "1.4.2.2"
+
+        //Version code auto incrceament
         vectorDrawables.useSupportLibrary = true
         def versionPropsFile = file('version.properties')
 
@@ -29,9 +32,11 @@ android {
             versionProps['VERSION_CODE']=code.toString()
             versionProps.store(versionPropsFile.newWriter(), null)
 
+            // Apply new version code
             defaultConfig {
                 versionCode code
             }
+
         }
         else {
             throw new GradleException("Could not read version.properties!")
