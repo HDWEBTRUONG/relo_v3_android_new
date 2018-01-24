@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -16,6 +17,8 @@ import java.io.IOException;
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
+
+import net.fukuri.memberapp.memberapp.BuildConfig;
 import net.fukuri.memberapp.memberapp.R;
 import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.api.ApiClientJP;
@@ -45,6 +48,7 @@ public class HandlerStartActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("Relo version code"," ** Version code: "+ BuildConfig.VERSION_CODE);
         final boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
         handler = new Handler(new Handler.Callback() {
