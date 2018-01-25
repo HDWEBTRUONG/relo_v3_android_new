@@ -144,16 +144,18 @@ android {
 
     // RENAME APK CONFIG
     applicationVariants.all { variant ->
+        if(!variant.outputs.contains()){
+            if (variant.getName().contains("relo_dev")) {
+                renameAPK(variant,'reloclub','stag','1')
+            }
+            if (variant.getName().contains("relo_prod")) {
+                renameAPK(variant,'reloclub','prod','1')
+            }
+            if (variant.getName().contains("relo_test")) {
+                renameAPK(variant,'reloclub','debug_xml','1')
+            }
+        }
 
-        if (variant.getName().contains("relo_dev")) {
-            renameAPK(variant,'reloclub','stag','1')
-        }
-        if (variant.getName().contains("relo_prod")) {
-            renameAPK(variant,'reloclub','prod','1')
-        }
-        if (variant.getName().contains("relo_test")) {
-            renameAPK(variant,'reloclub','debug_xml','1')
-        }
     }
 
 }
