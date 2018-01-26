@@ -264,12 +264,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
 
                 if(url.endsWith(".pdf") && !url.startsWith(Constant.URL_READ_FDF)){
                     pdfURL = Constant.URL_READ_FDF+url;
+                    view.loadUrl(pdfURL);
                 }else{
                     pdfURL ="";
+                    super.onPageStarted(view, url, favicon);
+
                 }
             }
 
@@ -287,9 +289,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
-                }
-                if(!StringUtil.isEmpty(pdfURL) && pdfURL.endsWith("pdf")){
-                    mWebView.loadUrl(pdfURL);
                 }
 
             }
