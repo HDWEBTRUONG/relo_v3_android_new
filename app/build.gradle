@@ -16,7 +16,7 @@ android {
         applicationId "net.fukuri.memberapp.memberapp"
         minSdkVersion 19
         targetSdkVersion 25
-        versionName "1.4.2.2"
+        versionName "2.0.0.0"
 
         //Version code auto incrceament
         vectorDrawables.useSupportLibrary = true
@@ -149,13 +149,19 @@ android {
                 renameAPK(variant,'reloclub','stag','1')
             }
             if (variant.getName().contains("relo_prod")) {
-                renameAPK(variant,'reloclub','prod','1')
+                renameAPK(variant,'reloclub','prod',variant.getVersionCode())
             }
             if (variant.getName().contains("relo_test")) {
                 renameAPK(variant,'reloclub','debug_xml','1')
             }
         }
 
+    }
+    afterEvaluate {
+        apply plugin: 'spoon'
+        spoon {
+            debug = true;
+        }
     }
 
 }
@@ -193,6 +199,7 @@ dependencies {
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'spoon'
 
 //FUNCTION BUID
 // create by Phatvan
