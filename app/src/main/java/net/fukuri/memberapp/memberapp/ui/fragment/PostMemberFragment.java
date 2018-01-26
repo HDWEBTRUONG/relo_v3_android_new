@@ -1,6 +1,7 @@
 package net.fukuri.memberapp.memberapp.ui.fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,6 +47,8 @@ import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
+
+import framework.phvtUtils.StringUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -256,12 +259,24 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
         }
     }
-
+    String pdfURL;
     private void setupWebView() {
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+
+                if(url.endsWith(".pdf") && !url.startsWith(Constant.URL_READ_FDF)){
+                    pdfURL = Constant.URL_READ_FDF+url;
+                }else{
+                    pdfURL ="";
+                }
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                AppLog.log_url(view.getUrl());
+                return super.shouldOverrideUrlLoading(view, request);
             }
 
             @Override
@@ -272,6 +287,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
+                }
+                if(!StringUtil.isEmpty(pdfURL) && pdfURL.endsWith("pdf")){
+                    mWebView.loadUrl(pdfURL);
                 }
 
             }
@@ -293,7 +311,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                AppLog.log("Source: "+view.getResources().toString());
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
