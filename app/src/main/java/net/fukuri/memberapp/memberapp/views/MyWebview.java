@@ -35,12 +35,15 @@ public class MyWebview extends WebView {
         webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
-        webSettings.setSupportMultipleWindows(true);
+        webSettings.setSupportMultipleWindows(false);
         webSettings.setGeolocationEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setUserAgentString(webSettings.getUserAgentString()+"ReloClub");
+
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setPluginState(WebSettings.PluginState.ON_DEMAND);
 
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         this.clearHistory();

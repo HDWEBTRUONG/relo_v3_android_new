@@ -29,6 +29,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLEncoder;
 
 import framework.phvtUtils.AppLog;
@@ -280,6 +281,21 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 super.onReceivedError(view, request, error);
 
             }
+//            @Override
+//            public void onLoadResource (WebView view, String url) {
+//                // process it only
+//                if (url.equals ("https://www.tour.ne.jp/")) {
+//                    Uri uri  = Uri.parse (url);
+//                    Intent i = new Intent (Intent.ACTION_VIEW, uri);
+//                    startActivity (i);
+//                }
+//            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                AppLog.log("Source: "+view.getResources().toString());
+                return super.shouldOverrideUrlLoading(view, url);
+            }
         });
         mWebView.setOnKeyListener(new View.OnKeyListener(){
 
@@ -320,7 +336,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
             @Override
             public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-                mWebView.loadUrl(view.getUrl());
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(view);
+                resultMsg.sendToTarget();
                 return true;
             }
         });
