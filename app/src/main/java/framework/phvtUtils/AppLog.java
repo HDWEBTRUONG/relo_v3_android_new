@@ -24,33 +24,33 @@ public class AppLog {
     // --------------------------------------------------------
     // Show Log info
     synchronized public static void log(String content) {
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
             Log.i(TAG, content);
-        }
+        //}
     }
 
     synchronized public static void log(String tag, String content) {
-            if (BuildConfig.DEBUG) {
+            //if (BuildConfig.DEBUG) {
                 Log.i(tag, content);
-            }
+            //}
     }
 
     // --------------------------------------------------------
     // Show Log Error
     synchronized public static void log_error(String content) {
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
             Log.e(TAG, content);
-        }
+        //}
     }
 
     // --------------------------------------------------------
     // Show Log URL
     synchronized public static void log_url(String content) {
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
             Log.i("", "--------------------------------------");
             Log.i(TAG, content);
             Log.i("", "--------------------------------------");
-        }
+        //}
     }
 
 
@@ -58,7 +58,7 @@ public class AppLog {
     synchronized public static void showLogWebview(String _host , String _param ){
         String _pra[];
 
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
 
             _pra = _param.split("&");
             //
@@ -78,13 +78,13 @@ public class AppLog {
             }
             log(s);
             log("---------------------------------------------");
-        }
+        //}
     }
 
 
     //Log JSON
     synchronized  public static void logJson(String tag,String title,String data){
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
             try {
                 Log.i(tag, title);
                 JSONObject obj = new JSONObject(data);
@@ -93,7 +93,7 @@ public class AppLog {
                 Log.d(TAG, "Data: "+data);
                 e.printStackTrace();
             }
-        }
+        //}
     }
 
 
