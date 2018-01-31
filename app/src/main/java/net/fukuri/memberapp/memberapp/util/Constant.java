@@ -144,5 +144,6 @@ public class Constant {
     public static final String TITLE_LOGOUT = "認証エラー";
 
     public static final String URL_READ_FDF = "http://docs.google.com/gview?embedded=true&url=";
+    public static final String URLS_READ_FDF = "https://docs.google.com/gview?embedded=true&url=";
 
 }
