@@ -41,6 +41,7 @@ public class MyWebview extends WebView {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setUserAgentString(webSettings.getUserAgentString()+"ReloClub");
+        webSettings.setAllowFileAccess(true);
 
         webSettings.setPluginState(WebSettings.PluginState.ON);
         webSettings.setPluginState(WebSettings.PluginState.ON_DEMAND);

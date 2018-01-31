@@ -270,19 +270,19 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         }
     }
     String pdfURL;
+    boolean isLoaded;
     private void setupWebView() {
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
+                AppLog.log("AAA: "+url);
                 if(url.endsWith(".pdf") && !url.startsWith(Constant.URL_READ_FDF)){
                     pdfURL = Constant.URL_READ_FDF+url;
-                    view.loadUrl(pdfURL);
                 }else{
                     pdfURL ="";
-                    super.onPageStarted(view, url, favicon);
 
                 }
+                super.onPageStarted(view, url, favicon);
             }
 
             @Override
@@ -299,6 +299,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
+
+                    if(!StringUtil.isEmpty(pdfURL)){
+                        mWebView.loadUrl(pdfURL);
+                        pdfURL = "";
+                    }
                 }
 
             }
@@ -346,7 +351,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 if(Constant.TITLE_LOGOUT.equalsIgnoreCase(title)){
-                    AppLog.log("Force logout: "+title);
                     Utils.forceLogout(getActivity());
                 }
             }
@@ -516,6 +520,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        AppLog.log("----------------"+requestCode);
         if(requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
             super.onActivityResult(requestCode, resultCode, data);
             return;

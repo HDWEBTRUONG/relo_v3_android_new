@@ -143,7 +143,7 @@ android {
     }
 
     // RENAME APK CONFIG
-    applicationVariants.all { variant ->
+   /* applicationVariants.all { variant ->
         if(!variant.outputs.contains()){
             if (variant.getName().contains("relo_dev")) {
                 renameAPK(variant,'reloclub','stag','1')
@@ -156,7 +156,7 @@ android {
             }
         }
 
-    }
+    }*/
     afterEvaluate {
         apply plugin: 'spoon'
         spoon {
