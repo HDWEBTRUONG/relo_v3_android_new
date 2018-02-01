@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -81,7 +82,6 @@ import static framework.phvtUtils.RealPathUtil.getDataColumn;
 public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
-    private String mCameraPhotoPath;
     private static final String UTF8 = "UTF-8";
     private static final String TYPE_IMAGE = "image/*";
     private static final int INPUT_FILE_REQUEST_CODE = 1;
@@ -235,7 +235,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-
             }
         });
 
@@ -543,7 +542,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         handler.sendEmptyMessage(LOAD_URL_WEB);
         AppLog.log("Web loaded");
     }
-
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == INPUT_FILE_REQUEST_CODE) {
@@ -556,7 +554,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
                 // Check that the response is a good one
                 if (resultCode == RESULT_OK) {
-                    if(data==null&& data.getData()!=null){
+                    if(data==null || data.getData()==null){
                         if (m_uri != null) {
                             results = new Uri[] { m_uri };
                         }
@@ -571,7 +569,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
                 mFilePathCallback.onReceiveValue(results);
                 mFilePathCallback = null;
-            } else {
+            }
+            else {
                 if (mUploadMessage == null) {
                     super.onActivityResult(requestCode, resultCode, data);
                     return;
@@ -580,7 +579,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 Uri result = null;
 
                 if (resultCode == RESULT_OK) {
-                    if(data==null){
+                    if(data==null || data.getData()==null){
                         if (m_uri != null) {
                             result =  m_uri ;
                         }
@@ -651,34 +650,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             intent.setType(TYPE_IMAGE);
             startActivityForResult(intent, REQUEST_CODE_FROM_JS);
         }
-    }
-
-    private void showGallery() {
-
-        //カメラの起動Intentの用意
-        String photoName = System.currentTimeMillis() + ".jpg";
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.TITLE, photoName);
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        m_uri = getActivity().getContentResolver()
-                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-
-        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, m_uri);
-
-        // ギャラリー用のIntent作成
-        Intent intentGallery;
-        if (Build.VERSION.SDK_INT < 19) {
-            intentGallery = new Intent(Intent.ACTION_GET_CONTENT);
-            intentGallery.setType("image/*");
-        } else {
-            intentGallery = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intentGallery.addCategory(Intent.CATEGORY_OPENABLE);
-            intentGallery.setType("image/jpeg");
-        }
-        Intent intent = Intent.createChooser(intentCamera, "画像の選択");
-        intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {intentGallery});
-        startActivityForResult(intent, REQUEST_CHOOSER);
     }
 
 }
