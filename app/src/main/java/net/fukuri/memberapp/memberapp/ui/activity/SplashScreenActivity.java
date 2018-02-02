@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 
 import framework.phvtActivity.BaseActivity;
 import net.fukuri.memberapp.memberapp.R;
+import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 
@@ -38,6 +39,7 @@ public class SplashScreenActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushvisorHandlerActivity.checkOpenedThisScreen=false;
+        //((ReloApp)getApplication()).trackingAnalytics(Constant.GA_HOWTO_SCREEN);
     }
 
 

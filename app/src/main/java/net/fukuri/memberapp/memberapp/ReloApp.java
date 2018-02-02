@@ -4,9 +4,12 @@ import android.app.Application;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 
 import net.fukuri.memberapp.memberapp.R;
+
+import framework.phvtUtils.AppLog;
 
 
 /**
@@ -89,6 +92,7 @@ public class ReloApp extends Application {
         getDefaultTracker();
         mTracker.setScreenName(nameScreen);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AppLog.log("Tracked: "+nameScreen);
 
     }
 

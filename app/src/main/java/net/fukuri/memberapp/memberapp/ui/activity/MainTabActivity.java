@@ -31,6 +31,7 @@ import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtUtils.AppLog;
 import net.fukuri.memberapp.memberapp.BuildConfig;
 import net.fukuri.memberapp.memberapp.R;
+import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.adapter.MenuListAdapter;
 import net.fukuri.memberapp.memberapp.api.ApiClientJP;
 import net.fukuri.memberapp.memberapp.api.ApiInterface;
@@ -290,6 +291,7 @@ public class MainTabActivity extends BaseActivityToolbar {
 //                postMemberWebViewFragment.setArguments(bundle);
 //                openDialogFragment(postMemberWebViewFragment);
                   memberSiteFragmentContainer.setVisibility(View.VISIBLE);
+                ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
                // updateAuth();
             }

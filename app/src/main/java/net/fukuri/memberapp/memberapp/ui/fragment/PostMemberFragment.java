@@ -112,7 +112,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onViewCreated(View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -235,6 +234,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                //mWebView.loadUrl( "https://sp.fukuri.net/main/www/jsp_new/cafeteria/cafe_main.jsp" );
             }
         });
 
@@ -292,7 +292,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     }
     String pdfURL;
     private void setupWebView() {
-        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "Native");
+        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "Android");
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -460,6 +460,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 return true;
             }
 
+            /*//Test OS 4.4
+            public void showFileChooser(ValueCallback<String[]> filePathCallback,
+                                        String acceptType, boolean paramBoolean){
+                // TODO Auto-generated method stub
+                AppLog.log("Android 4.4");
+
+            }*/
+
         });
 
         if (!checkPermissions()) {
@@ -570,6 +578,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 mFilePathCallback.onReceiveValue(results);
                 mFilePathCallback = null;
             }
+
+            /*//test OS 4.4
+            else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+
+            }*/
             else {
                 if (mUploadMessage == null) {
                     super.onActivityResult(requestCode, resultCode, data);
@@ -651,5 +664,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             startActivityForResult(intent, REQUEST_CODE_FROM_JS);
         }
     }
+
+    //test OS 4.4
 
 }

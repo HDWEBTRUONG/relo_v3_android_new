@@ -13,9 +13,11 @@ import java.util.Date;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import net.fukuri.memberapp.memberapp.R;
+import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.database.MyDatabaseHelper;
 import net.fukuri.memberapp.memberapp.model.CouponDTO;
 import net.fukuri.memberapp.memberapp.ui.BaseDialogFragmentToolbar;
+import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import okhttp3.ResponseBody;
@@ -103,6 +105,9 @@ public class DetailCouponOfflineDialogFragment extends BaseDialogFragmentToolbar
             couponID = bundle.getString(BUNDLE_DATA);
             areaID = bundle.getString(BUNDLE_DATA_AREA);
         }
+
+        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_DETAIL_SCREEN);
+        setGoogleAnalyticDetailCoupon(Constant.GA_CATALOGY_DETAIL,Constant.GA_ACTION_DETAIL,couponID,Constant.GA_VALUE_DETAIL);
     }
 
     @Override
