@@ -1,8 +1,6 @@
 package net.fukuri.memberapp.memberapp.ui.fragment;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,13 +10,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
@@ -35,25 +30,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import framework.phvtUtils.AppLog;
 import net.fukuri.memberapp.memberapp.BuildConfig;
 import net.fukuri.memberapp.memberapp.R;
-import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.api.ApiClientJP;
 import net.fukuri.memberapp.memberapp.api.ApiInterface;
 import net.fukuri.memberapp.memberapp.model.MessageEvent;
@@ -66,6 +44,18 @@ import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
+
+import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -73,7 +63,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static framework.phvtUtils.RealPathUtil.getDataColumn;
 
 /**
  * Created by tqk666 on 12/28/17.
@@ -234,7 +223,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-                //mWebView.loadUrl( "https://sp.fukuri.net/main/www/jsp_new/cafeteria/cafe_main.jsp" );
             }
         });
 
@@ -292,7 +280,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     }
     String pdfURL;
     private void setupWebView() {
-        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "Android");
+        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "droid");
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -323,12 +311,12 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
 
-
                     AppLog.log("Page on FINISH URL  = "+url);
                     if(!StringUtil.isEmpty(pdfURL)){
                         mWebView.loadUrl(pdfURL);
                         pdfURL = "";
                     }
+
                 }
 
             }
@@ -459,14 +447,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
                 return true;
             }
-
-            /*//Test OS 4.4
-            public void showFileChooser(ValueCallback<String[]> filePathCallback,
-                                        String acceptType, boolean paramBoolean){
-                // TODO Auto-generated method stub
-                AppLog.log("Android 4.4");
-
-            }*/
 
         });
 
@@ -664,7 +644,5 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             startActivityForResult(intent, REQUEST_CODE_FROM_JS);
         }
     }
-
-    //test OS 4.4
 
 }

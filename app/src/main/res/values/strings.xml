@@ -135,5 +135,5 @@
     <string name="string_error_login">会員サイトでパスワードを変更した場合、再度ログインが必要です。\n恐れ入りますが、新しいパスワードを入力し、もう一度ログインをお願いいたします。</string>
     <string name="detail_coupon_member_lable">会員特典 / Member\'s Privilege</string>
     <string name="lable_id_login">会員ID</string>
-    <string name="title_chooser_file">カメラ撮影か、ギャラリーからを選択してください。</string>
+    <string name="title_chooser_file">アップロード方法を選択してください。</string>
 </resources>
