@@ -189,9 +189,14 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
                 super.onPageFinished(view, url);
                 logUrl = url;
                 isLoadding = false;
+                AppLog.log("URL: "+url);
                 if(isVisible()){
                     hideLoading();
-                    imvBackBottomBar.setEnabled(mWebView.canGoBack());
+                    if(mWebView.getUrl().endsWith("nmap.htm")){
+                        imvBackBottomBar.setEnabled(false);
+                    }else{
+                        imvBackBottomBar.setEnabled(mWebView.canGoBack());
+                    }
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
@@ -205,6 +210,8 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
                 if(isVisible()){
                     hideLoading();
                 }
+                AppLog.log("Web error");
+                loadUrl("");
             }
 
         });
