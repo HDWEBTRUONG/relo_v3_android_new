@@ -98,8 +98,7 @@ public class AreaCouponPost {
                     "&p_s22=" + p_s22 +
                     "&p_s25=" + p_s25 +
                     "&p_s29=" + p_s29 +
-                    "&p_s34=" + p_s34 +
-                    "&p_s36=" + p_s36;
+                    "&p_s34=" + p_s34 ;
         } catch (Exception e) {
             return e.toString();
         }

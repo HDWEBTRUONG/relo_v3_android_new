@@ -96,9 +96,11 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWebView.goBack();
-                imvBackBottomBar.setEnabled(false);
-                llBack.setEnabled(false);
+                if(imvBackBottomBar.isEnabled()){
+                    mWebView.goBack();
+                    imvBackBottomBar.setEnabled(false);
+                    llBack.setEnabled(false);
+                }
             }
         });
         llForward.setOnClickListener(new View.OnClickListener() {
