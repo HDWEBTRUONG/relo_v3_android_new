@@ -163,7 +163,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
             EventBus.getDefault().post(new ReloadEvent(true));
         }
-        if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE){
+        if((valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE) || PostMemberFragment.isCallbackFromBrowser){
             AppLog.log_url(" start reload member_site ............. after timer minutes ");
             EventBus.getDefault().post(new EvenBusLoadWebMembersite());
         }

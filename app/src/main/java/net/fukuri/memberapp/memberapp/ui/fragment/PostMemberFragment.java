@@ -88,6 +88,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     public static final int MULTIPLE_PERMISSIONS = 10;
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public static boolean isCallbackFromBrowser = false;
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -193,29 +194,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-                if(loginSharedPreference!=null){
-                    try {
-                        Utils.showDialogBrowser(getActivity(), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent internetIntent = new Intent(Intent.ACTION_VIEW);
-                                Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
-                                        .buildUpon()
-                                        .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
-                                        .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
-                                        .build();
-                                internetIntent.setData(uri);
-                                getActivity().startActivity(internetIntent);
-//                                dismiss();
-                                fragmentContainer.setVisibility(View.GONE);
-                            }
-                        });
+                updateAPP();
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         });
 
@@ -318,6 +298,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     }
 
                 }
+                isCallbackFromBrowser = false;
 
             }
 
@@ -528,7 +509,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Subscribe
     public void onEvent(EvenBusLoadWebMembersite event) {
         handler.sendEmptyMessage(LOAD_URL_WEB);
-        AppLog.log("Web loaded");
+        if(isCallbackFromBrowser){
+            AppLog.log("Web loaded");
+        }
     }
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
@@ -642,6 +625,66 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType(TYPE_IMAGE);
             startActivityForResult(intent, REQUEST_CODE_FROM_JS);
+        }
+    }
+
+    private void updateAPP(){
+        String  userID = "";
+        String  pass = "";
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        userID = loginSharedPreference.getUserName();
+        pass = loginSharedPreference.getPass();
+        apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if(response!=null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        if(document!=null){
+                            Utils.isAuthSuccess(getActivity(),document);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    openBrowser();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log("Err: "+t.toString());
+                openBrowser();
+            }
+        });
+    }
+    private void openBrowser(){
+        final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        if(loginSharedPreference!=null){
+            try {
+                Utils.showDialogBrowser(getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                                .buildUpon()
+                                .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
+                                .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
+                                .build();
+                        internetIntent.setData(uri);
+                        getActivity().startActivity(internetIntent);
+                        isCallbackFromBrowser = true;
+                        fragmentContainer.setVisibility(View.GONE);
+                        dialog.dismiss();
+
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
