@@ -1,22 +1,26 @@
 package net.fukuri.memberapp.memberapp.ui.fragment;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -26,6 +30,20 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import net.fukuri.memberapp.memberapp.BuildConfig;
+import net.fukuri.memberapp.memberapp.R;
+import net.fukuri.memberapp.memberapp.api.ApiClientJP;
+import net.fukuri.memberapp.memberapp.api.ApiInterface;
+import net.fukuri.memberapp.memberapp.model.MessageEvent;
+import net.fukuri.memberapp.memberapp.ui.BaseFragmentToolbarBottombar;
+import net.fukuri.memberapp.memberapp.ui.webview.MyWebViewClient;
+import net.fukuri.memberapp.memberapp.util.Constant;
+import net.fukuri.memberapp.memberapp.util.ImageUtils;
+import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
+import net.fukuri.memberapp.memberapp.util.Utils;
+import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
+import net.fukuri.memberapp.memberapp.views.MyWebview;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.jsoup.Jsoup;
@@ -33,42 +51,33 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import framework.phvtUtils.AppLog;
-import net.fukuri.memberapp.memberapp.BuildConfig;
-import net.fukuri.memberapp.memberapp.R;
-import net.fukuri.memberapp.memberapp.ReloApp;
-import net.fukuri.memberapp.memberapp.api.ApiClientJP;
-import net.fukuri.memberapp.memberapp.api.ApiInterface;
-import net.fukuri.memberapp.memberapp.model.MessageEvent;
-import net.fukuri.memberapp.memberapp.ui.BaseFragmentToolbarBottombar;
-import net.fukuri.memberapp.memberapp.ui.webview.MyWebViewClient;
-import net.fukuri.memberapp.memberapp.util.Constant;
-import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
-import net.fukuri.memberapp.memberapp.util.Utils;
-import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
-import net.fukuri.memberapp.memberapp.views.MyWebview;
-
 import framework.phvtUtils.StringUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by tqk666 on 12/28/17.
  */
 
 public class PostMemberFragment extends BaseFragmentToolbarBottombar {
-    public static final int INPUT_FILE_REQUEST_CODE = 1;
+    private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mFilePathCallback;
-    private String mCameraPhotoPath;
+    private static final String UTF8 = "UTF-8";
+    private static final String TYPE_IMAGE = "image/*";
+    private static final int INPUT_FILE_REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_FROM_JS = 2;
+
+    private Uri m_uri;
+    private static final int REQUEST_CHOOSER = 1000;
 
     private MyWebview mWebView;
     private int checkWebview;
@@ -78,7 +87,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     public static final int LOAD_URL_WEB =1;
     public static final int MULTIPLE_PERMISSIONS = 10;
     String[] permissions = new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION};
+            Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public static boolean isCallbackFromBrowser = false;
 
     public static PostMemberFragment newInstance(String key, String url, int keyCheckWebview){
         PostMemberFragment memberFragment = new PostMemberFragment();
@@ -92,7 +102,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onViewCreated(View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -185,29 +194,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         llBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
-                if(loginSharedPreference!=null){
-                    try {
-                        Utils.showDialogBrowser(getActivity(), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent internetIntent = new Intent(Intent.ACTION_VIEW);
-                                Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
-                                        .buildUpon()
-                                        .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
-                                        .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
-                                        .build();
-                                internetIntent.setData(uri);
-                                getActivity().startActivity(internetIntent);
-//                                dismiss();
-                                fragmentContainer.setVisibility(View.GONE);
-                            }
-                        });
+                updateAPP();
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         });
 
@@ -215,7 +203,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
-
             }
         });
 
@@ -243,7 +230,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
     private boolean checkPermissions() {
         int findLoca = ContextCompat.checkSelfPermission(getActivity(), permissions[0]);
-        return findLoca == PackageManager.PERMISSION_GRANTED;
+        int writeStorage = ContextCompat.checkSelfPermission(getActivity(), permissions[1]);
+        return (findLoca == PackageManager.PERMISSION_GRANTED&& writeStorage == PackageManager.PERMISSION_GRANTED);
 
     }
     private void requestPermission() {
@@ -256,7 +244,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             case MULTIPLE_PERMISSIONS:
                 if (grantResults.length > 0) {
                     boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (location) {
+                    boolean writeSto = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (location&&writeSto) {
                         Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
@@ -270,8 +259,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         }
     }
     String pdfURL;
-    boolean isLoaded;
     private void setupWebView() {
+        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "droid");
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -302,13 +291,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     llBack.setEnabled(mWebView.canGoBack());
                     llForward.setEnabled(mWebView.canGoForward());
 
-
                     AppLog.log("Page on FINISH URL  = "+url);
                     if(!StringUtil.isEmpty(pdfURL)){
                         mWebView.loadUrl(pdfURL);
                         pdfURL = "";
                     }
+
                 }
+                isCallbackFromBrowser = false;
 
             }
 
@@ -366,54 +356,75 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 resultMsg.sendToTarget();
                 return true;
             }
+            // For Android 4.4.3+
+            public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
+                if(mUploadMessage != null){
+                    mUploadMessage.onReceiveValue(null);
+                }
+                mUploadMessage = uploadFile;
 
-            public boolean onShowFileChooser(
-                    WebView webView, ValueCallback<Uri[]> filePathCallback,
-                    WebChromeClient.FileChooserParams fileChooserParams) {
-                if(mFilePathCallback != null) {
+
+                Intent intent;
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                } else {
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType(TYPE_IMAGE);
+                }
+
+                //カメラの起動Intentの用意
+                String photoName = System.currentTimeMillis() + ".jpg";
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.Images.Media.TITLE, photoName);
+                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                m_uri = getActivity().getContentResolver()
+                        .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, m_uri);
+
+                Intent intentChooser = Intent.createChooser(intentCamera, getString(R.string.title_chooser_file));
+                intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {intent});
+                startActivityForResult(intentChooser, INPUT_FILE_REQUEST_CODE);
+            }
+
+            // For Android 5.0+
+            @Override public boolean onShowFileChooser(WebView webView,
+                                                       ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                // Double check that we don't have any existing callbacks
+                if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
                 }
                 mFilePathCallback = filePathCallback;
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                        takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-                        AppLog.log("Unable to create Image File: "+ex);
-                    }
-
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(photoFile));
-                    } else {
-                        takePictureIntent = null;
-                    }
-                }
-
-                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                contentSelectionIntent.setType("image/*");
-
-                Intent[] intentArray;
-                if(takePictureIntent != null) {
-                    intentArray = new Intent[]{takePictureIntent};
+                // Set up the intent to get an existing image
+                Intent intent;
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
                 } else {
-                    intentArray = new Intent[0];
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType(TYPE_IMAGE);
                 }
 
-                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
 
-                startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
+                //カメラの起動Intentの用意
+                String photoName = System.currentTimeMillis() + ".jpg";
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.Images.Media.TITLE, photoName);
+                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                m_uri = getActivity().getContentResolver()
+                        .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, m_uri);
+
+                Intent intentChooser = Intent.createChooser(intentCamera, getString(R.string.title_chooser_file));
+                intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {intent});
+                startActivityForResult(intentChooser, INPUT_FILE_REQUEST_CODE);
 
                 return true;
             }
@@ -498,57 +509,183 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Subscribe
     public void onEvent(EvenBusLoadWebMembersite event) {
         handler.sendEmptyMessage(LOAD_URL_WEB);
-        AppLog.log("Web loaded");
+        if(isCallbackFromBrowser){
+            AppLog.log("Web loaded");
+        }
     }
-
-    /**
-     * More info this method can be found at
-     * http://developer.android.com/training/camera/photobasics.html
-     *
-     * @return
-     * @throws IOException
-     */
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        return imageFile;
-    }
-
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
-        AppLog.log("----------------"+requestCode);
-        if(requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
+        if (requestCode == INPUT_FILE_REQUEST_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (mFilePathCallback == null) {
+                    super.onActivityResult(requestCode, resultCode, data);
+                    return;
+                }
+                Uri[] results = null;
+
+                // Check that the response is a good one
+                if (resultCode == RESULT_OK) {
+                    if(data==null || data.getData()==null){
+                        if (m_uri != null) {
+                            results = new Uri[] { m_uri };
+                        }
+                    }else{
+                        String dataString = data.getDataString();
+                        if (dataString != null) {
+                            results = new Uri[] { Uri.parse(dataString) };
+                        }
+                    }
+
+                }
+
+                mFilePathCallback.onReceiveValue(results);
+                mFilePathCallback = null;
+            }
+
+            /*//test OS 4.4
+            else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+
+            }*/
+            else {
+                if (mUploadMessage == null) {
+                    super.onActivityResult(requestCode, resultCode, data);
+                    return;
+                }
+
+                Uri result = null;
+
+                if (resultCode == RESULT_OK) {
+                    if(data==null || data.getData()==null){
+                        if (m_uri != null) {
+                            result =  m_uri ;
+                        }
+                    }else{
+                        String dataString = data.getDataString();
+                        if (dataString != null) {
+                            result = data.getData();
+                        }
+                    }
+                }
+
+                mUploadMessage.onReceiveValue(result);
+                mUploadMessage = null;
+            }
+        }else if(requestCode == REQUEST_CODE_FROM_JS){
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            // setting file name
+            Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//      String imgPath = cursor.getString(columnIndex);
+            String imgPath = ImageUtils.getPath(getActivity(), selectedImage);
+            cursor.close();
+//      String fileNameSegments[] = imgPath.split("/");
+//      String fileName = fileNameSegments[fileNameSegments.length - 1];
+
+            // encode image to string
+            BitmapFactory.Options options = null;
+            options = new BitmapFactory.Options();
+            options.inSampleSize = 3;
+            Bitmap bitmap = BitmapFactory.decodeFile(imgPath, options);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] b = stream.toByteArray();
+            String encodedString = Base64.encodeToString(b, Base64.DEFAULT);
+//      Map<String, String> params = new HashMap<String, String>();
+//      params.put("filename", fileName);
+//      params.put("image", encodedString);
+            mWebView.loadUrl("javascript:chooseImgResult(" + encodedString + ")");
+        }else{
+            super.onActivityResult(requestCode,resultCode, data);
+        }
+    }
+
+
+    /**
+     * JavaScript Interface. Web code can access methods in here
+     * (as long as they have the @JavascriptInterface annotation)
+     */
+    public class WebViewJavaScriptInterface {
+
+        private Context context;
+
+        /**
+         * Need a reference to the context in order to sent a post message
+         */
+        public WebViewJavaScriptInterface(Context context) {
+            this.context = context;
         }
 
-        Uri[] results = null;
+        @JavascriptInterface
+        public void onShowFileChooser() {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType(TYPE_IMAGE);
+            startActivityForResult(intent, REQUEST_CODE_FROM_JS);
+        }
+    }
 
-        // Check that the response is a good one
-        if(resultCode == Activity.RESULT_OK) {
-            if(data == null) {
-                // If there is not data, then we may have taken a photo
-                if(mCameraPhotoPath != null) {
-                    results = new Uri[]{Uri.parse(mCameraPhotoPath)};
-                }
-            } else {
-                String dataString = data.getDataString();
-                if (dataString != null) {
-                    results = new Uri[]{Uri.parse(dataString)};
+    private void updateAPP(){
+        String  userID = "";
+        String  pass = "";
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        userID = loginSharedPreference.getUserName();
+        pass = loginSharedPreference.getPass();
+        apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if(response!=null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        if(document!=null){
+                            Utils.isAuthSuccess(getActivity(),document);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    openBrowser();
                 }
             }
-        }
 
-        mFilePathCallback.onReceiveValue(results);
-        mFilePathCallback = null;
-        return;
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                AppLog.log("Err: "+t.toString());
+                openBrowser();
+            }
+        });
     }
+    private void openBrowser(){
+        final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
+        if(loginSharedPreference!=null){
+            try {
+                Utils.showDialogBrowser(getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                                .buildUpon()
+                                .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
+                                .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
+                                .build();
+                        internetIntent.setData(uri);
+                        getActivity().startActivity(internetIntent);
+                        isCallbackFromBrowser = true;
+                        fragmentContainer.setVisibility(View.GONE);
+                        dialog.dismiss();
+
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

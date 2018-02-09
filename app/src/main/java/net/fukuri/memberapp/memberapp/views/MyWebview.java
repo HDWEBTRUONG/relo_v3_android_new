@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -43,8 +44,16 @@ public class MyWebview extends WebView {
         webSettings.setUserAgentString(webSettings.getUserAgentString()+"ReloClub");
         webSettings.setAllowFileAccess(true);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
+        }else {
+            CookieManager.getInstance().setAcceptCookie(true);
+        }
+
         webSettings.setPluginState(WebSettings.PluginState.ON);
         webSettings.setPluginState(WebSettings.PluginState.ON_DEMAND);
+
+
 
         this.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         this.clearHistory();

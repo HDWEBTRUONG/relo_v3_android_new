@@ -18,10 +18,6 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-
-import framework.phvtUtils.AppLog;
-import framework.phvtUtils.StringUtil;
 import net.fukuri.memberapp.memberapp.R;
 import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.model.AreaCouponPost;
@@ -31,6 +27,11 @@ import net.fukuri.memberapp.memberapp.ui.webview.MyWebViewClient;
 import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
+
+import org.greenrobot.eventbus.EventBus;
+
+import framework.phvtUtils.AppLog;
+import framework.phvtUtils.StringUtil;
 
 /**
  * Created by tonkhanh on 5/18/17.

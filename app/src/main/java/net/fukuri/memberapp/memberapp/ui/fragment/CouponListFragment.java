@@ -160,6 +160,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         Bundle bundle = getArguments();
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
         if(!isArea){
+            ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
             areaName = ConstanArea.WHOLEJAPAN;
             //check update xml data
             if(!LoginSharedPreference.getInstance(getActivity()).checkDownloadDone()){
@@ -221,8 +222,6 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-        ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
-
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
