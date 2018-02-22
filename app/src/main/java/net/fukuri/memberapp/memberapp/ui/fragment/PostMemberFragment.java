@@ -41,11 +41,9 @@ import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.ImageUtils;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
-import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -116,7 +114,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             }
         });
 
-        handler = new Handler(new Handler.Callback() {
+/*        handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what==LOAD_URL_WEB) {
@@ -128,20 +126,27 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 }
                 return false;
             }
-        });
+        });*/
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         fragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_member_fragment);
         setupWebView();
+
+        if (!checkPermissions()) {
+            requestPermission();
+        }else{
+            loadGetUrl();
+        }
+
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -247,8 +252,10 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     boolean writeSto = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     if (location&&writeSto) {
                         Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
+
                     }else{
                         Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
                     Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
@@ -506,13 +513,13 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         }*/
     }
 
-    @Subscribe
+/*    @Subscribe
     public void onEvent(EvenBusLoadWebMembersite event) {
         handler.sendEmptyMessage(LOAD_URL_WEB);
         if(isCallbackFromBrowser){
             AppLog.log("Web loaded");
         }
-    }
+    }*/
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == INPUT_FILE_REQUEST_CODE) {

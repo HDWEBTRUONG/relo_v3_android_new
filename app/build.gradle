@@ -17,8 +17,12 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionName "2.0.0.0"
+        // Apply new version code
+        versionCode 2044
+
 
         //Version code auto incrceament
+        /*
         vectorDrawables.useSupportLibrary = true
         def versionPropsFile = file('version.properties')
 
@@ -39,7 +43,7 @@ android {
         }
         else {
             throw new GradleException("Could not read version.properties!")
-        }
+        }*/
 
     }
     buildTypes {
