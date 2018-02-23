@@ -41,9 +41,11 @@ import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.ImageUtils;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
+import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -114,19 +116,15 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             }
         });
 
-/*        handler = new Handler(new Handler.Callback() {
+        handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what==LOAD_URL_WEB) {
-                    if (!checkPermissions()) {
-                        requestPermission();
-                    }else{
                         loadGetUrl();
-                    }
                 }
                 return false;
             }
-        });*/
+        });
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
@@ -146,7 +144,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     @Override
     public void onStart() {
         super.onStart();
-//        EventBus.getDefault().register(this);
+       EventBus.getDefault().register(this);
     }
 
     @Override
@@ -513,13 +511,13 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         }*/
     }
 
-/*    @Subscribe
+    @Subscribe
     public void onEvent(EvenBusLoadWebMembersite event) {
         handler.sendEmptyMessage(LOAD_URL_WEB);
         if(isCallbackFromBrowser){
-            AppLog.log("Web loaded");
+            AppLog.log_url("[ PostMemberFragment ] Call back from Ext Browser ... reload membersite ..");
         }
-    }*/
+    }
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == INPUT_FILE_REQUEST_CODE) {
