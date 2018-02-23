@@ -54,7 +54,7 @@
 
     <!--******************Premission locale string**********************-->
     <string name="premission_accepted">承認しました。</string>
-    <string name="premissionaccepted_no_accepted">ロケーションを取得するため、アクセスを承認してください。</string>
+    <!--<string name="premissionaccepted_no_accepted">ロケーションを取得するため、アクセスを承認してください。</string>-->
     <string name="premission_error">アクセス許可を承認してください。</string>
 
     <!--******************Menu string**********************-->

@@ -253,10 +253,10 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     if (location&&writeSto) {
                         Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
 
-                    }else{
+                    }/*else{
                         Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
 
-                    }
+                    }*/
                 } else {
                     Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
                 }

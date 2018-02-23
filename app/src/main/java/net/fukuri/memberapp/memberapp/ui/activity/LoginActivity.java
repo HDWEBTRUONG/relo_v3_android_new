@@ -350,9 +350,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (location) {
                         new LoadValueLoginTask().execute("titanium");
-                    }else{
+                    }/*else{
                         Toast.makeText(this, R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 } else {
                     Toast.makeText(this, R.string.premission_error, Toast.LENGTH_SHORT).show();
                 }
