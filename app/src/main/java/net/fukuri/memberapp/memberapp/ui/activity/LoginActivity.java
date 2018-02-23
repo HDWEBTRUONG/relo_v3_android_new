@@ -353,9 +353,9 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
                     }/*else{
                         Toast.makeText(this, R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
                     }*/
-                } else {
+                }/* else {
                     Toast.makeText(this, R.string.premission_error, Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 break;
 
         }

@@ -257,9 +257,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                         Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
 
                     }*/
-                } else {
+                } /*else {
                     Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 loadGetUrl();
                 break;
 
