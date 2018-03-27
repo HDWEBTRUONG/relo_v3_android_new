@@ -136,4 +136,6 @@
     <string name="detail_coupon_member_lable">会員特典 / Member\'s Privilege</string>
     <string name="lable_id_login">会員ID</string>
     <string name="title_chooser_file">アップロード方法を選択してください。</string>
+    <string name="force_update_title">お知らせ</string>
+    <string name="popup_update">アップデートを行う</string>
 </resources>

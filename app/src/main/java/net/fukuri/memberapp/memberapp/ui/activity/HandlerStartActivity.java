@@ -106,7 +106,9 @@ public class HandlerStartActivity extends BaseActivity {
             public void onResponse(Call<ForceupdateApp> call, Response<ForceupdateApp> response) {
                 if(response.isSuccessful()){
                     if(Utils.convertIntVersion(response.body().getAndroid().getVersion())> Utils.convertIntVersion((BuildConfig.VERSION_NAME))){
-                        Utils.showDialogLIBForceUpdate(this, response.body().getUp_comment());
+                        Utils.showDialogLIBForceUpdate(HandlerStartActivity.this, response.body().getUp_comment());
+                    }else{
+                        handler.sendEmptyMessage(GOTOSCREEN);
                     }
                 }else{
                     handler.sendEmptyMessage(GOTOSCREEN);

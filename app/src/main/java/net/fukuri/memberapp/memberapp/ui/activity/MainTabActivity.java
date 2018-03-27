@@ -439,7 +439,7 @@ public class MainTabActivity extends BaseActivityToolbar {
             public void onResponse(Call<ForceupdateApp> call, Response<ForceupdateApp> response) {
                 if(response.isSuccessful()){
                     if(Utils.convertIntVersion(response.body().getAndroid().getVersion())> Utils.convertIntVersion((BuildConfig.VERSION_NAME))){
-                        Utils.showDialogLIBForceUpdate(this, response.body().getUp_comment());
+                        Utils.showDialogLIBForceUpdate(MainTabActivity.this, response.body().getUp_comment());
                     }
                 }
             }

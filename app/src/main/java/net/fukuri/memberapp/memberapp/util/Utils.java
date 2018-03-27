@@ -379,7 +379,7 @@ public class Utils {
                 .show();
     }
 
-    public static String PLAY_STORE_LINK ="";
+    public static String PLAY_STORE_LINK ="http://play.google.com/store/apps/details?id=%s";
     public static void showDialogLIBForceUpdate(final Context context, final String messagee){
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context);
         sweetAlertDialog.setCancelable(false);
