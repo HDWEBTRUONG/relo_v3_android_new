@@ -82,6 +82,7 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/cluboff/xml/xml_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
         }
         relo_prod {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -111,6 +112,7 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"https://api.fukuri.jp"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/xml/xml_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
         }
         relo_test {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -140,6 +142,7 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"https://api.club-off.com"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/prefukuri/xml_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
         }
         relo_ota_xml_test {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -169,6 +172,7 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc/"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/cluboff/xml/xml_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
         }
     }
     lintOptions {

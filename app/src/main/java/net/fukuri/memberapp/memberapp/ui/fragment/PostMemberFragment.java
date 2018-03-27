@@ -80,7 +80,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private static final int REQUEST_CHOOSER = 1000;
 
     private MyWebview mWebView;
+    private MyWebview wvMembersite;
     private int checkWebview;
+    private View viewLoading;
     private FrameLayout fragmentContainer;
     private ProgressBar horizontalProgress;
     Handler handler;
@@ -128,8 +130,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
+        viewLoading = view.findViewById(R.id.viewLoading);
+        wvMembersite = (MyWebview) view.findViewById(R.id.wvMembersite);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         fragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_member_fragment);
+        setupWebViewMembersite();
         setupWebView();
 
         if (!checkPermissions()) {
@@ -436,11 +441,51 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
         });
 
-        if (!checkPermissions()) {
+        /*if (!checkPermissions()) {
             requestPermission();
         }else{
             loadGetUrl();
-        }
+        }*/
+    }
+
+    private void setupWebViewMembersite() {
+        wvMembersite.addJavascriptInterface(new WebViewJavaScriptInterface(getActivity()), "droid");
+        wvMembersite.setWebViewClient(new MyWebViewClient(getActivity()) {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if(isVisible()){
+                    AppLog.log("Page on FINISH URL  = "+url);
+                    if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
+                        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+
+            }
+        });
+        wvMembersite.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+            }
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    viewLoading.setVisibility(View.GONE);
+                } else {
+                    viewLoading.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void loadGetUrl(){
@@ -491,7 +536,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         StringBuffer url=new StringBuffer(Constant.URL_MEMBER_BROWSER);
         url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
         url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
-        mWebView.loadUrl(url.toString());
+        wvMembersite.loadUrl(url.toString());
     }
 
     @Override
@@ -499,16 +544,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         super.onStop();
         EventBus.getDefault().unregister(this);
         mWebView.stopLoading();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        /*if (fragmentContainer.getVisibility() == View.VISIBLE){
-            fragmentContainer.setVisibility(View.GONE);
-            //((MainTabActivity)getActivity()).resetCurrentTab();
-        }*/
+        wvMembersite.stopLoading();
     }
 
     @Subscribe
@@ -673,10 +709,13 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent internetIntent = new Intent(Intent.ACTION_VIEW);
-                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                        /*Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
                                 .buildUpon()
                                 .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
                                 .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
+                                .build();*/
+                        Uri uri = Uri.parse(Constant.URL_NEXT_OF_MEMBERSITE)
+                                .buildUpon()
                                 .build();
                         internetIntent.setData(uri);
                         getActivity().startActivity(internetIntent);

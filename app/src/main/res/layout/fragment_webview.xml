@@ -13,11 +13,35 @@
         android:visibility="gone"
         android:layout_gravity="center"
         />
-    <net.fukuri.memberapp.memberapp.views.MyWebview
-        android:id="@+id/wvCoupon"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-    </net.fukuri.memberapp.memberapp.views.MyWebview>
-    <include layout="@layout/bottombar"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <net.fukuri.memberapp.memberapp.views.MyWebview
+                android:id="@+id/wvCoupon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+            </net.fukuri.memberapp.memberapp.views.MyWebview>
+            <include layout="@layout/bottombar"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/viewLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+    <net.fukuri.memberapp.memberapp.views.MyWebview
+        android:id="@+id/wvMembersite"
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="@dimen/_0dp"></net.fukuri.memberapp.memberapp.views.MyWebview>
 </LinearLayout>
