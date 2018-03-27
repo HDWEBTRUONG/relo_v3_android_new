@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.support.v4.content.ContextCompat;
@@ -373,6 +374,26 @@ public class Utils {
                         if(miUpdateIU!=null){
                             miUpdateIU.updateError(0);
                         }
+                    }
+                })
+                .show();
+    }
+
+    public static String PLAY_STORE_LINK ="";
+    public static void showDialogLIBForceUpdate(final Context context, final String messagee){
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context);
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog
+                .setTitleText(context.getString(R.string.force_update_title))
+                .setContentText(messagee)
+                .setConfirmText(context.getResources().getString(R.string.popup_update))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        //sDialog.dismissWithAnimation();
+                        AppLog.log("Link: "+String.format(PLAY_STORE_LINK, context.getPackageName()));
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(PLAY_STORE_LINK, context.getPackageName()))));
+                        System.exit(0);
                     }
                 })
                 .show();
