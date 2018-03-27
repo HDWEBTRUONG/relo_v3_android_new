@@ -18,7 +18,7 @@ android {
         targetSdkVersion 25
         versionName "2.0.0.0"
         // Apply new version code
-        versionCode 2044
+        versionCode 2010
 
 
         //Version code auto incrceament
@@ -113,8 +113,8 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"https://api.fukuri.jp"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/xml/xml_version.json"'
-            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
-            buildConfigField "String", "FORCEUPDATE_APP", '"http://ota.dev.vc/reloclub/xml/app_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/index.html"'
+            buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver.json"'
         }
         relo_test {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -144,8 +144,8 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"https://api.club-off.com"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/prefukuri/xml_version.json"'
-            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
-            buildConfigField "String", "FORCEUPDATE_APP", '"http://ota.dev.vc/reloclub/xml/app_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/index.html"'
+            buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver.json"'
         }
         relo_ota_xml_test {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -175,8 +175,8 @@ android {
             buildConfigField "String", "URL_FAQ", '"https://www.fukuri.jp/contents/files/fukuri/img/app/faq/index.html"'
             buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc/"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/cluboff/xml/xml_version.json"'
-            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
-            buildConfigField "String", "FORCEUPDATE_APP", '"http://ota.dev.vc/reloclub/xml/app_version.json"'
+            buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/index.html"'
+            buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver.json"'
         }
     }
     lintOptions {
