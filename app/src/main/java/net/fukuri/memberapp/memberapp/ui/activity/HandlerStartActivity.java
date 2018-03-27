@@ -24,6 +24,7 @@ import net.fukuri.memberapp.memberapp.ReloApp;
 import net.fukuri.memberapp.memberapp.api.ApiClientJP;
 import net.fukuri.memberapp.memberapp.api.ApiInterface;
 import net.fukuri.memberapp.memberapp.database.MyDatabaseHelper;
+import net.fukuri.memberapp.memberapp.model.ForceupdateApp;
 import net.fukuri.memberapp.memberapp.model.ValueLoginOld;
 import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
@@ -43,6 +44,7 @@ public class HandlerStartActivity extends BaseActivity {
     Handler handler;
     public static final int GOTOSCREEN =1;
     public static final int CHECKAUTH =2;
+    public static final int CHECKFORCEUPDATEAPP =3;
     public static final int SPLASH_TIME_OUT = 2000;
 
     @Override
@@ -69,6 +71,8 @@ public class HandlerStartActivity extends BaseActivity {
 
                 }else if(msg.what == CHECKAUTH){
                     checkAuthMember();
+                }else if(msg.what == CHECKFORCEUPDATEAPP){
+                    checkForceUpdateApp();
                 }
                 return false;
             }
@@ -96,6 +100,26 @@ public class HandlerStartActivity extends BaseActivity {
 
     }
 
+    private void checkForceUpdateApp(){
+        apiInterface.checkForceupdateApp(Constant.FORCEUPDATE_APP).enqueue(new Callback<ForceupdateApp>() {
+            @Override
+            public void onResponse(Call<ForceupdateApp> call, Response<ForceupdateApp> response) {
+                if(response.isSuccessful()){
+                    if(Utils.convertIntVersion(response.body().getAndroid().getVersion())> Utils.convertIntVersion((BuildConfig.VERSION_NAME))){
+                        Utils.showDialogLIBForceUpdate(this, response.body().getUp_comment());
+                    }
+                }else{
+                    handler.sendEmptyMessage(GOTOSCREEN);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForceupdateApp> call, Throwable t) {
+                handler.sendEmptyMessage(GOTOSCREEN);
+            }
+        });
+    }
+
     private void goNextScreen() {
         PushvisorHandlerActivity.checkOpenedThisScreen = true;
         startActivity(new Intent(this, LoginActivity.class));
@@ -117,7 +141,7 @@ public class HandlerStartActivity extends BaseActivity {
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
         LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
         if(StringUtil.isEmpty(loginSharedPreference.getUserName())){
-            handler.sendEmptyMessage(GOTOSCREEN);
+            handler.sendEmptyMessage(CHECKFORCEUPDATEAPP);
         }else{
             apiInterface.memberAuthHTML(loginSharedPreference.getUserName(), loginSharedPreference.getPass()).enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -133,7 +157,7 @@ public class HandlerStartActivity extends BaseActivity {
                         e.printStackTrace();
                         ReloApp.setBlockAuth(false);
                     }finally {
-                        handler.sendEmptyMessage(GOTOSCREEN);
+                        handler.sendEmptyMessage(CHECKFORCEUPDATEAPP);
                     }
                 }
 
@@ -142,7 +166,7 @@ public class HandlerStartActivity extends BaseActivity {
                     AppLog.log("Err: "+t.toString());
                     hideLoading();
                     ReloApp.setBlockAuth(false);
-                    handler.sendEmptyMessage(GOTOSCREEN);
+                    handler.sendEmptyMessage(CHECKFORCEUPDATEAPP);
                 }
             });
         }

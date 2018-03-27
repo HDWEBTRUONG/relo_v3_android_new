@@ -36,6 +36,7 @@ import net.fukuri.memberapp.memberapp.adapter.MenuListAdapter;
 import net.fukuri.memberapp.memberapp.api.ApiClientJP;
 import net.fukuri.memberapp.memberapp.api.ApiInterface;
 import net.fukuri.memberapp.memberapp.model.BlockEvent;
+import net.fukuri.memberapp.memberapp.model.ForceupdateApp;
 import net.fukuri.memberapp.memberapp.model.MessageEvent;
 import net.fukuri.memberapp.memberapp.model.ReloadEvent;
 import net.fukuri.memberapp.memberapp.ui.BaseActivityToolbar;
@@ -167,6 +168,7 @@ public class MainTabActivity extends BaseActivityToolbar {
             AppLog.log_url(" start reload member_site ............. after timer minutes OR CallBackfrom EXT Browser");
             EventBus.getDefault().post(new EvenBusLoadWebMembersite());
         }
+        checkForceUpdateApp();
     }
     void selectPage(int pageIndex){
         mTabHost.setCurrentTab(pageIndex);
@@ -429,5 +431,23 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
     public void resetCurrentTab(){
         mTabHost.setCurrentTab(0);
+    }
+
+    private void checkForceUpdateApp(){
+        apiInterface.checkForceupdateApp(Constant.FORCEUPDATE_APP).enqueue(new Callback<ForceupdateApp>() {
+            @Override
+            public void onResponse(Call<ForceupdateApp> call, Response<ForceupdateApp> response) {
+                if(response.isSuccessful()){
+                    if(Utils.convertIntVersion(response.body().getAndroid().getVersion())> Utils.convertIntVersion((BuildConfig.VERSION_NAME))){
+                        Utils.showDialogLIBForceUpdate(this, response.body().getUp_comment());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForceupdateApp> call, Throwable t) {
+                AppLog.log(""+t.toString());
+            }
+        });
     }
 }

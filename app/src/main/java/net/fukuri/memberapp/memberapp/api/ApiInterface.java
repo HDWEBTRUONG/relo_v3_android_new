@@ -1,6 +1,8 @@
 package net.fukuri.memberapp.memberapp.api;
 
 
+import net.fukuri.memberapp.memberapp.model.BaseReponse;
+import net.fukuri.memberapp.memberapp.model.ForceupdateApp;
 import net.fukuri.memberapp.memberapp.model.LoginReponse;
 import net.fukuri.memberapp.memberapp.model.VersionReponse;
 import net.fukuri.memberapp.memberapp.util.Constant;
@@ -10,6 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -36,6 +39,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("/log/create-logs.php")
     Call<ResponseBody> writeLog(@Field("request_no") String request_no, @Field("member_id") String member_id);
+
+    @GET
+    Call<ForceupdateApp> checkForceupdateApp(@Url String url);
 
 
 }

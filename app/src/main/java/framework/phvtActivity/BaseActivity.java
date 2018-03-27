@@ -53,7 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected BaseFragment mMainActiveFragment;
     protected ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     protected ApiInterface apiInterfaceLog = ApiClientLog.getClient().create(ApiInterface.class);
-    protected ApiInterface apiInterfaceForceUpdate = ApiClientForceUpdate.getClient().create(ApiInterface.class);
 
     //----------------------------------------------------------------------------------------------------
 
