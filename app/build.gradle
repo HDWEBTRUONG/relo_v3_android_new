@@ -16,7 +16,7 @@ android {
         applicationId "net.fukuri.memberapp.memberapp"
         minSdkVersion 19
         targetSdkVersion 25
-        versionName "2.0.0.0"
+        versionName "2.0.0"
         // Apply new version code
         versionCode 2010
 
@@ -83,7 +83,7 @@ android {
             buildConfigField "String", "URL_FORCEUPDATE", '"http://ota.dev.vc"'
             buildConfigField "String", "URL_FORCEUPDATE_FULL", '"/cluboff/xml/xml_version.json"'
             buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
-            buildConfigField "String", "FORCEUPDATE_APP", '"http://ota.dev.vc/reloclub/xml/app_version.json"'
+            buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver_test/appver.json"'
         }
         relo_prod {
             applicationId "net.fukuri.memberapp.memberapp"

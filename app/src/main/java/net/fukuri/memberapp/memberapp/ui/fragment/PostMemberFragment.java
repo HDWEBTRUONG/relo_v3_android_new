@@ -82,7 +82,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
     private MyWebview mWebView;
     private MyWebview wvMembersite;
     private int checkWebview;
-    private View viewLoading;
+    //private View viewLoading;
     private FrameLayout fragmentContainer;
     private ProgressBar horizontalProgress;
     Handler handler;
@@ -130,7 +130,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
         checkWebview = getArguments().getInt(Constant.KEY_CHECK_WEBVIEW, Constant.MEMBER_COUPON);
         mWebView = (MyWebview) view.findViewById(R.id.wvCoupon);
-        viewLoading = view.findViewById(R.id.viewLoading);
+        //viewLoading = view.findViewById(R.id.viewLoading);
         wvMembersite = (MyWebview) view.findViewById(R.id.wvMembersite);
         horizontalProgress = (ProgressBar) view.findViewById(R.id.horizontalProgress);
         fragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_member_fragment);
@@ -456,9 +456,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 super.onPageFinished(view, url);
                 if(isVisible()){
                     AppLog.log("Page on FINISH URL  = "+url);
-                    if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
+                    /*if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
                         mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
-                    }
+                    }*/
 
 
                 }
@@ -475,15 +475,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
-            }
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
-                    viewLoading.setVisibility(View.GONE);
-                } else {
-                    viewLoading.setVisibility(View.VISIBLE);
-                }
             }
         });
     }
@@ -537,6 +528,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
         url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
         wvMembersite.loadUrl(url.toString());
+        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
     }
 
     @Override
@@ -709,18 +701,17 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent internetIntent = new Intent(Intent.ACTION_VIEW);
-                        /*Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
+                        Uri uri = Uri.parse(Constant.URL_MEMBER_BROWSER)
                                 .buildUpon()
                                 .appendQueryParameter("APPU", loginSharedPreference.getKEY_APPU())
                                 .appendQueryParameter("APPP", loginSharedPreference.getKEY_APPP())
-                                .build();*/
-                        Uri uri = Uri.parse(Constant.URL_NEXT_OF_MEMBERSITE)
-                                .buildUpon()
                                 .build();
+                       /* Uri uri = Uri.parse(Constant.URL_NEXT_OF_MEMBERSITE)
+                                .buildUpon()
+                                .build();*/
                         internetIntent.setData(uri);
                         getActivity().startActivity(internetIntent);
                         isCallbackFromBrowser = true;
-                        fragmentContainer.setVisibility(View.GONE);
                         dialog.dismiss();
 
                     }
