@@ -148,5 +148,6 @@ public class Constant {
     public static final String URLS_READ_FDF = "https://docs.google.com/gview?embedded=true&url=";
     public static final String URLS_MEMBERSITE_DONE = "/top/AASC20111.cfm";
     public static final String URL_NEXT_OF_MEMBERSITE = BuildConfig.URL_NEXT_OF_MEMBERSITE;
+    public static final String WEB_COOKIE = "MYAREA";
 
 }

@@ -3,6 +3,7 @@ package net.fukuri.memberapp.memberapp.ui.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,6 +39,8 @@ import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.views.MyMaterialSpinner;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -52,6 +55,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ListView lvCoupon;
     TextView tvCategory;
     View svMenu;
+    View viewLoading;
     protected MyMaterialSpinner spinner;
     MyDatabaseHelper myDatabaseHelper;
     CouponListAdapter adapter;
@@ -90,6 +94,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         lvCoupon = (ListView) view.findViewById(R.id.list_category_listview);
         tvCategory = (TextView) view.findViewById(R.id.tvCategory);
         spinner = (MyMaterialSpinner) view.findViewById(R.id.spinnerCategory);
+        viewLoading = view.findViewById(R.id.viewLoading);
     }
 
     private void loadCategory() {
@@ -151,7 +156,16 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
+        AppLog.log("-------onPause");
+
+    }
+
+    @Override
+    public void onStop() {
+        AppLog.log("-------onStop");
         mainTabActivity.hideLoading();
+        super.onStop();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -204,6 +218,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppLog.log("-------onViewCreated");
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -222,6 +237,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
+        AppLog.log("-------onResume");
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -263,8 +279,8 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         mainTabActivity.showLoading();
         listCoupon.clear();
         listCoupon.addAll(myDatabaseHelper.getCouponWithDateCategoryIDs(categoryID, areaName));
-        mainTabActivity.hideLoading();
         mHandler.sendEmptyMessage(CouponListFragment.MSG_CREATE_ADAPTER);
+        mainTabActivity.hideLoading();
 
     }
     private void setAdapter(){

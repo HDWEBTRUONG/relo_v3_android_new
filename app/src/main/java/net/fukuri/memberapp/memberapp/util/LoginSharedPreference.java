@@ -37,6 +37,15 @@ public class LoginSharedPreference {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public void setCookie(String content){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constant.WEB_COOKIE, content);
+        editor.apply();
+    }
+    public String getCookie(){
+        return sharedPreferences.getString(Constant.WEB_COOKIE,"");
+    }
+
     public void setVersion(int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(VERSION, value);

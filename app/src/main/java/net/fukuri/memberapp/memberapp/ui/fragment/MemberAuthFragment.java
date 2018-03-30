@@ -40,16 +40,10 @@ import rx.Subscription;
 public class MemberAuthFragment extends BaseFragment {
     TextView tvValid;
     TextView tvMemberID;
-    TextView tvPhone;
-    View svError;
     String userID;
     String pass;
-    Handler handler;
     Observable observable;
     Subscription subscription= null;
-
-    public static final int UPDATE_LAYOUT = 1;
-    public static final int UPDATE_LAYOUT_ERROR = 2;
     public static final String TAG = MemberAuthFragment.class.getSimpleName();
 
     @Override
@@ -61,8 +55,6 @@ public class MemberAuthFragment extends BaseFragment {
     protected void getMandatoryViews(View root, Bundle savedInstanceState) {
         tvValid = (TextView) root.findViewById(R.id.tvValid);
         tvMemberID = (TextView) root.findViewById(R.id.tvMemberID);
-        tvPhone = (TextView) root.findViewById(R.id.tvPhone);
-        svError = root.findViewById(R.id.svError);
 
     }
 
@@ -77,56 +69,15 @@ public class MemberAuthFragment extends BaseFragment {
         LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(getActivity());
         userID = loginSharedPreference.getUserName();
         pass = loginSharedPreference.getPass();
-        tvPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tvPhone.getText().toString()));
-                startActivity(intent);
-            }
-        });
         tvValid.setText(MessageFormat.format(getString(R.string.member_auth_note_only_today), new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime())));
         if (!userID.contains("-")) {
             userID = new StringBuffer(userID).insert(userID.length() - 4, "-").toString();
         }
         tvMemberID.setText(userID);
 
-        handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                switch (msg.what) {
-                    case UPDATE_LAYOUT_ERROR:
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    svError.setVisibility(View.VISIBLE);
-                                    EventBus.getDefault().post(new BlockEvent());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-                        break;
-                }
-                return false;
-            }
-        });
-        if(ReloApp.isBlockAuth()){
-            handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
-        }else{
-            checkAuthMember();
-        }
-
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        handler.removeCallbacksAndMessages(null);
-    }
-
-    private void checkAuthMember(){
+    /*private void checkAuthMember(){
         ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
         apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -152,6 +103,6 @@ public class MemberAuthFragment extends BaseFragment {
                 //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
             }
         });
-    }
+    }*/
 
 }

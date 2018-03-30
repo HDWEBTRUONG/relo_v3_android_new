@@ -295,6 +295,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                Utils.getCookie(mainTabActivity,url);
                 if(isVisible()){
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());

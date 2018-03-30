@@ -1,9 +1,16 @@
 package net.fukuri.memberapp.memberapp.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -16,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,6 +37,7 @@ import java.io.IOException;
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
 import framework.phvtUtils.AppLog;
+
 import net.fukuri.memberapp.memberapp.BuildConfig;
 import net.fukuri.memberapp.memberapp.R;
 import net.fukuri.memberapp.memberapp.ReloApp;
@@ -50,6 +59,7 @@ import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,15 +76,30 @@ public class MainTabActivity extends BaseActivityToolbar {
     private FrameLayout mapSiteFragmentContainer;
 
     //Handler handler;
-    public static final int INDEX_AREA=0;
-    public static final int INDEX_TOP=1;
-    public static final int INDEX_MEMBER=2;
+    public static final int INDEX_AREA = 0;
+    public static final int INDEX_TOP = 1;
+    public static final int INDEX_MEMBER = 2;
     long lateResume;
     FragmentTabHost mTabHost;
     View llMember;
     View llTab;
     View llMain;
+    View svError;
+
+    String userID = "";
+    String pass = "";
+    TextView tvPhone;
+
+    Handler handler;
+    public static final int UPDATE_LAYOUT_ERROR = 2;
+
     protected static boolean isVisible = false;
+
+    public static final int MULTIPLE_PERMISSIONS = 10;
+    String[] permissions = new String[]{
+            Manifest.permission.CALL_PHONE};
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -88,10 +113,12 @@ public class MainTabActivity extends BaseActivityToolbar {
         setIsVisible(false);
         LoginSharedPreference.getInstance(this).setValueStop(Utils.dateTimeValue());
         EventBus.getDefault().unregister(this);
+        handler.removeCallbacksAndMessages(null);
     }
+
     @Subscribe
     public void onEvent(MessageEvent event) {
-        if(Constant.TOP_COUPON.equals(event.getMessage())){
+        if (Constant.TOP_COUPON.equals(event.getMessage())) {
             selectPage(INDEX_TOP);
         }
     }
@@ -116,28 +143,64 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onCreate(savedInstanceState);
         pushProcess();
         setupView();
-        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON),R.id.container_member_fragment,"MEMBER_FRAGMENT", new FragmentTransitionInfo());
-        replaceFragment(PostAreaWebViewFragment2.newInstance(),R.id.container_map_fragment,"MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
+        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, "MEMBER_FRAGMENT", new FragmentTransitionInfo());
+        replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case UPDATE_LAYOUT_ERROR:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    svError.setVisibility(View.VISIBLE);
+                                    EventBus.getDefault().post(new BlockEvent());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        break;
+                }
+                return false;
+            }
+        });
+        LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+
+        if (loginSharedPreference != null) {
+            userID = loginSharedPreference.getUserName();
+            pass = loginSharedPreference.getPass();
+        }
+        if (ReloApp.isBlockAuth()) {
+            handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+        } else {
+            checkAuthMember(userID, pass);
+        }
+
         setIsVisible(true);
         long valueTime = Utils.dateTimeValue();
         lateResume = LoginSharedPreference.getInstance(this).getValueStop();
 
 
-        if(mTabHost.getCurrentTab()==0){
+        if (mTabHost.getCurrentTab() == 0) {
             tvMenuTitle.setText(R.string.title_area);
             tvMenuSubTitle.setText(R.string.title_coupon_area);
-        }else if(mTabHost.getCurrentTab()==1){
+        } else if (mTabHost.getCurrentTab() == 1) {
             tvMenuTitle.setText(R.string.title_popular_coupon);
             tvMenuSubTitle.setText(R.string.title_coupon_list);
-        }else{
+        } else {
             tvMenuTitle.setText(R.string.title_area_coupon);
             tvMenuSubTitle.setText(R.string.title_coupon_list_area);
         }
+        mTabHost.setCurrentTab(1);
         //loadCountPush();
         /*Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
@@ -160,19 +223,21 @@ public class MainTabActivity extends BaseActivityToolbar {
                 EventBus.getDefault().post(new EvenBusLoadWebMembersite());
             }
         }*/
-        AppLog.log("value time: "+(valueTime - lateResume));
-        if(valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND){
+        AppLog.log("value time: " + (valueTime - lateResume));
+        if (valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND) {
             EventBus.getDefault().post(new ReloadEvent(true));
         }
-        if((valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE) || PostMemberFragment.isCallbackFromBrowser){
+        if ((valueTime - lateResume > Constant.LIMIT_ON_BACKGROUND_MEMBERSITE) || PostMemberFragment.isCallbackFromBrowser) {
             AppLog.log_url(" start reload member_site ............. after timer minutes OR CallBackfrom EXT Browser");
             EventBus.getDefault().post(new EvenBusLoadWebMembersite());
         }
         checkForceUpdateApp();
     }
-    void selectPage(int pageIndex){
+
+    void selectPage(int pageIndex) {
         mTabHost.setCurrentTab(pageIndex);
     }
+
 
     @Override
     public void setupToolbar() {
@@ -180,7 +245,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         ivMenuRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mDrawerLayoutMenu!=null){
+                if (mDrawerLayoutMenu != null) {
                     if (mDrawerLayoutMenu.isDrawerOpen(mDrawerListMenu)) {
                         mDrawerLayoutMenu.closeDrawer(mDrawerListMenu);
                     } else {
@@ -203,23 +268,36 @@ public class MainTabActivity extends BaseActivityToolbar {
         llMember = findViewById(R.id.llMember);
         llMain = findViewById(R.id.llMain);
         llTab = findViewById(R.id.llTab);
+        svError = findViewById(R.id.svError);
+        tvPhone = (TextView) findViewById(R.id.tvPhone);
         memberSiteFragmentContainer = (FrameLayout) findViewById(R.id.container_member_fragment);
         mapSiteFragmentContainer = (FrameLayout) findViewById(R.id.container_map_fragment);
 
         // Locate ListView in drawer_main.xml
         mDrawerListMenu = (ListView) findViewById(R.id.left_drawer);
 
-        /*memberSiteFragmentContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGlobalLayout() {
-                if(memberSiteFragmentContainer.getVisibility() == View.GONE){
-                    if(webMemberReload){
-                        webMemberReload = false;
-                        EventBus.getDefault().post(new EvenBusLoadWebMembersite());
-                    }
-                }
+            public void onClick(View v) {
+                callPhoneNumber();
             }
-        });*/
+        });
+    }
+
+    public void callPhoneNumber() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tvPhone.getText().toString()));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            requestPermission();
+            return;
+        }
+        startActivity(intent);
     }
 
     private void setupView(){
@@ -449,5 +527,61 @@ public class MainTabActivity extends BaseActivityToolbar {
                 AppLog.log(""+t.toString());
             }
         });
+    }
+
+    private void checkAuthMember(String userID, String pass){
+        ApiInterface apiInterface = ApiClientJP.getClient().create(ApiInterface.class);
+        apiInterface.memberAuthHTML(userID, pass).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                hideLoading();
+                try {
+                    if(response!=null && response.body()!=null){
+                        Document document = Jsoup.parse(response.body().string());
+                        if(!Utils.isAuthSuccess(MainTabActivity.this,document)){
+                            handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                hideLoading();
+                //handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
+            }
+        });
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, MULTIPLE_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:
+                if (grantResults.length > 0) {
+                    boolean callPhone = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (callPhone) {
+                        Toast.makeText(this, R.string.premission_accepted, Toast.LENGTH_SHORT).show();
+
+                    }/*else{
+                        Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
+
+                    }*/
+                } /*else {
+                    Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
+                }*/
+                callPhoneNumber();
+                break;
+
+        }
     }
 }

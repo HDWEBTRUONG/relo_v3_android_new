@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -67,6 +68,25 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Utils {
+
+    public static void getCookie(Context context, String siteName){
+        CookieManager cookieManager = CookieManager.getInstance();
+        String cookies = cookieManager.getCookie(siteName);
+        if(cookies!=null){
+            String[] temp=cookies.split(";");
+            for (String ar1 : temp ){
+                AppLog.log("Cookie: "+ ar1);
+
+                if(ar1.contains(Constant.WEB_COOKIE) && ar1.contains("=")){
+                    String cookie = ar1.substring(ar1.indexOf("=")+1,ar1.length());
+                    AppLog.log("Value: "+ cookie);
+                    LoginSharedPreference.getInstance(context).setCookie(cookie);
+                }
+
+
+            }
+        }
+    }
 
     public static  boolean isAuthSuccess(Context context, Document document){
         boolean isSuccess = true;

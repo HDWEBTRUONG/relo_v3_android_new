@@ -87,40 +87,45 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_LOGIN_SCREEN);
         mhandler = new Handler(){
             @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
-                    case MSG_ERROR_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
-                        btnLogin.setEnabled(true);
-                        break;
-                    case MSG_ERROR_FAILURE:
-                        Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
-                        btnLogin.setEnabled(true);
-                        break;
-                    case MSG_ERROR_ELSE:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_one_fileld_empty);
-                        btnLogin.setEnabled(true);
-                        break;
-                    case MSG_NOT_NETWORK:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
-                        btnLogin.setEnabled(true);
-                        break;
-                    case MSG_ENABLE_LOGIN:
-                        btnLogin.setEnabled(true);
-                        break;
-                    case MSG_GOTO_MAIN:
-                        gotoMain();
-                        break;
-                    case MSG_ERROR_ID_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_id_empty);
-                        break;
-                    case MSG_ERROR_PASS_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_pass_empty);
-                        break;
-                    case MSG_ERROR_ALL_EMPTY:
-                        Utils.showDialogLIB(LoginActivity.this,R.string.error_all_empty);
-                        break;
-                }
+            public void handleMessage(final Message msg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (msg.what){
+                            case MSG_ERROR_EMPTY:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_blank_id_password);
+                                btnLogin.setEnabled(true);
+                                break;
+                            case MSG_ERROR_FAILURE:
+                                Utils.showDialogLIB(LoginActivity.this, R.string.popup_error_api);
+                                btnLogin.setEnabled(true);
+                                break;
+                            case MSG_ERROR_ELSE:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_one_fileld_empty);
+                                btnLogin.setEnabled(true);
+                                break;
+                            case MSG_NOT_NETWORK:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_connect_network);
+                                btnLogin.setEnabled(true);
+                                break;
+                            case MSG_ENABLE_LOGIN:
+                                btnLogin.setEnabled(true);
+                                break;
+                            case MSG_GOTO_MAIN:
+                                gotoMain();
+                                break;
+                            case MSG_ERROR_ID_EMPTY:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_id_empty);
+                                break;
+                            case MSG_ERROR_PASS_EMPTY:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_pass_empty);
+                                break;
+                            case MSG_ERROR_ALL_EMPTY:
+                                Utils.showDialogLIB(LoginActivity.this,R.string.error_all_empty);
+                                break;
+                        }
+                    }
+                });
             }
         };
 
