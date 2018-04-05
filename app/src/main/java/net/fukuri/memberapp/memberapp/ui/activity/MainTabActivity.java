@@ -150,7 +150,6 @@ public class MainTabActivity extends BaseActivityToolbar {
     @Override
     protected void onResume() {
         super.onResume();
-
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -160,7 +159,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                             @Override
                             public void run() {
                                 try {
-                                    svError.setVisibility(View.VISIBLE);
+                                    //svError.setVisibility(View.VISIBLE);
                                     EventBus.getDefault().post(new BlockEvent());
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -179,11 +178,11 @@ public class MainTabActivity extends BaseActivityToolbar {
             userID = loginSharedPreference.getUserName();
             pass = loginSharedPreference.getPass();
         }
-        if (ReloApp.isBlockAuth()) {
+        /*if (ReloApp.isBlockAuth()) {
             handler.sendEmptyMessage(UPDATE_LAYOUT_ERROR);
         } else {
             checkAuthMember(userID, pass);
-        }
+        }*/
 
         setIsVisible(true);
         long valueTime = Utils.dateTimeValue();

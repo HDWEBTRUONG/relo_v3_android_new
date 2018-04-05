@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -69,23 +70,68 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
+    public static  void setCookie(String domain, String sessionCookie) {
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeAllCookie();
+        if(!StringUtil.isEmpty(sessionCookie)) {
+            String[] temp = sessionCookie.split(";");
+            for (String ar1 : temp) {
+                cookieManager.setCookie(domain, ar1);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.flush();
+        }else{
+            CookieSyncManager.getInstance().sync();
+        }
+    }
+
+    public static String getAllCokkie(String domain){
+        CookieManager cookieManager = CookieManager.getInstance();
+        return cookieManager.getCookie(domain);
+    }
+
+    public static String setCookieIconPage(Context context, String domain, String newCookie){
+        //String appCookie = getAllCokkie( domain);
+        if(!StringUtil.isEmpty(newCookie)) {
+            setCookie(domain,newCookie);
+            /*String[] temp = appCookie.split(";");
+            for (String ar1 : temp) {
+                if (ar1.contains(Constant.WEB_COOKIE)) {
+                    appCookie = appCookie.replace(ar1, Constant.WEB_COOKIE+"="+newCookie);
+                    setCookie(domain,appCookie);
+                }
+            }*/
+        }
+        return "";
+    }
+
+
+
     public static void getCookie(Context context, String siteName){
         CookieManager cookieManager = CookieManager.getInstance();
         String cookies = cookieManager.getCookie(siteName);
-        if(cookies!=null){
+        AppLog.log("All Cookie: "+cookies);
+        LoginSharedPreference.getInstance(context).setCookie(cookies);
+        /*if(cookies!=null){
             String[] temp=cookies.split(";");
             for (String ar1 : temp ){
                 AppLog.log("Cookie: "+ ar1);
 
                 if(ar1.contains(Constant.WEB_COOKIE) && ar1.contains("=")){
                     String cookie = ar1.substring(ar1.indexOf("=")+1,ar1.length());
-                    AppLog.log("Value: "+ cookie);
                     LoginSharedPreference.getInstance(context).setCookie(cookie);
                 }
 
 
             }
-        }
+        }*/
+    }
+    public static void getLogCookie(Context context, String siteName){
+        CookieManager cookieManager = CookieManager.getInstance();
+        String cookies = cookieManager.getCookie(siteName);
+        AppLog.log("All Cookie log: "+cookies);
     }
 
     public static  boolean isAuthSuccess(Context context, Document document){

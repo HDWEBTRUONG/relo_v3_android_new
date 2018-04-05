@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -136,6 +137,8 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         fragmentContainer = (FrameLayout)getActivity().findViewById(R.id.container_member_fragment);
         setupWebViewMembersite();
         setupWebView();
+
+        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
 
         if (!checkPermissions()) {
             requestPermission();
@@ -295,7 +298,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Utils.getCookie(mainTabActivity,url);
+                Utils.getLogCookie(mainTabActivity,url);
                 if(isVisible()){
                     imvBackBottomBar.setEnabled(mWebView.canGoBack());
                     imvForwardBottomBar.setEnabled(mWebView.canGoForward());
@@ -378,7 +381,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 Intent intent;
                 if (Build.VERSION.SDK_INT < 19) {
                     intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
+                    intent.setType("image");
                 } else {
                     intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -414,7 +417,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 Intent intent;
                 if (Build.VERSION.SDK_INT < 19) {
                     intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
+                    intent.setType("image");
                 } else {
                     intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -456,12 +459,16 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if(isVisible()){
+                    Utils.getCookie(mainTabActivity,url);
                     AppLog.log("Page on FINISH URL  = "+url);
-                    /*if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
-                        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
-                    }*/
-
-
+                    if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
+                        //Set cookie for icon
+                        if(!StringUtil.isEmpty(LoginSharedPreference.getInstance(getActivity()).getCookie())){
+                            Utils.setCookieIconPage(getActivity(),Constant.URL_NEXT_OF_MEMBERSITE,LoginSharedPreference.getInstance(getActivity()).getCookie());
+                            mWebView.loadUrl( "javascript:window.location.reload( true )" );
+                            AppLog.log("Seted.....");
+                        }
+                    }
                 }
 
             }
@@ -521,6 +528,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 loadUrlWeb();
             }
         });
+        loadUrlWeb();
 
     }
     public void loadUrlWeb(){
@@ -529,7 +537,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         url.append("?APPU="+ URLEncoder.encode(loginSharedPreference.getKEY_APPU()));
         url.append("&APPP="+URLEncoder.encode(loginSharedPreference.getKEY_APPP()));
         wvMembersite.loadUrl(url.toString());
-        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
     }
 
     @Override
