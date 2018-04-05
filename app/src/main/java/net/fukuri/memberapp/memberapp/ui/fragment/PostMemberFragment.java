@@ -138,8 +138,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         setupWebViewMembersite();
         setupWebView();
 
-        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
-
         if (!checkPermissions()) {
             requestPermission();
         }else{
@@ -291,7 +289,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                AppLog.log_url(view.getUrl());
+                Utils.setCookieIconPage(view,view.getUrl(),LoginSharedPreference.getInstance(getActivity()).getCookie());
                 return super.shouldOverrideUrlLoading(view, request);
             }
 
@@ -445,6 +443,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
 
         });
 
+        //Utils.setCookieIconPage(getActivity(),Constant.URL_NEXT_OF_MEMBERSITE,LoginSharedPreference.getInstance(getActivity()).getCookie());
+
+        mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
         /*if (!checkPermissions()) {
             requestPermission();
         }else{
@@ -464,7 +465,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                     if(url.endsWith(Constant.URLS_MEMBERSITE_DONE)){
                         //Set cookie for icon
                         if(!StringUtil.isEmpty(LoginSharedPreference.getInstance(getActivity()).getCookie())){
-                            Utils.setCookieIconPage(getActivity(),Constant.URL_NEXT_OF_MEMBERSITE,LoginSharedPreference.getInstance(getActivity()).getCookie());
                             mWebView.loadUrl( "javascript:window.location.reload( true )" );
                             AppLog.log("Seted.....");
                         }
@@ -528,7 +528,6 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 loadUrlWeb();
             }
         });
-        loadUrlWeb();
 
     }
     public void loadUrlWeb(){

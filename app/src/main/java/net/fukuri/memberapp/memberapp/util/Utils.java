@@ -70,9 +70,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
-    public static  void setCookie(String domain, String sessionCookie) {
+    public static  void setCookie(WebView webView,String domain, String sessionCookie) {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            cookieManager.setAcceptThirdPartyCookies(webView, true);
+        }else {
+            cookieManager.setAcceptCookie(true);
+        }
+        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(webView.getContext());
+        cookieSyncManager.startSync();
         cookieManager.removeAllCookie();
         if(!StringUtil.isEmpty(sessionCookie)) {
             String[] temp = sessionCookie.split(";");
@@ -83,7 +90,7 @@ public class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.flush();
         }else{
-            CookieSyncManager.getInstance().sync();
+            cookieSyncManager.sync();
         }
     }
 
@@ -92,10 +99,19 @@ public class Utils {
         return cookieManager.getCookie(domain);
     }
 
-    public static String setCookieIconPage(Context context, String domain, String newCookie){
+    public static boolean checkMyCookie(String domain){
+        String all = getAllCokkie(domain);
+        if(all==null && StringUtil.isEmpty(null)){
+            return false;
+        }
+        return all.contains(Constant.WEB_COOKIE);
+    }
+
+    public static void setCookieIconPage(WebView webView, String domain, String newCookie){
         //String appCookie = getAllCokkie( domain);
-        if(!StringUtil.isEmpty(newCookie)) {
-            setCookie(domain,newCookie);
+        if(!checkMyCookie(domain)){
+            if(!StringUtil.isEmpty(newCookie)) {
+                setCookie(webView,domain,newCookie);
             /*String[] temp = appCookie.split(";");
             for (String ar1 : temp) {
                 if (ar1.contains(Constant.WEB_COOKIE)) {
@@ -103,8 +119,8 @@ public class Utils {
                     setCookie(domain,appCookie);
                 }
             }*/
+            }
         }
-        return "";
     }
 
 
