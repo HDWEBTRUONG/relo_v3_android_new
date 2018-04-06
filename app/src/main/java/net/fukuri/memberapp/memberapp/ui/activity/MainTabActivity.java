@@ -126,7 +126,9 @@ public class MainTabActivity extends BaseActivityToolbar {
 
     @Subscribe
     public void onEvent(OpenMemberSiteEvent event) {
-        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
+        if(getSupportFragmentManager().findFragmentByTag(PostMemberFragment.class.getSimpleName())==null){
+            replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
+        }
         replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
