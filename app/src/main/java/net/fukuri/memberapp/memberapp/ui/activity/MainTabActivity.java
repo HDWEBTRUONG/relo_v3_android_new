@@ -47,6 +47,7 @@ import net.fukuri.memberapp.memberapp.api.ApiInterface;
 import net.fukuri.memberapp.memberapp.model.BlockEvent;
 import net.fukuri.memberapp.memberapp.model.ForceupdateApp;
 import net.fukuri.memberapp.memberapp.model.MessageEvent;
+import net.fukuri.memberapp.memberapp.model.OpenMemberSiteEvent;
 import net.fukuri.memberapp.memberapp.model.ReloadEvent;
 import net.fukuri.memberapp.memberapp.ui.BaseActivityToolbar;
 import net.fukuri.memberapp.memberapp.ui.fragment.CouponListAreaFragment;
@@ -124,6 +125,12 @@ public class MainTabActivity extends BaseActivityToolbar {
     }
 
     @Subscribe
+    public void onEvent(OpenMemberSiteEvent event) {
+        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
+        replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
+    }
+
+    @Subscribe
     public void onEvent(BlockEvent event) {
         ivMenuRight.setEnabled(false);
         llTab.setVisibility(View.GONE);
@@ -143,8 +150,6 @@ public class MainTabActivity extends BaseActivityToolbar {
         super.onCreate(savedInstanceState);
         pushProcess();
         setupView();
-        replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, "MEMBER_FRAGMENT", new FragmentTransitionInfo());
-        replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
     @Override
@@ -365,10 +370,9 @@ public class MainTabActivity extends BaseActivityToolbar {
         llMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                PostMemberWebViewFragment postMemberWebViewFragment = PostMemberWebViewFragment.newInstance();
-//                Bundle bundle = createBundleFragment(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON);
-//                postMemberWebViewFragment.setArguments(bundle);
-//                openDialogFragment(postMemberWebViewFragment);
+                if(getSupportFragmentManager().findFragmentByTag(PostMemberFragment.class.getSimpleName())==null){
+                    replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
+                }
                   memberSiteFragmentContainer.setVisibility(View.VISIBLE);
                 ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);

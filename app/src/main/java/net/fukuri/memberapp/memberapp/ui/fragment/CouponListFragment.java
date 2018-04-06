@@ -1,16 +1,21 @@
 package net.fukuri.memberapp.memberapp.ui.fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -31,6 +36,7 @@ import net.fukuri.memberapp.memberapp.database.ConstansDB;
 import net.fukuri.memberapp.memberapp.database.MyDatabaseHelper;
 import net.fukuri.memberapp.memberapp.model.CatagoryDTO;
 import net.fukuri.memberapp.memberapp.model.CouponDTO;
+import net.fukuri.memberapp.memberapp.model.OpenMemberSiteEvent;
 import net.fukuri.memberapp.memberapp.model.VersionReponse;
 import net.fukuri.memberapp.memberapp.model.XMLUpdate;
 import net.fukuri.memberapp.memberapp.ui.activity.MainTabActivity;
@@ -72,6 +78,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
     ArrayList<CatagoryDTO> categoryList = new ArrayList<>();
     int positionView = 0;
     int countDownloaded =0;
+
+    public static final int MULTIPLE_PERMISSIONS = 10;
+    String[] permissions = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private boolean isArea;
     public static final String TAG = CouponListFragment.class.getSimpleName();
@@ -173,6 +183,43 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         isArea = bundle.getBoolean(Constant.DATA_COUPON_URL);
+
+    }
+
+    private boolean checkPermissions() {
+        int findLoca = ContextCompat.checkSelfPermission(getActivity(), permissions[0]);
+        int writeStorage = ContextCompat.checkSelfPermission(getActivity(), permissions[1]);
+        return (findLoca == PackageManager.PERMISSION_GRANTED&& writeStorage == PackageManager.PERMISSION_GRANTED);
+
+    }
+    private void requestPermission() {
+        requestPermissions(permissions, MULTIPLE_PERMISSIONS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS:
+                if (grantResults.length > 0) {
+                    boolean location = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeSto = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (location&&writeSto) {
+                        Toast.makeText(getActivity(), R.string.premission_accepted, Toast.LENGTH_SHORT).show();
+
+                    }/*else{
+                        Toast.makeText(getActivity(), R.string.premissionaccepted_no_accepted, Toast.LENGTH_SHORT).show();
+
+                    }*/
+                } /*else {
+                    Toast.makeText(getActivity(), R.string.premission_error, Toast.LENGTH_SHORT).show();
+                }*/
+                callLoadData();
+                break;
+
+        }
+    }
+
+    public void callLoadData(){
         if(!isArea){
             ((ReloApp)getActivity().getApplication()).trackingAnalytics(Constant.GA_LIST_COUPON_SCREEN);
             areaName = ConstanArea.WHOLEJAPAN;
@@ -213,6 +260,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     }
             );
         }
+        if(LoginSharedPreference.getInstance(getActivity()).checkDownloadDone() && (categoryList==null || categoryList.isEmpty())){
+            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        }
+        EventBus.getDefault().post(new OpenMemberSiteEvent());
     }
 
     @Override
@@ -269,9 +320,10 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
-
-        if(LoginSharedPreference.getInstance(getActivity()).checkDownloadDone() && (categoryList==null || categoryList.isEmpty())){
-            mHandler.sendEmptyMessage(CouponListFragment.MSG_LOAD_CATEGORY);
+        if (!checkPermissions()) {
+            requestPermission();
+        }else{
+            callLoadData();
         }
     }
 
