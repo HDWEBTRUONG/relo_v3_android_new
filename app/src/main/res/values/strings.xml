@@ -7,10 +7,15 @@
     <string name="xlistview_header_hint_loading" />
     <string name="xlistview_header_last_time" />
     <string name="title_coupon_area">携帯会員証</string>
+    <string name="title_coupon_area_tab">携帯\n会員証</string>
     <string name="title_membership">ホームページ</string>
     <string name="title_coupon_list">人気クーポン</string>
+    <string name="title_coupon_list_tab">人気クー\nポン</string>
     <string name="title_coupon_list_area">エリアクーポン</string>
+    <string name="title_coupon_list_area_tab">エリアク\nーポン</string>
     <string name="title_member">会員サイト</string>
+    <string name="title_member_tab">会員\nサイト</string>
+    <string name="title_receipt">レシート\nで貯める</string>
 
     <!-- Login Fragment-->
     <string name="txt_bt_login">ログインボタン</string>

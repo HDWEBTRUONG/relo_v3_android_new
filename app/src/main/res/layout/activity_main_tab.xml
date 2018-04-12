@@ -25,7 +25,8 @@
                 android:id="@+id/llTab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="4">
+                android:gravity="center"
+                android:weightSum="5">
                 <android.support.v4.app.FragmentTabHost
                     android:id="@+id/fragment_tab_host"
                     android:layout_height="wrap_content"
@@ -39,9 +40,15 @@
                     android:layout_width="@dimen/_0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
-                    <include layout="@layout/view_tab_item"/>
+                    <include layout="@layout/view_tab_member"/>
                 </LinearLayout>
-
+                <LinearLayout
+                android:id="@+id/llReceipt"
+                android:layout_width="@dimen/_0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <include layout="@layout/view_tab_receipt"/>
+            </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <ListView

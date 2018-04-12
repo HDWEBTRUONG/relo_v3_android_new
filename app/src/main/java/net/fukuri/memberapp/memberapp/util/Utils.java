@@ -31,13 +31,18 @@ import org.jsoup.nodes.Node;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.security.interfaces.RSAPublicKey;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +58,8 @@ import java.util.Set;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.x500.X500Principal;
 
 import framework.phvtUtils.AppLog;
@@ -69,6 +77,37 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Utils {
+
+    public static String encodeSHA256(String text) throws SignatureException {
+        String secretKey = ConstansReceipt.password;
+        try {
+            Key sk = new SecretKeySpec(secretKey.getBytes(), HASH_ALGORITHM);
+            Mac mac = Mac.getInstance(sk.getAlgorithm());
+            mac.init(sk);
+            final byte[] hmac = mac.doFinal(text.getBytes());
+            return toHexString(hmac);
+        } catch (NoSuchAlgorithmException e1) {
+            // throw an exception or pick a different encryption method
+            throw new SignatureException(
+                    "error building signature, no such algorithm in device "
+                            + HASH_ALGORITHM);
+        } catch (InvalidKeyException e) {
+            throw new SignatureException(
+                    "error building signature, invalid key " + HASH_ALGORITHM);
+        }
+    }
+    private static final String HASH_ALGORITHM = "HmacSHA256";
+
+    public static String toHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+
+        Formatter formatter = new Formatter(sb);
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+
+        return sb.toString();
+    }
 
     public static  void setCookie(WebView webView,String domain, String sessionCookie) {
         CookieManager cookieManager = CookieManager.getInstance();

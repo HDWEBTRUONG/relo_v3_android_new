@@ -149,5 +149,6 @@ public class Constant {
     public static final String URLS_MEMBERSITE_DONE = "/top/AASC20111.cfm";
     public static final String URL_NEXT_OF_MEMBERSITE = BuildConfig.URL_NEXT_OF_MEMBERSITE;
     public static final String WEB_COOKIE = "MYAREA";
+    public static final String URL_RECEIPT = BuildConfig.URL_RECEIPT;
 
 }

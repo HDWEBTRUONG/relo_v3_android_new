@@ -12,21 +12,21 @@
         android:orientation="vertical"
         android:gravity="center">
         <ImageView
-            android:id="@+id/image_view"
+            android:id="@+id/ivReceipt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_site_off"
+            android:src="@drawable/tab_receipt"
             android:layout_margin="@dimen/_2dp"/>
         <TextView
-            android:layout_below="@id/image_view"
-            android:id="@+id/tvLableTab"
+            android:layout_below="@id/ivReceipt"
+            android:id="@+id/tvLableTabivReceipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="0dp"
-            android:lines="2"
             android:textAlignment="center"
+            android:lines="2"
             android:textSize="@dimen/text_size_small"
             android:textColor="@color/color_tab_lable"
-            android:text="@string/title_member"/>
+            android:text="@string/title_receipt"/>
     </LinearLayout>
 </RelativeLayout>

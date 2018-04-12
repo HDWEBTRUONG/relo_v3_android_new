@@ -33,6 +33,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import java.io.IOException;
+import java.security.SignatureException;
 
 import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtCommon.FragmentTransitionInfo;
@@ -56,12 +57,14 @@ import net.fukuri.memberapp.memberapp.ui.fragment.MemberAuthFragment;
 import net.fukuri.memberapp.memberapp.ui.fragment.PostAreaWebViewFragment2;
 import net.fukuri.memberapp.memberapp.ui.fragment.PostMemberFragment;
 import net.fukuri.memberapp.memberapp.ui.fragment.WebViewDialogFragment;
+import net.fukuri.memberapp.memberapp.util.ConstansReceipt;
 import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
 
 import okhttp3.ResponseBody;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,6 +86,7 @@ public class MainTabActivity extends BaseActivityToolbar {
     long lateResume;
     FragmentTabHost mTabHost;
     View llMember;
+    View llReceipt;
     View llTab;
     View llMain;
     View svError;
@@ -272,6 +276,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         mDrawerLayoutMenu = (DrawerLayout) findViewById(R.id.drawerMenuRight);
         mTabHost = (FragmentTabHost) findViewById(R.id.fragment_tab_host);
         llMember = findViewById(R.id.llMember);
+        llReceipt = findViewById(R.id.llReceipt);
         llMain = findViewById(R.id.llMain);
         llTab = findViewById(R.id.llTab);
         svError = findViewById(R.id.svError);
@@ -357,17 +362,17 @@ public class MainTabActivity extends BaseActivityToolbar {
         mTabHost.setup(this, getSupportFragmentManager(), R.id.container_fragment);
 
         mTabHost.addTab(setIndicator(mTabHost.newTabSpec(MemberAuthFragment.class.getSimpleName()),
-                R.drawable.tab_area, getString(R.string.title_coupon_area)), MemberAuthFragment.class, null);
+                R.drawable.tab_area, getString(R.string.title_coupon_area_tab)), MemberAuthFragment.class, null);
 
         Bundle bundlePupolar = new Bundle();
         bundlePupolar.putBoolean(Constant.DATA_COUPON_URL,false);
         mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListFragment.class.getSimpleName()),
-                R.drawable.tab_coupon_all, getString(R.string.title_coupon_list)), CouponListFragment.class, bundlePupolar);
+                R.drawable.tab_coupon_all, getString(R.string.title_coupon_list_tab)), CouponListFragment.class, bundlePupolar);
 
         Bundle bundleArea = new Bundle();
         bundleArea.putBoolean(Constant.DATA_COUPON_URL,true);
         mTabHost.addTab(setIndicator(mTabHost.newTabSpec(CouponListAreaFragment.class.getSimpleName()),
-                R.drawable.tab_coupon_area, getString(R.string.title_coupon_list_area)), CouponListAreaFragment.class, bundleArea);
+                R.drawable.tab_coupon_area, getString(R.string.title_coupon_list_area_tab)), CouponListAreaFragment.class, bundleArea);
 
         llMember.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -379,6 +384,12 @@ public class MainTabActivity extends BaseActivityToolbar {
                 ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
                // updateAuth();
+            }
+        });
+        llReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callOpenBrowserReceipt();
             }
         });
 
@@ -400,6 +411,32 @@ public class MainTabActivity extends BaseActivityToolbar {
             }
         });
 
+    }
+
+    private void callOpenBrowserReceipt() {
+        final LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
+        if(loginSharedPreference!=null){
+            String time = String.valueOf(Utils.dateTimeValue());
+            Intent internetIntent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse(Constant.URL_RECEIPT)
+                    .buildUpon()
+                    .appendQueryParameter("client_id", ConstansReceipt.client_id)
+                    .appendQueryParameter("corp", ConstansReceipt.corp)
+                    .appendQueryParameter("time", time)
+                    .appendQueryParameter("uid", loginSharedPreference.getUserName().replace("-",""))
+                    //.appendQueryParameter("campaign_id", ConstansReceipt.campaign_id)
+                    .appendQueryParameter("user_id", ConstansReceipt.user_id)
+                    .build();
+            String keySHA256 = null;
+            try {
+                keySHA256 = Utils.encodeSHA256(uri.getQuery());
+            } catch (SignatureException e) {
+                e.printStackTrace();
+            }
+            uri = uri.buildUpon().appendQueryParameter("key", keySHA256).build();
+            internetIntent.setData(uri);
+            startActivity(internetIntent);
+        }
     }
 
     public void updateAuth(){
