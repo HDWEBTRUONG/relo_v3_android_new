@@ -16,9 +16,9 @@ android {
         applicationId "net.fukuri.memberapp.memberapp"
         minSdkVersion 19
         targetSdkVersion 25
-        versionName "2.0.3"
+        versionName "2.0.4"
         // Apply new version code
-        versionCode 2050
+        versionCode 2051
 
 
         //Version code auto incrceament

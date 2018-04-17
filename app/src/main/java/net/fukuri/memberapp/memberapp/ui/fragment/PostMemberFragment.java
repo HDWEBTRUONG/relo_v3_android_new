@@ -43,6 +43,7 @@ import net.fukuri.memberapp.memberapp.util.ImageUtils;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
+import net.fukuri.memberapp.memberapp.util.ase.EventBusPermission;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
 
 import org.greenrobot.eventbus.EventBus;
@@ -138,11 +139,12 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         setupWebViewMembersite();
         setupWebView();
 
-        if (!checkPermissions()) {
+        /*if (!checkPermissions()) {
             requestPermission();
         }else{
             loadGetUrl();
-        }
+        }*/
+        loadGetUrl();
 
     }
 
@@ -242,6 +244,11 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
         int writeStorage = ContextCompat.checkSelfPermission(getActivity(), permissions[1]);
         return (findLoca == PackageManager.PERMISSION_GRANTED&& writeStorage == PackageManager.PERMISSION_GRANTED);
 
+    }
+
+    public boolean checkWriteStore(){
+        int writeStorage = ContextCompat.checkSelfPermission(getActivity(), permissions[1]);
+        return (writeStorage == PackageManager.PERMISSION_GRANTED);
     }
     private void requestPermission() {
         requestPermissions(permissions, MULTIPLE_PERMISSIONS);
@@ -405,6 +412,9 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             // For Android 5.0+
             @Override public boolean onShowFileChooser(WebView webView,
                                                        ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if(!checkWriteStore()){
+                    return false;
+                }
                 // Double check that we don't have any existing callbacks
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
@@ -553,6 +563,14 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             AppLog.log_url("[ PostMemberFragment ] Call back from Ext Browser ... reload membersite ..");
         }
     }
+
+    @Subscribe(sticky = true)
+    public void onEvent(EventBusPermission event) {
+        if (!checkPermissions()) {
+            requestPermission();
+        }
+    }
+
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == INPUT_FILE_REQUEST_CODE) {

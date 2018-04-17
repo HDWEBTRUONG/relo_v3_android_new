@@ -320,11 +320,12 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         };
-        if (!checkPermissions()) {
+        /*if (!checkPermissions()) {
             requestPermission();
         }else{
             callLoadData();
-        }
+        }*/
+        callLoadData();
     }
 
     protected void getListDataCategoryID(String categoryID) {
