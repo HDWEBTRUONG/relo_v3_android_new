@@ -18,7 +18,7 @@ android {
         targetSdkVersion 25
         versionName "2.0.3"
         // Apply new version code
-        versionCode 2050
+        versionCode 2051
 
 
         //Version code auto incrceament

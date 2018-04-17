@@ -32,8 +32,13 @@ public class PushvisorHandlerActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pushProcess();
         setHandler();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pushProcess();
     }
 
     public void setHandler(){

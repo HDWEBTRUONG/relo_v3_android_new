@@ -60,6 +60,7 @@ import net.fukuri.memberapp.memberapp.util.Constant;
 import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.util.ase.EvenBusLoadWebMembersite;
+import net.fukuri.memberapp.memberapp.util.ase.EventBusPermission;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -129,7 +130,7 @@ public class MainTabActivity extends BaseActivityToolbar {
         if(getSupportFragmentManager().findFragmentByTag(PostMemberFragment.class.getSimpleName())==null){
             replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
         }
-        replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
+        //replaceFragment(PostAreaWebViewFragment2.newInstance(), R.id.container_map_fragment, "MAP_AREA_FRAGMENT", new FragmentTransitionInfo());
     }
 
     @Subscribe
@@ -375,6 +376,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                 if(getSupportFragmentManager().findFragmentByTag(PostMemberFragment.class.getSimpleName())==null){
                     replaceFragment(PostMemberFragment.newInstance(Constant.KEY_LOGIN_URL, "", Constant.MEMBER_COUPON), R.id.container_member_fragment, PostMemberFragment.class.getSimpleName(), new FragmentTransitionInfo());
                 }
+                EventBus.getDefault().postSticky(new EventBusPermission());
                   memberSiteFragmentContainer.setVisibility(View.VISIBLE);
                 ((ReloApp)getApplication()).trackingAnalytics(Constant.GA_MEMBER_SCREEN);
 //                AnimationUtil.slideToTop(memberSiteFragmentContainer);
@@ -489,10 +491,12 @@ public class MainTabActivity extends BaseActivityToolbar {
 
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
-        // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
         // プッシュ通知の反応率を測定(必須)
         this.appVisorPush.trackPushWithActivity(this);
+
+        // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
+
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
         try{
             this.appVisorPush.setUserPropertyWithGroup(LoginSharedPreference.getInstance(this).getUserName(),AppVisorPush.UserPropertyGroup1);
