@@ -78,6 +78,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
+    public static String getUserID(String user){
+        if(StringUtil.isEmpty(user) || user.length()<7){
+            return "";
+        }else{
+            user = user.replace("-","");
+            return user.substring(0,7);
+        }
+    }
+
     public static String encodeSHA256(String text) throws SignatureException {
         String secretKey = ConstansReceipt.password;
         try {

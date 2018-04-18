@@ -422,12 +422,12 @@ public class MainTabActivity extends BaseActivityToolbar {
             Intent internetIntent = new Intent(Intent.ACTION_VIEW);
             Uri uri = Uri.parse(Constant.URL_RECEIPT)
                     .buildUpon()
+                    .appendQueryParameter("campaign_id", ConstansReceipt.campaign_id)
                     .appendQueryParameter("client_id", ConstansReceipt.client_id)
                     .appendQueryParameter("corp", ConstansReceipt.corp)
                     .appendQueryParameter("time", time)
                     .appendQueryParameter("uid", loginSharedPreference.getUserName().replace("-",""))
-                    //.appendQueryParameter("campaign_id", ConstansReceipt.campaign_id)
-                    .appendQueryParameter("user_id", ConstansReceipt.user_id)
+                    .appendQueryParameter("user_id", Utils.getUserID(loginSharedPreference.getUserName()))
                     .build();
             String keySHA256 = null;
             try {
@@ -436,6 +436,7 @@ public class MainTabActivity extends BaseActivityToolbar {
                 e.printStackTrace();
             }
             uri = uri.buildUpon().appendQueryParameter("key", keySHA256).build();
+            AppLog.log("url: "+uri.toString());
             internetIntent.setData(uri);
             startActivity(internetIntent);
         }
