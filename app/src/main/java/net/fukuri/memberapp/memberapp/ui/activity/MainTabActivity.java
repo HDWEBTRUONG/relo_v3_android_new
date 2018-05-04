@@ -529,12 +529,6 @@ public class MainTabActivity extends BaseActivityToolbar {
 
         this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
 
-        // プッシュ通知の反応率を測定(必須)
-        this.appVisorPush.trackPushWithActivity(this);
-
-        // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
-        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
-
         // BRANDID  of userPropertyGroup 1 （UserPropertyGroup1〜UserPropertyGroup5）
         try{
             this.appVisorPush.setUserPropertyWithGroup(LoginSharedPreference.getInstance(this).getUserName(),AppVisorPush.UserPropertyGroup1);
@@ -542,11 +536,6 @@ public class MainTabActivity extends BaseActivityToolbar {
         }catch (Exception ex){
             Log.e("BSV", ex.toString());
         }
-
-        String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
-        AppLog.log("###################################");
-        AppLog.log("####### [ Appvisor uuid ]=", mDevice_Token_Pushnotification);
-        AppLog.log("###################################");
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -631,4 +620,5 @@ public class MainTabActivity extends BaseActivityToolbar {
 
         }
     }
+
 }

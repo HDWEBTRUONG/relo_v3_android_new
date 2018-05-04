@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 
+import biz.appvisor.push.android.sdk.AppVisorPush;
 import framework.phvtActivity.BaseActivity;
 import framework.phvtUtils.AppLog;
 import framework.phvtUtils.StringUtil;
@@ -50,6 +51,7 @@ public class HandlerStartActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        pushProcess();
         Log.d("Relo version code"," ** Version code: "+ BuildConfig.VERSION_CODE);
         final boolean notFirst = LoginSharedPreference.getInstance(this).get(Constant.TAG_IS_FIRST, Boolean.class);
         sqLiteOpenHelper = new MyDatabaseHelper(this);
@@ -199,5 +201,23 @@ public class HandlerStartActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+    private AppVisorPush appVisorPush;
+    public void pushProcess() {
+        this.appVisorPush = AppVisorPush.sharedInstance();
+
+        this.appVisorPush.setAppInfor(getApplicationContext(), Constant.APPVISOR_ID);
+
+        // プッシュ通知の反応率を測定(必須)
+        this.appVisorPush.trackPushWithActivity(this);
+
+        // プッシュ通知の関連設定(GCM_SENDER_ID、アイコン、ステータスバーアイコン、プッシュ通知で起動するクラス名、タイトル)
+        this.appVisorPush.startPush(Constant.GCM_SENDER_ID, R.mipmap.ic_launcher, R.mipmap.ic_launcher, PushvisorHandlerActivity.class, getString(R.string.app_name));
+
+
+        String mDevice_Token_Pushnotification = this.appVisorPush.getDeviceID();
+        AppLog.log("###################################");
+        AppLog.log("####### [ Appvisor uuid ]=", mDevice_Token_Pushnotification);
+        AppLog.log("###################################");
     }
 }
