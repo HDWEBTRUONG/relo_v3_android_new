@@ -63,7 +63,7 @@ android {
             buildConfigField "String", "WEBVIEW_URL_AREA_COUPON", '"https://test.e-map.ne.jp/smt/rclzmaptest/loc.htm"'
             buildConfigField "String", "TEMPLATE_URL_MEMBER", '"https://sptest.fukuri.jp/fkr/apps/oil/ffoil_main.cfm"'
             buildConfigField "String", "TEMPLATE_ARG", '"u=https://{0}"'
-            buildConfigField "String", "APPVISOR_ID", '"KxWC2gRwtc"'
+            buildConfigField "String", "APPVISOR_ID", '"sp0MyhcBrb"'
             buildConfigField "String", "URL_MEMBER_BROWSER", '"https://sptest.fukuri.jp/fkr/apps/oil/get_login.cfm"'
             buildConfigField "String", "WEBVIEW_CAN_NOT_LOGIN", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
             buildConfigField "String", "WEBVIEW_FORGET_ID", '"https://www.fukuri.jp/fkr/apps/rem/ffrem_main.cfm"'
