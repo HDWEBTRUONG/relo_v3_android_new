@@ -19,7 +19,7 @@ android {
         versionName "2.0.4"
         // Apply new version code
         versionCode 2052
-
+        multiDexEnabled true
 
         //Version code auto incrceament
         /*
@@ -85,6 +85,7 @@ android {
             buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/test/index.html"'
             buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver_test/appver.json"'
             buildConfigField "String", "URL_RECEIPT", '"https://www.drwallet.jp/client/relo/campaigns/738"'
+            buildConfigField "String", "PP_ID", '"be723356-d2e7-4d0c-aa92-f6cdff54b5df"'
         }
         relo_prod {
             applicationId "net.fukuri.memberapp.memberapp"
@@ -117,7 +118,8 @@ android {
             buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/index.html"'
             buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver.json"'
             buildConfigField "String", "URL_RECEIPT", '"https://www.drwallet.jp/client/relo/campaigns/738"'
-        }
+            buildConfigField "String", "PP_ID", '"d16c1039-12d3-4f68-b2d3-f0ea9f8bbc70"'
+        }/*
         relo_test {
             applicationId "net.fukuri.memberapp.memberapp"
             buildConfigField "String", "GCM_SENDER_ID", '"706109937582"'
@@ -181,7 +183,7 @@ android {
             buildConfigField "String", "URL_NEXT_OF_MEMBERSITE", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/icon/index.html"'
             buildConfigField "String", "FORCEUPDATE_APP", '"https://sp.fukuri.jp/contents/files/fukuri/img/app/appver/appver.json"'
             buildConfigField "String", "URL_RECEIPT", '"https://www.drwallet.jp/client/relo/campaigns/738"'
-        }
+        }*/
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -241,6 +243,13 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.github.jrvansuita:CheckNewAppVersionAvailable:v1.0.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile files('libs/profilepassportsdk_1_16_1.jar')
+
+    // ジオエリア検知機能を使用する場合のみ
+    compile 'com.google.android.gms:play-services-location:10.2.1'
+    // GoogleAdID取得のため(必須)
+    compile 'com.google.android.gms:play-services-ads:10.2.1'
+    compile 'com.android.support:multidex:1.0.0'
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

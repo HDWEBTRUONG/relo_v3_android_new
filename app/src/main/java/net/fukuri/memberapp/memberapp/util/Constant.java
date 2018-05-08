@@ -151,4 +151,6 @@ public class Constant {
     public static final String WEB_COOKIE = "MYAREA";
     public static final String URL_RECEIPT = BuildConfig.URL_RECEIPT;
 
+    public static final String PP_ID = BuildConfig.PP_ID;
+
 }

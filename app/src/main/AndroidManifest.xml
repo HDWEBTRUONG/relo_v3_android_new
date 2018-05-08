@@ -17,10 +17,17 @@
         android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-permission android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE" />
     <!-- App receives GCM messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Android 4.0.4以下を対象の場合は必須。それ以外であれば非必須 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name="net.fukuri.memberapp.memberapp.ReloApp"
@@ -35,11 +42,11 @@
         <activity
             android:name=".ui.activity.HandlerStartActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".ui.activity.SplashScreenActivity"
@@ -59,8 +66,25 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".ui.activity.ProfilePassportActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <receiver
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="ppm2app" />
+
+            </intent-filter>
+        </activity>
+
+       <!-- <receiver
             android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -69,18 +93,7 @@
 
                 <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
-        </receiver>
-        <!--<receiver
-            android:name=".services.MyAppVisorPushBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="net.fukuri.memberapp.memberapp" />
-            </intent-filter>
         </receiver>-->
-
-        <service android:name="biz.appvisor.push.android.sdk.AppVisorPushIntentService" />
-        <!--<service android:name=".services.MyAppVisorPushIntentService"/>-->
         <service
             android:name="biz.appvisor.push.android.sdk.NotificationStartService"
             android:exported="false"></service>
@@ -116,6 +129,95 @@
         </receiver>
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
+
+        //PP lib
+        <!-- PPM2.0 SANDBOX設定（true:サンドボックス(赤帯), false:本番(青帯)） -->
+        <meta-data
+            android:name="PP_SANDBOX"
+            android:value="true" />
+
+        <!-- PPSDKのGCM使用設定 (true:時間Push通知を使用しない, false: 時間Push通知を使用) -->
+        <meta-data
+            android:name="PP_DISUSE_GCM_FLAG"
+            android:value="false" />
+
+        <!-- GooglePlayServicesを使用する為のタグ（必須） -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- ジオエリア検知情報をユーザーへコールバックするレシーバークラス -->
+
+        <!-- 各種バッチ用レシーバークラス -->
+        <receiver
+            android:name="jp.profilepassport.android.tasks.PPScheduleReceiver">
+            <intent-filter>
+                <!-- アプリ更新イベント -->
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <!-- 時間変更イベント -->
+                <action android:name="android.intent.action.TIME_SET" />
+                <!-- Locale変更イベント -->
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <!-- 起動 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- 位置情報使用状態変更 -->
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 時間Push通知用レシーバークラス -->
+        <receiver
+            android:name="jp.profilepassport.android.notification.time.PPTimeNotificationReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <!-- SDKを組み込むアプリのパッケージ名 -->
+                <category android:name="net.fukuri.memberapp.memberapp" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ジオエリア検知情報をユーザーへコールバックするレシーバークラス -->
+        <receiver
+            android:name=".listener.PPSDKDemoGeoAreaListener"
+            android:exported="false">
+            <intent-filter>
+                <!-- ジオエリア検知イベントアクション名 -->
+                <action android:name="jp.profilepassport.android.GEOAREA" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 時間Push通知用Service -->
+        <service android:name="jp.profilepassport.android.notification.time.PPTimeNotificationService" />
+
+        <!-- Push通知開封処理用Service -->
+        <service android:name="jp.profilepassport.android.notification.PPNotificationService" />
+
+        <!-- ジオエリア検知用Service -->
+        <service android:name="jp.profilepassport.android.geoarea.service.PPGeoAreaService" />
+
+        <!-- ログ作成用レシーバークラス -->
+        <receiver
+            android:name="jp.profilepassport.android.logger.PPLoggerReceiver">
+            <intent-filter>
+                <!-- アプリ更新イベント -->
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <!-- 起動イベント -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="jp.profilepassport.android.logger.action.PP_LOGGER_ACTION" />
+                <!-- 時間変更イベント -->
+                <action android:name="android.intent.action.TIME_SET" />
+                <!-- タイムゾーン変更イベント -->
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
