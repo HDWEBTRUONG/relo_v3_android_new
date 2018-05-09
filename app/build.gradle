@@ -249,7 +249,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.2.1'
     // GoogleAdID取得のため(必須)
     compile 'com.google.android.gms:play-services-ads:10.2.1'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
 }
 // ADD THIS PLUGIN AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

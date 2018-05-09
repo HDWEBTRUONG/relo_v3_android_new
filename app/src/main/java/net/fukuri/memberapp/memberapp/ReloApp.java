@@ -1,6 +1,7 @@
 package net.fukuri.memberapp.memberapp;
 
 import android.app.Application;
+import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -49,6 +50,7 @@ public class ReloApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         isUpdateData = false;
     }
     /**

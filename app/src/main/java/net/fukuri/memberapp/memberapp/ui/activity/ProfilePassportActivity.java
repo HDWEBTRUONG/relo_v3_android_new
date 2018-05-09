@@ -1,23 +1,38 @@
 package net.fukuri.memberapp.memberapp.ui.activity;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import net.fukuri.memberapp.memberapp.R;
 import net.fukuri.memberapp.memberapp.listener.PPSDKDemoGeoAreaListener;
 import net.fukuri.memberapp.memberapp.ui.BaseActivityToolbar;
+import net.fukuri.memberapp.memberapp.util.PPSDKDemoLog;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoPPsdkSettings;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoSharedPreferences;
 
 import framework.phvtUtils.AppLog;
 import jp.profilepassport.android.PPGeoAreaResult;
 import jp.profilepassport.android.PPSDKManager;
+import jp.profilepassport.android.PPSDKManagerListener;
+import jp.profilepassport.android.PPSettingsManager;
 
 /**
  * Created by tonkhanh on 5/8/18.
  */
 
-public class ProfilePassportActivity extends BaseActivityToolbar {
+public class ProfilePassportActivity extends BaseActivityToolbar implements PPSDKManagerListener {
+    public static ProfilePassportActivity profilePassportActivity;
+
+    public static ProfilePassportActivity getInstall(){
+        if(profilePassportActivity==null){
+            profilePassportActivity = new ProfilePassportActivity();
+        }
+        return profilePassportActivity;
+    }
 
     @Override
     public void setupToolbar() {
@@ -50,15 +65,13 @@ public class ProfilePassportActivity extends BaseActivityToolbar {
     protected void onStart() {
         super.onStart();
         PPSDKDemoPPsdkSettings.setPPsdkSetting(ProfilePassportActivity.this, PPSDKDemoSharedPreferences.getPPSDKChecked(
-                getApplicationContext()));
-        PPSDKDemoGeoAreaListener.setPPSDKDemoGeoAreaActivity(ProfilePassportActivity.this);
-        PPSDKManager.startGeofenceMonitoring(this);
+                getApplicationContext()), this);
     }
 
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults){
         if(requestCode == PPSDKManager.PERMISSION_STORAGE_REQUEST_CODE){
             PPSDKDemoPPsdkSettings.setPPsdkSetting(getApplicationContext(),
-                    PPSDKDemoSharedPreferences.getPPSDKChecked(getApplicationContext()));
+                    PPSDKDemoSharedPreferences.getPPSDKChecked(getApplicationContext()), this);
         }
     }
 
@@ -76,4 +89,54 @@ public class ProfilePassportActivity extends BaseActivityToolbar {
         AppLog.log("setGeoAreaLeft");
     }
 
+    @Override
+    public void onSuccessServiceStart() {
+        PPSDKDemoLog.d("Service Start Success 2");
+        setGeoAreaDetect();
+        PPSettingsManager.setNotificationLargeIcon(getApplicationContext(), R.mipmap.ic_launcher);
+        PPSettingsManager.setNotificationSmallIcon(getApplicationContext(), R.mipmap.ic_launcher);
+        Toast.makeText(this, "SDK Service Start Success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailureServiceStart(int errorCode) {
+        PPSDKDemoLog.d("Service Start Failed Error Code: " + errorCode);
+
+        PPSDKDemoSharedPreferences.setOptInShown(this, false);
+        Toast.makeText(this, "SDK Service Start Failed: " + errorCode, Toast.LENGTH_SHORT).show();
+    }
+
+    private void startGeoAreaMonitoring() {
+
+        boolean isChecked = PPSDKDemoSharedPreferences.getGeoAreaDetectChecked(this);
+        if (isChecked) {
+            PPSDKDemoLog.d("GeoArea Monitoring Start");
+            PPSDKDemoGeoAreaListener.setPPSDKDemoGeoAreaActivity(this);
+            PPSDKManager.startGeofenceMonitoring(this);
+        } else {
+            PPSDKDemoLog.d("GeoArea Monitoring doesn't Start");
+            PPSDKManager.stopGeofenceMonitoring(this);
+        }
+    }
+
+    private void setGeoAreaDetect() {
+        boolean isChecked = PPSDKDemoSharedPreferences.getGeoAreaDetectChecked(this);
+        if (isChecked) {
+            PPSDKDemoGeoAreaListener.setPPSDKDemoGeoAreaActivity(this);
+            boolean permission_location = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            if(permission_location){
+                // ユーザへパーミッションが必要な旨を表示する例
+                Toast toast = Toast.makeText(getApplicationContext(), "ジオエリア検知には「位置情報」のアプリ権限が必要です。", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+
+            }else{
+                PPSDKDemoLog.d("GeoArea Detect Service Start");
+                PPSDKManager.startGeofenceMonitoring(this);
+            }
+        }else{
+            PPSDKDemoLog.d("GeoArea Monitoring doesn't Start");
+            PPSDKManager.stopGeofenceMonitoring(this);
+        }
+    }
 }

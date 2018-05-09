@@ -6,13 +6,14 @@ package net.fukuri.memberapp.memberapp.listener;
 import android.content.Context;
 import android.widget.Toast;
 
+import net.fukuri.memberapp.memberapp.ui.activity.ProfilePassportActivity;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoLog;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoSharedPreferences;
 
 import jp.profilepassport.android.PPSDKManager;
 import jp.profilepassport.android.PPSDKManagerListener;
 
-public class PPSDKDemoListener implements PPSDKManagerListener {
+public class PPSDKDemoListener implements PPSDKManagerListener{
 
     private static PPSDKDemoListener sPPSDKListener;
     private static Context sContext;

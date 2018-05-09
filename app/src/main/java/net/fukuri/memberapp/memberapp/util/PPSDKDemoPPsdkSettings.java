@@ -14,6 +14,7 @@ import android.widget.Toast;
 import net.fukuri.memberapp.memberapp.listener.PPSDKDemoListener;
 
 import jp.profilepassport.android.PPSDKManager;
+import jp.profilepassport.android.PPSDKManagerListener;
 
 public class PPSDKDemoPPsdkSettings {
 
@@ -24,7 +25,7 @@ public class PPSDKDemoPPsdkSettings {
      */
     private static final String PP_APP_ID = Constant.PP_ID;
 
-    public static void setPPsdkSetting(final Activity activity, final boolean isStarted) {
+    public static void setPPsdkSetting(final Activity activity, final boolean isStarted, PPSDKManagerListener ppsdkManagerListener) {
 
         if (isStarted) {
             // ユーザへパーミッションが必要な旨を表示する例
@@ -34,22 +35,22 @@ public class PPSDKDemoPPsdkSettings {
                 Toast toast = Toast.makeText(activity.getApplicationContext(), "このアプリでは、「ストレージ」と「位置情報」のアプリ権限が必要です。", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
-                setPPsdkSetting(activity.getApplicationContext(), isStarted);
+                setPPsdkSetting(activity.getApplicationContext(), isStarted, ppsdkManagerListener);
                 return;
             }
 
             Log.d(TAG, "PPSDK Start.");
-            PPSDKManager.serviceStartWithAppId(activity, PP_APP_ID, PPSDKDemoListener.getInstance(activity.getApplicationContext()));
+            PPSDKManager.serviceStartWithAppId(activity, PP_APP_ID, ppsdkManagerListener);
         } else {
             Log.d(TAG, "PPSDK Stop.");
             PPSDKManager.serviceStop(activity);
         }
     }
 
-    public static void setPPsdkSetting(final Context context, final boolean isStarted) {
+    public static void setPPsdkSetting(final Context context, final boolean isStarted, PPSDKManagerListener ppsdkManagerListener) {
         if (isStarted) {
             Log.d(TAG, "PPSDK Start.");
-                        PPSDKManager.serviceStartWithAppId(context, PP_APP_ID, PPSDKDemoListener.getInstance(context));
+                        PPSDKManager.serviceStartWithAppId(context, PP_APP_ID, ppsdkManagerListener);
         } else {
             Log.d(TAG, "PPSDK Stop.");
                         PPSDKManager.serviceStop(context);
