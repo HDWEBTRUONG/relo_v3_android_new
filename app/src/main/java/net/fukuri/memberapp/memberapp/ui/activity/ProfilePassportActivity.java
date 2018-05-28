@@ -1,6 +1,7 @@
 package net.fukuri.memberapp.memberapp.ui.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
@@ -93,9 +94,13 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
     public void onSuccessServiceStart() {
         PPSDKDemoLog.d("Service Start Success 2");
         setGeoAreaDetect();
+        startBeaconDetect();
         PPSettingsManager.setNotificationLargeIcon(getApplicationContext(), R.mipmap.ic_launcher);
         PPSettingsManager.setNotificationSmallIcon(getApplicationContext(), R.mipmap.ic_launcher);
-        Toast.makeText(this, "SDK Service Start Success", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "SDK Service Start Success", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, HandlerStartActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -137,6 +142,16 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
         }else{
             PPSDKDemoLog.d("GeoArea Monitoring doesn't Start");
             PPSDKManager.stopGeofenceMonitoring(this);
+        }
+    }
+    private void startBeaconDetect() {
+        boolean isChecked = PPSDKDemoSharedPreferences.getBeaconDetectChecked(this);
+        if (isChecked) {
+            PPSDKDemoLog.d("Beacon Detect Start");
+            PPSDKManager.startBeaconDetection(this);
+        } else {
+            PPSDKDemoLog.d("Beacon Detect doesn't Start");
+            PPSDKManager.stopBeaconDetection(this);
         }
     }
 }
