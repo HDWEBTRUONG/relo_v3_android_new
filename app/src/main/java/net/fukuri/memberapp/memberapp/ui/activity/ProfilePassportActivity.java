@@ -109,6 +109,9 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
 
         PPSDKDemoSharedPreferences.setOptInShown(this, false);
         Toast.makeText(this, "SDK Service Start Failed: " + errorCode, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, HandlerStartActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void startGeoAreaMonitoring() {

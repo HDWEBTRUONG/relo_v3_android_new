@@ -29,6 +29,8 @@ import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.Utils;
 import net.fukuri.memberapp.memberapp.views.MyWebview;
 
+import framework.phvtUtils.AppLog;
+
 /**
  * Created by tonkhanh on 5/18/17.
  */
@@ -85,6 +87,7 @@ public class PostMemberWebViewFragment extends BaseDialogFragmentToolbarBottomba
                 llBrowser.setEnabled(true);
 
                 imvReloadBottomBar.setVisibility(View.VISIBLE);
+                llHome.setVisibility(View.GONE);
                 break;
         }
         llBack.setOnClickListener(new View.OnClickListener() {

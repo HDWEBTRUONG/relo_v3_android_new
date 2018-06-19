@@ -22,6 +22,7 @@ public abstract class BaseDialogFragmentToolbarBottombar extends BaseDialogFragm
     protected LinearLayout llForward;
     protected LinearLayout llBrowser;
     protected LinearLayout llReload;
+    protected LinearLayout llHome;
 
 
 
@@ -39,6 +40,7 @@ public abstract class BaseDialogFragmentToolbarBottombar extends BaseDialogFragm
         llForward = (LinearLayout) view.findViewById(R.id.llForward);
         llBrowser = (LinearLayout) view.findViewById(R.id.llBrowser);
         llReload = (LinearLayout) view.findViewById(R.id.llReload);
+        llHome = (LinearLayout) view.findViewById(R.id.llHome);
     }
 
     @Override

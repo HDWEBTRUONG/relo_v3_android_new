@@ -24,6 +24,7 @@ public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar
     protected LinearLayout llForward;
     protected LinearLayout llBrowser;
     protected LinearLayout llReload;
+    protected LinearLayout llHome;
 
 
 
@@ -38,6 +39,7 @@ public abstract class BaseFragmentToolbarBottombar extends BaseFragmentBottombar
         llForward = (LinearLayout) view.findViewById(R.id.llForward);
         llBrowser = (LinearLayout) view.findViewById(R.id.llBrowser);
         llReload = (LinearLayout) view.findViewById(R.id.llReload);
+        llHome = (LinearLayout) view.findViewById(R.id.llHome);
     }
 
     @Override

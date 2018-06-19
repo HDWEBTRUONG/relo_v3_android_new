@@ -177,6 +177,7 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
                 lnBottom.setVisibility(View.VISIBLE);
                 imvBackBottomBar.setVisibility(View.VISIBLE);
                 imvForwardBottomBar.setVisibility(View.VISIBLE);
+                llHome.setVisibility(View.VISIBLE);
 
 
                 //Test
@@ -214,6 +215,13 @@ public class PostMemberFragment extends BaseFragmentToolbarBottombar {
             @Override
             public void onClick(View v) {
                 mWebView.loadUrl( "javascript:window.location.reload( true )" );
+            }
+        });
+
+        llHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.loadUrl(Constant.URL_NEXT_OF_MEMBERSITE);
             }
         });
 

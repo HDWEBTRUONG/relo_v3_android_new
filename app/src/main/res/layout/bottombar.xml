@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_back_wv"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
@@ -39,8 +39,24 @@
                 android:id="@+id/imvForwardBottomBar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:src="@drawable/ic_forward_wv"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llHome"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/imvHome"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_home"
+                android:visibility="visible"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
@@ -55,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/btn_browser"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
@@ -70,9 +86,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_reload_wv"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_gravity="center"/>
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

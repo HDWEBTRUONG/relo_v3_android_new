@@ -79,6 +79,7 @@ public class WebViewDetailCouponFragment extends BaseDialogFragmentToolbarBottom
         imvForwardBottomBar.setVisibility(View.VISIBLE);
         imvBrowserBottomBar.setVisibility(View.VISIBLE);
         imvReloadBottomBar.setVisibility(View.VISIBLE);
+        llHome.setVisibility(View.INVISIBLE);
 
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override

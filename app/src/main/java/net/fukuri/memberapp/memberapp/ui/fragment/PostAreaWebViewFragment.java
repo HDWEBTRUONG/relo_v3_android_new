@@ -89,6 +89,7 @@ public class PostAreaWebViewFragment extends BaseDialogFragmentToolbarBottombar 
         imvForwardBottomBar.setVisibility(View.VISIBLE);
 
         imvReloadBottomBar.setVisibility(View.VISIBLE);
+        llHome.setVisibility(View.GONE);
 
         // disable button browser
         llBrowser.setEnabled(false);
