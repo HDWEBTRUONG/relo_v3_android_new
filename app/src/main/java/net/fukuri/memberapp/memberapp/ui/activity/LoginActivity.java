@@ -2,6 +2,7 @@ package net.fukuri.memberapp.memberapp.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -395,14 +396,21 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
         LoginSharedPreference loginSharedPreference = LoginSharedPreference.getInstance(this);
         loginSharedPreference.setUserName(etUser.getText().toString().trim());
         loginSharedPreference.setPass(etPass.getText().toString().trim());
-        Intent mainActivity = new Intent(this, MainTabActivity.class);
-                        startActivity(mainActivity);
-                        finish();
+        autoGotoMain();
     }
     private void autoGotoMain(){
-        Intent mainActivity = new Intent(this, MainTabActivity.class);
-        startActivity(mainActivity);
-        finish();
+        if(LoginSharedPreference.getInstance(this).isDeniedPassport()){
+            LoginSharedPreference.getInstance(this).setDeniedPassport();
+            Intent mainActivity = new Intent(this, MainTabActivity.class);
+            startActivity(mainActivity);
+            finish();
+        }else{
+            LoginSharedPreference.getInstance(this).setDeniedPassport();
+            Intent mainActivity = new Intent(this, ProfilePassportActivity.class);
+            startActivity(mainActivity);
+            finish();
+        }
+
     }
     public void clickLinkFAQ(){
         goNextWebview(Constant.WEBVIEW_CAN_NOT_LOGIN, getString(R.string.string_login), getString(R.string.title_can_not_login));

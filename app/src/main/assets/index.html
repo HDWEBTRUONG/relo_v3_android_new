@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script>
+      function callAllowedSDKPassport(){
+          window.MyHandler.callAllowedSDKPassport();
+      }
+      function callDeniedSDKPassport(){
+          window.MyHandler.callDeniedSDKPassport();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="wb_container">
+      <div class="wb-wrap">
+        <div class="wb-merit wb-merit--now">
+          <div class="wb-merit__ribbon"><img src="./assets/img/merit_ribbon_now.png" alt="今届く、今使う"></div>
+          <div class="wb-merit__title"><span>現在地にあわせた</span><br><span>おトクな情報をお届け</span></div>
+          <div class="wb-merit__tip wb-merit__tip--right">
+            <div class="wb-merit__tip__body"><span>初めての場所でも</span><span>使える特典、</span><span>見逃さない</span></div>
+            <div class="wb-merit__img"><img src="./assets/img/img_phone.png" alt=""></div>
+          </div>
+        </div>
+        <div class="wb-merit wb-merit--home">
+          <div class="wb-merit__ribbon"><img src="./assets/img/merit_ribbon_home.png" alt="自宅・職場など"></div>
+          <div class="wb-merit__title"><span>身近なエリアの</span><br><span>限定情報が届く</span></div>
+          <div class="wb-merit__tip wb-merit__tip--left">
+            <div class="wb-merit__tip__body"><span>身近な場所の</span><span>限定情報を</span><span>見逃さない</span></div>
+            <div class="wb-merit__img"><img src="./assets/img/img_map.png" alt=""></div>
+          </div>
+        </div>
+        <div class="wb-attention">
+          <div class="wb-attention__title">ご利用にあたって</div>
+          <div class="wb-attention__body">
+            <ul class="wb-attention__list">
+              <li class="wb-attention__list__item">ご利用には、PUSH通知の許可が必要です。<br>以下より「許可する」を選択してください。</li>
+              <li class="wb-attention__list__item">アプリは、お客様の位置情報を取得します。
+                <ul class="wb-attention__list wb-attention__list--attention">
+                  <li class="wb-attention__list__item">取得する情報には、お客様の個人を特定する情報は含みません。</li>
+                  <li class="wb-attention__list__item">取得した位置情報は株式会社ブログウォッチャーに連携し、統計データとして利用する可能性があります。取得した位置情報の利用範囲やその他規定については、以下のページをご確認ください。<br><a href="http://www.blogwatcher.co.jp/terms/l_in-fo_demo/" target="_blank">http://www.blogwatcher.co.jp/terms/l_in-fo_demo/</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="wb-btn"><a class="wb-btn__item wb-btn__item--disallow" onclick="callDeniedSDKPassport()"><span>許可しない</span><small>※限定クーポンを受け取ることができません。</small></a><a class="wb-btn__item wb-btn__item--allow" onclick="callAllowedSDKPassport()"><span>許可する</span></a></div>
+    </div>
+  </body>
+</html>

@@ -4,5 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <include layout="@layout/toolbar"/>
+    <net.fukuri.memberapp.memberapp.views.MyWebview
+        android:id="@+id/wvPassPort"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </net.fukuri.memberapp.memberapp.views.MyWebview>
 
 </LinearLayout>
