@@ -62,7 +62,7 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
     }
 
     public void callDeniedSDKPassport(){
-
+        gotoMain();
     }
 
 
