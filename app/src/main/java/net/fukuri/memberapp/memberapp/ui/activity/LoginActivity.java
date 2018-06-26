@@ -400,12 +400,10 @@ public class LoginActivity extends BaseActivityToolbar implements View.OnClickLi
     }
     private void autoGotoMain(){
         if(LoginSharedPreference.getInstance(this).isDeniedPassport()){
-            LoginSharedPreference.getInstance(this).setDeniedPassport();
             Intent mainActivity = new Intent(this, MainTabActivity.class);
             startActivity(mainActivity);
             finish();
         }else{
-            LoginSharedPreference.getInstance(this).setDeniedPassport();
             Intent mainActivity = new Intent(this, ProfilePassportActivity.class);
             startActivity(mainActivity);
             finish();

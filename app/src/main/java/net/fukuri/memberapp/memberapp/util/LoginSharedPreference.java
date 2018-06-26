@@ -22,6 +22,7 @@ public class LoginSharedPreference {
     public final String TIME_STOP = "timeStop";
     public final String FLAG_DOWNLOAD_DONE = "FLAG_DOWNLOAD_DONE";
     public final String FLAT_DENIED_PASSPORT = "FLAT_DENIED_PASSPORT";
+    public final String FLAT_REQUIRE_PASSPORT = "FLAT_REQUIRE_PASSPORT";
     public static LoginSharedPreference sharedPreference;
 
     private final SharedPreferences sharedPreferences;
@@ -47,14 +48,24 @@ public class LoginSharedPreference {
         return sharedPreferences.getString(Constant.WEB_COOKIE,"");
     }
 
-    public void setDeniedPassport(){
+    public void setDeniedPassport(boolean isDenide){
+        setRequirePassported();
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(FLAT_DENIED_PASSPORT, true);
+        editor.putBoolean(FLAT_DENIED_PASSPORT, isDenide);
         editor.apply();
     }
 
     public boolean isDeniedPassport(){
         return sharedPreferences.getBoolean(FLAT_DENIED_PASSPORT,false);
+    }
+    public void setRequirePassported(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FLAT_REQUIRE_PASSPORT, true);
+        editor.apply();
+    }
+
+    public boolean isRequirePassported(){
+        return sharedPreferences.getBoolean(FLAT_REQUIRE_PASSPORT,false);
     }
 
 

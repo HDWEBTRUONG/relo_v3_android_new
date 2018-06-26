@@ -123,19 +123,26 @@
              Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
              installation campaign reporting
         -->
+
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">
-            <intent-filter>
+        <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
 
         //PP lib
         <!-- PPM2.0 SANDBOX設定（true:サンドボックス(赤帯), false:本番(青帯)） -->
+        <receiver android:name=".util.PPSDKDemoMultiGCMReceiver" >
+            <intent-filter>
+                <category android:name="net.fukuri.memberapp.memberapp" />
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="PP_SANDBOX"
             android:value="true" />
@@ -157,8 +164,9 @@
             android:name="jp.profilepassport.android.tasks.PPScheduleReceiver">
             <intent-filter>
                 <!-- アプリ更新イベント -->
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.net.fukuri.memberapp.memberapp" />
                 <data android:scheme="package" />
+                <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
             <intent-filter>
                 <!-- 時間変更イベント -->
@@ -191,6 +199,7 @@
             <intent-filter>
                 <!-- ジオエリア検知イベントアクション名 -->
                 <action android:name="jp.profilepassport.android.GEOAREA" />
+                <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
         </receiver>
 
@@ -208,7 +217,7 @@
             android:name="jp.profilepassport.android.logger.PPLoggerReceiver">
             <intent-filter>
                 <!-- アプリ更新イベント -->
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.net.fukuri.memberapp.memberapp" />
                 <data android:scheme="package" />
             </intent-filter>
             <intent-filter>

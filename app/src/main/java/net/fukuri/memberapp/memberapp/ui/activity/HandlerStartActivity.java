@@ -137,7 +137,7 @@ public class HandlerStartActivity extends BaseActivity {
 
     private void goMainScreen() {
         PushvisorHandlerActivity.checkOpenedThisScreen = true;
-        startActivity(new Intent(this, MainTabActivity.class));
+        startActivity(new Intent(this, ProfilePassportActivity.class));
         finish();
     }
 

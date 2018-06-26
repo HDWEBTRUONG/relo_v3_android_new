@@ -13,8 +13,10 @@ import android.widget.Toast;
 import net.fukuri.memberapp.memberapp.R;
 import net.fukuri.memberapp.memberapp.listener.PPSDKDemoGeoAreaListener;
 import net.fukuri.memberapp.memberapp.ui.BaseActivityToolbar;
+import net.fukuri.memberapp.memberapp.util.LoginSharedPreference;
 import net.fukuri.memberapp.memberapp.util.MyJavascriptInterface;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoLog;
+import net.fukuri.memberapp.memberapp.util.PPSDKDemoMultiGCMReceiver;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoPPsdkSettings;
 import net.fukuri.memberapp.memberapp.util.PPSDKDemoSharedPreferences;
 
@@ -49,19 +51,33 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         wvPassPort = (WebView) findViewById(R.id.wvPassPort);
-        wvPassPort.loadUrl("file:///android_asset/index.html");
-        wvPassPort.addJavascriptInterface(new MyJavascriptInterface(this, wvPassPort), "MyHandler");
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WebView.setWebContentsDebuggingEnabled(true);
+        if(LoginSharedPreference.getInstance(this).isRequirePassported()){
+            wvPassPort.setVisibility(View.INVISIBLE);
+            if(LoginSharedPreference.getInstance(this).isDeniedPassport()){
+                callDeniedSDKPassport();
+            }else{
+                callAllowedSDKPassport();
+            }
+
+        }else{
+            wvPassPort.setVisibility(View.VISIBLE);
+            wvPassPort.loadUrl("file:///android_asset/index.html");
+            wvPassPort.addJavascriptInterface(new MyJavascriptInterface(this, wvPassPort), "MyHandler");
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
         }
+
     }
 
     public void callAllowedSDKPassport(){
+        LoginSharedPreference.getInstance(this).setDeniedPassport(false);
         PPSDKDemoPPsdkSettings.setPPsdkSetting(ProfilePassportActivity.this, PPSDKDemoSharedPreferences.getPPSDKChecked(
                 getApplicationContext()), this);
     }
 
     public void callDeniedSDKPassport(){
+        LoginSharedPreference.getInstance(this).setDeniedPassport(true);
         gotoMain();
     }
 
@@ -118,6 +134,7 @@ public class ProfilePassportActivity extends BaseActivityToolbar implements PPSD
 
     @Override
     public void onSuccessServiceStart() {
+        PPSDKDemoMultiGCMReceiver.setPPSDKDemoMultiGCMActivity(this);
         PPSDKDemoLog.d("Service Start Success 2");
         setGeoAreaDetect();
         startBeaconDetect();
