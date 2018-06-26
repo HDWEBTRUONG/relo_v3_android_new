@@ -55,7 +55,7 @@
                 android:id="@+id/imvHome"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_home"
+                android:src="@drawable/house"
                 android:visibility="visible"
                 android:layout_gravity="center"/>
         </LinearLayout>
