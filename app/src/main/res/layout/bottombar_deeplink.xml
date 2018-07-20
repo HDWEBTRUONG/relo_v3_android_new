@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnBottom"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <include layout="@layout/line_layout"/>
+    <RelativeLayout
+        android:layout_marginTop="@dimen/_0.3dp"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        >
+
+            <ImageView
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imvReloadBottomBar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_reload_wv"
+                android:visibility="visible"
+                android:layout_marginRight="@dimen/_15dp"
+                />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

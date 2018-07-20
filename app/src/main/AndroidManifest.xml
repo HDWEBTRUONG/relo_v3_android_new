@@ -10,17 +10,19 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <permission
         android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="net.fukuri.memberapp.memberapp.permission.C2D_MESSAGE" />
     <!-- App receives GCM messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -33,12 +35,12 @@
         android:name=".ReloApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:icon"
-        android:largeHeap="true"
         android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:largeHeap="true"
         android:launchMode="singleTop"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <activity
             android:name=".ui.activity.HandlerStartActivity"
             android:screenOrientation="portrait">
@@ -47,23 +49,28 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="reloapp" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+
+                <!--<data android:scheme="reloapp" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".ui.activity.SplashScreenActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.PushvisorHandlerActivity"
@@ -71,23 +78,23 @@
         <activity
             android:name=".ui.activity.MainTabActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.activity.ProfilePassportActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="ppm2app" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="ppm2app" />
             </intent-filter>
-
         </activity>
 
-       <!-- <receiver
+        <!--
+        <receiver
             android:name="biz.appvisor.push.android.sdk.AppVisorPushBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -96,10 +103,11 @@
 
                 <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
+        -->
         <service
             android:name="biz.appvisor.push.android.sdk.NotificationStartService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <!-- Listen Push Notify to show Dialog Coupon -->
         <meta-data
@@ -127,22 +135,20 @@
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">
-        <intent-filter>
+            <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 
-
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-
-
         //PP lib
         <!-- PPM2.0 SANDBOX設定（true:サンドボックス(赤帯), false:本番(青帯)） -->
-        <receiver android:name=".util.PPSDKDemoMultiGCMReceiver" >
+        <receiver android:name=".util.PPSDKDemoMultiGCMReceiver">
             <intent-filter>
                 <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="PP_SANDBOX"
             android:value="true" />
@@ -159,16 +165,20 @@
 
         <!-- ジオエリア検知情報をユーザーへコールバックするレシーバークラス -->
 
+
         <!-- 各種バッチ用レシーバークラス -->
-        <receiver
-            android:name="jp.profilepassport.android.tasks.PPScheduleReceiver">
+        <receiver android:name="jp.profilepassport.android.tasks.PPScheduleReceiver">
             <intent-filter>
+
                 <!-- アプリ更新イベント -->
                 <action android:name="android.intent.action.net.fukuri.memberapp.memberapp" />
+
                 <data android:scheme="package" />
+
                 <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
             <intent-filter>
+
                 <!-- 時間変更イベント -->
                 <action android:name="android.intent.action.TIME_SET" />
                 <!-- Locale変更イベント -->
@@ -197,8 +207,10 @@
             android:name=".listener.PPSDKDemoGeoAreaListener"
             android:exported="false">
             <intent-filter>
+
                 <!-- ジオエリア検知イベントアクション名 -->
                 <action android:name="jp.profilepassport.android.GEOAREA" />
+
                 <category android:name="net.fukuri.memberapp.memberapp" />
             </intent-filter>
         </receiver>
@@ -213,14 +225,16 @@
         <service android:name="jp.profilepassport.android.geoarea.service.PPGeoAreaService" />
 
         <!-- ログ作成用レシーバークラス -->
-        <receiver
-            android:name="jp.profilepassport.android.logger.PPLoggerReceiver">
+        <receiver android:name="jp.profilepassport.android.logger.PPLoggerReceiver">
             <intent-filter>
+
                 <!-- アプリ更新イベント -->
                 <action android:name="android.intent.action.net.fukuri.memberapp.memberapp" />
+
                 <data android:scheme="package" />
             </intent-filter>
             <intent-filter>
+
                 <!-- 起動イベント -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="jp.profilepassport.android.logger.action.PP_LOGGER_ACTION" />
@@ -231,6 +245,17 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".ui.activity.DeepLinkActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="reloapp" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
